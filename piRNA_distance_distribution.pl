@@ -1,6 +1,13 @@
 #!/usr/bin/perl
 
 #if you run it on hpcc
+
+if(scalar(@ARGV)<4)
+{
+        usage();
+}
+
+
 BEGIN { unshift @INC,"/home/xuj1/bin/";}
 require "Statstics.pm";
 require "Jia.pm";
