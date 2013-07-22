@@ -114,7 +114,7 @@ use File::Basename;
             }
         }
     }
- 	$OUTDIR=$ARGV[3];   
+ 	$OUTDIR=$ARGV[2];   
     open OUT, ">$OUTDIR/$file1.5-5.distance.distribution";
     foreach $strand (keys %hash_dis)
     {
