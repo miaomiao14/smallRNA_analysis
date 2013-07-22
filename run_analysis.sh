@@ -35,7 +35,7 @@ OPTIONS:
 	-h      Show this message
 	-i      Input file in bed/norm.bed format, with full directory
 	-o      Output directory, default: current directory
-	-t		input file format:bed or normbed
+	-t      input file format:bed or normbed
 	-c      Number of CPUs to use, default: 8
 	-f      Configure file to provide/overwrite variables	
 
@@ -43,7 +43,7 @@ EOF
 echo -en "\e[0m"
 }
 # taking options
-while getopts "hi:c:o:s:f:" OPTION
+while getopts "hi:c:o:t:f:" OPTION
 do
 	case $OPTION in
 		h)
