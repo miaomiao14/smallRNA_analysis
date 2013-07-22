@@ -2,7 +2,7 @@
 
 #if you run it on hpcc
 
-if(scalar(@ARGV)<2)
+if(scalar(@ARGV)<3)
 {
         usage();
 }
@@ -18,9 +18,9 @@ use File::Basename;
 # the distribution of 5'-5' end distance of piRNAs from the same strand.
 
    $file1=fileparse($ARGV[0]);  
-   @namefield=split(/\./,$file1);
-   $name1=$namefield[0]."_".$namefield[2];
-   $file1=$name1;
+   #@namefield=split(/\./,$file1);
+   #$name1=$namefield[0]."_".$namefield[2];
+   #$file1=$name1;
    
    $format=$ARGV[1];
    
@@ -114,8 +114,8 @@ use File::Basename;
             }
         }
     }
-    
-    open OUT, ">$file1.5-5.distance.distribution";
+ 	$OUTDIR=$ARGV[3];   
+    open OUT, ">$OUTDIR/$file1.5-5.distance.distribution";
     foreach $strand (keys %hash_dis)
     {
         foreach $chr (sort keys %{$hash_dis{$strand}})
@@ -129,7 +129,7 @@ use File::Basename;
     close (OUT);
     
     
-    open OUT, ">$file1.5-5.distance.distribution.summary";
+    open OUT, ">$OUTDIR/$file1.5-5.distance.distribution.summary";
     foreach $dis (sort { $a <=> $b } keys %h_dis)
     {
         print OUT "$dis\t$h_dis{$dis}\n";
@@ -140,7 +140,7 @@ sub usage
 {
         print "\nUsage:$0\n\n\t";
         print "REQUIRED\n\t";
-        print "BED/NORMBED type(bed|normbed)\n";
+        print "inputfile type(bed|normbed) outdir\n";
         print "This perl script is count the frequency of 5'-5'end distances of smallRNAs(23-29) from the same strand\n";
 
         exit(1);
