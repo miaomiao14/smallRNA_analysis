@@ -75,6 +75,7 @@ then
 	usage && exit 1
 fi
 
+FILE=${INPUT##*/}
 piRNA_distance_distribution.pl $INPUT $TYPE $OUTDIR
-Rscript piRNA_distance_plot.r ${OUTDIR}/${INPUT}.5-5.distance.distribution
+Rscript piRNA_distance_plot.r ${OUTDIR}/${FILE}.5-5.distance.distribution
 #Rscript piRNA_distance_plot.r 
