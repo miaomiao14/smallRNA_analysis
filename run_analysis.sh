@@ -77,5 +77,5 @@ fi
 
 FILE=${INPUT##*/}
 ${PIPELINE_DIRECTORY}/piRNA_distance_distribution.pl $INPUT $TYPE $OUTDIR
-Rscript ${PIPELINE_DIRECTORY}/piRNA_distance_plot.r ${OUTDIR}/${FILE}.5-5.distance.distribution
-#Rscript piRNA_distance_plot.r 
+Rscript ${PIPELINE_DIRECTORY}/piRNA_distance_plot.r plot_distribution_summary ${OUTDIR}/${FILE}.5-5.distance.distribution.summary
+Rscript ${PIPELINE_DIRECTORY}/piRNA_distance_plot.r plot_distribution ${OUTDIR}/${FILE}.5-5.distance.distribution

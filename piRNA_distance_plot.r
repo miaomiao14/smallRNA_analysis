@@ -3,9 +3,12 @@ library(ggplot2)
 
 
 argv = commandArgs (TRUE)
-file=argv[1]
+input=argv[1]
+pp=read.table(file,F)
 
-  pp=read.table(file,F)
+plot_distribution <- function (input) {
+	file=input
+	pp=read.table(file,F)	
 	colnames(pp)=c("strand","chr","distance","reads")
 	for ( i in 1:length(levels(pp$strand)) )
 	{
@@ -30,4 +33,20 @@ file=argv[1]
 		}
 		dev.off()
 	}
+}
+	
+	
 
+plot_distribution_summary <- function (input) {
+		file=input
+		pp=read.table(file,F)
+		pdfname= paste(file, 'piRNA_distance_distribution.pdf', sep='')
+		pdf(pdfname,width=9,height=5)
+		colnames(pp)=c("distance","reads")
+		pp=pp[order(pp$distance),]
+		p<-ggplot(pp,aes(distance,reads))+ggtitle(files[j])
+		p1<-p+geom_line(size=1,colour="red")+xlab("5«-5«end distance on the same strand")+scale_x_continuous(limits = c(0, 100),breaks=seq(0,100,4),labels=seq(0,100,4))+geom_vline(xintercept = c(27,54),col="black",linetype=2)
+		print(p1)
+		
+		dev.off()
+	}

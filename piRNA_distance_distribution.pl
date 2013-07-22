@@ -49,7 +49,7 @@ use File::Basename;
         {
 
         	($reads,$ntm,$dep)=split(/,/,$_[3]);
-        	if($file1=~/plus/i)
+        	if($file1=~/plus/i) #strand information is not included in the data, but in the file name
         	{
 	            $plus{$_[0]}{$_[1]}+=$reads/$ntm;
 	            $plus_end{$_[0]}{$_[1]}=$_[2];
