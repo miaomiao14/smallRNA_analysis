@@ -24,7 +24,7 @@ usage() {
 echo -en "\e[1;36m"
 cat << EOF
 
-usage: $0 -i input_file.fq[.gz] -s fly|mouse -o output_directory[current directory] -c cpu[8] 
+usage: $0 -i input_file.[norm].bed -t type -o output_directory[current directory] -c cpu[8] 
 
 This is a small RNA downstream analysis pipeline developed in the Zamore Lab in 
 University of Massachusetts Medical School. 
