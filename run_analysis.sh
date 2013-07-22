@@ -24,12 +24,9 @@ usage() {
 echo -en "\e[1;36m"
 cat << EOF
 
-usage: $0 -i input_file.[norm].bed -t type -o output_directory[current directory] -c cpu[8] 
+usage: $0 -i input_file.[norm].bed -t type -o output_directory[current directory] 
 
-This is a small RNA downstream analysis pipeline developed in the Zamore Lab in 
-University of Massachusetts Medical School. 
-Please email wei.wang2@umassmed.edu for any questions or bugs. 
-Thanks for using it. 
+This is a small RNA downstream analysis pipeline. 
 
 OPTIONS:
 	-h      Show this message
@@ -74,7 +71,7 @@ if [[ -z $INPUT ]] || [[ -z $TYPE ]]
 then
 	usage && exit 1
 fi
-
+[ ! -z $OUTDIR ] || OUTDIR=$PWD
 FILE=${INPUT##*/}
 ${PIPELINE_DIRECTORY}/piRNA_distance_distribution.pl $INPUT $TYPE $OUTDIR
 ${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/piRNA_distance_plot.r plot_distribution_summary ${OUTDIR}/${FILE}.5-5.distance.distribution.summary
