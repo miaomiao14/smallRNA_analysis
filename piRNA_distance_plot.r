@@ -4,7 +4,7 @@ library(ggplot2)
 
 argv = commandArgs (TRUE)
 input=argv[1]
-pp=read.table(file,F)
+
 
 plot_distribution <- function (input) {
 	file=input
