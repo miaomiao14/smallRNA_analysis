@@ -39,12 +39,13 @@ plot_distribution <- function (input) {
 
 plot_distribution_summary <- function (input) {
 		file=input
+		filename=basename(input)
 		pp=read.table(file,F)
-		pdfname= paste(file, 'piRNA_distance_distribution.pdf', sep='')
+		pdfname= paste(filename, 'piRNA_distance_distribution.pdf', sep='')
 		pdf(pdfname,width=9,height=5)
 		colnames(pp)=c("distance","reads")
 		pp=pp[order(pp$distance),]
-		p<-ggplot(pp,aes(distance,reads))+ggtitle(file)
+		p<-ggplot(pp,aes(distance,reads))+ggtitle(filename)
 		p1<-p+geom_line(size=1,colour="red")+xlab("5«-5«end distance on the same strand")+scale_x_continuous(limits = c(0, 100),breaks=seq(0,100,4),labels=seq(0,100,4))+geom_vline(xintercept = c(27,54),col="black",linetype=2)
 		print(p1)
 		
