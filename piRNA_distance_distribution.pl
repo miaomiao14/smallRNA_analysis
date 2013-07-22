@@ -140,7 +140,7 @@ sub usage
 {
         print "\nUsage:$0\n\n\t";
         print "REQUIRED\n\t";
-        print "PEP(transdecoder longest_orf.pep) BED(cufflink_gtf_to_bed) OUTDIR PEPTYPE(long or best)\n";
+        print "BED/NORMBED type(bed|normbed)\n";
         print "This perl script is to extract 5UTR of transcripts based on the annotation of transdecoder\n";
 
         exit(1);
