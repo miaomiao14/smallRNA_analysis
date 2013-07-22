@@ -1,0 +1,12 @@
+#!/usr/bin/perl
+if(@ARGV<2){print "usage: $0 sourcefile function_name arguments (>logfile)\n"; exit;}
+$sourcefile=shift @ARGV;
+$func=shift @ARGV;
+$"="\",\"";
+if(@ARGV){
+ system("echo 'source(\"$sourcefile\");$func(\"@ARGV\")' | R --slave --no-save");
+ #print("echo 'source(\"$sourcefile\");$func(\"@ARGV\")' | R --slave --no-save\n");
+}
+else{
+ system("echo 'source(\"$sourcefile\");$func()' | R --slave --no-save");
+}
