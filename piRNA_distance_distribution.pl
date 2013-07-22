@@ -2,7 +2,7 @@
 
 #if you run it on hpcc
 
-if(scalar(@ARGV)<4)
+if(scalar(@ARGV)<2)
 {
         usage();
 }
