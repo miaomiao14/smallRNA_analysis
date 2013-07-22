@@ -47,13 +47,14 @@ use File::Basename;
         }
         if($format eq "bed")
         {
+
         	($reads,$ntm,$dep)=split(/,/,$_[3]);
-        	if ($_[3] eq '+')
-	        {
+        	if($file1=~/plus/i)
+        	{
 	            $plus{$_[0]}{$_[1]}+=$reads/$ntm;
 	            $plus_end{$_[0]}{$_[1]}=$_[2];
 	        }
-	        else
+	        if($file1=~/minus/i)
 	        {
 	            $minus{$_[0]}{$_[2]}+=$reads/$ntm;
 	        }
