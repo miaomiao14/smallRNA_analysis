@@ -45,7 +45,7 @@ plot_distribution_summary <- function (input) {
 		pdf(pdfname,width=9,height=5)
 		colnames(pp)=c("distance","reads")
 		pp=pp[order(pp$distance),]
-		p<-ggplot(pp,aes(distance,reads))+ggtitle(filename)
+		p<-ggplot(pp,aes(distance,reads))+opts(title=filename)
 		p1<-p+geom_line(size=1,colour="red")+xlab("5'-5'end distance on the same strand")+scale_x_continuous(limits = c(0, 100),breaks=seq(0,100,4),labels=seq(0,100,4))+geom_vline(xintercept = c(27,54),col="black",linetype=2)
 		print(p1)
 		
