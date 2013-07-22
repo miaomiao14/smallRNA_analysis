@@ -25,7 +25,7 @@ plot_distribution <- function (input) {
 			pppp=as.data.frame(lapply(subset(ppp,chr==levels(ppp$chr)[k]),'[',drop=TRUE))	
 			ppppp=pppp[order(pppp$distance),]
 			t=paste(levels(pp$strand)[i],'_',levels(ppp$chr)[k],sep="")
-			p<-ggplot(ppppp,aes(distance,reads))+opts(title=t)
+			p<-ggplot(ppppp,aes(distance,reads))+labs(title=t)
 			p1<-p+geom_line(size=2,colour="red")+scale_x_continuous(limits = c(0, 100),breaks=seq(0,100,2),labels=seq(0,100,2))+geom_vline(xintercept = c(27,54),col="black",linetype=2)
 			print(p1,vp=viewport(layout.pos.row = a[n], layout.pos.col = b[n]))
 			n=n+1
@@ -41,11 +41,11 @@ plot_distribution_summary <- function (input) {
 		file=input
 		filename=basename(input)
 		pp=read.table(file,F)
-		pdfname= paste(filename, 'piRNA_distance_distribution.pdf', sep='')
+		pdfname= paste(file, 'piRNA_distance_distribution.pdf', sep='')
 		pdf(pdfname,width=9,height=5)
 		colnames(pp)=c("distance","reads")
 		pp=pp[order(pp$distance),]
-		p<-ggplot(pp,aes(distance,reads))+opts(title=filename)
+		p<-ggplot(pp,aes(distance,reads))+labs(title=filename)
 		p1<-p+geom_line(size=1,colour="red")+xlab("5'-5'end distance on the same strand")+scale_x_continuous(limits = c(0, 100),breaks=seq(0,100,4),labels=seq(0,100,4))+geom_vline(xintercept = c(27,54),col="black",linetype=2)
 		print(p1)
 		
