@@ -141,7 +141,7 @@ sub usage
         print "\nUsage:$0\n\n\t";
         print "REQUIRED\n\t";
         print "BED/NORMBED type(bed|normbed)\n";
-        print "This perl script is to extract 5UTR of transcripts based on the annotation of transdecoder\n";
+        print "This perl script is count the frequency of 5'-5'end distances of smallRNAs(23-29) from the same strand\n";
 
         exit(1);
 }
