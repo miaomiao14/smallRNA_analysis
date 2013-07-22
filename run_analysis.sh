@@ -11,7 +11,7 @@ export DEBUG=1
 # pipeline address: if you copy all the files to another directory, this is the place to change; under this directory sits two directories, bin and common. bin stores all the binary executables and common stores all the information of each ORGANISM.
 export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 # set PATH to be aware of pipeline/bin; this bin directory needs to be searched first
-export PATH=${PIPELINE_DIRECTORY}/bin:$PATH
+export PATH=${PIPELINE_DIRECTORY}/:$PATH
 
 
 
@@ -76,6 +76,6 @@ then
 fi
 
 FILE=${INPUT##*/}
-piRNA_distance_distribution.pl $INPUT $TYPE $OUTDIR
-Rscript piRNA_distance_plot.r ${OUTDIR}/${FILE}.5-5.distance.distribution
+${PIPELINE_DIRECTORY}/piRNA_distance_distribution.pl $INPUT $TYPE $OUTDIR
+Rscript ${PIPELINE_DIRECTORY}/piRNA_distance_plot.r ${OUTDIR}/${FILE}.5-5.distance.distribution
 #Rscript piRNA_distance_plot.r 
