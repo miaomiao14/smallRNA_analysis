@@ -55,7 +55,7 @@ use File::Basename;
 	        }
 	        else
 	        {
-	            $minus{$_[0]}{$_[2]}+=$reads/$ntm;;
+	            $minus{$_[0]}{$_[2]}+=$reads/$ntm;
 	        }
         }
     }
