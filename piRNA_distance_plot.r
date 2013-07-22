@@ -1,4 +1,5 @@
 library(gridExtra)
+library(ggplot2)
 files=list.files(pattern="*.distribution$")
 
 for (j in (1:length(files)))
@@ -9,8 +10,6 @@ for (j in (1:length(files)))
 	{
 		ppp=as.data.frame(lapply(subset(pp,strand==levels(pp$strand)[i]),'[',drop=TRUE))
 		pdfname= paste(files[j],"_",levels(pp$strand)[i],"_", 'piRNA_distance_distribution.pdf', sep='')
-		#pdfname= paste(files[j], 'wt_unox_piRNA_distance_distribution.pdf', sep='')
-		
 		pdf(pdfname,width=25,height=20)
 		grid.newpage()
 		pushViewport(viewport(layout=grid.layout(2,2)))
