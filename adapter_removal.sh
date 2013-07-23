@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export PIPELINE_PATH=/home/wengz/pipelines/smallRNApipeline/pipeline_dm/
-export PATH=${PIPELINE_PATH}:PATH
+export PATH=${PIPELINE_PATH}:${PATH}
 ADAPTER=TGGAATTCTCGGGTGCCAAGG
 INDIR=$1
 OUTDIR=$2
