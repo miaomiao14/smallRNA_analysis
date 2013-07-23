@@ -11,7 +11,8 @@ paraFile=${RANDOM}.para
 #require minimum adapter length of 8
 for fq in `ls *.ovary.fq`
 do \
-filename=`basename .fq`
+file=${fq##*/}
+filename=`basename $file .fq`
 #echo -e "fastx_clipper -a $ADAPTER -l 18 -c -M 8 -i $fq -o ${OUTDIR}/${filename}.inserts" >>${paraFile}
 echo -ne " Extract_insert_6mer.pl $fq $ADAPTER > ${filename}.insertsout && " >>${paraFile}
 echo -ne "inserts2uniqreads.pl ${filename}.insertsout 18 30 > ${filename}.inserts && " >>${paraFile}
