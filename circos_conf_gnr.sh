@@ -26,14 +26,16 @@ chromosomes_display_default = yes
 " >>file.conf
 num_vars=$#
 count=0
-radius_inc=$((0.6/${num_vars}))
-base=0.55
+radius_inc=$(awk -v a=${num_vars} 'BEGIN{print 0.6/a}')
+base=0.4
 for CIRCOSBIN in "$@"
 do
 filename=${CIRCOSBIN##*/}
+FLAG=0
 if [[ $filename =~ "plus" ]]
 then
-rr0=$(($base+$count*$radius_inc))
+rr0=$(awk -v a=$base -v b=$count -v c=$radius_inc 'BEGIN{print a+b*c}')
+rr1=$(awk -v a=$base -v b=$count -v c=$radius_inc 'BEGIN{print a+(b+1)*c}')
 echo "
 
 	<plot>
@@ -41,28 +43,33 @@ echo "
 	min   = 0
 	max   = $maxvalue
 	file  = ${CIRCOSBIN}
-	r0    = 0.4r
-	r1    = 0.6r
+	r0    = $rr0
+	r1    = $rr1
 	color = vvdblue
 	thickness = 0.75
 	</plot> " >>file.conf
 fi
-
 if [[ $filename =~ "minus" ]]
 then 
+FLAG=1
+rr0=$(awk -v a=$base -v b=$count -v c=$radius_inc 'BEGIN{print a+b*c}')
+rr1=$(awk -v a=$base -v b=$count -v c=$radius_inc 'BEGIN{print a+(b-1)*c}')
 echo "
 	<plot>
 	type  = line
 	min   = 0
 	max   = $maxvalue
 	file  = ${CIRCOSBIN}
-	r0    = 0.5r
-	r1    = 0.80r
+	r0    = $rr0
+	r1    = $rr1
 	color = vvdred
 	thickness = 0.75
 	</plot> " >>file.conf
 fi
+if [[ $FLAG == 1 ]]
+then
 count=$(($count+1))
+fi
 done
 
 echo "
@@ -74,5 +81,4 @@ echo "
 <<include ../../etc/image.conf>>
 </image>
 
-<<include ../../etc/housekeeping.conf>>
-" >file.conf
+<<include ../../etc/housekeeping.conf>>" >>file.conf

@@ -159,7 +159,7 @@ echo >> $dir/output/$insertsname.log
 
 echo "making stats and annotation tables...."  >> $dir/output/$insertsname.log
 echo `date` >> $dir/output/$insertsname.log
-paraFile=${RANDOM}.para
+paraFile=$dir/output/${RANDOM}.para
 echo -ne "table.sh $inserts $dir/output &&" >>${paraFile}
 echo -e "tablenorm.pl $inserts $dir/output" >>${paraFile}
 echo -ne "table.sh $inserts.uniqmap $dir/output &&" >>${paraFile}
@@ -176,7 +176,7 @@ echo >> $dir/output/$insertsname.log
 # endosiRNA
 echo "endosiRNA" >> $dir/output/$insertsname.log
 echo `date` >> $dir/output/$insertsname.log
-paraFile=${RANDOM}.para
+paraFile=$dir/output/${RANDOM}.para
 echo -ne "normbed2mapper /home/wengz/pipelines/smallRNApipeline/pipeline_dm/common/cisNAT.map  $inserts.xkxh.norm.bed  map  >  $inserts.xkxh.norm.bed.cisNAT &&" >>${paraFile}
 echo -e "lenselector $inserts.xkxh.norm.bed.cisNAT 21 >  $inserts.xkxh.norm.bed.cisNAT.seq.21nt" >>${paraFile}
 echo -ne "normbed2mapper /home/wengz/pipelines/smallRNApipeline/pipeline_dm/common/structured_loci.map  $inserts.xkxh.norm.bed  map  > $inserts.xkxh.norm.bed.structured_loci &&" >>${paraFile} 
@@ -194,7 +194,7 @@ echo >> $dir/output/$insertsname.log
 
 #5. make lendis figures
 echo "making figures" >> $dir/output/$insertsname.log
-paraFile=${RANDOM}.para
+paraFile=$dir/output/${RANDOM}.para
 
 echo -e "lendis $inserts.match2_all.out.uniq.reads > $inserts.match2_all.out.uniq.lendis" >>${paraFile}
 echo -e "lendis $inserts.match2_all.out.uniq.reads r > $inserts.match2_all.out.reads.lendis ">>${paraFile}
@@ -262,7 +262,7 @@ rm $inserts.uniqmap.antimRNA.mapper
 
 echo `date` >> $dir/output/$insertsname.log
 echo "gzip the intermediate results...."  >> $dir/output/$insertsname.log
-paraFile=${RANDOM}.para
+paraFile=$dir/output/${RANDOM}.para
 for i in `ls -l $dir | egrep -v '^d' | awk '{print $9}'`
 do
 	echo -e "gzip ${dir}/$i" >>${paraFile}
