@@ -7,7 +7,7 @@ paraFile=${INDIR}/species.reads.stat.${RANDOM}.paraFile
 for i in `ls *.${fileEND}`
 do 
 echo -ne "wc -l ${i} >> $LOG &&" >> ${paraFile}
-echo -e "awk '{a+=\$2}END{print a}' ${i} >> $LOG" >> ${paraFile}
+echo -e "awk -v filename=${i} '{a+=\$2}END{print a,filename}' ${i} >> $LOG" >> ${paraFile}
 done
 if [[ ! -f ${paraFile}.completed ]] || [[ -f $$paraFile.failed_commands ]]
 then
