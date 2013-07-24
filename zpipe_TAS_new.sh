@@ -93,6 +93,7 @@ echo "map to knownRNAs done" >> $dir/output/$insertsname.log
 # hairpins
 echo "map to hairpins...." >> $dir/output/$insertsname.log
 echo `date` >> $dir/output/$insertsname.log
+#TODO: update the hairpin annotation; use bowtie to do the mapping
 maptocat $inserts.uniq.reads /home/wengz/pipelines/smallRNApipeline/pipeline_dm/common/hairpin.cat /home/wengz/pipelines/smallRNApipeline/pipeline_dm/common/hairpin.len $inserts.hairpin_all.mapper
 grep dme $inserts.hairpin_all.mapper > $inserts.hairpin.mapper
 match.pl $inserts.uniqmap.match2_all.out.uniq.reads $inserts.hairpin.mapper > $inserts.uniqmap.hairpin.mapper
@@ -104,6 +105,7 @@ echo "map to hairpins done" >> $dir/output/$insertsname.log
 # mRNAs
 echo "map to mRNAs...." >> $dir/output/$insertsname.log
 echo `date` >> $dir/output/$insertsname.log
+#TODO: update the mRNA annotation; build bowtie indexes
 run_bowtie.pl $inserts.uniq.reads $mm dmel_transcript mRNA
 modmRNAannot.pl $inserts.mRNA > $inserts.mRNA.mapper
 match.pl $inserts.uniqmap.match2_all.out.uniq.reads $inserts.mRNA.mapper > $inserts.uniqmap.mRNA.mapper
@@ -121,6 +123,7 @@ grep -v + $inserts.uniqmap.mRNA.mapper > $inserts.uniqmap.antimRNA.mapper
 # exons
 echo "map to exons...." >> $dir/output/$insertsname.log
 echo `date` >> $dir/output/$insertsname.log
+#TODO: update the exon annotation; build bowtie indexes
 run_bowtie.pl $inserts.uniq.reads $mm dmel_exon exon
 bowtieout2mapper.pl $inserts.exon /home/wengz/pipelines/smallRNApipeline/pipeline_dm/common/exon.map > $inserts.exon.mapper
 match.pl $inserts.uniqmap.match2_all.out.uniq.reads $inserts.exon.mapper > $inserts.uniqmap.exon.mapper
@@ -131,6 +134,7 @@ echo "map to exons done" >> $dir/output/$insertsname.log
 # introns
 echo "map to introns...." >> $dir/output/$insertsname.log
 echo `date` >> $dir/output/$insertsname.log
+#TODO: update the intron annotation; build bowtie indexes
 run_bowtie.pl $inserts.uniq.reads $mm dmel_intron intron
 bowtieout2mapper.pl $inserts.intron /home/wengz/pipelines/smallRNApipeline/pipeline_dm/common/intron.map > $inserts.intron.mapper
 match.pl $inserts.uniqmap.match2_all.out.uniq.reads $inserts.intron.mapper > $inserts.uniqmap.intron.mapper
@@ -141,6 +145,7 @@ echo "map to introns done" >> $dir/output/$insertsname.log
 # intergenic
 echo "map to intergenic...." >> $dir/output/$insertsname.log
 echo `date` >> $dir/output/$insertsname.log
+#TODO: update the intergenic annotation; build bowtie indexes
 run_bowtie.pl $inserts.uniq.reads $mm dmel_intergenic intergenic
 bowtieout2mapper.pl $inserts.intergenic /home/wengz/pipelines/smallRNApipeline/pipeline_dm/common/intergenic.map > $inserts.intergenic.mapper
 match.pl $inserts.uniqmap.match2_all.out.uniq.reads $inserts.intergenic.mapper > $inserts.uniqmap.intergenic.mapper
