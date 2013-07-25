@@ -1,9 +1,13 @@
 #! /usr/bin/env bash
+
 #input file is match2all.out
 #binsize is for the bigWigSummary
 Dir=$1
 File=$2
 binsize=$3
+type=$4
+[ ! -d $PWD/circos ] && mkdir -p $PWD/circos
+OUTDIR=$PWD/circos
 #mapper2circos.pl ${DIR}/$file $chrsize
 #for i in `ls ${DIR}/*sense.bed`
 #do
@@ -16,9 +20,7 @@ echo "#!/bin/sh
 #$ -l mem_free=10G
 #$ -S /bin/bash
 #$ -m e
-# pipeline address: if you copy all the files to another directory, this is the place to change; under this directory sits two directories, bin and common. bin stores all the binary executables and common stores all the information of each ORGANISM.
 export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
-# set PATH to be aware of pipeline/bin; this bin directory needs to be searched first
 export PATH=${PIPELINE_DIRECTORY}/:$PATH
 export RUNDIR=/home/wangw1/bin
 mkdir \$HOME/scratch/jobid_\$JOB_ID
@@ -27,10 +29,11 @@ end=\$SGE_TASK_LAST
 
 DIR=$Dir
 file=$File
+FILETYPE=$type
 chrsize=/home/wangw1/pipeline/common/dm3.chrom.sizes
 NF=$normfile
 lenrangeselector \${DIR}/\$file 23 29 > \${DIR}/\${file}.23-29
-/home/wangw1/bin/normbed2circos.pl \${file}.23-29 \$chrsize $NF
+${PIPELINE_DIRECTORY}/home/wangw1/bin/normbedmapper2circos.pl \${file}.23-29 \$FILETYPE \$chrsize $NF $OUTDIR
 echo \"file format done!\"
 for i in \`ls \${DIR}/*circos.bed\`
 do
