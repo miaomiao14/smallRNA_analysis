@@ -27,15 +27,16 @@ while(my $chr=<CHR>)
 	$chrsize{$chrLine[0]}=$chrLine[1];
 }
 ################################################################
-my $normFacFile=shift @ARGV;
-if($normFacFile)
-{
-	open NF, "$normFacFile";
-}
-else
-{
-	open NF, "/home/wangw1/pipeline/common/nf_2012_01.txt";
-}
+#my $normFacFile=shift @ARGV;
+#if($normFacFile)
+#{
+#	open NF, "$normFacFile";
+#}
+#else
+#{
+#	open NF, "/home/wangw1/pipeline/common/nf_2012_01.txt";
+#}
+my $normFac=shift @ARGV;
 ################################################################
 while(my $l=<NF>)
 {
@@ -54,10 +55,10 @@ $gz = gzopen($inFile, "rb") or die "Cannot open $inFile: $gzerrno\n" ;
 if($type eq "normbed")
 {
 	$filename=`basename $file .norm.bed.gz`;
-	$normfactor=$nf{$filename}/1000000;
+	$normfactor=$normFac/1000000;
 
-	open PLUSOUT, ">$outdir/$file\.plus\.circos\.bed";
-	open MINUSOUT, ">$outdir/$file\.minus\.circos\.bed";
+	open PLUSOUT, ">$outdir/$filename\.plus\.circos\.bed";
+	open MINUSOUT, ">$outdir/$filename\.minus\.circos\.bed";
 	
 	while($gz->gzreadline($r) > 0) #read zipped files
 	#while($r=<IN>) 
@@ -86,9 +87,9 @@ if($type eq "mapper2")
 {
 
 	$filename=`basename $file .mapper2.gz`;
-	$normfactor=$nf{$filename}/1000000;
-	open SOUT, ">$outdir/$file\.sense\.circos\.bed";
-	open AOUT, ">$outdir/$file\.antisense\.circos\.bed";
+	$normfactor=$normFac/1000000;
+	open SOUT, ">$outdir/$filename\.sense\.circos\.bed";
+	open AOUT, ">$outdir/$filename\.antisense\.circos\.bed";
 
 	while($gz->gzreadline($r) > 0)	
 	#while($r=<IN>) 
