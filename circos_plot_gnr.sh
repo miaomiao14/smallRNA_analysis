@@ -59,8 +59,8 @@ do
 			n=\$((\$tlen/\$b))
 			nbin=\$((\$n+1))
 			
-			"echo -e \" bigWigSummary \${j}.bw \${a[\$k]} 0 \${a[\$((\$k+1))]} \$nbin -type=mean > \${j}.\${a[\$k]}.mean.\${BINSIZE}.txt \"  \>\>\${paraFile}"
-			"echo -e \" bigWigSummary \${j}.bw \${a[\$k]} 0 \${a[\$((\$k+1))]} \$nbin -type=max > \${j}.\${a[\$k]}.max.\${BINSIZE}.txt \" \>\> \${paraFile}"
+			"echo -e \" bigWigSummary \${j}.bw \${a[\$k]} 0 \$tlen \$nbin -type=mean > \${j}.\${a[\$k]}.mean.\${BINSIZE}.txt \"  \>\>\${paraFile}"
+			"echo -e \" bigWigSummary \${j}.bw \${a[\$k]} 0 \$tlen \$nbin -type=max > \${j}.\${a[\$k]}.max.\${BINSIZE}.txt \" \>\> \${paraFile}"
 		done
 		if [[ ! -f \${paraFile}.completed ]] || [[ -f \$paraFile.failed_commands ]]
 		then
