@@ -7,9 +7,9 @@ for file in "$@"
 do
 CIRCOSBIN=$file
 filename=${CIRCOSBIN##*/}
-awk -v f=filename 'BEGIN{OFS="\t"}{if(min==""){min=max=$4}; if($4>max) {max=$4}; if($4< min) {min=$4}; total+=$4; count+=1;} END {print f,total/count, min, max}' $CIRCOSBIN >>${OUTDIR}/${STATFILE}
+awk -v f=$filename 'BEGIN{OFS="\t"}{if(min==""){min=max=$4}; if($4>max) {max=$4}; if($4< min) {min=$4}; total+=$4; count+=1;} END {print f,total/count, min, max}' $CIRCOSBIN >>${OUTDIR}/${STATFILE}
 done
-maxvalue=`awk 'BEGIN{OFS="\t"}{if(min==""){min=max=$4}; if($4>max) {max=$4}; if($4< min) {min=$4};}END {print max}' ${STATFILE}`
+maxvalue=`awk 'BEGIN{OFS="\t"}{if(min==""){min=max=$4}; if($4>max) {max=$4}; if($4< min) {min=$4};}END {print max}' ${OUTDIR}/${STATFILE}`
 
 echo "
 #karyotype = ../data/karyotype.drosophila.hires.dm3.txt
@@ -23,7 +23,7 @@ chromosomes_display_default = yes
 #chromosomes = chrx:8-12;chr2l:4-11;chr3R:9-21
 #chromosomes_breaks = -chr2l:11-19
 	<plots>
-" >>file.conf
+" >>${OUTDIR}/file.conf
 num_vars=$#
 count=0
 radius_inc=$(awk -v a=${num_vars} 'BEGIN{print 0.6/a}')
@@ -47,7 +47,7 @@ echo "
 	r1    = $rr1
 	color = vvdblue
 	thickness = 0.75
-	</plot> " >>file.conf
+	</plot> " >>${OUTDIR}/file.conf
 fi
 if [[ $filename =~ "minus" ]]
 then 
@@ -64,7 +64,7 @@ echo "
 	r1    = $rr1
 	color = vvdred
 	thickness = 0.75
-	</plot> " >>file.conf
+	</plot> " >>${OUTDIR}/file.conf
 fi
 if [[ $FLAG == 1 ]]
 then
@@ -81,4 +81,4 @@ echo "
 <<include ../../etc/image.conf>>
 </image>
 
-<<include ../../etc/housekeeping.conf>>" >>file.conf
+<<include ../../etc/housekeeping.conf>>" >>${OUTDIR}/file.conf
