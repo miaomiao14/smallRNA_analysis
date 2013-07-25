@@ -73,9 +73,9 @@ count=\$((\$count+1))
 done
 paraFile=\${DIR}/\${RANDOM}.para
 
-# print "inputdir normType[nnc|seqDep] strand[sense|antisense] metrics[max|mean] binsize filename fileformat[normbed|mapper2]\n";
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc sense mean \$BINSIZE \${i} \$FILETYPE \" \>\>\${paraFile}
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc antisense mean \$BINSIZE \${i} \$FILETYPE \" \>\>\${paraFile}
+
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc sense mean \$BINSIZE \${i} \$FILETYPE \" \>\> \${paraFile}
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc antisense mean \$BINSIZE \${i} \$FILETYPE \" \>\> \${paraFile}
 "echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc sense max \$BINSIZE \${i} \$FILETYPE \" \>\> \${paraFile}
 "echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc antisense max \$BINSIZE \${i} \$FILETYPE \" \>\> \${paraFile}
 "echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep sense mean \$BINSIZE \${i} \$FILETYPE \" \>\> \${paraFile}
