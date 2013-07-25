@@ -1,5 +1,6 @@
 #!/bin/bash
-
+#input is the uniq.reads
+#seq count
 INDIR=$1
 fileEND=$2
 LOG=${INDIR}/species.reads.stat
