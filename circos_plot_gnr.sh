@@ -12,6 +12,7 @@ do
 	#ln -s $i ${OUTDIR}
 	FILE=${i##*/}
 	insertsname=`basename $FILE .xkxh.transposon.mapper2.gz`
+	insertsname=${FILE%%.inserts.*}
 	nfnnc=`cat ${INDIR}/${insertsname}/output/${insertsname}_stats_table_reads|tail -1|cut -f4`
 	nfdep=`cat ${INDIR}/${insertsname}/output/${insertsname}_stats_table_reads|tail -1|cut -f2`
 	OUTDIR=${INDIR}/circos/${insertsname}
