@@ -16,7 +16,7 @@ do
 	inserts=${inserts}.inserts
 	nfnnc=`cat ${INDIR}/${inserts}/output/${insertsname}_stats_table_reads|tail -1|cut -f4`
 	nfdep=`cat ${INDIR}/${inserts}/output/${insertsname}_stats_table_reads|tail -1|cut -f2`
-	OUTDIR=${INDIR}/circos/
+	OUTDIR=${INDIR}/circos
 	mkdir -p ${OUTDIR}
 	SGE=${INDIR}/circos/${insertsname}.circos.sge
 	
@@ -59,8 +59,8 @@ do
 			n=\$((\$tlen/\$b))
 			nbin=\$((\$n+1))
 			
-			"echo -e \" bigWigSummary \${j}.bw \${a[\$k]} 0 \$tlen \$nbin -type=mean > \${j}.\${a[\$k]}.mean.\${BINSIZE}.txt \"  \>\>\${paraFile}"
-			"echo -e \" bigWigSummary \${j}.bw \${a[\$k]} 0 \$tlen \$nbin -type=max > \${j}.\${a[\$k]}.max.\${BINSIZE}.txt \" \>\> \${paraFile}"
+			"echo -e \" bigWigSummary \${j}.bw \${a[\$k]} 0 \$tlen \$nbin -type=mean \> \${j}.\${a[\$k]}.mean.\${BINSIZE}.txt \"  \>\>\${paraFile}"
+			"echo -e \" bigWigSummary \${j}.bw \${a[\$k]} 0 \$tlen \$nbin -type=max \> \${j}.\${a[\$k]}.max.\${BINSIZE}.txt \" \>\> \${paraFile}"
 		done
 		if [[ ! -f \${paraFile}.completed ]] || [[ -f \$paraFile.failed_commands ]]
 		then
@@ -96,7 +96,7 @@ fi
 
 mv \$HOME/scratch/jobid_\$JOB_ID ${OUTDIR}/${insertsname}
 "> $SGE
-#qsub $SGE
+qsub $SGE
 done
 
 
