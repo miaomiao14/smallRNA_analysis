@@ -74,14 +74,14 @@ done
 paraFile=\${DIR}/\${RANDOM}.para
 
 
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc sense mean \$b \${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc antisense mean \$b \${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc sense max \$b \${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc antisense max \$b \${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep sense mean \$b \${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep antisense mean \$b \${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep sense max \$b \${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep antisense max \$b \${i} \$FILETYPE \" \>\> \${paraFile} "
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc sense mean \$b ${i} \$FILETYPE \" \>\> \${paraFile} "
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc antisense mean \$b ${i} \$FILETYPE \" \>\> \${paraFile} "
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc sense max \$b ${i} \$FILETYPE \" \>\> \${paraFile} "
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc antisense max \$b ${i} \$FILETYPE \" \>\> \${paraFile} "
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep sense mean \$b ${i} \$FILETYPE \" \>\> \${paraFile} "
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep antisense mean \$b ${i} \$FILETYPE \" \>\> \${paraFile} "
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep sense max \$b ${i} \$FILETYPE \" \>\> \${paraFile} "
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep antisense max \$b ${i} \$FILETYPE \" \>\> \${paraFile} "
 if [[ ! -f \${paraFile}.completed ]] || [[ -f \$paraFile.failed_commands ]]
 then
 	
