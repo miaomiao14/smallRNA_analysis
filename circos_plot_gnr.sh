@@ -39,7 +39,7 @@ end=\$SGE_TASK_LAST
 FILETYPE=mapper2
 CHRSIZE=/home/wangw1/pipeline/common/dm3.chrom.sizes
 
-declar -a NORMFACTOR=(${nfnnc} ${nfdep})
+declare -a NORMFACTOR=(${nfnnc} ${nfdep})
 
 for NF in \${NORMFACTOR[@]}
 do 
@@ -56,6 +56,7 @@ do
 			tlen=\${a[\$((\$k+1))]}
 			n=\$((\$tlen/\$b))
 			nbin=\$((\$n+1))
+			
 			bigWigSummary \${j}.bw \${a[\$k]} 0 \${a[\$((\$k+1))]} \$nbin -type=mean >\${j}.\${a[\$k]}.mean.bin.txt
 			bigWigSummary \${j}.bw \${a[\$k]} 0 \${a[\$((\$k+1))]} \$nbin -type=max >\${j}.\${a[\$k]}.max.bin.txt
 		done
@@ -63,22 +64,18 @@ do
 	done
 done
 
-#match2all_scorefile2circostrack.pl \$DIR mean \$bin \$file
-#match2all_scorefile2circostrack.pl \$DIR max \$bin \$file
+\${PIPELINE_DIRECTORY}/match2all_scorefile2circostrack.pl \$DIR mean \$bin \$file
+\${PIPELINE_DIRECTORY}/match2all_scorefile2circostrack.pl \$DIR max \$bin \$file
 
 #\`rm -f *.bin.txt\` 
 #\`rm -f *.bed\`
 #\`rm -f *.bedGraph\`
 #\`rm -f *.sort\`
 #\`rm -f *.bw\`
-#for k in \`ls \${DIR}/*.\$bin.txt\`
-#do
-#echo \$k
-#cut -f4 \$k |sort -r -n |head -1
-#done
+
 mv \$HOME/scratch/jobid_\$JOB_ID ${OUTDIR}/${insertsname}
 "> $SGE
-#qsub $SGE
+qsub $SGE
 done
 
 
