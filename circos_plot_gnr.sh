@@ -9,12 +9,13 @@ BINSIZE=$2
 
 for i in `ls ${INDIR}/*.inserts/*uniqmap.xkxh.transposon.mapper2.gz`
 do 
-	ln -s $i ${OUTDIR}
+	#ln -s $i ${OUTDIR}
 	FILE=\${i##*/}
 	insertsname=`basename $FILE .xkxh.transposon.mapper2.gz`
 	nfnnc=`cat ${INDIR}/${insertsname}/output/${insertsname}_stats_table_reads|tail -1|cut -f4`
 	nfdep=`cat ${INDIR}/${insertsname}/output/${insertsname}_stats_table_reads|tail -1|cut -f2`
 	OUTDIR=${INDIR}/circos/${insertsname}
+	mkdir -p ${OUTDIR}
 	SGE=${INDIR}/circos/${insertsname}.circos.sge
 	
 ###generate sge file
