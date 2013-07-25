@@ -59,8 +59,8 @@ do
 			n=\$((\$tlen/\$b))
 			nbin=\$((\$n+1))
 			
-			"echo -e \" bigWigSummary \${j}.bw \${a[\$k]} 0 \$tlen \$nbin -type=mean \> \${j}.\${a[\$k]}.mean.\${BINSIZE}.txt \"  \>\>\${paraFile}"
-			"echo -e \" bigWigSummary \${j}.bw \${a[\$k]} 0 \$tlen \$nbin -type=max \> \${j}.\${a[\$k]}.max.\${BINSIZE}.txt \" \>\> \${paraFile}"
+			"echo -e \" bigWigSummary \${j}.bw \${a[\$k]} 0 \$tlen \$nbin -type=mean \> \${j}.\${a[\$k]}.mean.\${b}.txt \"  \>\>\${paraFile}"
+			"echo -e \" bigWigSummary \${j}.bw \${a[\$k]} 0 \$tlen \$nbin -type=max \> \${j}.\${a[\$k]}.max.\${b}.txt \" \>\> \${paraFile}"
 		done
 		if [[ ! -f \${paraFile}.completed ]] || [[ -f \$paraFile.failed_commands ]]
 		then
@@ -74,14 +74,14 @@ done
 paraFile=\${DIR}/\${RANDOM}.para
 
 
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc sense mean \$BINSIZE \${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc antisense mean \$BINSIZE \${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc sense max \$BINSIZE \${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc antisense max \$BINSIZE \${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep sense mean \$BINSIZE \${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep antisense mean \$BINSIZE \${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep sense max \$BINSIZE \${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep antisense max \$BINSIZE \${i} \$FILETYPE \" \>\> \${paraFile} "
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc sense mean \$b \${i} \$FILETYPE \" \>\> \${paraFile} "
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc antisense mean \$b \${i} \$FILETYPE \" \>\> \${paraFile} "
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc sense max \$b \${i} \$FILETYPE \" \>\> \${paraFile} "
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc antisense max \$b \${i} \$FILETYPE \" \>\> \${paraFile} "
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep sense mean \$b \${i} \$FILETYPE \" \>\> \${paraFile} "
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep antisense mean \$b \${i} \$FILETYPE \" \>\> \${paraFile} "
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep sense max \$b \${i} \$FILETYPE \" \>\> \${paraFile} "
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep antisense max \$b \${i} \$FILETYPE \" \>\> \${paraFile} "
 if [[ ! -f \${paraFile}.completed ]] || [[ -f \$paraFile.failed_commands ]]
 then
 	
