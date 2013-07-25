@@ -73,7 +73,7 @@ done
 #\`rm -f *.sort\`
 #\`rm -f *.bw\`
 
-mv \$HOME/scratch/jobid_\$JOB_ID ${OUTDIR}/${insertsname}
+mv \$HOME/scratch/jobid_\$JOB_ID ${OUTDIR}/
 "> $SGE
 qsub $SGE
 done
