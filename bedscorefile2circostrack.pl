@@ -56,8 +56,8 @@ foreach $f (@files)
 	chomp $sco;
 	@scores=split(/\t/,$sco);
 	my ($filename,$dir)=fileparse($f);
-	#print "$filename\n";
-	$filename=~/A.*.(chr.+)\.$type\.bin\.txt/;
+	#@files=`ls $dir/*.$normFacType.$strand.*.$metrictype.$binsize.*`;
+	$filename =~ /Phil.*.(chr.+)\.$metrictype\.$binsize\.txt/;
 	#$r[2]=~/(chr.+):(\d+)-(\d+)\((.+)\)/;
 	$chrom=$1;
 	$sizechr=$chrsize{$chrom};
