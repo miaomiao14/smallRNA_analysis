@@ -76,7 +76,7 @@ done
 #done
 mv \$HOME/scratch/jobid_\$JOB_ID ${OUTDIR}/${insertsname}
 "> $SGE
-qsub $SGE
+#qsub $SGE
 done
 
 
