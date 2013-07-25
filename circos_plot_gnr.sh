@@ -89,7 +89,7 @@ done
 #\`rm -f *.bedGraph\`
 #\`rm -f *.sort\`
 #\`rm -f *.bw\`
-[ -d ${OUTDIR}/${insertsname} ] && rm ${OUTDIR}/${insertsname}
+[ -d ${OUTDIR}/${insertsname} ] && rm -rf ${OUTDIR}/${insertsname}
 mv \$HOME/scratch/jobid_\$JOB_ID ${OUTDIR}/${insertsname}
 "> $SGE
 qsub $SGE
