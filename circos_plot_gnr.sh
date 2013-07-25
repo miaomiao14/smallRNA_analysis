@@ -7,7 +7,7 @@ INDIR=$1 #this is the folder store all pipeline results outmost folders
 BINSIZE=$2 
 [ ! -d ${INDIR}/circos ] && mkdir -p ${INDIR}/circos
 
-for i in `ls ${INDIR}/*.inserts/*uniqmap.xkxh.transposon.mapper2.gz`
+for i in `ls ${INDIR}/*.inserts/*.xkxh.transposon.mapper2.gz`
 do 
 	#ln -s $i ${OUTDIR}
 	FILE=${i##*/}
@@ -84,11 +84,11 @@ fi
 count=\$((\$count+1))
 done
 
-#\`rm -f *.bin.txt\` 
-#\`rm -f *.bed\`
-#\`rm -f *.bedGraph\`
-#\`rm -f *.sort\`
-#\`rm -f *.bw\`
+\`rm -f *.bin.txt\` 
+\`rm -f *.bed\`
+\`rm -f *.bedGraph\`
+\`rm -f *.sort\`
+\`rm -f *.bw\`
 [ -d ${OUTDIR}/${insertsname} ] && rm -rf ${OUTDIR}/${insertsname}
 mv \$HOME/scratch/jobid_\$JOB_ID ${OUTDIR}/${insertsname}
 "> $SGE
