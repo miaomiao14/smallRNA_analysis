@@ -37,6 +37,7 @@ while(my $chr=<CHR>)
 #	open NF, "/home/wangw1/pipeline/common/nf_2012_01.txt";
 #}
 my $normFac=shift @ARGV;
+my $normFacType=shift @ARGV;
 ################################################################
 while(my $l=<NF>)
 {
@@ -54,11 +55,13 @@ $gz = gzopen($inFile, "rb") or die "Cannot open $inFile: $gzerrno\n" ;
 
 if($type eq "normbed")
 {
-	$filename=`basename $file .norm.bed.gz`;
+	$file =~ /(.*)\.norm/;
+	$filename=$1;
+	#$filename=`basename $file .norm.bed.gz`;
 	$normfactor=$normFac/1000000;
 
-	open PLUSOUT, ">$outdir/$filename\.plus\.circos\.bed";
-	open MINUSOUT, ">$outdir/$filename\.minus\.circos\.bed";
+	open PLUSOUT, ">$outdir/$filename\.$normFacType\.plus\.circos\.bed";
+	open MINUSOUT, ">$outdir/$filename\.$normFacType\.minus\.circos\.bed";
 	
 	while($gz->gzreadline($r) > 0) #read zipped files
 	#while($r=<IN>) 
@@ -85,11 +88,12 @@ if($type eq "normbed")
 }
 if($type eq "mapper2")
 {
-
-	$filename=`basename $file .mapper2.gz`;
+	$file =~ /(.*)\.mapper2/;
+	$filename=$1;
+	#$filename=`basename $file .mapper2.gz`; #this does not work, because it contains carrier return
 	$normfactor=$normFac/1000000;
-	open SOUT, ">$outdir/$filename\.sense\.circos\.bed";
-	open AOUT, ">$outdir/$filename\.antisense\.circos\.bed";
+	open SOUT, ">$outdir/$filename\.$normFacType\.sense\.circos\.bed";
+	open AOUT, ">$outdir/$filename\.$normFacType\.antisense\.circos\.bed";
 
 	while($gz->gzreadline($r) > 0)	
 	#while($r=<IN>) 
@@ -134,7 +138,7 @@ sub usage
 {
         print "\nUsage:$0\n\n\t";
         print "REQUIRED\n\t";
-        print "inputfile(*.norm.bed|*.mapper2) type(normbed|mapper2) CHRSIZE NormFactorFile outdir\n";
+        print "inputfile(*.norm.bed|*.mapper2) type(normbed|mapper2) CHRSIZE NormFactorFile NormFactorType outdir\n";
         print "This perl script is convert the normbed file to bed file with 4th column is the score(reads,NTM,nf)\n";
 
         exit(1);

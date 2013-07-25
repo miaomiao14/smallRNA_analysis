@@ -5,7 +5,7 @@ export PATH=${PIPELINE_PATH}:${PATH}
 ADAPTER=TGGAATTCTCGGGTGCCAAGG
 INDIR=$1
 OUTDIR=$2
-paraFile=${RANDOM}.para
+paraFile=${OUTDIR}/${RANDOM}.para
 ######################################
 #discard sequences shorter than 18nt##
 #discard non-adapted sequences      ##
@@ -24,7 +24,7 @@ echo -ne "inserts2uniqreads.pl ${OUTDIR}/${filename}.insertsout 18 30 > ${OUTDIR
 echo -e "rm ${OUTDIR}/${filename}.insertsout" >>${paraFile}
 done
 
-if [[ ! -f ${paraFile}.completed ]] || [[ -f $$paraFile.failed_commands ]]
+if [[ ! -f ${paraFile}.completed ]] || [[ -f $paraFile.failed_commands ]]
 then
 	CPUN=`wc -l $paraFile |cut -f1 -d" "` && \
 	ParaFly -c $paraFile -CPU $CPUN -failed_cmds $paraFile.failed_commands

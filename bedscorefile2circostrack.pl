@@ -5,16 +5,40 @@
 ##binsize 
 ##prefix of file name
 use File::Basename;
-#my ($filename,$dir)=fileparse($ARGV[1]);
-$dir=$ARGV[0];
-$type=$ARGV[1];
-@files=`ls $dir/*.$type.*`;
-$binsize=$ARGV[2];
-$pre=$ARGV[3];
-@pre=split(/\./,$pre);
-$pre=$pre[0];
-open CHR, "/home/wangw1/pipeline/common/dm3.chrom.sizes";
 
+if(scalar(@ARGV)<7)
+{
+        usage();
+}
+
+
+$dir=shift @ARGV;
+$normFacType=shift @ARGV;
+$strand=shift @ARGV;
+$metrictype=shift @ARGV;
+$binsize=shift @ARGV;
+#From normbedmapper2circos.pl
+#open SOUT, ">$outdir/$filename\.$normFacType\.sense\.circos\.bed";
+#from Bigwig
+#\${j}.\${a[\$k]}.mean.\${BINSIZE}.txt
+@files=`ls $dir/*.$normFacType.$strand.*.$metrictype.$binsize.*`;
+
+#\${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR mean \$bin \$file
+$inputfilename=shift @ARGV;
+($file,$dir)=fileparse($inputfilename);
+$inputformat=shift @ARGV;
+if($inputformat eq "mapper2")
+{
+$file =~ /(.*)\.mapper2/;
+$filename=$1;
+}
+if($inputformat eq "normbed")
+{
+$file =~ /(.*)\.norm/;
+$filename=$1;
+}
+
+open CHR, "/home/wangw1/pipeline/common/dm3.chrom.sizes";
 while($read=<CHR>)
 {
 	chomp $read;
@@ -23,12 +47,12 @@ while($read=<CHR>)
 }
 close(CHR);
 
-open OUT, ">$dir/$pre.$type.circos.$binsize.txt";
+open OUT, ">$dir/$filename.$normFacType.$strand.$metrictype.$binsize.circos.txt";
 
 foreach $f (@files)
 {
 	open SCORE, "$f";
-	$sco=<SCORE>;
+	$sco=<SCORE>; #each chromosome is a line
 	chomp $sco;
 	@scores=split(/\t/,$sco);
 	my ($filename,$dir)=fileparse($f);
@@ -83,3 +107,13 @@ foreach $f (@files)
 }
 close(SCORE);
 close(OUT);
+
+sub usage
+{
+        print "\nUsage:$0\n\n\t";
+        print "REQUIRED\n\t";
+        print "inputdir normType[nnc|seqDep] strand[sense|antisense] metrics[max|mean] binsize filename fileformat[normbed|mapper2]\n";
+        print "This perl script is to convert the inputfile to circos track!\n";
+
+        exit(1);
+}

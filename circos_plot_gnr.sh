@@ -16,7 +16,7 @@ do
 	inserts=${inserts}.inserts
 	nfnnc=`cat ${INDIR}/${inserts}/output/${insertsname}_stats_table_reads|tail -1|cut -f4`
 	nfdep=`cat ${INDIR}/${inserts}/output/${insertsname}_stats_table_reads|tail -1|cut -f2`
-	OUTDIR=${INDIR}/circos/${insertsname}
+	OUTDIR=${INDIR}/circos/
 	mkdir -p ${OUTDIR}
 	SGE=${INDIR}/circos/${insertsname}.circos.sge
 	
@@ -40,10 +40,11 @@ FILETYPE=mapper2
 CHRSIZE=/home/wangw1/pipeline/common/dm3.chrom.sizes
 
 declare -a NORMFACTOR=(${nfnnc} ${nfdep})
-
+declare -a NORMFACTORTYPE=("nnc" "seqDep")
+count=0
 for NF in \${NORMFACTOR[@]}
 do 
-\${PIPELINE_DIRECTORY}/normbedmapper2circos.pl ${i} \$FILETYPE \$CHRSIZE \$NF \$DIR
+\${PIPELINE_DIRECTORY}/normbedmapper2circos.pl ${i} \$FILETYPE \$CHRSIZE \$NF \${NORMFACTORTYPE[\$count]} \$DIR
 	for j in \`ls \${DIR}/*circos.bed\`
 	do 
 		bedSort \$j \$j.sort
@@ -51,21 +52,41 @@ do
 		bedGraphToBigWig \${j}.bedGraph \$CHRSIZE \${j}.bw
 		a=(\$(cat \$CHRSIZE))
 		b=$BINSIZE
+		paraFile=\${DIR}/\${RANDOM}.para
 		for k in \$(seq 0 2 \$(( \${#a[@]} - 1)))
 		do 
 			tlen=\${a[\$((\$k+1))]}
 			n=\$((\$tlen/\$b))
 			nbin=\$((\$n+1))
 			
-			bigWigSummary \${j}.bw \${a[\$k]} 0 \${a[\$((\$k+1))]} \$nbin -type=mean >\${j}.\${a[\$k]}.mean.bin.txt
-			bigWigSummary \${j}.bw \${a[\$k]} 0 \${a[\$((\$k+1))]} \$nbin -type=max >\${j}.\${a[\$k]}.max.bin.txt
+			echo -e " bigWigSummary \${j}.bw \${a[\$k]} 0 \${a[\$((\$k+1))]} \$nbin -type=mean >\${j}.\${a[\$k]}.mean.\${BINSIZE}.txt ">>\${paraFile}
+			echo -e " bigWigSummary \${j}.bw \${a[\$k]} 0 \${a[\$((\$k+1))]} \$nbin -type=max >\${j}.\${a[\$k]}.max.\${BINSIZE}.txt ">>\${paraFile}
 		done
+		if [[ ! -f \${paraFile}.completed ]] || [[ -f \$paraFile.failed_commands ]]
+		then
+	
+		ParaFly -c \$paraFile -CPU 8 -failed_cmds \$paraFile.failed_commands
+		fi
 	
 	done
+count=\$((\$count+1))
 done
+paraFile=\${DIR}/\${RANDOM}.para
 
-\${PIPELINE_DIRECTORY}/match2all_scorefile2circostrack.pl \$DIR mean \$bin \$file
-\${PIPELINE_DIRECTORY}/match2all_scorefile2circostrack.pl \$DIR max \$bin \$file
+# print "inputdir normType[nnc|seqDep] strand[sense|antisense] metrics[max|mean] binsize filename fileformat[normbed|mapper2]\n";
+echo -e " \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc sense mean \$BINSIZE \${i} \$FILETYPE ">>\${paraFile}
+echo -e " \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc antisense mean \$BINSIZE \${i} \$FILETYPE ">>\${paraFile}
+echo -e " \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc sense max \$BINSIZE \${i} \$FILETYPE ">>\${paraFile}
+echo -e " \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc antisense max \$BINSIZE \${i} \$FILETYPE ">>\${paraFile}
+echo -e " \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep sense mean \$BINSIZE \${i} \$FILETYPE ">>\${paraFile}
+echo -e " \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep antisense mean \$BINSIZE \${i} \$FILETYPE ">>\${paraFile}
+echo -e " \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep sense max \$BINSIZE \${i} \$FILETYPE ">>\${paraFile}
+echo -e " \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep antisense max \$BINSIZE \${i} \$FILETYPE ">>\${paraFile}
+if [[ ! -f \${paraFile}.completed ]] || [[ -f \$paraFile.failed_commands ]]
+then
+	
+	ParaFly -c $paraFile -CPU 8 -failed_cmds \$paraFile.failed_commands
+fi
 
 #\`rm -f *.bin.txt\` 
 #\`rm -f *.bed\`
@@ -73,9 +94,9 @@ done
 #\`rm -f *.sort\`
 #\`rm -f *.bw\`
 
-mv \$HOME/scratch/jobid_\$JOB_ID ${OUTDIR}/
+mv \$HOME/scratch/jobid_\$JOB_ID ${OUTDIR}/${insertsname}
 "> $SGE
-qsub $SGE
+#qsub $SGE
 done
 
 
