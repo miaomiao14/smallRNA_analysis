@@ -41,18 +41,18 @@ CHRSIZE=/home/wangw1/pipeline/common/dm3.chrom.sizes
 
 declar -a NORMFACTOR=(${nfnnc} ${nfdep})
 
-for NF in ${NORMFACTOR[@]}
-do \
-${PIPELINE_DIRECTORY}/normbedmapper2circos.pl \${i} \$FILETYPE \$CHRSIZE $NF \$DIR
+for NF in \${NORMFACTOR[@]}
+do 
+\${PIPELINE_DIRECTORY}/normbedmapper2circos.pl ${i} \$FILETYPE \$CHRSIZE \$NF \$DIR
 	for j in \`ls \${DIR}/*circos.bed\`
-	do \
+	do 
 		bedSort \$j \$j.sort
 		bedItemOverlapCountWithScore dm3 \$j.sort chromSize=\$CHRSIZE stdin >\${j}.bedGraph
 		bedGraphToBigWig \${j}.bedGraph \$CHRSIZE \${j}.bw
 		a=(\$(cat \$CHRSIZE))
 		b=$BINSIZE
 		for k in \$(seq 0 2 \$(( \${#a[@]} - 1)))
-		do \
+		do 
 			tlen=\${a[\$((\$k+1))]}
 			n=\$((\$tlen/\$b))
 			nbin=\$((\$n+1))
