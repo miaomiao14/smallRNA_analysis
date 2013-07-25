@@ -46,8 +46,8 @@ while($read=<CHR>)
 	$chrsize{$a[0]}=$a[1];
 }
 close(CHR);
-
-open OUT, ">$dir/$filename.$normFacType.$strand.$metrictype.$binsize.circos.txt";
+$OUTDIR=shift @ARGV;
+open OUT, ">$OUTDIR/$filename.$normFacType.$strand.$metrictype.$binsize.circos.txt";
 
 foreach $f (@files)
 {
@@ -56,7 +56,7 @@ foreach $f (@files)
 	chomp $sco;
 	@scores=split(/\t/,$sco);
 	my ($filename,$dir)=fileparse($f);
-	print "$filename\n";
+	#print "$filename\n";
 	$filename=~/A.*.(chr.+)\.$type\.bin\.txt/;
 	#$r[2]=~/(chr.+):(\d+)-(\d+)\((.+)\)/;
 	$chrom=$1;
@@ -112,7 +112,7 @@ sub usage
 {
         print "\nUsage:$0\n\n\t";
         print "REQUIRED\n\t";
-        print "inputdir normType[nnc|seqDep] strand[sense|antisense] metrics[max|mean] binsize filename fileformat[normbed|mapper2]\n";
+        print "inputdir normType[nnc|seqDep] strand[sense|antisense] metrics[max|mean] binsize filename fileformat[normbed|mapper2] outputdir\n";
         print "This perl script is to convert the inputfile to circos track!\n";
 
         exit(1);

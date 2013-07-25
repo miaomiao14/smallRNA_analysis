@@ -69,31 +69,27 @@ do
 		fi
 	
 	done
-count=\$((\$count+1))
-done
+
 paraFile=\${DIR}/\${RANDOM}.para
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR \${NORMFACTORTYPE[\$count]} sense mean \$b ${i} \$FILETYPE \$DIR \" \>\> \${paraFile} "
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR \${NORMFACTORTYPE[\$count]} antisense mean \$b ${i} \$FILETYPE \$DIR \" \>\> \${paraFile} "
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR \${NORMFACTORTYPE[\$count]} sense max \$b ${i} \$FILETYPE \$DIR \" \>\> \${paraFile} "
+"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR \${NORMFACTORTYPE[\$count]} antisense max \$b ${i} \$FILETYPE \$DIR \" \>\> \${paraFile} "
 
-
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc sense mean \$b ${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc antisense mean \$b ${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc sense max \$b ${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR nnc antisense max \$b ${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep sense mean \$b ${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep antisense mean \$b ${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep sense max \$b ${i} \$FILETYPE \" \>\> \${paraFile} "
-"echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR seqDep antisense max \$b ${i} \$FILETYPE \" \>\> \${paraFile} "
 if [[ ! -f \${paraFile}.completed ]] || [[ -f \$paraFile.failed_commands ]]
 then
 	
 	ParaFly -c \$paraFile -CPU 8 -failed_cmds \$paraFile.failed_commands
 fi
+count=\$((\$count+1))
+done
 
 #\`rm -f *.bin.txt\` 
 #\`rm -f *.bed\`
 #\`rm -f *.bedGraph\`
 #\`rm -f *.sort\`
 #\`rm -f *.bw\`
-
+[ -d ${OUTDIR}/${insertsname} ] && rm ${OUTDIR}/${insertsname}
 mv \$HOME/scratch/jobid_\$JOB_ID ${OUTDIR}/${insertsname}
 "> $SGE
 qsub $SGE
