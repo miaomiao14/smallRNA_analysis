@@ -1,72 +1,81 @@
 #! /usr/bin/env bash
 
-#input file is match2all.out
+#input file is xkxh.norm.bed or xkxh.transposon.mapper2
+#give input directory, 
 #binsize is for the bigWigSummary
-Dir=$1
-File=$2
-binsize=$3
-type=$4
-[ ! -d $PWD/circos ] && mkdir -p $PWD/circos
-OUTDIR=$PWD/circos
-#mapper2circos.pl ${DIR}/$file $chrsize
-#for i in `ls ${DIR}/*sense.bed`
-#do
-#F=${i##*/}
-SGE=${File}.circos.sge
-echo "#!/bin/sh
+INDIR=$1 #this is the folder store all pipeline results outmost folders
+BINSIZE=$2 
+[ ! -d ${INDIR}/circos ] && mkdir -p ${INDIR}/circos
+
+for i in `ls ${INDIR}/*.inserts/*uniqmap.xkxh.transposon.mapper2.gz`
+do 
+	ln -s $i ${OUTDIR}
+	FILE=\${i##*/}
+	insertsname=`basename $FILE .xkxh.transposon.mapper2.gz`
+	nfnnc=`cat ${INDIR}/${insertsname}/output/${insertsname}_stats_table_reads|tail -1|cut -f4`
+	nfdep=`cat ${INDIR}/${insertsname}/output/${insertsname}_stats_table_reads|tail -1|cut -f2`
+	OUTDIR=${INDIR}/circos/${insertsname}
+	SGE=${INDIR}/circos/${insertsname}.circos.sge
+	
+###generate sge file
+	echo "#!/bin/sh
 #$ -V
 #$ -cwd
+#$ -pe single 8
 #$ -o \$HOME/sge_jobs_output/sge_job.\$JOB_ID.out -j y
-#$ -l mem_free=10G
+#$ -l mem_free=31G
 #$ -S /bin/bash
 #$ -m e
 export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 export PATH=${PIPELINE_DIRECTORY}/:$PATH
-export RUNDIR=/home/wangw1/bin
 mkdir \$HOME/scratch/jobid_\$JOB_ID
+export DIR=\$HOME/scratch/jobid_\$JOB_ID
 start=\$SGE_TASK_FIRST
 end=\$SGE_TASK_LAST
 
-DIR=$Dir
-file=$File
-FILETYPE=$type
-chrsize=/home/wangw1/pipeline/common/dm3.chrom.sizes
-NF=$normfile
-lenrangeselector \${DIR}/\$file 23 29 > \${DIR}/\${file}.23-29
-${PIPELINE_DIRECTORY}/home/wangw1/bin/normbedmapper2circos.pl \${file}.23-29 \$FILETYPE \$chrsize $NF $OUTDIR
-echo \"file format done!\"
-for i in \`ls \${DIR}/*circos.bed\`
-do
-F=\${i##*/}
-bedSort \$i \$F.sort
-bedItemOverlapCountWithScore dm3 \$F.sort chromSize=\$chrsize stdin >\${F}.bedGraph
-bedGraphToBigWig \${F}.bedGraph \$chrsize \${F}.bw
-a=(\$(cat \$chrsize))
-#echo " Number of elements in array is \$\(\( $\{#a[\@]\} \)\)"
-bin=$binsize
-for j in \$(seq 0 2 \$(( \${#a[@]} - 1)))
-do
-tlen=\${a[\$((\$j+1))]}
-n=\$((\$tlen/\$bin))
-nbin=\$((\$n+1))
-bigWigSummary \${F}.bw \${a[\$j]} 0 \${a[\$((\$j+1))]} \$nbin -type=mean >\${F}.\${a[\$j]}.mean.bin.txt
-bigWigSummary \${F}.bw \${a[\$j]} 0 \${a[\$((\$j+1))]} \$nbin -type=max >\${F}.\${a[\$j]}.max.bin.txt
-done
+FILETYPE=mapper2
+CHRSIZE=/home/wangw1/pipeline/common/dm3.chrom.sizes
+
+declar -a NORMFACTOR=(${nfnnc} ${nfdep})
+
+for NF in ${NORMFACTOR[@]}
+do \
+${PIPELINE_DIRECTORY}/normbedmapper2circos.pl \${i} \$FILETYPE \$CHRSIZE $NF \$DIR
+	for j in \`ls \${DIR}/*circos.bed\`
+	do \
+		bedSort \$j \$j.sort
+		bedItemOverlapCountWithScore dm3 \$j.sort chromSize=\$CHRSIZE stdin >\${j}.bedGraph
+		bedGraphToBigWig \${j}.bedGraph \$CHRSIZE \${j}.bw
+		a=(\$(cat \$CHRSIZE))
+		b=$BINSIZE
+		for k in \$(seq 0 2 \$(( \${#a[@]} - 1)))
+		do \
+			tlen=\${a[\$((\$k+1))]}
+			n=\$((\$tlen/\$b))
+			nbin=\$((\$n+1))
+			bigWigSummary \${j}.bw \${a[\$k]} 0 \${a[\$((\$k+1))]} \$nbin -type=mean >\${j}.\${a[\$k]}.mean.bin.txt
+			bigWigSummary \${j}.bw \${a[\$k]} 0 \${a[\$((\$k+1))]} \$nbin -type=max >\${j}.\${a[\$k]}.max.bin.txt
+		done
+	
+	done
 done
 
-match2all_scorefile2circostrack.pl \$DIR mean \$bin \$file
-match2all_scorefile2circostrack.pl \$DIR max \$bin \$file
+#match2all_scorefile2circostrack.pl \$DIR mean \$bin \$file
+#match2all_scorefile2circostrack.pl \$DIR max \$bin \$file
 
-\`rm -f *.bin.txt\` 
-\`rm -f *.bed\`
-\`rm -f *.bedGraph\`
-\`rm -f *.sort\`
-\`rm -f *.23-29\`
-\`rm -f *.bw\`
-for k in \`ls \${DIR}/*.\$bin.txt\`
-do
-echo \$k
-cut -f4 \$k |sort -r -n |head -1
-done
+#\`rm -f *.bin.txt\` 
+#\`rm -f *.bed\`
+#\`rm -f *.bedGraph\`
+#\`rm -f *.sort\`
+#\`rm -f *.bw\`
+#for k in \`ls \${DIR}/*.\$bin.txt\`
+#do
+#echo \$k
+#cut -f4 \$k |sort -r -n |head -1
+#done
+mv \$HOME/scratch/jobid_\$JOB_ID ${OUTDIR}/${insertsname}
 "> $SGE
 qsub $SGE
+done
+
+

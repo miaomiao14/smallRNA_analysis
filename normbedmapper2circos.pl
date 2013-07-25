@@ -2,7 +2,7 @@
 
 
 use File::Basename;
-  
+use Compress::Zlib; 
 if(scalar(@ARGV)<1)
 {
         usage();
@@ -48,28 +48,34 @@ my $outdir=shift @ARGV;
 
 $file=fileparse($inFile);
 open IN, "$inFile";
+$gz = gzopen($inFile, "rb") or die "Cannot open $inFile: $gzerrno\n" ;
+
 
 if($type eq "normbed")
 {
-	$filename=`basename $file .xkxh.norm.bed`;
+	$filename=`basename $file .norm.bed.gz`;
 	$normfactor=$nf{$filename}/1000000;
 
-	open PLUSOUT, ">$outdir/$file\.plus\.bed";
-	open MINUSOUT, ">$outdir/$file\.minus\.bed";
+	open PLUSOUT, ">$outdir/$file\.plus\.circos\.bed";
+	open MINUSOUT, ">$outdir/$file\.minus\.circos\.bed";
 	
-	while($r=<IN>) 
+	while($gz->gzreadline($r) > 0) #read zipped files
+	#while($r=<IN>) 
 	{ 
 		chomp $r;
 		@r= split(/\t/,$r);
-		next if ($r[5]>$chrsize{$r[2]});
-		$start=$r[1]-1;
-		if($r[4] eq "+")
+		if (length($r[0])>=23 & length($r[0])<=34)
 		{
-			print PLUSOUT "$r[0]\t$start\t$r[2]\t$r[5],$r[6],$normfactor\n";
-		}
-		if($r[4] eq "-")
-		{
-			print MINUSOUT "$r[0]\t$start\t$r[2]\t$r[5],$r[6],$normfactor\n";
+			next if ($r[5]>$chrsize{$r[2]});
+			$start=$r[1]-1;
+			if($r[4] eq "+")
+			{
+				print PLUSOUT "$r[0]\t$start\t$r[2]\t$r[5],$r[6],$normfactor\n";
+			}
+			if($r[4] eq "-")
+			{
+				print MINUSOUT "$r[0]\t$start\t$r[2]\t$r[5],$r[6],$normfactor\n";
+			}
 		}
 	}
 	close(PLUSOUT);
@@ -79,26 +85,30 @@ if($type eq "normbed")
 if($type eq "mapper2")
 {
 
-	$filename=`basename $file .xkxh.transposon.mapper2`;
+	$filename=`basename $file .mapper2.gz`;
 	$normfactor=$nf{$filename}/1000000;
-	open SOUT, ">$outdir/$file\.sense\.bed";
-	open AOUT, ">$outdir/$file\.antisense\.bed";
-		
-	while($r=<IN>) 
+	open SOUT, ">$outdir/$file\.sense\.circos\.bed";
+	open AOUT, ">$outdir/$file\.antisense\.circos\.bed";
+
+	while($gz->gzreadline($r) > 0)	
+	#while($r=<IN>) 
 	{ 
 		chomp $r;
 		@r= split(/\t/,$r);
-		$r[2]=~/(chr.+):(\d+)-(\d+)\((.+)\)/;
-		next if ($3>$chrsize{$1});
-		$ntm_nta=$r[6]*$r[7];
-		$key="$1\t$2\t$3\t$r[1],$ntm_nta,$normfactor\n";
-		if($r[3] eq "sense")
+		if (length($r[0])>=23 & length($r[0])<=34)
 		{
-			$hash{$key}=0;
-		}
-		else 
-		{
-			$hash{$key}=1;
+			$r[2]=~/(chr.+):(\d+)-(\d+)\((.+)\)/;
+			next if ($3>$chrsize{$1});
+			$ntm_nta=$r[6]*$r[7];
+			$key="$1\t$2\t$3\t$r[1],$ntm_nta,$normfactor\n";
+			if($r[3] eq "sense")
+			{
+				$hash{$key}=0;
+			}
+			else 
+			{
+				$hash{$key}=1;
+			}
 		}
 	}
 
