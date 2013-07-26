@@ -84,11 +84,11 @@ fi
 count=\$((\$count+1))
 done
 
-\`rm -f *.bin.txt\` 
-\`rm -f *.bed\`
-\`rm -f *.bedGraph\`
-\`rm -f *.sort\`
-\`rm -f *.bw\`
+\`rm -f \$DIR\*.bin.txt\` 
+\`rm -f \$DIR\*.bed\`
+\`rm -f \$DIR\*.bedGraph\`
+\`rm -f \$DIR\*.sort\`
+\`rm -f \$DIR\*.bw\`
 [ -d ${OUTDIR}/${insertsname} ] && rm -rf ${OUTDIR}/${insertsname}
 mv \$HOME/scratch/jobid_\$JOB_ID ${OUTDIR}/${insertsname}
 "> $SGE
