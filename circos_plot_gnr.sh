@@ -95,11 +95,11 @@ fi
 count=\$((\$count+1))
 done
 
-\`rm -f \$DIR\*.bin.txt\` 
-\`rm -f \$DIR\*.bed\`
-\`rm -f \$DIR\*.bedGraph\`
-\`rm -f \$DIR\*.sort\`
-\`rm -f \$DIR\*.bw\`
+\`rm -f \${DIR}\*.bin.txt\` 
+\`rm -f \${DIR}\*.bed\`
+\`rm -f \${DIR}\*.bedGraph\`
+\`rm -f \${DIR}\*.sort\`
+\`rm -f \${DIR}\*.bw\`
 [ -d ${OUTDIR}/${insertsname}.$BINSIZE ] && rm -rf ${OUTDIR}/${insertsname}.$BINSIZE
 mv \$HOME/scratch/jobid_\$JOB_ID ${OUTDIR}/${insertsname}.$BINSIZE
 "> $SGE
