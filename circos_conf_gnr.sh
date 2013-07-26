@@ -2,6 +2,7 @@
 
 
 OUTDIR=/home/wangw1/src/circos-0.56/fly/etc
+[ -f ${OUTDIR}/file.conf ] && rm ${OUTDIR}/file.conf
 STATFILE=CIRCOSBIN.${RANDOM}.stat
 for file in "$@"
 do
@@ -79,4 +80,4 @@ echo "
 
 <image>
 <<include ../../etc/image.conf>>
-</image>
+</image> " >>${OUTDIR}/file.conf
