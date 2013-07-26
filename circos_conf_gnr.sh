@@ -32,7 +32,7 @@ for CIRCOSBIN in "$@"
 do
 filename=${CIRCOSBIN##*/}
 FLAG=0
-if [[ $filename =~ "plus" ]]
+if [[ $filename =~ "plus" ]] || [[ $filename =~ "sense" ]]
 then
 rr0=$(awk -v a=$base -v b=$count -v c=$radius_inc 'BEGIN{print a+b*c}')
 rr1=$(awk -v a=$base -v b=$count -v c=$radius_inc 'BEGIN{print a+(b+1)*c}')
@@ -49,7 +49,7 @@ echo "
 	thickness = 0.75
 	</plot> " >>${OUTDIR}/file.conf
 fi
-if [[ $filename =~ "minus" ]]
+if [[ $filename =~ "minus" ]] || [[ $filename =~ "antisense" ]]
 then 
 FLAG=1
 rr0=$(awk -v a=$base -v b=$count -v c=$radius_inc 'BEGIN{print a+b*c}')
