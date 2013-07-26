@@ -44,8 +44,8 @@ echo "
 	min   = 0
 	max   = $maxvalue
 	file  = ${CIRCOSBIN}
-	r0    = $rr0
-	r1    = $rr1
+	r0    = ${rr0}r
+	r1    = ${rr1}r
 	color = vvdblue
 	thickness = 0.75
 	</plot> " >>${OUTDIR}/file.conf
@@ -61,8 +61,8 @@ echo "
 	min   = 0
 	max   = $maxvalue
 	file  = ${CIRCOSBIN}
-	r0    = $rr0
-	r1    = $rr1
+	r0    = ${rr0}r
+	r1    = ${rr1}r
 	color = vvdred
 	thickness = 0.75
 	</plot> " >>${OUTDIR}/file.conf
@@ -80,4 +80,5 @@ echo "
 
 <image>
 <<include ../../etc/image.conf>>
-</image> " >>${OUTDIR}/file.conf
+</image>
+<<include housekeeping.conf>> " >>${OUTDIR}/file.conf
