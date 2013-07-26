@@ -60,6 +60,7 @@ paraFile=\${DIR}/\${RANDOM}.bed2bw.para
 	fi
 	
 	for j in \`ls \${DIR}/*circos.bed\`
+	do
 		a=(\$(cat \$CHRSIZE))
 		b=$BINSIZE
 		paraFile=\${DIR}/\${RANDOM}.bw2bwsummary.para
