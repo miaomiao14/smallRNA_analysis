@@ -10,7 +10,7 @@ CIRCOSBIN=$file
 filename=${CIRCOSBIN##*/}
 awk -v f=$filename 'BEGIN{OFS="\t"}{if(min==""){min=max=$4}; if($4>max) {max=$4}; if($4< min) {min=$4}; total+=$4; count+=1;} END {print f,total/count, min, max}' $CIRCOSBIN >>${OUTDIR}/${STATFILE}
 done
-maxv=`awk 'BEGIN{OFS="\t"}{if(min==""){min=max=$4}; if($4>max) {max=$4}; if($4< min) {min=$4};}END {print max}' ${OUTDIR}/${STATFILE}`
+maxv=`awk 'BEGIN{OFS="\t"}{if(min==""){min=max=$4}; if($4>max) {max=$4}; if($4< min) {min=$4};}END {print min}' ${OUTDIR}/${STATFILE}`
 maxvalue=`awk -v m=$maxv 'BEGIN{print m/2}'`
 echo "
 #karyotype = ../data/karyotype.drosophila.hires.dm3.txt
@@ -34,22 +34,6 @@ do
 filename=${CIRCOSBIN##*/}
 rr0=$(awk -v a=$base -v b=$count -v c=$radius_inc 'BEGIN{print a+b*c}')
 rr1=$(awk -v a=$base -v b=$count -v c=$radius_inc 'BEGIN{print a+(b+1)*c}')
-if [[ $filename =~ "plus" ]] || [[ $filename =~ "\.sense" ]]
-then
-
-echo "
-
-	<plot>
-	type  = line
-	min   = 0
-	max   = $maxvalue
-	file  = ${CIRCOSBIN}
-	r0    = ${rr0}r
-	r1    = ${rr1}r
-	color = vvdblue
-	thickness = 0.75
-	</plot> " >>${OUTDIR}/file.conf
-fi
 if [[ $filename =~ "minus" ]] || [[ $filename =~ "antisense" ]]
 then 
 
@@ -66,6 +50,24 @@ echo "
 	thickness = 0.75
 	</plot> " >>${OUTDIR}/file.conf
 fi
+
+if [[ $filename =~ "plus" ]] || [[ $filename =~ "\.sense" ]]
+then
+
+echo "
+
+	<plot>
+	type  = line
+	min   = 0
+	max   = $maxvalue
+	file  = ${CIRCOSBIN}
+	r0    = ${rr0}r
+	r1    = ${rr1}r
+	color = vvdblue
+	thickness = 0.75
+	</plot> " >>${OUTDIR}/file.conf
+fi
+
 
 count=$(($count+1))
 
