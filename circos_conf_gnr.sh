@@ -32,7 +32,7 @@ for CIRCOSBIN in "$@"
 do
 filename=${CIRCOSBIN##*/}
 FLAG=0
-if [[ $filename =~ "plus" ]] || [[ $filename =~ "sense" ]]
+if [[ $filename =~ "plus" ]] || [[ $filename =~ "\.sense" ]]
 then
 rr0=$(awk -v a=$base -v b=$count -v c=$radius_inc 'BEGIN{print a+b*c}')
 rr1=$(awk -v a=$base -v b=$count -v c=$radius_inc 'BEGIN{print a+(b+1)*c}')
@@ -68,7 +68,7 @@ echo "
 fi
 if [[ $FLAG == 1 ]]
 then
-count=$(($count+1))
+count=$(($count+2))
 fi
 done
 
@@ -80,5 +80,3 @@ echo "
 <image>
 <<include ../../etc/image.conf>>
 </image>
-
-<<include ../../etc/housekeeping.conf>>" >>${OUTDIR}/file.conf
