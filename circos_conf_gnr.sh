@@ -32,11 +32,11 @@ base=0.4
 for CIRCOSBIN in "$@"
 do
 filename=${CIRCOSBIN##*/}
-FLAG=0
-if [[ $filename =~ "plus" ]] || [[ $filename =~ "\.sense" ]]
-then
 rr0=$(awk -v a=$base -v b=$count -v c=$radius_inc 'BEGIN{print a+b*c}')
 rr1=$(awk -v a=$base -v b=$count -v c=$radius_inc 'BEGIN{print a+(b+1)*c}')
+if [[ $filename =~ "plus" ]] || [[ $filename =~ "\.sense" ]]
+then
+
 echo "
 
 	<plot>
@@ -52,14 +52,13 @@ echo "
 fi
 if [[ $filename =~ "minus" ]] || [[ $filename =~ "antisense" ]]
 then 
-FLAG=1
-rr0=$(awk -v a=$base -v b=$count -v c=$radius_inc 'BEGIN{print a+b*c}')
-rr1=$(awk -v a=$base -v b=$count -v c=$radius_inc 'BEGIN{print a+(b-1)*c}')
+
 echo "
 	<plot>
 	type  = line
 	min   = 0
 	max   = $maxvalue
+	orientation = in
 	file  = ${CIRCOSBIN}
 	r0    = ${rr0}r
 	r1    = ${rr1}r
@@ -67,10 +66,9 @@ echo "
 	thickness = 0.75
 	</plot> " >>${OUTDIR}/file.conf
 fi
-if [[ $FLAG == 1 ]]
-then
-count=$(($count+2))
-fi
+
+count=$(($count+1))
+
 done
 
 echo "
