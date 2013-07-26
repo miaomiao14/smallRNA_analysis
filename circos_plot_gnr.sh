@@ -45,14 +45,24 @@ count=0
 for NF in \${NORMFACTOR[@]}
 do 
 \${PIPELINE_DIRECTORY}/normbedmapper2circos.pl ${i} \$FILETYPE \$CHRSIZE \$NF \${NORMFACTORTYPE[\$count]} \$DIR
+paraFile=\${DIR}/\${RANDOM}.bed2bw.para
+
 	for j in \`ls \${DIR}/*circos.bed\`
 	do 
-		bedSort \$j \$j.sort
-		bedItemOverlapCountWithScore dm3 \$j.sort chromSize=\$CHRSIZE stdin >\${j}.bedGraph
-		bedGraphToBigWig \${j}.bedGraph \$CHRSIZE \${j}.bw
+		"echo -ne \" bedSort \$j \$j.sort \&\& \"  \>\>\${paraFile}"
+		"echo -ne \" bedItemOverlapCountWithScore dm3 \$j.sort chromSize=\$CHRSIZE stdin \>\${j}.bedGraph \&\& \"  \>\>\${paraFile}"
+		"echo -e \" bedGraphToBigWig \${j}.bedGraph \$CHRSIZE \${j}.bw \"  \>\>\${paraFile}"
+	done
+	if [[ ! -f \${paraFile}.completed ]] || [[ -f \$paraFile.failed_commands ]]
+		then
+	
+		ParaFly -c \$paraFile -CPU 8 -failed_cmds \$paraFile.failed_commands
+	fi
+	
+	for j in \`ls \${DIR}/*circos.bed\`
 		a=(\$(cat \$CHRSIZE))
 		b=$BINSIZE
-		paraFile=\${DIR}/\${RANDOM}.para
+		paraFile=\${DIR}/\${RANDOM}.bw2bwsummary.para
 		for k in \$(seq 0 2 \$(( \${#a[@]} - 1)))
 		do 
 			tlen=\${a[\$((\$k+1))]}
@@ -70,7 +80,7 @@ do
 	
 	done
 
-paraFile=\${DIR}/\${RANDOM}.para
+paraFile=\${DIR}/\${RANDOM}.bwSummary2bincount.para
 "echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR \${NORMFACTORTYPE[\$count]} sense mean \$b ${i} \$FILETYPE \$DIR \" \>\> \${paraFile} "
 "echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR \${NORMFACTORTYPE[\$count]} antisense mean \$b ${i} \$FILETYPE \$DIR \" \>\> \${paraFile} "
 "echo -e \" \${PIPELINE_DIRECTORY}/bedscorefile2circostrack.pl \$DIR \${NORMFACTORTYPE[\$count]} sense max \$b ${i} \$FILETYPE \$DIR \" \>\> \${paraFile} "
@@ -89,8 +99,8 @@ done
 \`rm -f \$DIR\*.bedGraph\`
 \`rm -f \$DIR\*.sort\`
 \`rm -f \$DIR\*.bw\`
-[ -d ${OUTDIR}/${insertsname} ] && rm -rf ${OUTDIR}/${insertsname}
-mv \$HOME/scratch/jobid_\$JOB_ID ${OUTDIR}/${insertsname}
+[ -d ${OUTDIR}/${insertsname}.$BINSIZE ] && rm -rf ${OUTDIR}/${insertsname}.$BINSIZE
+mv \$HOME/scratch/jobid_\$JOB_ID ${OUTDIR}/${insertsname}.$BINSIZE
 "> $SGE
 qsub $SGE
 done
