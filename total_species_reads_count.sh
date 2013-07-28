@@ -3,12 +3,13 @@
 #seq count
 INDIR=$1
 fileEND=$2
-LOG=${INDIR}/species.reads.stat
+SPECIESLOG=${INDIR}/species.stat
+READSLOG=${INDIR}/readsspecies.stat
 paraFile=${INDIR}/species.reads.stat.${RANDOM}.paraFile
 for i in `ls *.${fileEND}`
 do 
-echo -ne "wc -l ${i} >> $LOG &&" >> ${paraFile}
-echo -e "awk -v filename=${i} '{a+=\$2}END{print a,filename}' ${i} >> $LOG" >> ${paraFile}
+echo -ne "wc -l ${i} >> $SPECIESLOG " >> ${paraFile}
+echo -e "awk -v filename=${i} '{a+=\$2}END{print a,filename}' ${i} >> $READSLOG" >> ${paraFile}
 done
 if [[ ! -f ${paraFile}.completed ]] || [[ -f $$paraFile.failed_commands ]]
 then
