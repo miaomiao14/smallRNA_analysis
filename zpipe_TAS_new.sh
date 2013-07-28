@@ -59,7 +59,7 @@ cut -f1,2 $inserts.match2_all.out  |uniq.lines+ 0 > $inserts.match2_all.out.uniq
 cut -f1,2 $inserts.uniqmap.match2_all.out  |uniq.lines+ 0 > $inserts.uniqmap.match2_all.out.uniq.reads
 
 # make bam 
-insert2bam.sh $inserts.uniq.reads
+#insert2bam.sh $inserts.uniq.reads
 
 #3. map to transposon
 echo "map to the transposons...." >> $dir/output/$insertsname.log
@@ -196,23 +196,27 @@ echo >> $dir/output/$insertsname.log
 echo "making figures" >> $dir/output/$insertsname.log
 paraFile=$dir/output/${RANDOM}.para
 
-echo -e "lendis $inserts.match2_all.out.uniq.reads > $inserts.match2_all.out.uniq.lendis" >>${paraFile}
-echo -e "lendis $inserts.match2_all.out.uniq.reads r > $inserts.match2_all.out.reads.lendis ">>${paraFile}
+echo -ne "lendis $inserts.match2_all.out.uniq.reads > $inserts.match2_all.out.uniq.lendis && " >>${paraFile}
 echo -e "RRR /home/wengz/pipelines/smallRNApipeline/pipeline_dm/R.source plot_lendis $inserts.match2_all.out.uniq.lendis ">>${paraFile}
+
+echo -ne "lendis $inserts.match2_all.out.uniq.reads r > $inserts.match2_all.out.reads.lendis && ">>${paraFile}
 echo -e "RRR /home/wengz/pipelines/smallRNApipeline/pipeline_dm/R.source plot_lendis $inserts.match2_all.out.reads.lendis ">>${paraFile}
 
-echo -e "lendis $inserts.xk.match2_all.out.uniq.reads > $inserts.xk.match2_all.out.uniq.lendis ">>${paraFile}
-echo -e "lendis $inserts.xk.match2_all.out.uniq.reads r > $inserts.xk.match2_all.out.reads.lendis ">>${paraFile}
+echo -ne "lendis $inserts.xk.match2_all.out.uniq.reads > $inserts.xk.match2_all.out.uniq.lendis && ">>${paraFile}
 echo -e "RRR /home/wengz/pipelines/smallRNApipeline/pipeline_dm/R.source plot_lendis $inserts.xk.match2_all.out.uniq.lendis ">>${paraFile}
+
+echo -ne "lendis $inserts.xk.match2_all.out.uniq.reads r > $inserts.xk.match2_all.out.reads.lendis && ">>${paraFile}
 echo -e "RRR /home/wengz/pipelines/smallRNApipeline/pipeline_dm/R.source plot_lendis $inserts.xk.match2_all.out.reads.lendis ">>${paraFile}
 
-echo -e "lendis $inserts.xkxh.match2_all.out.uniq.reads > $inserts.xkxh.match2_all.out.uniq.lendis ">>${paraFile}
-echo -e "lendis $inserts.xkxh.match2_all.out.uniq.reads r > $inserts.xkxh.match2_all.out.reads.lendis ">>${paraFile}
+echo -ne "lendis $inserts.xkxh.match2_all.out.uniq.reads > $inserts.xkxh.match2_all.out.uniq.lendis && ">>${paraFile}
 echo -e "RRR /home/wengz/pipelines/smallRNApipeline/pipeline_dm/R.source plot_lendis $inserts.xkxh.match2_all.out.uniq.lendis ">>${paraFile}
+
+echo -ne "lendis $inserts.xkxh.match2_all.out.uniq.reads r > $inserts.xkxh.match2_all.out.reads.lendis && ">>${paraFile}
 echo -e "RRR /home/wengz/pipelines/smallRNApipeline/pipeline_dm/R.source plot_lendis $inserts.xkxh.match2_all.out.reads.lendis ">>${paraFile}
 
-echo -e "lendis2.pl $inserts.xkxh.transposon.mapper2 > $inserts.xkxh.transposon.mapper2.lendis2 ">>${paraFile}
+echo -e "lendis2.pl $inserts.xkxh.transposon.mapper2 > $inserts.xkxh.transposon.mapper2.lendis2 &&">>${paraFile}
 echo -e "RRR /home/wengz/pipelines/smallRNApipeline/pipeline_dm/R.source plot_lendis2 $inserts.xkxh.transposon.mapper2.lendis2 ">>${paraFile}
+
 if [[ ! -f ${paraFile}.completed ]] || [[ -f $$paraFile.failed_commands ]]
 then
 	#CPUN=`wc -l $paraFile |cut -f1 -d" "` && \
