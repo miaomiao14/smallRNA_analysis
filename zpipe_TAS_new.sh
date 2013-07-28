@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 # pipeline for smallRNAs
 # Author Jia
 # March 2009
