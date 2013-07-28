@@ -8,8 +8,8 @@ READSLOG=${INDIR}/readsspecies.stat
 paraFile=${INDIR}/species.reads.stat.${RANDOM}.paraFile
 for i in `ls *.${fileEND}`
 do 
-echo -e "wc -l ${i} |awk 'BEGIN{OFS="\t"}{print $2,$1}' >> $SPECIESLOG " >> ${paraFile}
-echo -e "awk -v filename=${i} 'BEGIN{OFS="\t"}{a+=\$2}END{print filename,a}' ${i} >> $READSLOG" >> ${paraFile}
+echo -e "wc -l ${i} |awk 'BEGIN{OFS=\"\t\"}{print \$2,\$1}' >> $SPECIESLOG " >> ${paraFile}
+echo -e "awk -v filename=${i} 'BEGIN{OFS=\"\t\"}{a+=\$2}END{print filename,a}' ${i} >> $READSLOG" >> ${paraFile}
 done
 if [[ ! -f ${paraFile}.completed ]] || [[ -f $$paraFile.failed_commands ]]
 then
