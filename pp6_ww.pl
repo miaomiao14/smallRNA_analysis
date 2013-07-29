@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 use File::Basename;
+use Compress::Zlib;
 #print "pp";
 #print map {"\t$_"} @ARGV;
 #print "\n";
@@ -22,16 +23,22 @@ for ($i=0; $i<$ARGV[2]; $i++) {
 
      foreach ($n=1;$n<=20;$n++) {
      %pp=(); %pos=(); %pp_seq=(); %pos_seq=();
-     open IN, $ARGV[$i];
-     while(<IN>) { chomp; split(/\t/);
+     $gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
+     #open IN, $ARGV[$i];
+     #while(<IN>) 
+     while($gz->gzreadline($_) > 0)
+     { chomp; split(/\t/);
      next if (length($_[0])>29 || length($_[0])<23);
      $_[2]=~/(chr.+):(\d+)-(\d+)\((.+)\)/;
      if ($4 eq '+') { $start=$2+$n-1; $pp{"$1:$start-"}+=$_[1]/$_[6]; $pp_seq{"$1:$start-"}=$_[0];}
      else { $start=$3-$n+1;$pp{"$1:$start+"}+=$_[1]/$_[6];$pp_seq{"$1:$start+"}=$_[0];}
      }
    
-     open IN, $ARGV[$j];
-     while(<IN>) { chomp; split(/\t/);
+     #open IN, $ARGV[$j];
+     $gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
+     #while(<IN>) 
+     while($gz->gzreadline($_) > 0)
+     { chomp; split(/\t/);
      next if (length($_[0])>29 || length($_[0])<23);
      $_[2]=~/(chr.+):(\d+)-(\d+)\((.+)\)/; 
      if ($4 eq '+') { $pos{"$1:$2+"}+=$_[1]/$_[6]; $pos_seq{"$1:$2+"}= $_[0]; }
