@@ -14,6 +14,7 @@ plot_PolarHisto_senseFraction=function(filename,outdir)
 	cd=merge(list,group,by="transposon")
 	cd= cd[cd[,10]!=0,]
 	cd_p=subset(cd,select=c("g","transposon","piRNA_antisense","piRNA_sense"))
+	cd_p$transposon=sub('FBgn[0-9n]+\\_','',trn,perl=TRUE)
 	colnames(cd_p)=c("family","item","piRNA_antisense","piRNA_sense")
 	cd_p<-melt(cd_p,c("family","item"),variable_name="score")
 	
