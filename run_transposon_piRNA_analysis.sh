@@ -28,7 +28,8 @@ do
 	#nfdep=`cat ${INDIR}/${inserts}/output/${insertsname}_stats_table_reads|tail -1|cut -f2`
 	#OUTDIR=${INDIR}/transposon_piRNA/${insertsname}
 	OUTDIR=${INDIR}/transposon_piRNA
-	mkdir -p ${OUTDIR}
+	[ ! -d $OUTDIR ] && mkdir -p ${OUTDIR}
+	#
 
 #polarHistogram for sense fraction
 ${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/polarHistogram_sense_fraction.r plot_PolarHisto_senseFraction $i ${OUTDIR}
