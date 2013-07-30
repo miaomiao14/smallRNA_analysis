@@ -17,7 +17,7 @@ INDIR=$1 #this is the folder store all pipeline results outmost folders
 OUT=${INDIR}/transposon_piRNA
 LOG=${OUT}/log
 STEP=1
-echo -e "`date "+$ISO_8601"`\tDraw polar histogram of sense fraction" | tee -a $LOG
+echo -e "`date "+$ISO_8601"`\tDraw polar histogram of sense fraction" >> $LOG
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.senseFraction ] && \
 for i in `ls ${INDIR}/*.inserts/output/*.transposon.list`
 do 
@@ -33,7 +33,7 @@ done
 	touch ${OUT}/.status.${STEP}.transposon_piRNA.senseFraction
 STEP=$((STEP+1))
 
-echo -e "`date "+$ISO_8601"`\tDraw length distribution of transposon piRNAs" | tee -a $LOG
+echo -e "`date "+$ISO_8601"`\tDraw length distribution of transposon piRNAs" >> $LOG
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.lendis2 ] && \
 OUTDIR=${INDIR}/transposon_piRNA/lendis && \
 [ ! -d $OUTDIR ] && mkdir -p ${OUTDIR} && \
