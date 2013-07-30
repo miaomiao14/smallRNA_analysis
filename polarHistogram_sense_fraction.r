@@ -1,9 +1,11 @@
 
 argv = commandArgs (TRUE)
-input=argv[1]
+
+filename=argv[1]
+outdir=argv[2]
 
 g = read.table ("/home/wangw1/pipeline/common/Zamore.group", F)
-plotPolarHisto=function(filename)
+plot_PolarHisto_senseFraction=function(filename,outdir)
 {
 	list=read.delim(filename,T)
 	group=g
@@ -16,12 +18,13 @@ plotPolarHisto=function(filename)
 	
 	p<-polarHistogram(cd_p,familyLabel=TRUE)
 	print(p)
-	pdfname=paste(filename,".pdf",sep="")
+	file=basename(filename)
+	pdfname=paste(outdir/file,"senseFraction.polarHisto.pdf",sep="")
 	ggsave(pdfname,width=12,height=12)
 	dev.off()
 }
 
-	plotPolarHisto(input);
+#plot_PolarHisto_senseFraction(input);
 
 
 
