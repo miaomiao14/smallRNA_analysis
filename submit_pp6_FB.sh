@@ -40,9 +40,9 @@ export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 	paraFile=${OUTDIR}/${insertsname}.pp6.para
 	for j in \`ls -1 \${OUTDIR}/\${FILENAME}.*\`
 	do
-
+	T1=\${j##*mapper2.}
 	"echo -ne \" T1=\${j##*mapper2.} \&\& \"  \>\>\${paraFile}"  ###transposon name	
-	"echo -e \" \$T1 \` $script \${j} \${j} 1 ${OUTDIR} \` \>\> $OUTDIR/\${insertsname}.FB.${T1}.pp6.out \"  \>\>\${paraFile}"
+	"echo -e \" \$T1 \` $script \${j} \${j} 1 ${OUTDIR} \` \>\> \$OUTDIR/\${insertsname}.FB.\${T1}.pp6.out \"  \>\>\${paraFile}"
 	"echo -e \" echo \$T1 \` $script \${j} \${j} 1 ${OUTDIR} | head -n 1 \` \>\> \${OUTDIR}/\${insertsname}.FB.pp6.temp \"  \>\> \${paraFile}"
 	done
 	if [[ ! -f \${paraFile}.completed ]] || [[ -f \$paraFile.failed_commands ]]
