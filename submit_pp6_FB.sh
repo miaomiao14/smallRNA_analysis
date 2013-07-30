@@ -12,6 +12,7 @@ for i in `ls ${INDIR}/*.inserts/*.xkxh.transposon.mapper2.gz`
 do 
 	#ln -s $i ${OUTDIR}
 	FILE=${i##*/}
+	FILENAME=${FILE%.gz}
 	insertsname=`basename $FILE .xkxh.transposon.mapper2.gz`
 	#inserts=${FILE%%.inserts.*}
 	#inserts=${inserts}.inserts
@@ -37,7 +38,7 @@ export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 
 	${PIPELINE_DIRECTORY}/FB.pl \$i \${OUTDIR} &&
 	paraFile=${OUTDIR}/${insertsname}.pp6.para
-	for j in `ls -1 \${OUTDIR}/\${FILE}.*`
+	for j in \`ls -1 \${OUTDIR}/\${FILENAME}.*\`
 	do
 
 	"echo -ne \" T1=${j##*mapper2.} \&\& \"  \>\>\${paraFile}"  ###transposon name	
