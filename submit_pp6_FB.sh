@@ -42,11 +42,9 @@ export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 	do
 	T1=\${j##*mapper2.}
 	
-	"echo -ne  \" T1=${j##*mapper2.} \&\& \" \>\> ${paraFile}"
-	"echo -e \" \\\`$script ${j} ${j} 1 ${OUTDIR} \\\$T1 \\\` \>\> $OUTDIR/${insertsname}.FB.\${T1}.pp6.out  \" \>\>${paraFile}"
-	"echo -e \" \\\`$script ${j} ${j} 1 ${OUTDIR} \\\$T1 \\\` \>\> $OUTDIR/${insertsname}.FB.pp6.temp  \" \>\> ${paraFile}"
-
-
+	"echo -ne  \" T1=\\\${j##*mapper2.} \&\& \" \>\> ${paraFile}"
+	"echo -e \" \\\`$script \\\${j} \\\${j} 1 ${OUTDIR} \\\$T1 \\\` \>\> $OUTDIR/${insertsname}.FB.\${T1}.pp6.out  \" \>\> \${paraFile}"
+	"echo -e \" \\\`$script \\\${j} \\\${j} 1 ${OUTDIR} \\\$T1 \\\` \>\> $OUTDIR/${insertsname}.FB.pp6.temp  \" \>\> \${paraFile}"
 
 	done
 	if [[ ! -f \${paraFile}.completed ]] || [[ -f \$paraFile.failed_commands ]]
@@ -58,6 +56,6 @@ export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 	
 	#qsub $SGE
 	#sleep 5s
-awk '{OFS="\t"}{print $0}' ${OUTDIR}/${insertsname}.FB.pp6.temp > ${OUTDIR}/${insertsname}.FB.pp6
+#awk '{OFS="\t"}{print $0}' ${OUTDIR}/${insertsname}.FB.pp6.temp > ${OUTDIR}/${insertsname}.FB.pp6
 done
  
