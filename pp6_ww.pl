@@ -10,11 +10,11 @@ for ($i=0; $i<$ARGV[2]; $i++) {
 
    for ($j=0; $j<$ARGV[2]; $j++) {
    $file1=fileparse($ARGV[$i]);  #$file1 is the target strand
-   $file1 =~ /(.*)\.xkxh2/;
+   $file1 =~ /(.*)\.xkxh/;
    $filename1=$1;
     
    $file2=fileparse($ARGV[$j]); #file2 is the guide strand
-   $file2 =~ /(.*)\.xkxh2/;
+   $file2 =~ /(.*)\.xkxh/;
    $filename2=$1;
 	
     print "$filename1-$filename2";
