@@ -53,10 +53,10 @@ do
 	
 		ParaFly -c \$paraFile -CPU 24 -failed_cmds \$paraFile.failed_commands
 	fi
-	awk '{OFS=\"\\\\t\"}{print $0}' ${OUTDIR}/${insertsname}.FB.pp6.temp > ${OUTDIR}/${insertsname}.FB.pp6
+	awk '{OFS=\"\\\t\"}{print \$0}' ${OUTDIR}/${insertsname}.FB.pp6.temp > ${OUTDIR}/${insertsname}.FB.pp6
 "> $SGE
 	
-	#qsub $SGE
+	qsub $SGE
 	#sleep 5s
 
 done
