@@ -44,11 +44,8 @@ export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 	
 	"echo -ne  \" T1=${j##*mapper2.} \&\& \" \>\> ${paraFile}"
 	"echo -e \" \\\`$script ${j} ${j} 1 ${OUTDIR} \\\$T1 \\\` \>\> $OUTDIR/${insertsname}.FB.\${T1}.pp6.out  \" \>\>${paraFile}"
-	"echo -e \" \\\`$script ${j} ${j} 1 ${OUTDIR} \\\$T1 \\\` \>\> $OUTDIR/${insertsname}.FB.pp6.out  \" \>\> ${paraFile}"
-	
-	#"echo -ne \" T1=\${j##*mapper2.} \&\& \"  \>\>\${paraFile}"  ###transposon name	
-	#"echo -e \" ` $script \${j} \${j} 1 ${OUTDIR} \$T1 \` \>\> \$OUTDIR/\${insertsname}.FB.\${T1}.pp6.out \"  \>\>\${paraFile}"
-	#"echo -e \" echo \$T1 \` $script \${j} \${j} 1 ${OUTDIR} | head -n 1 \` \>\> \${OUTDIR}/\${insertsname}.FB.pp6.temp \"  \>\> \${paraFile}"
+	"echo -e \" \\\`$script ${j} ${j} 1 ${OUTDIR} \\\$T1 \\\` \>\> $OUTDIR/${insertsname}.FB.pp6.temp  \" \>\> ${paraFile}"
+
 
 
 	done
