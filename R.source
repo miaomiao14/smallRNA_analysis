@@ -1,0 +1,9 @@
+plot_lendis2 <- function (input) {
+name=paste(input,'.pdf',sep="");
+pdf(name);
+L=read.delim(input,header=F);
+ylim_plus=max(L$V2)*1.2;ylim_minus=-max(L$V3)*1.2;
+barplot(L$V2,main=input,col=4,ylab='number of normalized reads',ylim=c(ylim_minus,ylim_plus));
+barplot(-L$V3,names.arg=L$V1,col=2,xlab='length (nt)',ylim=c(ylim_minus,ylim_plus),add=TRUE);
+dev.off();
+}
