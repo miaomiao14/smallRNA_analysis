@@ -26,7 +26,8 @@ do
 	#inserts=${inserts}.inserts
 	#nfnnc=`cat ${INDIR}/${inserts}/output/${insertsname}_stats_table_reads|tail -1|cut -f4`
 	#nfdep=`cat ${INDIR}/${inserts}/output/${insertsname}_stats_table_reads|tail -1|cut -f2`
-	OUTDIR=${INDIR}/transposon_piRNA/${insertsname}
+	#OUTDIR=${INDIR}/transposon_piRNA/${insertsname}
+	OUTDIR=${INDIR}/transposon_piRNA
 	mkdir -p ${OUTDIR}
 
 #polarHistogram for sense fraction
