@@ -37,7 +37,7 @@ polarHistogram<-function(
 		spaceFamily=1.2,
 		innerRadius=0.3,
 		outerRadius=1,
-		guides=c(10,20,40,80),
+		guides=c(10,20,40,50,80),
 		alphaStart=-0.3,
 		circleProportion=0.8,
 		direction="inwards",
