@@ -34,11 +34,12 @@ do
 ##$ -M weiwanghhq@gmail.com
 #$ -m e 
 
-export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
+	export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 
-	${PIPELINE_DIRECTORY}/FB.pl \$i \${OUTDIR} &&
+	$script $i $i 1 ${OUTDIR} >$OUTDIR/${insertsname}.total.pp6.out
+	${PIPELINE_DIRECTORY}/FB.pl $i ${OUTDIR} &&
 	paraFile=${OUTDIR}/${insertsname}.pp6.para
-	for j in \`ls -1 \${OUTDIR}/\${FILENAME}.*\`
+	for j in \`ls -1 ${OUTDIR}/${FILENAME}.*\`
 	do
 	T1=\${j##*mapper2.}
 	
