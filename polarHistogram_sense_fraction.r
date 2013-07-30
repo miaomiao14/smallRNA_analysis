@@ -1,4 +1,5 @@
-
+library (ggplot2)
+library (reshape)
 argv = commandArgs (TRUE)
 
 filename=argv[1]
