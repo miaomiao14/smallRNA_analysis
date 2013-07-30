@@ -47,9 +47,9 @@ do
 	nfnnc=`cat ${INDIR}/${inserts}/output/${insertsname}_stats_table_reads|tail -1|cut -f4`
 	nfdep=`cat ${INDIR}/${inserts}/output/${insertsname}_stats_table_reads|tail -1|cut -f2`
 	
-	echo -e "${PIPELINE_DIRECTORY}/lendis2.pl ${i} $OUTDIR nnc $nfnnc &&" >>${paraFile}
+	echo -ne "${PIPELINE_DIRECTORY}/lendis2.pl ${i} $OUTDIR nnc $nfnnc &&" >>${paraFile}
 	echo -e "RRR ${PIPELINE_DIRECTORY}/R.source plot_lendis2 ${OUTDIR}/$insertsname.xkxh.transposon.mapper2.nnc.lendis2 " >>${paraFile}	
-	echo -e "${PIPELINE_DIRECTORY}/lendis2.pl ${i} $OUTDIR seqDep $nfnnc &&" >>${paraFile}
+	echo -ne "${PIPELINE_DIRECTORY}/lendis2.pl ${i} $OUTDIR seqDep $nfnnc &&" >>${paraFile}
 	echo -e "RRR ${PIPELINE_DIRECTORY}/R.source plot_lendis2 ${OUTDIR}/$insertsname.xkxh.transposon.mapper2.seqDep.lendis2 " >>${paraFile}		
 done
 	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
