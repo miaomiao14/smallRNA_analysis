@@ -22,7 +22,7 @@ do
 	mkdir -p ${OUTDIR}
 	SGE=${INDIR}/pp6_FB/${insertsname}.pp6_FB.sge
 
-	script=${PIPELINE_DIRECTORY}/pp6_ww.pl
+	script=${PIPELINE_DIRECTORY}/pp6_T_ww.pl
 	
 #echo "spliting transposon family..."
 	echo "#!/bin/sh
@@ -41,9 +41,16 @@ export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 	for j in \`ls -1 \${OUTDIR}/\${FILENAME}.*\`
 	do
 	T1=\${j##*mapper2.}
-	"echo -ne \" T1=\${j##*mapper2.} \&\& \"  \>\>\${paraFile}"  ###transposon name	
-	"echo -e \" \$T1 \` $script \${j} \${j} 1 ${OUTDIR} \` \>\> \$OUTDIR/\${insertsname}.FB.\${T1}.pp6.out \"  \>\>\${paraFile}"
-	"echo -e \" echo \$T1 \` $script \${j} \${j} 1 ${OUTDIR} | head -n 1 \` \>\> \${OUTDIR}/\${insertsname}.FB.pp6.temp \"  \>\> \${paraFile}"
+	
+	"echo -ne  \" T1=${j##*mapper2.} \&\& \" \>\> ${paraFile}"
+	"echo -e \" \\\`$script ${j} ${j} 1 ${OUTDIR} \\\$T1 \\\` \>\> $OUTDIR/${insertsname}.FB.\${T1}.pp6.out  \" \>\>${paraFile}"
+	"echo -e \" \\\`$script ${j} ${j} 1 ${OUTDIR} \\\$T1 \\\` \>\> $OUTDIR/${insertsname}.FB.pp6.out  \" \>\> ${paraFile}"
+	
+	#"echo -ne \" T1=\${j##*mapper2.} \&\& \"  \>\>\${paraFile}"  ###transposon name	
+	#"echo -e \" ` $script \${j} \${j} 1 ${OUTDIR} \$T1 \` \>\> \$OUTDIR/\${insertsname}.FB.\${T1}.pp6.out \"  \>\>\${paraFile}"
+	#"echo -e \" echo \$T1 \` $script \${j} \${j} 1 ${OUTDIR} | head -n 1 \` \>\> \${OUTDIR}/\${insertsname}.FB.pp6.temp \"  \>\> \${paraFile}"
+
+
 	done
 	if [[ ! -f \${paraFile}.completed ]] || [[ -f \$paraFile.failed_commands ]]
 	then

@@ -16,8 +16,14 @@ for ($i=0; $i<$ARGV[2]; $i++) {
    $file2=fileparse($ARGV[$j]); #file2 is the guide strand
    $file2 =~ /(.*)\.xkxh/;
    $filename2=$1;
-	
-    print "$filename1-$filename2";
+   if($ARGV[4])
+   {
+   $Transposon=$ARGV[4];
+   print "$Transposon\t$filename1-$filename2";
+   }
+   else
+   {print "$filename1-$filename2";}
+    
     open PPSEQ, ">$ARGV[3]/$filename1_$filename2.ppseq";
      $X=0; $Z=0; %score=();
 
