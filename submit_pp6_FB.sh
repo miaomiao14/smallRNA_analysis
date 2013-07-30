@@ -36,16 +36,16 @@ do
 
 	export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 
-	$script $i $i 1 ${OUTDIR} >$OUTDIR/${insertsname}.total.pp6.out &&
+	[ ! -f $OUTDIR/${insertsname}.total.pp6.out ] && $script $i $i 1 ${OUTDIR} >$OUTDIR/${insertsname}.total.pp6.out &&
 	${PIPELINE_DIRECTORY}/FB.pl $i ${OUTDIR} &&
 	paraFile=${OUTDIR}/${insertsname}.pp6.para
 	for j in \`ls -1 ${OUTDIR}/${FILENAME}.*\`
 	do
 	T1=\${j##*mapper2.}
 	
-	"echo -ne  \" T1=\\\${j##*mapper2.} \\\&\\\& \" \>\> \${paraFile}"
-	"echo -e \" \\\`$script \\\${j} \\\${j} 1 ${OUTDIR} \\\$T1 \\\` \\\>\\\> $OUTDIR/${insertsname}.FB.\\\${T1}.pp6.out  \" \>\> \${paraFile}"
-	"echo -e \" \\\`$script \\\${j} \\\${j} 1 ${OUTDIR} \\\$T1 \\\` \\\>\\\> $OUTDIR/${insertsname}.FB.pp6.temp  \" \>\> \${paraFile}"
+	"echo -ne  \" T1=\${j##*mapper2.} \&\& \" \>\> \${paraFile}"
+	"echo -e \" \\\`$script \${j} \${j} 1 ${OUTDIR} \\\$T1 \\\` \>\> $OUTDIR/${insertsname}.FB.\${T1}.pp6.out  \" \>\> \${paraFile}"
+	"echo -e \" \\\`$script \${j} \${j} 1 ${OUTDIR} \\\$T1 \\\` \>\> $OUTDIR/${insertsname}.FB.pp6.temp  \" \>\> \${paraFile}"
 
 	done
 	if [[ ! -f \${paraFile}.completed ]] || [[ -f \$paraFile.failed_commands ]]
