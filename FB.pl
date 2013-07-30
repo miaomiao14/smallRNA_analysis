@@ -1,10 +1,14 @@
 #!/usr/bin/perl
 
 use File::Basename;
-open IN, $ARGV[0];
+use Compress::Zlib;
+#open IN, $ARGV[0];
 $filename=fileparse($ARGV[0]);
 $OUTDIR=$ARGV[1];
-while(<IN>) {
+$gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
+while($gz->gzreadline($_) > 0)
+#while(<IN>) 
+{
   chomp;
   split(/\t/);
   $_[5] =~ /(.+)\./;
