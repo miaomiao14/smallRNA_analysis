@@ -25,6 +25,7 @@ do
 	
 #echo "spliting transposon family..."
 	echo "#!/bin/sh
+
 #$ -pe single 24
 #$ -V
 #$ -o \$HOME/sge_jobs_output/sge_job.\$JOB_ID.out -j y
@@ -32,8 +33,9 @@ do
 ##$ -M weiwanghhq@gmail.com
 #$ -m e 
 
+export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 
-	${PIPELINE_DIRECTORY}/FB.pl $i ${OUTDIR} &&
+	${PIPELINE_DIRECTORY}/FB.pl \$i \${OUTDIR} &&
 	paraFile=${OUTDIR}/${insertsname}.pp6.para
 	for j in `ls -1 ${OUTDIR}/${FILE}.*`
 	do
@@ -50,5 +52,5 @@ do
 "> $SGE
 	
 	#qsub $SGE
-	sleep 5s
+	#sleep 5s
 done
