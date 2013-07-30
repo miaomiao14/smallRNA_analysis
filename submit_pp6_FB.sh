@@ -44,8 +44,8 @@ do
 	T1=\${j##*mapper2.}
 	
 	"echo -ne  \" T1=\${j##*mapper2.} \&\& \" \>\> \${paraFile}"
-	"echo -ne \" \\\`$script \${j} \${j} 1 ${OUTDIR} \\\$T1 \\\` \>\> $OUTDIR/${insertsname}.FB.\${T1}.pp6.out \&\& \" \>\> \${paraFile}"
-	"echo -e \" \\\`$script \${j} \${j} 1 ${OUTDIR} \\\$T1 \\\` \>\> $OUTDIR/${insertsname}.FB.pp6.temp  \" \>\> \${paraFile}"
+	"echo -ne \" \`$script \${j} \${j} 1 ${OUTDIR} \\\$T1 \` \>\> $OUTDIR/${insertsname}.FB.\${T1}.pp6.out \&\& \" \>\> \${paraFile}"
+	"echo -e \" \`$script \${j} \${j} 1 ${OUTDIR} \\\$T1 \` \>\> $OUTDIR/${insertsname}.FB.pp6.temp  \" \>\> \${paraFile}"
 
 	done
 	if [[ ! -f \${paraFile}.completed ]] || [[ -f \$paraFile.failed_commands ]]
