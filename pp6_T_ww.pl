@@ -20,11 +20,14 @@ for ($i=0; $i<$ARGV[2]; $i++) {
    {
    $Transposon=$ARGV[4];
    print "$Transposon\t$filename1-$filename2";
+   open PPSEQ, ">$ARGV[3]/$filename1_$filename2.$Transposon.ppseq";
    }
    else
-   {print "$filename1-$filename2";}
+   {print "$filename1-$filename2";
+   	open PPSEQ, ">$ARGV[3]/$filename1_$filename2.ppseq";
+   }
     
-    open PPSEQ, ">$ARGV[3]/$filename1_$filename2.ppseq";
+    
      $X=0; $Z=0; %score=();
 
      foreach ($n=1;$n<=20;$n++) {
