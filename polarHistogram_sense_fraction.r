@@ -24,6 +24,10 @@ plot_PolarHisto_senseFraction=function(filename,outdir)
 	pdfname=paste(outputfile,"senseFraction.polarHisto.pdf",sep="")
 	ggsave(pdfname,width=12,height=12)
 	dev.off()
+	pdfname=paste(outputfile,"senseFraction.polarHisto.ps",sep="")
+	ggsave(pdfname,width=12,height=12)
+	dev.off()
+	
 }
 
 #plot_PolarHisto_senseFraction(input);
