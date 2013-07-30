@@ -32,7 +32,7 @@ for ($i=0; $i<$ARGV[2]; $i++) {
 
      foreach ($n=1;$n<=20;$n++) {
      %pp=(); %pos=(); %pp_seq=(); %pos_seq=();
-     if($filename1=~/gz/)
+     if($file1=~/gz/)
      {
 	     $gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
 	     while($gz->gzreadline($_) > 0)
@@ -56,7 +56,7 @@ for ($i=0; $i<$ARGV[2]; $i++) {
      }
 
    
-      if($filename1=~/gz/)
+      if($file2=~/gz/)
      {
 	     $gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
 	     while($gz->gzreadline($_) > 0)
