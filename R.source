@@ -50,7 +50,7 @@ layout(matrix(c(1:n), n, 1, byrow = TRUE))
 for ( i in 1:length(levels(L$gt)) )
 {
 gtname=levels(L$gt)[i]
-Lgtx=as.data.frame(lapply(subset(L,gg==gtname),'[',drop=TRUE))
+Lgtx=as.data.frame(lapply(subset(L,gt==gtname),'[',drop=TRUE))
 barplot(Lgtx$sense,main=gtname,col=4,ylab='number of normalized reads(ppm)',ylim=c(ylim_minus,ylim_plus));
 barplot(-Lgtx$antisense,names.arg=Lgtx$len,col=2,xlab='length (nt)',ylim=c(ylim_minus,ylim_plus),add=TRUE);
 }
