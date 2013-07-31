@@ -104,25 +104,27 @@ do
 	#MAPPER2UNIQLENDIS=${MAPPER2UNIQLENDIS}","${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.nnc.lendis2 
 	
 	
-	for t in ${!SUBGROUP}
+	
+	for NF in "${NORMFACTORTYPE[@]}"
 	do
-		lendisFile=${OUTDIR3}/$g.${RANDOM}.lendis2
-		for NF in "${NORMFACTORTYPE[@]}"
+		lendisFile=${OUTDIR3}/${NF}.${RANDOM}.lendis2
+		for t in ${!SUBGROUP}
 		do
-		cat ${OUTDIR2}/${t}.xkxh.transposon.mapper2.${NF}.lendis2| awk '{OFS="\t"}{print ${!t},$1,$2,$3}' >> ${lendisFile}.${NF}	 
+		cat ${OUTDIR2}/${t}.xkxh.transposon.mapper2.${NF}.lendis2| awk '{OFS="\t"}{print ${t},$1,$2,$3}' >> ${lendisFile}.${t}	 
 		done
-		echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 ${lendisFile}.${NF} ${OUTDIR3}" >>${paraFile}
+		echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 ${lendisFile}.${t} ${OUTDIR3}" >>${paraFile}
 	done
 	
 	
-	for t in ${!SUBGROUP}
+	
+	for NF in "${NORMFACTORTYPE[@]}"
 	do
-		lendisFile=${OUTDIR3}/$g.uniqmap.${RANDOM}.lendis2
-		for NF in "${NORMFACTORTYPE[@]}"
+		lendisFile=${OUTDIR3}/${NF}.uniqmap.${RANDOM}.lendis2
+		for t in ${!SUBGROUP}
 		do
-		cat ${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.${NF}.lendis2| awk '{OFS="\t"}{print ${!t}".uniqmap",$1,$2,$3}' >> ${lendisFile}.${NF}	 
+		cat ${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.${NF}.lendis2| awk '{OFS="\t"}{print ${t}".uniqmap",$1,$2,$3}' >> ${lendisFile}.${t}	 
 		done
-		echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 ${lendisFile}.${NF} ${OUTDIR3}" >>${paraFile}
+		echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 ${lendisFile}.${t} ${OUTDIR3}" >>${paraFile}
 	done
 	
 done
