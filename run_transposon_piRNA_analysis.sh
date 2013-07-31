@@ -94,6 +94,7 @@ paraFile=${OUTDIR3}/${RANDOM}.drawpairedlendis2.para && \
 for g in ${GROUPGT[@]}
 do
 	SUBGROUP=${!g}
+	echo ${SUBGROUP[@]} >> $LOG
 	declare -a MAPPER2NNCLENDIS=()
 	declare -a MAPPER2UNIQLENDIS=()
 	echo -ne "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2" >>${paraFile} 
