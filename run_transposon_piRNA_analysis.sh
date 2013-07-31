@@ -93,6 +93,8 @@ paraFile=${OUTDIR}/${RANDOM}.drawpairedlendis2.para && \
 for g in ${GROUPGT[@]}
 do
 	SUBGROUP=${!g}
+	MAPPER2NNCLENDIS=""
+	MAPPER2UNIQLENDIS=""
 	for t in ${SUBGROUP[@]}
 	do 
 		MAPPER2NNCLENDIS=${MAPPER2NNCLENDIS}" "${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2 
