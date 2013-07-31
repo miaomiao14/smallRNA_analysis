@@ -52,9 +52,9 @@ do
 	nfdep=`cat ${INDIR}/${inserts}/output/${insertsname}_stats_table_reads|tail -1|cut -f2`
 	
 	echo -ne "${PIPELINE_DIRECTORY}/lendis2.pl ${i} $OUTDIR2 nnc $nfnnc &&" >>${paraFile}
-	echo -e "RRR ${PIPELINE_DIRECTORY}/R.source plot_lendis2 ${OUTDIR2}/$insertsname.xkxh.transposon.mapper2.nnc.lendis2 ${insertsname}" >>${paraFile}	
+	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_lendis2 ${OUTDIR2}/$insertsname.xkxh.transposon.mapper2.nnc.lendis2 ${insertsname}" >>${paraFile}	
 	echo -ne "${PIPELINE_DIRECTORY}/lendis2.pl ${i} $OUTDIR2 seqDep $nfnnc &&" >>${paraFile}
-	echo -e "RRR ${PIPELINE_DIRECTORY}/R.source plot_lendis2 ${OUTDIR2}/$insertsname.xkxh.transposon.mapper2.seqDep.lendis2 ${insertsname}" >>${paraFile}		
+	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_lendis2 ${OUTDIR2}/$insertsname.xkxh.transposon.mapper2.seqDep.lendis2 ${insertsname}" >>${paraFile}		
 done
 [ $? == 0 ] && \
 	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
@@ -103,8 +103,8 @@ do
 	
 	done
 	#PreMappingList=("${PreMappingList[@]}" "new_target")
-	RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 ${MAPPER2NNCLENDIS[@]}
-	RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 ${MAPPER2UNIQLENDIS[@]}
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 ${MAPPER2NNCLENDIS[@]}
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 ${MAPPER2UNIQLENDIS[@]}
 	#echo -e "RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 ${MAPPER2NNCLENDIS[@]}" >>${paraFile}	
 	#echo -e "RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 ${MAPPER2UNIQLENDIS[@]}" >>${paraFile}
 done

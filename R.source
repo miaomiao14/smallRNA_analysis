@@ -23,7 +23,7 @@ dev.off();
 
 plot_paired_lendis2<- function (input) {
 n=length(input)
-n
+input
 }
 
 #a=input[1]
