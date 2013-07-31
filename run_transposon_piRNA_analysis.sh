@@ -97,7 +97,7 @@ for g in "${GROUPGT[@]}"
 do
 	SUBGROUP="$g[@]"
 	echo $g  >> $LOG
-	echo ${#(!SUBGROUP)} >> $LOG #not the value
+	#echo ${#(!SUBGROUP)} >> $LOG #not the value
 	#declare -a MAPPER2NNCLENDIS=()
 	#declare -a MAPPER2UNIQLENDIS=()
 	#MAPPER2NNCLENDIS=${MAPPER2NNCLENDIS}","${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2 
