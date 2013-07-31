@@ -107,7 +107,7 @@ do
 	for t in ${!SUBGROUP}
 	do
 		for NF in ${NORMFACTORTYPE[@]}
-		lendisFile=${OUTDIR3}/$g.${NF}.${RANDOM}.lendis2 
+		lendisFile=${OUTDIR3}/$g.${NF}.${RANDOM}.lendis2
 		do
 		cat ${OUTDIR2}/${t}.xkxh.transposon.mapper2.${NF}.lendis2| awk '{OFS="\t"}{print $t,$1,$2,$3}' >> $lendisFile	 
 		done
@@ -118,7 +118,7 @@ do
 	for t in ${!SUBGROUP}
 	do
 		for NF in ${NORMFACTORTYPE[@]}
-		lendisFile=${OUTDIR3}/$g.${NF}.uniqmap.${RANDOM}.lendis2 
+		lendisFile=${OUTDIR3}/$g.${NF}.uniqmap.${RANDOM}.lendis2
 		do
 		cat ${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.${NF}.lendis2| awk '{OFS="\t"}{print $t,$1,$2,$3}' >> $lendisFile	 
 		done
