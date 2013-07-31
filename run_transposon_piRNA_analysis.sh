@@ -86,15 +86,15 @@ declare -a gt_cor2_ox=("Phil.SRA.nosAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.aub
 declare -a gt_cor2_unox=("Phil.SRA.nosAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.aubvasAgo3CDrescue.unox.ovary.inserts")
 
 echo -e "`date` "+$ISO_8601"\tDraw paired length distribution of transposon piRNAs" >> $LOG
-OUTDIR=${INDIR}/transposon_piRNA/paired_lendis
+OUTDIR3=${INDIR}/transposon_piRNA/paired_lendis
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.paired.lendis2 ] && \
-[ ! -d $OUTDIR ] && mkdir -p ${OUTDIR} && \
-paraFile=${OUTDIR}/${RANDOM}.drawpairedlendis2.para && \
+[ ! -d $OUTDIR3 ] && mkdir -p ${OUTDIR3} && \
+paraFile=${OUTDIR3}/${RANDOM}.drawpairedlendis2.para && \
 for g in ${GROUPGT[@]}
 do
 	SUBGROUP=${!g}
-	MAPPER2NNCLENDIS=""
-	MAPPER2UNIQLENDIS=""
+	MAPPER2NNCLENDIS=()
+	MAPPER2UNIQLENDIS=()
 	for t in ${SUBGROUP[@]}
 	do 
 		MAPPER2NNCLENDIS=${MAPPER2NNCLENDIS}" "${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2 
