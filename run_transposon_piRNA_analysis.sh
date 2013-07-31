@@ -103,8 +103,8 @@ do
 	do 
 		#MAPPER2NNCLENDIS=${MAPPER2NNCLENDIS}","${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2 
 		#MAPPER2UNIQLENDIS=${MAPPER2UNIQLENDIS}","${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.nnc.lendis2 
-		echo ${OUTDIR2}/${!t}.xkxh.transposon.mapper2.nnc.lendis2 >> $LOG
-		echo -ne "${OUTDIR2}/${!t}.xkxh.transposon.mapper2.nnc.lendis2" >>${paraFile} 
+		echo ${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2 >> $LOG
+		echo -ne "${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2" >>${paraFile} 
 	
 	done
 	echo -e "\n" >>${paraFile}
