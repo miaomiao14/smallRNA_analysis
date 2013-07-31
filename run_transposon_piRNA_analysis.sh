@@ -21,9 +21,9 @@ LOG=${OUT}/log
 
 STEP=1
 OUTDIR1=${INDIR}/transposon_piRNA
+[ ! -d $OUTDIR1 ] && mkdir -p ${OUTDIR1}
 echo -e "`date` "+$ISO_8601"\tDraw polar histogram of sense fraction" >> $LOG
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.senseFraction ] && \
-[ ! -d $OUTDIR1 ] && mkdir -p ${OUTDIR1} && \
 for i in `ls ${INDIR}/*.inserts/output/*.transposon.list`
 do 
 
@@ -39,8 +39,8 @@ STEP=$((STEP+1))
 
 echo -e "`date` "+$ISO_8601"\tDraw length distribution of transposon piRNAs" >> $LOG
 OUTDIR2=${INDIR}/transposon_piRNA/lendis
+[ ! -d $OUTDIR2 ] && mkdir -p ${OUTDIR2}
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.lendis2 ] && \
-[ ! -d $OUTDIR2 ] && mkdir -p ${OUTDIR2} && \
 paraFile=${OUTDIR2}/${RANDOM}.drawlendis2.para && \
 for i in `ls ${INDIR}/*.inserts/*.xkxh.transposon.mapper2.gz`
 do 	
@@ -88,9 +88,9 @@ declare -a gt_cor2_unox=("Phil.SRA.nosAgo3CDrescue.unox.ovary.inserts" "Phil.SRA
 
 echo -e "`date` "+$ISO_8601"\tDraw paired length distribution of transposon piRNAs" >> $LOG
 OUTDIR3=${INDIR}/transposon_piRNA/paired_lendis
-[ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.paired.lendis2 ] && \
 [ ! -d $OUTDIR3 ] && mkdir -p ${OUTDIR3}
-paraFile=${OUTDIR3}/${RANDOM}.drawpairedlendis2.para 
+[ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.paired.lendis2 ] && \
+paraFile=${OUTDIR3}/${RANDOM}.drawpairedlendis2.para && \
 for g in ${!GROUPGT[@]}
 do
 	SUBGROUP=${GROUPGT[$g]}
@@ -102,6 +102,7 @@ do
 	do 
 		#MAPPER2NNCLENDIS=${MAPPER2NNCLENDIS}","${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2 
 		#MAPPER2UNIQLENDIS=${MAPPER2UNIQLENDIS}","${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.nnc.lendis2 
+		echo ${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2 >> $LOG
 		echo -ne "${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2" >>${paraFile} 
 	
 	done
