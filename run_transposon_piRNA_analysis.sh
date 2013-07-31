@@ -122,7 +122,7 @@ do
 		lendisFile=${OUTDIR3}/${NF}.uniqmap.${RANDOM}.lendis2
 		for t in ${!SUBGROUP}
 		do
-		cat ${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.${NF}.lendis2| awk '{OFS="\t"}{print ${t}.uniqmap,$1,$2,$3}' >> ${lendisFile}.${t}	 
+		cat ${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.${NF}.lendis2| awk '{OFS="\t"}{a= ${t}.uniqmap; print a,$1,$2,$3}' >> ${lendisFile}.${t}	 
 		done
 		echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 ${lendisFile}.${t} ${OUTDIR3}" >>${paraFile}
 	done
