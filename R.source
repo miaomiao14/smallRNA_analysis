@@ -26,12 +26,12 @@ plot_paired_lendis2<- function (input,outdir) {
 L=read.table(input,header=F)
 colnames(L)=c("gt","len","sense","antisense")
 m1=basename(input)
-ylim_plus=max(L$V3,L$V4)*1.2;ylim_minus=-ylim_plus;
+ylim_plus=max(L$sense,L$antisense)*1.2;ylim_minus=-ylim_plus;
 n=length(levels(L$gt))
 
 h=7
 w=h*n
-name=paste(outdir,"/",input,'.pdf',sep="");
+pdfname=paste(outdir,"/",m1,'.pdf',sep="");
 pdf (pdfname,width=w,height=h)
 layout(matrix(c(1:n), n, 1, byrow = TRUE))
 for ( i in 1:length(levels(L$gt)) )
@@ -44,8 +44,8 @@ barplot(-Lgtx$antisense,names.arg=Lgtx$len,col=2,xlab='length (nt)',ylim=c(ylim_
 dev.off();
 
 
-name=paste(outdir,"/",input,'.ps',sep="");
-pdf (pdfname,width=w,height=h)
+name=paste(outdir,"/",m1,'.ps',sep="");
+pdfpdf (pdfname,width=w,height=h)
 layout(matrix(c(1:n), n, 1, byrow = TRUE))
 for ( i in 1:length(levels(L$gt)) )
 {
