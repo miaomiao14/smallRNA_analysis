@@ -94,9 +94,9 @@ for g in ${GROUPGT[@]}
 do
 	SUBGROUP=${!g}
 	for t in ${SUBGROUP[@]}
-	do \
-		MAPPER2NNCLENDIS=${MAPPER2NNCLENDIS}" "${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2 \
-		MAPPER2UNIQLENDIS=${MAPPER2UNIQLENDIS}" "${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.nnc.lendis2 \
+	do 
+		MAPPER2NNCLENDIS=${MAPPER2NNCLENDIS}" "${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2 
+		MAPPER2UNIQLENDIS=${MAPPER2UNIQLENDIS}" "${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.nnc.lendis2 
 	
 	done
 	#PreMappingList=("${PreMappingList[@]}" "new_target")
