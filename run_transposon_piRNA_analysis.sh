@@ -89,8 +89,8 @@ declare -a gt_cor2_unox=("Phil.SRA.nosAgo3CDrescue.unox.ovary.inserts" "Phil.SRA
 echo -e "`date` "+$ISO_8601"\tDraw paired length distribution of transposon piRNAs" >> $LOG
 OUTDIR3=${INDIR}/transposon_piRNA/paired_lendis
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.paired.lendis2 ] && \
-[ ! -d $OUTDIR3 ] && mkdir -p ${OUTDIR3} && \
-paraFile=${OUTDIR3}/${RANDOM}.drawpairedlendis2.para && \
+[ ! -d $OUTDIR3 ] && mkdir -p ${OUTDIR3}
+paraFile=${OUTDIR3}/${RANDOM}.drawpairedlendis2.para 
 for g in ${!GROUPGT[@]}
 do
 	SUBGROUP=${GROUPGT[$g]}
