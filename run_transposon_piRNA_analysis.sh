@@ -56,6 +56,7 @@ do
 	echo -ne "${PIPELINE_DIRECTORY}/lendis2.pl ${i} $OUTDIR2 seqDep $nfnnc &&" >>${paraFile}
 	echo -e "RRR ${PIPELINE_DIRECTORY}/R.source plot_lendis2 ${OUTDIR2}/$insertsname.xkxh.transposon.mapper2.seqDep.lendis2 ${insertsname}" >>${paraFile}		
 done
+[ $? == 0 ] && \
 	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
 	touch ${OUT}/.status.${STEP}.transposon_piRNA.lendis2
 STEP=$((STEP+1))
@@ -89,12 +90,12 @@ echo -e "`date` "+$ISO_8601"\tDraw paired length distribution of transposon piRN
 OUTDIR3=${INDIR}/transposon_piRNA/paired_lendis
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.paired.lendis2 ] && \
 [ ! -d $OUTDIR3 ] && mkdir -p ${OUTDIR3} && \
-#paraFile=${OUTDIR3}/${RANDOM}.drawpairedlendis2.para && \
+paraFile=${OUTDIR3}/${RANDOM}.drawpairedlendis2.para && \
 for g in ${GROUPGT[@]}
 do
 	SUBGROUP=${!g}
-	MAPPER2NNCLENDIS=()
-	MAPPER2UNIQLENDIS=()
+	declare -a MAPPER2NNCLENDIS=()
+	declare -a MAPPER2UNIQLENDIS=()
 	for t in ${SUBGROUP[@]}
 	do 
 		MAPPER2NNCLENDIS=${MAPPER2NNCLENDIS}" "${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2 
@@ -107,6 +108,7 @@ do
 	#echo -e "RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 ${MAPPER2NNCLENDIS[@]}" >>${paraFile}	
 	#echo -e "RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 ${MAPPER2UNIQLENDIS[@]}" >>${paraFile}
 done
+#[ $? == 0 ] && \
 	#ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
 	#touch ${OUT}/.status.${STEP}.transposon_piRNA.paired.lendis2
 #STEP=$((STEP+1))
