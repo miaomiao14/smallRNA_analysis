@@ -19,3 +19,16 @@ dev.off();
 
 
 }
+
+
+plot_paired_lendis2<- function (input) {
+n=length(input)
+n
+}
+
+#a=input[1]
+#b=input[2]
+#c=input[3]
+##a=read.table(a,header=F)
+#b
+#c
