@@ -21,26 +21,39 @@ dev.off();
 }
 
 
-plot_paired_lendis2<- function (input1,input2) {
+plot_paired_lendis2<- function (input,outdir) {
 
-a=read.table(input1,header=F)
-m1=basename(input1)
-b=read.table(input2,header=F)
-m2=basename(input2)
-ylim_plus=max(a$V2,b$V2,a$V3,b$V3)*1.2;ylim_minus=-ylim_plus;
+L=read.table(input,header=F)
+colnames(L)=c("gt","len","sense","antisense")
+m1=basename(input)
+ylim_plus=max(L$V3,L$V4)*1.2;ylim_minus=-ylim_plus;
+n=length(levels(L$gt))
 
-
-
-
+h=7
+w=h*n
+name=paste(outdir,"/",input,'.pdf',sep="");
+pdf (pdfname,width=w,height=h)
+layout(matrix(c(1:n), n, 1, byrow = TRUE))
+for ( i in 1:length(levels(L$gt)) )
+{
+gtname=levels(L$gt)[i]
+Lgtx=as.data.frame(lapply(subset(L,gg==gtname),'[',drop=TRUE))
+barplot(Lgtx$sense,main=gtname,col=4,ylab='number of normalized reads(ppm)',ylim=c(ylim_minus,ylim_plus));
+barplot(-Lgtx$antisense,names.arg=Lgtx$len,col=2,xlab='length (nt)',ylim=c(ylim_minus,ylim_plus),add=TRUE);
 }
+dev.off();
 
-#a=input[1]
-#b=input[2]
-#c=input[3]
-##a=read.table(a,header=F)
-#b
-#c
 
-plot_triple_lendis2<- function (input1,input2,input3) {
+name=paste(outdir,"/",input,'.ps',sep="");
+pdf (pdfname,width=w,height=h)
+layout(matrix(c(1:n), n, 1, byrow = TRUE))
+for ( i in 1:length(levels(L$gt)) )
+{
+gtname=levels(L$gt)[i]
+Lgtx=as.data.frame(lapply(subset(L,gg==gtname),'[',drop=TRUE))
+barplot(Lgtx$sense,main=gtname,col=4,ylab='number of normalized reads(ppm)',ylim=c(ylim_minus,ylim_plus));
+barplot(-Lgtx$antisense,names.arg=Lgtx$len,col=2,xlab='length (nt)',ylim=c(ylim_minus,ylim_plus),add=TRUE);
+}
+dev.off();
 
 }

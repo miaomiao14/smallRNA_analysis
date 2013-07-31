@@ -17,7 +17,7 @@ INDIR=$1 #this is the folder store all pipeline results outmost folders
 OUT=${INDIR}/transposon_piRNA
 LOG=${OUT}/log
 
-
+declare -a NORMFACTORTYPE=("nnc" "seqDep")
 
 STEP=1
 OUTDIR1=${INDIR}/transposon_piRNA
@@ -50,6 +50,8 @@ do
 	inserts=${inserts}.inserts
 	nfnnc=`cat ${INDIR}/${inserts}/output/${insertsname}_stats_table_reads|tail -1|cut -f4`
 	nfdep=`cat ${INDIR}/${inserts}/output/${insertsname}_stats_table_reads|tail -1|cut -f2`
+	
+	declare -a NORMFACTOR=(${nfnnc} ${nfdep}) #not in use now
 	
 	echo -ne "${PIPELINE_DIRECTORY}/lendis2.pl ${i} $OUTDIR2 nnc $nfnnc &&" >>${paraFile}
 	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_lendis2 ${OUTDIR2}/$insertsname.xkxh.transposon.mapper2.nnc.lendis2 ${insertsname}" >>${paraFile}	
@@ -98,43 +100,30 @@ do
 	echo ${#(!SUBGROUP)} >> $LOG #not the value
 	#declare -a MAPPER2NNCLENDIS=()
 	#declare -a MAPPER2UNIQLENDIS=()
-	echo -ne "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 " >>${paraFile} 
+	#MAPPER2NNCLENDIS=${MAPPER2NNCLENDIS}","${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2 
+	#MAPPER2UNIQLENDIS=${MAPPER2UNIQLENDIS}","${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.nnc.lendis2 
+	
+	
 	for t in ${!SUBGROUP}
-	do 
-		#MAPPER2NNCLENDIS=${MAPPER2NNCLENDIS}","${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2 
-		#MAPPER2UNIQLENDIS=${MAPPER2UNIQLENDIS}","${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.nnc.lendis2 
-		echo ${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2 >> $LOG
-		echo -ne "${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2 " >>${paraFile} 
-	
+	do
+		for NF in ${NORMFACTORTYPE[@]}
+		lendisFile=${OUTDIR3}/$g.${NF}.${RANDOM}.lendis2 
+		do
+		cat ${OUTDIR2}/${t}.xkxh.transposon.mapper2.${NF}.lendis2| awk '{OFS="\t"}{print $t,$1,$2,$3}' >> $lendisFile	 
+		done
+		echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 $lendisFile ${OUTDIR3}" >>${paraFile}
 	done
-	echo -e "\n" >>${paraFile}
 	
-	echo -ne "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 " >>${paraFile} 
+	
 	for t in ${!SUBGROUP}
-	do 
-		echo ${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.nnc.lendis2 >> $LOG
-		echo -ne "${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.nnc.lendis2 " >>${paraFile} 
-	
+	do
+		for NF in ${NORMFACTORTYPE[@]}
+		lendisFile=${OUTDIR3}/$g.${NF}.uniqmap.${RANDOM}.lendis2 
+		do
+		cat ${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.${NF}.lendis2| awk '{OFS="\t"}{print $t,$1,$2,$3}' >> $lendisFile	 
+		done
+		echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 $lendisFile ${OUTDIR3}" >>${paraFile}
 	done
-	echo -e "\n" >>${paraFile}
-	#seqDep
-	echo -ne "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 " >>${paraFile} 	
-	for t in ${!SUBGROUP}
-	do 
-		echo ${OUTDIR2}/${t}.xkxh.transposon.mapper2.seqDep.lendis2 >> $LOG
-		echo -ne "${OUTDIR2}/${t}.xkxh.transposon.mapper2.seqDep.lendis2 " >>${paraFile} 
-	
-	done
-	echo -e "\n" >>${paraFile}
-	
-	echo -ne "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 " >>${paraFile} 
-	for t in ${!SUBGROUP}
-	do 
-		echo ${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.seqDep.lendis2 >> $LOG
-		echo -ne "${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.seqDep.lendis2 " >>${paraFile} 
-	
-	done
-	echo -e "\n" >>${paraFile}
 	
 done
 #[ $? == 0 ] && \
