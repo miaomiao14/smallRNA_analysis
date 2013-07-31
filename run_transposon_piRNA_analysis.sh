@@ -95,7 +95,7 @@ for g in "${GROUPGT[@]}"
 do
 	SUBGROUP="$g[@]"
 	echo $g  >> $LOG
-	echo ${#g[@]} >> $LOG #not the value
+	echo ${#(!SUBGROUP)} >> $LOG #not the value
 	#declare -a MAPPER2NNCLENDIS=()
 	#declare -a MAPPER2UNIQLENDIS=()
 	echo -ne "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 " >>${paraFile} 
