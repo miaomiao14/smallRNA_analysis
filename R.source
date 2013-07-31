@@ -21,9 +21,17 @@ dev.off();
 }
 
 
-plot_paired_lendis2<- function (input) {
-n=length(input)
-input
+plot_paired_lendis2<- function (input1,input2) {
+
+a=read.table(input1,header=F)
+m1=basename(input1)
+b=read.table(input2,header=F)
+m2=basename(input2)
+ylim_plus=max(a$V2,b$V2,a$V3,b$V3)*1.2;ylim_minus=-ylim_plus;
+
+
+
+
 }
 
 #a=input[1]
@@ -32,3 +40,7 @@ input
 ##a=read.table(a,header=F)
 #b
 #c
+
+plot_triple_lendis2<- function (input1,input2,input3) {
+
+}

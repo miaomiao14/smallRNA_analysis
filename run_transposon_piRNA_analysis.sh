@@ -95,9 +95,9 @@ for g in "${GROUPGT[@]}"
 do
 	SUBGROUP="$g[@]"
 	echo $g  >> $LOG
-	echo ${SUBGROUP[@]} >> $LOG #not the value
-	declare -a MAPPER2NNCLENDIS=()
-	declare -a MAPPER2UNIQLENDIS=()
+	echo ${#!SUBGROUP} >> $LOG #not the value
+	#declare -a MAPPER2NNCLENDIS=()
+	#declare -a MAPPER2UNIQLENDIS=()
 	echo -ne "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 " >>${paraFile} 
 	for t in ${!SUBGROUP}
 	do 
@@ -118,10 +118,9 @@ do
 	done
 	echo -e "\n" >>${paraFile}
 	#seqDep
+	echo -ne "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 " >>${paraFile} 	
 	for t in ${!SUBGROUP}
 	do 
-		#MAPPER2NNCLENDIS=${MAPPER2NNCLENDIS}","${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2 
-		#MAPPER2UNIQLENDIS=${MAPPER2UNIQLENDIS}","${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.nnc.lendis2 
 		echo ${OUTDIR2}/${t}.xkxh.transposon.mapper2.seqDep.lendis2 >> $LOG
 		echo -ne "${OUTDIR2}/${t}.xkxh.transposon.mapper2.seqDep.lendis2 " >>${paraFile} 
 	
