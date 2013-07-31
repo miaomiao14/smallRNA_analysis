@@ -98,21 +98,45 @@ do
 	echo ${SUBGROUP[@]} >> $LOG #not the value
 	declare -a MAPPER2NNCLENDIS=()
 	declare -a MAPPER2UNIQLENDIS=()
-	echo -ne "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2" >>${paraFile} 
+	echo -ne "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 " >>${paraFile} 
 	for t in ${!SUBGROUP}
 	do 
 		#MAPPER2NNCLENDIS=${MAPPER2NNCLENDIS}","${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2 
 		#MAPPER2UNIQLENDIS=${MAPPER2UNIQLENDIS}","${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.nnc.lendis2 
 		echo ${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2 >> $LOG
-		echo -ne "${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2" >>${paraFile} 
+		echo -ne "${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2 " >>${paraFile} 
 	
 	done
 	echo -e "\n" >>${paraFile}
-	#PreMappingList=("${PreMappingList[@]}","new_target")
-	#${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 "${MAPPER2NNCLENDIS[@]}"
-	#${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 "${MAPPER2UNIQLENDIS[@]}"
-	#echo -e "RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 ${MAPPER2NNCLENDIS[@]}" >>${paraFile}	
-	#echo -e "RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 ${MAPPER2UNIQLENDIS[@]}" >>${paraFile}
+	
+	echo -ne "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 " >>${paraFile} 
+	for t in ${!SUBGROUP}
+	do 
+		echo ${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.nnc.lendis2 >> $LOG
+		echo -ne "${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.nnc.lendis2 " >>${paraFile} 
+	
+	done
+	echo -e "\n" >>${paraFile}
+	#seqDep
+	for t in ${!SUBGROUP}
+	do 
+		#MAPPER2NNCLENDIS=${MAPPER2NNCLENDIS}","${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2 
+		#MAPPER2UNIQLENDIS=${MAPPER2UNIQLENDIS}","${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.nnc.lendis2 
+		echo ${OUTDIR2}/${t}.xkxh.transposon.mapper2.seqDep.lendis2 >> $LOG
+		echo -ne "${OUTDIR2}/${t}.xkxh.transposon.mapper2.seqDep.lendis2 " >>${paraFile} 
+	
+	done
+	echo -e "\n" >>${paraFile}
+	
+	echo -ne "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 " >>${paraFile} 
+	for t in ${!SUBGROUP}
+	do 
+		echo ${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.seqDep.lendis2 >> $LOG
+		echo -ne "${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.seqDep.lendis2 " >>${paraFile} 
+	
+	done
+	echo -e "\n" >>${paraFile}
+	
 done
 #[ $? == 0 ] && \
 	#ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
