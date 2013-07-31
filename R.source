@@ -33,7 +33,7 @@ h=7
 w=h*n
 pdfname=paste(outdir,"/",m1,'.pdf',sep="");
 pdf (pdfname,width=w,height=h)
-layout(matrix(c(1:n), n, 1, byrow = TRUE))
+layout(matrix(c(1:n), n, 1, byrow = FALSE))
 for ( i in 1:length(levels(L$gt)) )
 {
 gtname=levels(L$gt)[i]
