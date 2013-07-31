@@ -95,6 +95,7 @@ for g in ${!GROUPGT[@]}
 do
 	SUBGROUP=${GROUPGT[$g]}
 	echo ${SUBGROUP[@]} >> $LOG
+	echo hello  >> $LOG
 	declare -a MAPPER2NNCLENDIS=()
 	declare -a MAPPER2UNIQLENDIS=()
 	echo -ne "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2" >>${paraFile} 
