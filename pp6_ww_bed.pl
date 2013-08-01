@@ -28,12 +28,9 @@ if($parameters->{in_file2})
 {
 	$inputfile2=fileparse($parameters->{in_file2});
 	push @inputfiles, $parameters->{in_file2};
-	open PPZ, ">$outdir/${inputfile1}_$inputfile2.zscore";
+	
 }
-else
-{
-	open PPZ, ">$outdir/${inputfile1}_$inputfile1.zscore";
-}
+
 
 
 
@@ -53,6 +50,8 @@ for (my $i=0; $i<@inputfiles; $i++)
 		$file2 =~ /(.*)\.bed*.*/;
 		my $filename2="";
 		$filename2=$1;
+   		
+   		open PPZ, ">$outdir/${file1}_${file2}.zscore";
    		
 		if($parameters->{trn})
 		{
@@ -91,7 +90,8 @@ for (my $i=0; $i<@inputfiles; $i++)
 				{ 
 					chomp $record;
 					my($chr,$start,$end,$name,$score,$strand) = split(/\t/,$record);
-					my $len=$end-$start;
+					my $len=0;
+					$len=$end-$start;
 					next if ($len>29 || $len<23); #the length range of piRNAs
 					my $ppStart=0;
 					if ($strand eq '+')  #if the piRNA is on + strand 
@@ -120,7 +120,8 @@ for (my $i=0; $i<@inputfiles; $i++)
 				{
 					chomp $record;
 					my($chr,$start,$end,$name,$score,$strand) = split(/\t/,$record);
-					my $len=$end-$start;
+					my $len=0;
+					$len=$end-$start;
 					next if ($len>29 || $len<23);
 					my $ppStart=0;
 					if ($strand eq '+') 
@@ -150,7 +151,8 @@ for (my $i=0; $i<@inputfiles; $i++)
 				{ 
 					chomp $record;
 					my($chr,$start,$end,$name,$score,$strand) = split(/\t/,$record);
-					my $len=$end-$start;
+					my $len=0;
+					$len=$end-$start;
 					next if ($len>29 || $len<23);
 					if ($strand eq '+') 
 					{
@@ -175,7 +177,8 @@ for (my $i=0; $i<@inputfiles; $i++)
 				{
 					chomp $record;
 					my($chr,$start,$end,$name,$score,$strand) = split(/\t/,$record);
-					my $len=$end-$start;
+					my $len=0;
+					$len=$end-$start;
 					next if ($len>29 || $len<23);
 					if ($strand eq '+') 
 					{
