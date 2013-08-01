@@ -34,7 +34,7 @@ for ($i=0; $i<$ARGV[2]; $i++) {
      %pp=(); %pos=(); %pp_seq=(); %pos_seq=();
      if($file1=~/gz/)
      {
-	     $gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
+	     $gz = gzopen($ARGV[$i], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
 	     while($gz->gzreadline($_) > 0)
 	          { chomp; split(/\t/);
 		     next if (length($_[0])>29 || length($_[0])<23);
@@ -45,7 +45,7 @@ for ($i=0; $i<$ARGV[2]; $i++) {
      }
      else
      {
-	     open IN, $ARGV[$i];
+	     open IN, $ARGV[$i] or die "Cannot open $ARGV[$i]: $!\n";
 	     while(<IN>) 
 	          { chomp; split(/\t/);
 			     next if (length($_[0])>29 || length($_[0])<23);
@@ -58,7 +58,7 @@ for ($i=0; $i<$ARGV[2]; $i++) {
    
       if($file2=~/gz/)
      {
-	     $gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
+	     $gz = gzopen($ARGV[$j], "rb") or die "Cannot open $ARGV[$j]: $gzerrno\n" ;
 	     while($gz->gzreadline($_) > 0)
 	          { chomp; split(/\t/);
 			     next if (length($_[0])>29 || length($_[0])<23);
@@ -69,7 +69,7 @@ for ($i=0; $i<$ARGV[2]; $i++) {
      }
      else
      {
-	     open IN, $ARGV[$i];
+	     open IN, $ARGV[$j]  or die "Cannot open $ARGV[$j]: $!\n";
 	     while(<IN>) 
 	          { chomp; split(/\t/);
 		     next if (length($_[0])>29 || length($_[0])<23);
