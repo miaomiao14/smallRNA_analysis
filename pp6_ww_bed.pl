@@ -266,7 +266,7 @@ sub usage
 	print "-j  <inputfile2 [optional]>\n\t";
 	print "-o  <outputdir>\n\t";
 	print "-f  <input format [default:bed]>\n\t";
-	print "-t  <transposon name>\n\t";
+	print "-t  <transposon name[optional]>\n\t";
 	print "This perl script is to calculate the Ping-Pong Zscore of smallRNAs within length range 23-29nt\n\t";
 	print "It's maintained by WEI WANG. If you have any questions, please contact wei.wang2\@umassmed.edu\n";
 	
