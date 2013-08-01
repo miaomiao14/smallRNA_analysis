@@ -21,17 +21,22 @@ my $inputfile1=fileparse($parameters->{in_file1});
 my @inputfiles=();
 push @inputfiles, $parameters->{in_file1};
 my $inputfile2="";
+my $outdir=$parameters->{outdir};
+my $format=$parameters->{format};
 
 if($parameters->{in_file2})
 {
 	$inputfile2=fileparse($parameters->{in_file2});
 	push @inputfiles, $parameters->{in_file2};
+	open PPZ, ">$outdir/${inputfile1}_$inputfile2.zscore";
+}
+else
+{
+	open PPZ, ">$outdir/${inputfile1}_$inputfile1.zscore";
 }
 
-my $outdir=$parameters->{outdir};
-my $format=$parameters->{format};
 
-open PPZ, ">$outdir/${inputfile1}_$inputfile2.zscore";
+
 for (my $i=0; $i<@inputfiles; $i++) 
 {
 	for (my $j=0; $j<@inputfiles; $j++) 
@@ -52,13 +57,13 @@ for (my $i=0; $i<@inputfiles; $i++)
 		if($parameters->{trn})
 		{
 			my $Transposon=$parameters->{trn};
-			print PPZ "$Transposon\t$filename1-$filename2";
+			print PPZ "$Transposon\t$filename1-$filename2\t";
 			open PPSEQ, ">$outdir/${filename1}_$filename2.$Transposon.ppseq";
 			open PPSCORE, ">$outdir/${filename1}_$filename2.$Transposon.ppscore";
 		}
 		else
 		{
-			print PPZ "$filename1-$filename2";
+			print PPZ "$filename1-$filename2\t";
 			open PPSEQ, ">$outdir/${filename1}_$filename2.ppseq";
 			open PPSCORE, ">$outdir/${filename1}_$filename2.ppscore";
 		}
@@ -204,7 +209,8 @@ for (my $i=0; $i<@inputfiles; $i++)
 		my $std=0;
 		$std=&standard_deviation(values %score);
 		if ($std>0) { $Z=($X-&mean(values %score))/$std;} else {$Z=-10;}
-		print PPZ "\t$Z\t$X\n";
+		printf PPZ '%.2f', $Z;
+		print PPZ "\t$X\n";
 	}
 
 }
