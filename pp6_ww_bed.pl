@@ -44,13 +44,13 @@ for (my $i=0; $i<@inputfiles; $i++)
 		
 		my $file1="";	#$file[i] is the target strand,$file[j] is the guide strand
 		$file1=fileparse($inputfiles[$i]);
-		$file1 =~ /(.*)\.bed/;
+		$file1 =~ /(.*)\.bed.*/;
 		my $filename1="";
 		$filename1=$1;
     
 		my $file2=""; #file2 is the guide strand
 		$file1=fileparse($inputfiles[$i]);
-		$file2 =~ /(.*)\.bed/;
+		$file2 =~ /(.*)\.bed.*/;
 		my $filename2="";
 		$filename2=$1;
    		
