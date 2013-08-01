@@ -46,7 +46,7 @@ for (my $i=0; $i<@inputfiles; $i++)
 		$filename1=$1;
     
 		my $file2=""; #file2 is the guide strand
-		$file1=fileparse($inputfiles[$i]);
+		$file2=fileparse($inputfiles[$j]);
 		$file2 =~ /(.*)\.bed*.*/;
 		my $filename2="";
 		$filename2=$1;
