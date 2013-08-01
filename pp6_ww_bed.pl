@@ -51,7 +51,7 @@ for (my $i=0; $i<@inputfiles; $i++)
 		my $filename2="";
 		$filename2=$1;
    		
-   		open PPZ, ">$outdir/${file1}_${file2}.zscore";
+   		open PPZ, ">$outdir/${filename1}_${filename2}.zscore";
    		
 		if($parameters->{trn})
 		{
