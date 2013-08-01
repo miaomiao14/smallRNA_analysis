@@ -111,6 +111,7 @@ for (my $i=0; $i<@inputfiles; $i++)
 	
 					}
 			     }
+			     $gz->gzclose();
 			}
 			#not zip input file
 			else
@@ -140,6 +141,7 @@ for (my $i=0; $i<@inputfiles; $i++)
 						#push @{$pp_seq{"$chr:$ppStart+"}},$len;
 					}
 				}
+				close(IN);
 	     	}
 			#read zip input file
 			#the guide strand
@@ -168,6 +170,7 @@ for (my $i=0; $i<@inputfiles; $i++)
 	
 					}
 			     }
+			     $gz->gzclose();
 			}
 			#not zip inputfile
 			else
@@ -194,6 +197,7 @@ for (my $i=0; $i<@inputfiles; $i++)
 	
 					}
 				}
+				close(IN);
 	     	}
 	     	#calculate the PPscore for each pair of piRNAs with 5'-5' distance n	
 			foreach my $cor (keys %pos)
@@ -224,7 +228,9 @@ for (my $i=0; $i<@inputfiles; $i++)
 	}
 
 }
-
+close(PPSCORE);
+close(PPSEQ);
+close(PPZ);
 
 sub mean 
 {
