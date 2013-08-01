@@ -76,11 +76,15 @@ STEP=$((STEP+1))
 #declare -a gt_cor2_ox=("nosAgo3CDrescue.ox" "aubvasAgo3CDrescue.ox")
 #declare -a gt_cor2_unox=("nosAgo3CDrescue.unox" "aubvasAgo3CDrescue.unox")
 
-declare -a GROUPGT=("ago3_ox" "ago3_unox" "aub_ox" "aub_unox" "ago3mut_cor1_ox" "ago3mut_cor1_unox" "ago3CD_cor2_ox" "ago3CD_cor2_unox")
+declare -a GROUPGT=("pago3_ox" "pago3_unox" "ago3_ox" "ago3_unox" "aub_ox" "aub_unox" "ago3mut_cor1_ox" "ago3mut_cor1_unox" "ago3CD_cor2_ox" "ago3CD_cor2_unox")
+declare -a pago3_ox=("Phil.SRA.nosAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.ago3MutsWW.ox.ovary.inserts" "Phil.SRA.nosAgo3WTrescue.ox.ovary.inserts")
+declare -a pago3_unox=("Phil.SRA.nosAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.ago3MutsWW.unox.ovary.inserts" "Phil.SRA.nosAgo3WTrescue.unox.ovary.inserts")
 declare -a ago3_ox=("Phil.SRA.aubvasAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.ago3MutsWW.ox.ovary.inserts" "Phil.SRA.aubvasAgo3WTrescue.ox.ovary.inserts")
 declare -a ago3_unox=("Phil.SRA.aubvasAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.ago3MutsWW.unox.ovary.inserts" "Phil.SRA.aubvasAgo3WTrescue.unox.ovary.inserts")
 declare -a aub_ox=("Phil.SRA.AubCDrescue.ox.ovary.inserts" "Phil.SRA.AubMutsWW.ox.ovary.inserts" "Phil.SRA.AubWTrescue.ox.ovary.inserts")
 declare -a aub_unox=("Phil.SRA.AubCDrescue.unox.ovary.inserts" "Phil.SRA.AubMutsWW.unox.ovary.inserts" "Phil.SRA.AubWTrescue.unox.ovary.inserts")
+
+
 
 declare -a ago3mut_cor1_ox=("Phil.SRA.ago3MutsWW.ox.ovary.inserts" "Phil.SRA.ago3MutsCJ.ox.ovary.inserts")
 declare -a ago3mut_cor1_unox=("Phil.SRA.ago3MutsWW.unox.ovary.inserts" "Phil.SRA.ago3MutsCJ.unox.ovary.inserts")
@@ -108,9 +112,11 @@ do
 	for NF in "${NORMFACTORTYPE[@]}"
 	do
 		lendisFile=${OUTDIR3}/${g}.${NF}.${RANDOM}.lendis2
+		count=1
 		for t in ${!SUBGROUP}
 		do
-		cat ${OUTDIR2}/${t}.xkxh.transposon.mapper2.${NF}.lendis2| awk -v gt=$t '{OFS="\t"}{print gt,$1,$2,$3}' >> ${lendisFile}	 
+		cat ${OUTDIR2}/${t}.xkxh.transposon.mapper2.${NF}.lendis2| awk -v gt=$t -v rank=$count '{OFS="\t"}{print gt,$1,$2,$3,rank}' >> ${lendisFile}
+		count=$(($count+1))	 
 		done
 		echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 ${lendisFile} ${OUTDIR3}" >>${paraFile}
 	done
@@ -120,9 +126,11 @@ do
 	for NF in "${NORMFACTORTYPE[@]}"
 	do
 		lendisFile=${OUTDIR3}/${g}.${NF}.uniqmap.${RANDOM}.lendis2
+		count=1
 		for t in ${!SUBGROUP}
 		do
-		cat ${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.${NF}.lendis2| awk -v gt=$t '{OFS="\t"}{ print gt".uniqmap",$1,$2,$3}' >> ${lendisFile}	 
+		cat ${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.${NF}.lendis2| awk -v gt=$t -v rank=$count '{OFS="\t"}{ print gt".uniqmap",$1,$2,$3,rank}' >> ${lendisFile}
+		count=$(($count+1))		 
 		done
 		echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 ${lendisFile} ${OUTDIR3}" >>${paraFile}
 	done
