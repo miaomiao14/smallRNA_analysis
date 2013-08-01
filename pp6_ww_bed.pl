@@ -57,18 +57,25 @@ for (my $i=0; $i<@inputfiles; $i++)
 		if($parameters->{trn})
 		{
 			my $Transposon=$parameters->{trn};
+			print PPZ "Transposon\tPINGPONGFILE\tZSCORE\tPPSCORE10\n"; 
 			print PPZ "$Transposon\t$filename1-$filename2\t";
 			open PPSEQ, ">$outdir/${filename1}_$filename2.$Transposon.ppseq";
 			open PPSCORE, ">$outdir/${filename1}_$filename2.$Transposon.ppscore";
 		}
 		else
 		{
+			print PPZ "PINGPONGFILE\tZSCORE\tPPSCORE10\n";
 			print PPZ "$filename1-$filename2\t";
 			open PPSEQ, ">$outdir/${filename1}_$filename2.ppseq";
 			open PPSCORE, ">$outdir/${filename1}_$filename2.ppscore";
 		}
-    
-    
+ 					#chr:start(+/-) of the piRNA partner 
+					#the length of piRNA partners (only record one length)
+					#the abundance of piRNA partners
+					#the length of piRNAs (only record one length)
+					#the abundance of piRNA   
+    	print PPSEQ "POSOFPARTNER\tPARTNERLEN\tPARTNERABUNDANCE\tpiRNALEN\tpiRNAABUDNACE\n";
+    	print PPSCORE "OVERLAP\tPPSCORE\n";
 		my $X=0; my $Z=0; my %score=();
 	
 		foreach (my $n=1;$n<=20;$n++) #iterate with different 5'-5' distance of piRNAs from oposite strand
