@@ -20,7 +20,7 @@ filename=`basename $file .fq`
 #echo -e "fastx_clipper -a $ADAPTER -l 18 -c -M 8 -i $fq -o ${OUTDIR}/${filename}.inserts" >>${paraFile}
 echo -ne "grep -A 1 \"@\" $fq | grep -v \"@\" | grep -v \"\-\-\"  | uniq.reads+   >${fq}.raw && " >>${paraFile}
 echo -ne " Extract_insert_10mer.pl ${fq}.raw $ADAPTER > ${OUTDIR}/${filename}.insertsout && " >>${paraFile}
-echo -ne "inserts2uniqreads.pl ${OUTDIR}/${filename}.insertsout 18 30 > ${OUTDIR}/${filename}.inserts && " >>${paraFile}
+echo -ne "inserts2uniqreads.pl ${OUTDIR}/${filename}.insertsout 18 30 > ${OUTDIR}/${filename}.inserts.trimmed && " >>${paraFile}
 echo -e "rm ${OUTDIR}/${filename}.insertsout" >>${paraFile}
 done
 
