@@ -163,7 +163,7 @@ do
 	#declare -a NORMFACTORTYPE=("nnc" "seqDep")	
 	for NF in "${NORMFACTORTYPE[@]}"
 	do
-		echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_transposon_abundance_zscore_barplot ${INDIR}/${inserts}/output/${insertsname}.transposon.list ${INDIR}/pp6_FB/${insertsname}/$insertsname.FB.pp6.out $totalZscore $NF ${!NF} $OUTDIR4" >>${paraFile}	
+		echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_transposon_abundance_zscore_barplot ${INDIR}/${inserts}/output/${insertsname}.transposon.list ${INDIR}/pp6_FB/${insertsname}/$insertsname.FB.pp6.out $totalZscore ${!NF} $NF $OUTDIR4" >>${paraFile}	
 	done
 done
 [ $? == 0 ] && \
