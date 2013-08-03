@@ -140,3 +140,33 @@ done
 	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
 	touch ${OUT}/.status.${STEP}.transposon_piRNA.paired.lendis2
 STEP=$((STEP+1))
+
+
+
+echo -e "`date` "+$ISO_8601"\tDraw transposon piRNA abundance and zscore barplot..." >> $LOG
+OUTDIR4=${INDIR}/transposon_piRNA/abundance_zscore
+[ ! -d $OUTDIR4 ] && mkdir -p ${OUTDIR4}
+[ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.abundance_zscore ] && \
+paraFile=${OUTDIR4}/${RANDOM}.drawbarplotAbundanceZscore.para && \
+for i in `ls ${INDIR}/*.inserts/*.xkxh.transposon.mapper2.gz`
+do 	
+	FILE=${i##*/}
+	insertsname=`basename $FILE .xkxh.transposon.mapper2.gz`
+	inserts=${FILE%%.inserts.*}
+	inserts=${inserts}.inserts
+	nnc=`cat ${INDIR}/${inserts}/output/${insertsname}_stats_table_reads|tail -1|cut -f4`
+	seqDep=`cat ${INDIR}/${inserts}/output/${insertsname}_stats_table_reads|tail -1|cut -f2`
+	
+	declare -a NORMFACTOR=(${nfnnc} ${nfdep}) #not in use now
+	
+	totalZscore=`cat ${INDIR}/pp6_FB/${insertsname}/$insertsname.total.pp6.out|cut -f2`
+	#declare -a NORMFACTORTYPE=("nnc" "seqDep")	
+	for NF in "${NORMFACTORTYPE[@]}"
+	do
+		echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_transposon_abundance_zscore_barplot ${INDIR}/${inserts}/output/${insertsname}.transposon.list ${INDIR}/pp6_FB/${insertsname}/$insertsname.FB.pp6.out $totalZscore $NF ${!NF} $OUTDIR4" >>${paraFile}	
+	done
+done
+[ $? == 0 ] && \
+	#ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
+	#touch ${OUT}/.status.${STEP}.transposon_piRNA.abundance_zscore
+#STEP=$((STEP+1))
