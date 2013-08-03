@@ -81,6 +81,7 @@ colnames(group)=c("transposon","g")
 
 aGroup=merge(a,group,by.x="transposon",all.x=TRUE)
 aGroup$g[is.na(aGroup$g)]=4
+nf=as.numeric(nf)
 aGroup$piRNA=aGroup$piRNA/nf*1000000
 aGroupppm=subset(aGroup,select=c("transposon","piRNA","g"))
 
