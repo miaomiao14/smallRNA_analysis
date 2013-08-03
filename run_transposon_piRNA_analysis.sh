@@ -167,6 +167,6 @@ do
 	done
 done
 [ $? == 0 ] && \
-	#ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
-	#touch ${OUT}/.status.${STEP}.transposon_piRNA.abundance_zscore
-#STEP=$((STEP+1))
+	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
+	touch ${OUT}/.status.${STEP}.transposon_piRNA.abundance_zscore
+STEP=$((STEP+1))
