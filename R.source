@@ -101,6 +101,8 @@ trn=aGroupppmpp$transposon
 aGroupppmpp$transposon=sub('FBgn[0-9n]+\\_','',aGroupppmpp$transposon,perl=TRUE)
 aGroupppmpp$transposon=sub("FBgnnnnnnnn_","",aGroupppmpp$transposon,perl=TRUE) 
 par(mar = c(13, 4, 4, 6) + 0.1)
+
+z=format(z,digits=2)
 m=paste("Ping-Pong Z score for each transposon family in", name,"\n","Ping-Pong Z score for all transposon piRNAs is", format(z,digits=2), sep=' ')
 aGroupppmpp$g=as.factor(aGroupppmpp$g)
 fcol=c("black","green","red","yellow")
