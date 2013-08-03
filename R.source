@@ -96,7 +96,7 @@ aGroupppmpp=merge(aGroupppm,pp,by="transposon")
 
 pdfname=paste(outdir,"/", name,"_trn_abundance_vs_zscore.",nftype,".pdf",sep='')
 pdf (pdfname,width=25,height=12)
-aGroupppmpp=aGroupppmpp[order(aGroupppmpp$piRNA),]
+aGroupppmpp=aGroupppmpp[order(aGroupppmpp$zscore),]
 trn=aGroupppmpp$transposon
 aGroupppmpp$transposon=sub('FBgn[0-9n]+\\_','',aGroupppmpp$transposon,perl=TRUE)
 aGroupppmpp$transposon=sub("FBgnnnnnnnn_","",aGroupppmpp$transposon,perl=TRUE) 
@@ -115,8 +115,9 @@ axis(2, at=1.96, labels="z=1.96",las=2)
 abline(h=1.96,col="red",lty=2)
 
 par(new=T)
-
-barplot(aGroupppmpp$piRNA,col="lightgrey",axes=F,xlab="",ylab="", main=m,ylim=c(0,max(aGroupppmpp$piRNA)),col.lab="blue")
+fcol=c("black","green","red","yellow")
+#barplot(aGroupppmpp$piRNA,col="lightgrey",axes=F,xlab="",ylab="", main=m,ylim=c(0,max(aGroupppmpp$piRNA)),col.lab="blue")
+barplot(aGroupppmpp$piRNA,col=fcol[aGroupppmpp$g],axes=F,xlab="",ylab="", main=m,ylim=c(0,max(aGroupppmpp$piRNA)),col.lab="blue")
 axis(4, ylim=c(0,max(aGroupppmpp$piRNA)),las=2)
 mtext(4,text="ppm",line=4)
 axis(4, at=500, labels="ppm=500",las=2,col="blue")
