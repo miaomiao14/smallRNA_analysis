@@ -76,7 +76,7 @@ dev.off();
 plot_transposon_abundance_zscore_barplot <- function (tlist,plist,z,nftype,nf,outdir) {
 a=read.table(tlist,T)
 
-group=read.table("Zamore.group")
+group=read.table("/home/wangw1/pipeline/common/Zamore.group")
 colnames(group)=c("transposon","g")
 
 aGroup=merge(a,group,by.x="transposon",all.x=TRUE)
