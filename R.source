@@ -73,7 +73,7 @@ dev.off();
 
 
 
-plot_transposon_abundance_zscore_barplot <- function (tlist,plist,z,nftype,nf,outdir) {
+plot_transposon_abundance_zscore_barplot <- function (tlist,plist,z,nf,nftype,outdir) {
 a=read.table(tlist,T)
 
 group=read.table("/home/wangw1/pipeline/common/Zamore.group")
