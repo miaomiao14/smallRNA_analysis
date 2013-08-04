@@ -102,6 +102,7 @@ done
 \`rm -f \${DIR}\*.bw\`
 [ -d ${OUTDIR}/${insertsname}.$BINSIZE ] && rm -rf ${OUTDIR}/${insertsname}.$BINSIZE
 mv \$HOME/scratch/jobid_\$JOB_ID ${OUTDIR}/${insertsname}.$BINSIZE
+
 "> $SGE
 qsub $SGE
 done

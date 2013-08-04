@@ -178,7 +178,7 @@ STEP=$((STEP+1))
 
 OUTDIR5=${INDIR}/transposon_piRNA/polar_allTrn
 [ ! -d $OUTDIR5 ] && mkdir -p ${OUTDIR5}
-echo -e "`date` "+$ISO_8601"\tDraw polar histogram of sense fraction" >> $LOG
+echo -e "`date` "+$ISO_8601"\tDraw polar histogram of sense fraction(including transposon families not in groups)" >> $LOG
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.senseFractionallTrn ] && \
 for i in `ls ${INDIR}/*.inserts/output/*.transposon.list`
 do 
@@ -190,5 +190,80 @@ done
 [ $? == 0 ] && \	
 	touch ${OUT}/.status.${STEP}.transposon_piRNA.senseFractionallTrn
 STEP=$((STEP+1))
+
+
+
+declare -a GROUPGT=("pago3_ox" "pago3_unox" "ago3_ox" "ago3_unox" "aub_ox" "aub_unox" "ago3mut_cor1_ox" "ago3mut_cor1_unox" "ago3CD_cor2_ox" "ago3CD_cor2_unox")
+declare -a pago3_ox=("Phil.SRA.nosAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.ago3MutsWW.ox.ovary.inserts" "Phil.SRA.nosAgo3WTrescue.ox.ovary.inserts")
+declare -a pago3_unox=("Phil.SRA.nosAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.ago3MutsWW.unox.ovary.inserts" "Phil.SRA.nosAgo3WTrescue.unox.ovary.inserts")
+declare -a ago3_ox=("Phil.SRA.aubvasAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.ago3MutsWW.ox.ovary.inserts" "Phil.SRA.aubvasAgo3WTrescue.ox.ovary.inserts")
+declare -a ago3_unox=("Phil.SRA.aubvasAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.ago3MutsWW.unox.ovary.inserts" "Phil.SRA.aubvasAgo3WTrescue.unox.ovary.inserts")
+declare -a aub_ox=("Phil.SRA.AubCDrescue.ox.ovary.inserts" "Phil.SRA.AubMutsWW.ox.ovary.inserts" "Phil.SRA.AubWTrescue.ox.ovary.inserts")
+declare -a aub_unox=("Phil.SRA.AubCDrescue.unox.ovary.inserts" "Phil.SRA.AubMutsWW.unox.ovary.inserts" "Phil.SRA.AubWTrescue.unox.ovary.inserts")
+
+
+
+declare -a ago3mut_cor1_ox=("Phil.SRA.ago3MutsWW.ox.ovary.inserts" "Phil.SRA.ago3MutsCJ.ox.ovary.inserts")
+declare -a ago3mut_cor1_unox=("Phil.SRA.ago3MutsWW.unox.ovary.inserts" "Phil.SRA.ago3MutsCJ.unox.ovary.inserts")
+
+declare -a ago3CD_cor2_ox=("Phil.SRA.nosAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.aubvasAgo3CDrescue.ox.ovary.inserts")
+declare -a ago3CD_cor2_unox=("Phil.SRA.nosAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.aubvasAgo3CDrescue.unox.ovary.inserts")
+
+
+INDIR6=${INDIR}/circos
+OUTDIR6=/home/wangw1/src/circos-0.56/fly/
+#/home/wangw1/src/circos-0.56/bin/circos -conf /home/wangw1/src/circos-0.56/fly/etc/
+BINSIZE=$2
+declare -a NORMFACTORTYPE=("nnc" "seqDep")
+declare -a METRICTYPE=("max" "mean")
+[ ! -d $OUTDIR6/circosPlot ] && mkdir -p ${OUTDIR6}/circosPlot
+echo -e "`date` "+$ISO_8601"\tCreate circos configuration files and generate circos plot" >> $LOG
+[ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.circosplot ] && \
+paraFile=${OUTDIR4}/${RANDOM}.drawcircosplot.para && \
+for g in "${GROUPGT[@]}"
+do
+	SUBGROUP="$g[@]"
+	
+	for NF in ${NORMFACTORTYPE[@]}
+	do 
+		for MT in ${METRICTYPE[@]}
+		do
+			declare -a TARGETS=() 
+			declare -a TARGETSUNIQ=() 
+			for t in ${!SUBGROUP}
+			do			
+			TARGETS=${TARGETS}" "${INDIR6}/$t.${BINSIZE}/${t}.*.${NF}.antisense.${MT}.${BINSIZE}.circos.txt
+			TARGETS=${TARGETS}" "${INDIR6}/$t.${BINSIZE}/${t}.*.${NF}.sense.${MT}.${BINSIZE}.circos.txt
+			TARGETSUNIQ=${TARGETSUNIQ}" "${INDIR6}/$t.uniqmap.${BINSIZE}/${t}.uniqmap.*.${NF}.antisense.${MT}.${BINSIZE}.circos.txt
+			TARGETSUNIQ=${TARGETSUNIQ}" "${INDIR6}/$t.uniqmap.${BINSIZE}/${t}.uniqmap.*.${NF}.sense.${MT}.${BINSIZE}.circos.txt
+			done
+			
+			echo ${TARGETS[@]} >> $LOG
+			echo ${TARGETSUNIQ[@]} >> $LOG
+			
+			echo -ne " ${PIPELINE_DIRECTORY}/circos_conf_gnr.sh ${TARGETS[@]} && " >>${paraFile}
+			echo -ne " mv ${OUTDIR6}/etc/file.conf ${OUTDIR6}/etc/${!SUBGROUP}.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
+			echo -ne " cd ${OUTDIR6} && " >>${paraFile}
+			echo -ne " /home/wangw1/src/circos-0.56/bin/circos -conf ./etc/${!SUBGROUP}.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
+			echo -ne " mv ${OUTDIR6}/circos.svg ${OUTDIR6}/circosPlot/${!SUBGROUP}.${NF}.${MT}.${BINSIZE}.svg && " >>${paraFile}
+			echo -e " mv ${OUTDIR6}/circos.png ${OUTDIR6}/circosPlot/${!SUBGROUP}.${NF}.${MT}.${BINSIZE}.png " >>${paraFile}
+			
+			echo -ne " ${PIPELINE_DIRECTORY}/circos_conf_gnr.sh ${TARGETSUNIQ[@]} && " >>${paraFile}
+			echo -ne " mv ${OUTDIR6}/etc/file.conf ${OUTDIR6}/etc/${!SUBGROUP}.uniqmap.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
+			echo -ne " cd ${OUTDIR6} && " >>${paraFile}
+			echo -ne " /home/wangw1/src/circos-0.56/bin/circos -conf ./etc/${!SUBGROUP}.uniqmap.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
+			echo -ne " mv ${OUTDIR6}/circos.svg ${OUTDIR6}/circosPlot/${!SUBGROUP}.uniqmap.${NF}.${MT}.${BINSIZE}.svg && " >>${paraFile}
+			echo -e " mv ${OUTDIR6}/circos.png ${OUTDIR6}/circosPlot/${!SUBGROUP}.uniqmap.${NF}.${MT}.${BINSIZE}.png " >>${paraFile}
+			
+			
+		done
+	done
+done
+[ $? == 0 ] && \
+	#ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
+	#touch ${OUT}/.status.${STEP}.transposon_piRNA.circosplot
+STEP=$((STEP+1))
+
+
 
 
