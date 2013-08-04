@@ -94,22 +94,45 @@ for (my $i=0; $i<@inputfiles; $i++)
 					$len=$end-$start;
 					next if ($len>29 || $len<23); #the length range of piRNAs
 					my $ppStart=0;
-					if ($strand eq '+')  #if the piRNA is on + strand 
+					if($parameters->{format} eq "bed")
 					{
-						$ppStart=$start+$n; #bed format start is 0-based(included), get the start position of its piRNA partner
-						$pp{"$chr:$ppStart-"}+=1; ##assuming each sequence(with n reads) will have n rows
-												  ##record the chr:start position of its piRNA partner(-) as the key
-						$pp_seq{"$chr:$ppStart-"}=$len;
-						#push @{$pp_seq{"$chr:$ppStart-"}},$len; ##record the length of the piRNAs, not the length of its partner
+						if ($strand eq '+')  #if the piRNA is on + strand 
+						{
+							$ppStart=$start+$n; #bed format start is 0-based(included), get the start position of its piRNA partner
+							$pp{"$chr:$ppStart-"}+=1; ##assuming each sequence(with n reads) will have n rows
+													  ##record the chr:start position of its piRNA partner(-) as the key
+							$pp_seq{"$chr:$ppStart-"}=$len;
+							#push @{$pp_seq{"$chr:$ppStart-"}},$len; ##record the length of the piRNAs, not the length of its partner
+						}
+						else #if the piRNA is on - strand 
+						{ 
+							$ppStart=$end-$n; #bed format end is 1-based(not included)
+							$pp{"$chr:$ppStart+"}+=1; ##record the chr:start position of its piRNA partner(+) as the key
+							$pp_seq{"$chr:$ppStart+"}=$len;
+							#push @{$pp_seq{"$chr:$ppStart+"}},$len;##record the length of the piRNAs, not the length of its partner
+		
+						}
 					}
-					else #if the piRNA is on - strand 
-					{ 
-						$ppStart=$end-$n; #bed format end is 1-based(not included)
-						$pp{"$chr:$ppStart+"}+=1; ##record the chr:start position of its piRNA partner(+) as the key
-						$pp_seq{"$chr:$ppStart+"}=$len;
-						#push @{$pp_seq{"$chr:$ppStart+"}},$len;##record the length of the piRNAs, not the length of its partner
-	
+					if($parameters->{format} eq "bedscore")
+					{
+						if ($strand eq '+')  #if the piRNA is on + strand 
+						{
+							$ppStart=$start+$n; #bed format start is 0-based(included), get the start position of its piRNA partner
+							$pp{"$chr:$ppStart-"}+=$score; ##assuming each sequence(with n reads) will have n rows
+													  ##record the chr:start position of its piRNA partner(-) as the key
+							$pp_seq{"$chr:$ppStart-"}=$len;
+							#push @{$pp_seq{"$chr:$ppStart-"}},$len; ##record the length of the piRNAs, not the length of its partner
+						}
+						else #if the piRNA is on - strand 
+						{ 
+							$ppStart=$end-$n; #bed format end is 1-based(not included)
+							$pp{"$chr:$ppStart+"}+=$score; ##record the chr:start position of its piRNA partner(+) as the key
+							$pp_seq{"$chr:$ppStart+"}=$len;
+							#push @{$pp_seq{"$chr:$ppStart+"}},$len;##record the length of the piRNAs, not the length of its partner
+		
+						}
 					}
+					
 			     }
 			     $gz->gzclose();
 			}
@@ -125,21 +148,43 @@ for (my $i=0; $i<@inputfiles; $i++)
 					$len=$end-$start;
 					next if ($len>29 || $len<23);
 					my $ppStart=0;
-					if ($strand eq '+') 
+					if($parameters->{format} eq "bed")
 					{
-						$ppStart=$start+$n; #bed format start is 0-based(included)
-						$pp{"$chr:$ppStart-"}+=1;
-						$pp_seq{"$chr:$ppStart-"}=$len;
-						#push @{$pp_seq{"$chr:$ppStart-"}},$len;
-	
+						if ($strand eq '+') 
+						{
+							$ppStart=$start+$n; #bed format start is 0-based(included)
+							$pp{"$chr:$ppStart-"}+=1;
+							$pp_seq{"$chr:$ppStart-"}=$len;
+							#push @{$pp_seq{"$chr:$ppStart-"}},$len;
+		
+						}
+						else 
+						{ 
+							$ppStart=$end-$n; #bed format end is 1-based(not included)
+							$pp{"$chr:$ppStart+"}+=1;
+							$pp_seq{"$chr:$ppStart+"}=$len;
+							#push @{$pp_seq{"$chr:$ppStart+"}},$len;
+						}
 					}
-					else 
-					{ 
-						$ppStart=$end-$n; #bed format end is 1-based(not included)
-						$pp{"$chr:$ppStart+"}+=1;
-						$pp_seq{"$chr:$ppStart+"}=$len;
-						#push @{$pp_seq{"$chr:$ppStart+"}},$len;
+					if($parameters->{format} eq "bedscore")
+					{
+						if ($strand eq '+') 
+						{
+							$ppStart=$start+$n; #bed format start is 0-based(included)
+							$pp{"$chr:$ppStart-"}+=$score;
+							$pp_seq{"$chr:$ppStart-"}=$len;
+							#push @{$pp_seq{"$chr:$ppStart-"}},$len;
+		
+						}
+						else 
+						{ 
+							$ppStart=$end-$n; #bed format end is 1-based(not included)
+							$pp{"$chr:$ppStart+"}+=$score;
+							$pp_seq{"$chr:$ppStart+"}=$len;
+							#push @{$pp_seq{"$chr:$ppStart+"}},$len;
+						}
 					}
+					
 				}
 				close(IN);
 	     	}
@@ -156,18 +201,37 @@ for (my $i=0; $i<@inputfiles; $i++)
 					my $len=0;
 					$len=$end-$start;
 					next if ($len>29 || $len<23);
-					if ($strand eq '+') 
+					if($parameters->{format} eq "bed")
 					{
-						
-						$pos{"$chr:$start+"}+=1; #record the chr:start position of the piRNAs
-						$pos_seq{"$chr:$start+"}=$len;#record the length of the piRNAs
+						if ($strand eq '+') 
+						{
+							
+							$pos{"$chr:$start+"}+=1; #record the chr:start position of the piRNAs
+							$pos_seq{"$chr:$start+"}=$len;#record the length of the piRNAs
+						}
+						else 
+						{ 
+							
+							$pos{"$chr:$end-"}+=1;
+							$pos_seq{"$chr:$end-"}=$len;
+		
+						}
 					}
-					else 
-					{ 
-						
-						$pos{"$chr:$end-"}+=1;
-						$pos_seq{"$chr:$end-"}=$len;
-	
+					if($parameters->{format} eq "bedscore")
+					{
+						if ($strand eq '+') 
+						{
+							
+							$pos{"$chr:$start+"}+=$score; #record the chr:start position of the piRNAs
+							$pos_seq{"$chr:$start+"}=$len;#record the length of the piRNAs
+						}
+						else 
+						{ 
+							
+							$pos{"$chr:$end-"}+=$score;
+							$pos_seq{"$chr:$end-"}=$len;
+		
+						}
 					}
 			     }
 			     $gz->gzclose();
@@ -183,19 +247,39 @@ for (my $i=0; $i<@inputfiles; $i++)
 					my $len=0;
 					$len=$end-$start;
 					next if ($len>29 || $len<23);
-					if ($strand eq '+') 
+					if($parameters->{format} eq "bed")
 					{
-						
-						$pos{"$chr:$start+"}+=1;
-						$pos_seq{"$chr:$start+"}=$len;
+						if ($strand eq '+') 
+						{
+							
+							$pos{"$chr:$start+"}+=1;
+							$pos_seq{"$chr:$start+"}=$len;
+						}
+						else 
+						{ 
+							
+							$pos{"$chr:$end-"}+=1;
+							$pos_seq{"$chr:$end-"}=$len;
+		
+						}
 					}
-					else 
-					{ 
-						
-						$pos{"$chr:$end-"}+=1;
-						$pos_seq{"$chr:$end-"}=$len;
-	
+					if($parameters->{format} eq "bedscore")
+					{
+						if ($strand eq '+') 
+						{
+							
+							$pos{"$chr:$start+"}+=$score;
+							$pos_seq{"$chr:$start+"}=$len;
+						}
+						else 
+						{ 
+							
+							$pos{"$chr:$end-"}+=$score;
+							$pos_seq{"$chr:$end-"}=$len;
+		
+						}
 					}
+					
 				}
 				close(IN);
 	     	}
@@ -274,7 +358,7 @@ sub usage
 	print "-i  <inputfile1>\n\t";
 	print "-j  <inputfile2 [optional]>\n\t";
 	print "-o  <outputdir>\n\t";
-	print "-f  <input format [default:bed]>\n\t";
+	print "-f  <input format [bed|bedscore]>\n\t";
 	print "-t  <transposon name[optional]>\n\t";
 	print "This perl script is to calculate the Ping-Pong Zscore of smallRNAs within length range 23-29nt\n\t";
 	print "The input is bed file which includes both +(or sense) and -(or antisense) mappers\n\t";
