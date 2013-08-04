@@ -211,7 +211,7 @@ declare -a ago3CD_cor2_unox=("Phil.SRA.nosAgo3CDrescue.unox.ovary.inserts" "Phil
 
 
 INDIR6=${INDIR}/circos
-OUTDIR6=/home/wangw1/src/circos-0.56/fly/
+OUTDIR6=/home/wangw1/src/circos-0.56/fly
 #/home/wangw1/src/circos-0.56/bin/circos -conf /home/wangw1/src/circos-0.56/fly/etc/
 BINSIZE=$2
 declare -a NORMFACTORTYPE=("nnc" "seqDep")
@@ -242,26 +242,26 @@ do
 			echo ${TARGETSUNIQ[@]} >> $LOG
 			
 			echo -ne " ${PIPELINE_DIRECTORY}/circos_conf_gnr.sh ${TARGETS[@]} && " >>${paraFile}
-			echo -ne " mv ${OUTDIR6}/etc/file.conf ${OUTDIR6}/etc/${!SUBGROUP}.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
+			echo -ne " mv ${OUTDIR6}/etc/file.conf ${OUTDIR6}/etc/${SUBGROUP}.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
 			echo -ne " cd ${OUTDIR6} && " >>${paraFile}
-			echo -ne " /home/wangw1/src/circos-0.56/bin/circos -conf ./etc/${!SUBGROUP}.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
-			echo -ne " mv ${OUTDIR6}/circos.svg ${OUTDIR6}/circosPlot/${!SUBGROUP}.${NF}.${MT}.${BINSIZE}.svg && " >>${paraFile}
-			echo -e " mv ${OUTDIR6}/circos.png ${OUTDIR6}/circosPlot/${!SUBGROUP}.${NF}.${MT}.${BINSIZE}.png " >>${paraFile}
+			echo -ne " /home/wangw1/src/circos-0.56/bin/circos -conf ./etc/${SUBGROUP}.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
+			echo -ne " mv ${OUTDIR6}/circos.svg ${OUTDIR6}/circosPlot/${SUBGROUP}.${NF}.${MT}.${BINSIZE}.svg && " >>${paraFile}
+			echo -e " mv ${OUTDIR6}/circos.png ${OUTDIR6}/circosPlot/${SUBGROUP}.${NF}.${MT}.${BINSIZE}.png " >>${paraFile}
 			
 			echo -ne " ${PIPELINE_DIRECTORY}/circos_conf_gnr.sh ${TARGETSUNIQ[@]} && " >>${paraFile}
-			echo -ne " mv ${OUTDIR6}/etc/file.conf ${OUTDIR6}/etc/${!SUBGROUP}.uniqmap.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
+			echo -ne " mv ${OUTDIR6}/etc/file.conf ${OUTDIR6}/etc/${SUBGROUP}.uniqmap.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
 			echo -ne " cd ${OUTDIR6} && " >>${paraFile}
-			echo -ne " /home/wangw1/src/circos-0.56/bin/circos -conf ./etc/${!SUBGROUP}.uniqmap.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
-			echo -ne " mv ${OUTDIR6}/circos.svg ${OUTDIR6}/circosPlot/${!SUBGROUP}.uniqmap.${NF}.${MT}.${BINSIZE}.svg && " >>${paraFile}
-			echo -e " mv ${OUTDIR6}/circos.png ${OUTDIR6}/circosPlot/${!SUBGROUP}.uniqmap.${NF}.${MT}.${BINSIZE}.png " >>${paraFile}
+			echo -ne " /home/wangw1/src/circos-0.56/bin/circos -conf ./etc/${SUBGROUP}.uniqmap.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
+			echo -ne " mv ${OUTDIR6}/circos.svg ${OUTDIR6}/circosPlot/${SUBGROUP}.uniqmap.${NF}.${MT}.${BINSIZE}.svg && " >>${paraFile}
+			echo -e " mv ${OUTDIR6}/circos.png ${OUTDIR6}/circosPlot/${SUBGROUP}.uniqmap.${NF}.${MT}.${BINSIZE}.png " >>${paraFile}
 			
 			
 		done
 	done
 done
 [ $? == 0 ] && \
-	#ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
-	#touch ${OUT}/.status.${STEP}.transposon_piRNA.circosplot
+	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
+	touch ${OUT}/.status.${STEP}.transposon_piRNA.circosplot
 STEP=$((STEP+1))
 
 
