@@ -18,7 +18,7 @@ do
 	nfdep=`cat ${INDIR}/${inserts}/output/${insertsname}_stats_table_reads|tail -1|cut -f2`
 	OUTDIR=${INDIR}/circos
 	mkdir -p ${OUTDIR}
-	SGE=${INDIR}/circos/${insertsname}.circos.sge
+	SGE=${INDIR}/circos/${insertsname}.circos.bin${BINSIZE}.sge
 	
 ###generate sge file
 	echo "#!/bin/sh
