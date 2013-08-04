@@ -92,7 +92,7 @@ for ($i=0; $i<$ARGV[2]; $i++) {
      if ($n==10) { $X=$score{$n}; delete $score{$n};}
      }
    $std=&standard_deviation(values %score);
-   if ($std>0) { $Z=($X-&mean(values %score))/$std;} else {$Z=-10;}
+   if ((scalar %score)>9 && $std>0) { $Z=($X-&mean(values %score))/$std;} else {$Z=-10;}
    print "\t$Z\t$X\n";
    }
    #print "\n";
