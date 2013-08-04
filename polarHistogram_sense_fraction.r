@@ -36,6 +36,39 @@ plot_PolarHisto_senseFraction=function(filename,outdir)
 	
 }
 
+plot_PolarHisto_senseFraction_allTrn=function(filename,outdir)
+{
+	list=read.delim(filename,T)
+	group=g
+	colnames(group)=c("transposon","g")
+	cd=merge(list,group,by.x="transposon",all.x=TRUE)
+	cd$g[is.na(cd$g)]=4
+	#aGroup=merge(a,group,by.x="transposon",all.x=TRUE)
+	#aGroup$g[is.na(aGroup$g)]=4
+	cd= cd[cd[,10]!=0,]
+	cd_p=subset(cd,select=c("g","transposon","piRNA_antisense","piRNA_sense"))
+	trn=cd_p$transposon
+	cd_p$transposon=sub('FBgn[0-9n]+\\_','',trn,perl=TRUE)
+	colnames(cd_p)=c("family","item","piRNA_antisense","piRNA_sense")
+	cd_p<-melt(cd_p,c("family","item"),variable_name="score")
+	
+	file=basename(filename)
+	outputfile=paste(outdir,"/",file,sep="")
+	
+	p<-polarHistogram(cd_p,familyLabel=TRUE)
+	print(p)
+	
+	pdfname=paste(outputfile,"senseFraction.polarHisto.pdf",sep="")
+	ggsave(pdfname,width=12,height=12)
+	dev.off()
+	p<-polarHistogram(cd_p,familyLabel=TRUE)
+	print(p)
+	pdfname=paste(outputfile,"senseFraction.polarHisto.ps",sep="")
+	ggsave(pdfname,width=12,height=12)
+	dev.off()
+	
+}
+
 #plot_PolarHisto_senseFraction(input);
 
 

@@ -20,7 +20,7 @@ LOG=${OUT}/log
 declare -a NORMFACTORTYPE=("nnc" "seqDep")
 
 STEP=1
-OUTDIR1=${INDIR}/transposon_piRNA
+OUTDIR1=${INDIR}/transposon_piRNA/polar
 [ ! -d $OUTDIR1 ] && mkdir -p ${OUTDIR1}
 echo -e "`date` "+$ISO_8601"\tDraw polar histogram of sense fraction" >> $LOG
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.senseFraction ] && \
@@ -36,6 +36,7 @@ done
 [ $? == 0 ] && \	
 	touch ${OUT}/.status.${STEP}.transposon_piRNA.senseFraction
 STEP=$((STEP+1))
+
 
 echo -e "`date` "+$ISO_8601"\tDraw length distribution of transposon piRNAs" >> $LOG
 OUTDIR2=${INDIR}/transposon_piRNA/lendis
@@ -171,3 +172,23 @@ done
 	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
 	touch ${OUT}/.status.${STEP}.transposon_piRNA.abundance_zscore
 STEP=$((STEP+1))
+
+
+
+
+OUTDIR5=${INDIR}/transposon_piRNA/polar_allTrn
+[ ! -d $OUTDIR5 ] && mkdir -p ${OUTDIR5}
+echo -e "`date` "+$ISO_8601"\tDraw polar histogram of sense fraction" >> $LOG
+[ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.senseFractionallTrn ] && \
+for i in `ls ${INDIR}/*.inserts/output/*.transposon.list`
+do 
+
+	FILE=${i##*/}
+	insertsname=`basename $FILE .transposon.list`
+${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/polarHistogram_sense_fraction.r plot_PolarHisto_senseFraction_allTrn $i ${OUTDIR5}
+done
+[ $? == 0 ] && \	
+	touch ${OUT}/.status.${STEP}.transposon_piRNA.senseFractionallTrn
+STEP=$((STEP+1))
+
+
