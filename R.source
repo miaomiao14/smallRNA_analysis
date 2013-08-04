@@ -114,7 +114,7 @@ axis(2, at=seq(-10,max(aGroupppmpp$zscore,20),by=10),las=2)
 axis(2, at=1.96, labels="z=1.96",las=2,col.ticks ="red")
 abline(h=1.96,col="red",lty=2)
 
-par(mar = c(10, 4, 4, 6),new=T)
+par(mar = c(12, 4, 4, 6),new=T)
 fcol=c("black","green","red","yellow")
 #barplot(aGroupppmpp$piRNA,col="lightgrey",axes=F,xlab="",ylab="", main=m,ylim=c(0,max(aGroupppmpp$piRNA)),col.lab="blue")
 barplot(aGroupppmpp$piRNA,col=fcol[aGroupppmpp$g],axes=F,names=aGroupppmpp$transposon,las=2,xlab="",ylab="", main=m,ylim=c(0,max(aGroupppmpp$piRNA)),col.lab="blue")
