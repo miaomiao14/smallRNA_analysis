@@ -100,24 +100,24 @@ aGroupppmpp=aGroupppmpp[order(aGroupppmpp$zscore),]
 trn=aGroupppmpp$transposon
 aGroupppmpp$transposon=sub('FBgn[0-9n]+\\_','',aGroupppmpp$transposon,perl=TRUE)
 aGroupppmpp$transposon=sub("FBgnnnnnnnn_","",aGroupppmpp$transposon,perl=TRUE) 
-par(mar = c(13, 4, 4, 6) )
+par(mar = c(18, 4, 4, 6) )
 
-z=formatC(z,digits=4)
-m=paste("Ping-Pong Z score for each transposon family in", name,"\n","Ping-Pong Z score for all transposon piRNAs is", z, sep=' ')
+tz=formatC(z,digits=4)
+m=paste("Ping-Pong Z score for each transposon family in", name,"\n","Ping-Pong Z score for all transposon piRNAs is", tz, sep=' ')
 aGroupppmpp$g=as.factor(aGroupppmpp$g)
 fcol=c("black","green","red","yellow")
 
-barplot(aGroupppmpp$zscore,border="lightgrey",col=fcol[aGroupppmpp$g],  axes=F,names=aGroupppmpp$transposon, las=2,ylab="Z score")
+barplot(aGroupppmpp$zscore,border="lightgrey",col=fcol[aGroupppmpp$g],  axes=F, las=2,ylab="Z score")
 legend(x=1,y=max(aGroupppmpp$zscore,20),legend=c("group1","group2","group3","not in group"),pch=15,col=c("black","green","red","yellow"))
 
 axis(2, at=seq(-10,max(aGroupppmpp$zscore,20),by=10),las=2)
 axis(2, at=1.96, labels="z=1.96",las=2,col.ticks ="red")
 abline(h=1.96,col="red",lty=2)
 
-par(mar = c(8, 4, 4, 6),new=T)
+par(mar = c(10, 4, 4, 6),new=T)
 fcol=c("black","green","red","yellow")
 #barplot(aGroupppmpp$piRNA,col="lightgrey",axes=F,xlab="",ylab="", main=m,ylim=c(0,max(aGroupppmpp$piRNA)),col.lab="blue")
-barplot(aGroupppmpp$piRNA,col=fcol[aGroupppmpp$g],axes=F,xlab="",ylab="", main=m,ylim=c(0,max(aGroupppmpp$piRNA)),col.lab="blue")
+barplot(aGroupppmpp$piRNA,col=fcol[aGroupppmpp$g],axes=F,names=aGroupppmpp$transposon,xlab="",ylab="", main=m,ylim=c(0,max(aGroupppmpp$piRNA)),col.lab="blue")
 axis(4, ylim=c(0,max(aGroupppmpp$piRNA)),las=2)
 mtext(4,text="ppm",line=4)
 axis(4, at=500, labels="ppm=500",las=2,col="blue",col.ticks ="blue")
