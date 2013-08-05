@@ -5,9 +5,9 @@ OUTDIR=/home/wangw1/src/circos-0.56/fly/etc
 A=( "$@" )
 n=${#A[@]}
 LAST_P=$((n-1))
-CONFILE=${A[${LAST_P}]}
-unset A[${#A[@]}-1]
-[ -f ${OUTDIR}/file.conf ] && rm ${OUTDIR}/file.conf
+CONFILE=${A[${LAST_P}]} #the last argument is the name of config file
+unset A[${#A[@]}-1] #remove the last argument
+[ -f ${OUTDIR}/${CONFILE} ] && rm ${OUTDIR}/${CONFILE}
 STATFILE=${CONFILE}.stat
 for file in "${A[@]}"
 do
