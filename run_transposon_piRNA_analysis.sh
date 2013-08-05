@@ -212,14 +212,16 @@ declare -a ago3CD_cor2_unox=("Phil.SRA.nosAgo3CDrescue.unox.ovary.inserts" "Phil
 
 INDIR6=${INDIR}/circos
 OUTDIR6=/home/wangw1/src/circos-0.56/fly
+OUTDIR6_2=${INDIR}/transposon_piRNA/circos_conf
 #/home/wangw1/src/circos-0.56/bin/circos -conf /home/wangw1/src/circos-0.56/fly/etc/
 BINSIZE=$2
 declare -a NORMFACTORTYPE=("nnc" "seqDep")
 declare -a METRICTYPE=("max" "mean")
 [ ! -d $OUTDIR6/circosPlot ] && mkdir -p ${OUTDIR6}/circosPlot
+
 echo -e "`date` "+$ISO_8601"\tCreate circos configuration files and generate circos plot" >> $LOG
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.circosplot ] && \
-paraFile=${OUTDIR4}/${RANDOM}.drawcircosplot.para && \
+paraFile=${OUTDIR6_2}/${RANDOM}.drawcircosplot.para && \
 for g in "${GROUPGT[@]}"
 do
 	SUBGROUP="$g[@]"
