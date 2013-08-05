@@ -10,6 +10,7 @@ CIRCOSBIN=$file
 filename=${CIRCOSBIN##*/}
 awk -v f=$filename 'BEGIN{OFS="\t"}{if(min==""){min=max=$4}; if($4>max) {max=$4}; if($4< min) {min=$4}; total+=$4; count+=1;} END {print f,total/count, min, max}' $CIRCOSBIN >>${OUTDIR}/${STATFILE}
 done
+
 maxv=`awk 'BEGIN{OFS="\t"}{if(min==""){min=max=$4}; if($4>max) {max=$4}; if($4< min) {min=$4};}END {print min}' ${OUTDIR}/${STATFILE}`
 maxvalue=`awk -v m=$maxv 'BEGIN{print m/2}'`
 echo "

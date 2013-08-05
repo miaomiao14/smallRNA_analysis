@@ -238,22 +238,22 @@ do
 			TARGETSUNIQ=${TARGETSUNIQ}" "${INDIR6}/$t.uniqmap.${BINSIZE}/${t}.uniqmap.*.${NF}.sense.${MT}.${BINSIZE}.circos.txt
 			done
 			
-			echo ${TARGETS[@]} >> $LOG
-			echo ${TARGETSUNIQ[@]} >> $LOG
+			#echo ${TARGETS[@]} >> $LOG
+			#echo ${TARGETSUNIQ[@]} >> $LOG
 			
 			echo -ne " ${PIPELINE_DIRECTORY}/circos_conf_gnr.sh ${TARGETS[@]} && " >>${paraFile}
-			echo -ne " mv ${OUTDIR6}/etc/file.conf ${OUTDIR6}/etc/${SUBGROUP}.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
+			echo -ne " mv ${OUTDIR6}/etc/file.conf ${OUTDIR6}/etc/${g}.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
 			echo -ne " cd ${OUTDIR6} && " >>${paraFile}
-			echo -ne " /home/wangw1/src/circos-0.56/bin/circos -conf ./etc/${SUBGROUP}.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
-			echo -ne " mv ${OUTDIR6}/circos.svg ${OUTDIR6}/circosPlot/${SUBGROUP}.${NF}.${MT}.${BINSIZE}.svg && " >>${paraFile}
-			echo -e " mv ${OUTDIR6}/circos.png ${OUTDIR6}/circosPlot/${SUBGROUP}.${NF}.${MT}.${BINSIZE}.png " >>${paraFile}
+			echo -ne " /home/wangw1/src/circos-0.56/bin/circos -conf ./etc/${g}.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
+			echo -ne " mv ${OUTDIR6}/circos.svg ${OUTDIR6}/circosPlot/${g}.${NF}.${MT}.${BINSIZE}.svg && " >>${paraFile}
+			echo -e " mv ${OUTDIR6}/circos.png ${OUTDIR6}/circosPlot/${g}.${NF}.${MT}.${BINSIZE}.png " >>${paraFile}
 			
 			echo -ne " ${PIPELINE_DIRECTORY}/circos_conf_gnr.sh ${TARGETSUNIQ[@]} && " >>${paraFile}
-			echo -ne " mv ${OUTDIR6}/etc/file.conf ${OUTDIR6}/etc/${SUBGROUP}.uniqmap.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
+			echo -ne " mv ${OUTDIR6}/etc/file.conf ${OUTDIR6}/etc/${g}.uniqmap.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
 			echo -ne " cd ${OUTDIR6} && " >>${paraFile}
-			echo -ne " /home/wangw1/src/circos-0.56/bin/circos -conf ./etc/${SUBGROUP}.uniqmap.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
-			echo -ne " mv ${OUTDIR6}/circos.svg ${OUTDIR6}/circosPlot/${SUBGROUP}.uniqmap.${NF}.${MT}.${BINSIZE}.svg && " >>${paraFile}
-			echo -e " mv ${OUTDIR6}/circos.png ${OUTDIR6}/circosPlot/${SUBGROUP}.uniqmap.${NF}.${MT}.${BINSIZE}.png " >>${paraFile}
+			echo -ne " /home/wangw1/src/circos-0.56/bin/circos -conf ./etc/${g}.uniqmap.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
+			echo -ne " mv ${OUTDIR6}/circos.svg ${OUTDIR6}/circosPlot/${g}.uniqmap.${NF}.${MT}.${BINSIZE}.svg && " >>${paraFile}
+			echo -e " mv ${OUTDIR6}/circos.png ${OUTDIR6}/circosPlot/${g}.uniqmap.${NF}.${MT}.${BINSIZE}.png " >>${paraFile}
 			
 			
 		done
