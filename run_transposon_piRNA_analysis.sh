@@ -218,7 +218,7 @@ BINSIZE=$2
 declare -a NORMFACTORTYPE=("nnc" "seqDep")
 declare -a METRICTYPE=("max" "mean")
 [ ! -d $OUTDIR6/circosPlot ] && mkdir -p ${OUTDIR6}/circosPlot
-
+[ ! -d ${OUTDIR6_2} ] && mkdir -p ${OUTDIR6_2}
 echo -e "`date` "+$ISO_8601"\tCreate circos configuration files and generate circos plot" >> $LOG
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.circosplot ] && \
 paraFile=${OUTDIR6_2}/${RANDOM}.drawcircosplot.para && \
