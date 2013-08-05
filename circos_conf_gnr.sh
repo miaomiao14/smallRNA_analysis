@@ -8,7 +8,7 @@ LAST_P=$((n-1))
 CONFILE=${A[${LAST_P}]}
 unset A[${#A[@]}-1]
 [ -f ${OUTDIR}/file.conf ] && rm ${OUTDIR}/file.conf
-STATFILE=CIRCOSBIN.${RANDOM}.stat
+STATFILE=${CONFILE}.stat
 for file in "${A[@]}"
 do
 CIRCOSBIN=$file
