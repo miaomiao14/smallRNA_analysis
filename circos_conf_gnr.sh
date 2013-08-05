@@ -2,9 +2,14 @@
 
 
 OUTDIR=/home/wangw1/src/circos-0.56/fly/etc
+A=( "$@" )
+n=${#A[@]}
+LAST_P=$((n-1))
+CONFILE=${A[${LAST_P}]}
+unset A[${#A[@]}-1]
 [ -f ${OUTDIR}/file.conf ] && rm ${OUTDIR}/file.conf
 STATFILE=CIRCOSBIN.${RANDOM}.stat
-for file in "$@"
+for file in "${A[@]}"
 do
 CIRCOSBIN=$file
 filename=${CIRCOSBIN##*/}
@@ -25,8 +30,9 @@ chromosomes_display_default = yes
 #chromosomes = chrx:8-12;chr2l:4-11;chr3R:9-21
 #chromosomes_breaks = -chr2l:11-19
 	<plots>
-" >>${OUTDIR}/file.conf
+" >>${OUTDIR}/${CONFILE}
 num_vars=$#
+num_vars=$(($num_vars-1))
 count=0
 radius_inc=$(awk -v a=${num_vars} 'BEGIN{print 0.6/a}')
 base=0.4
@@ -49,7 +55,7 @@ echo "
 	r1    = ${rr1}r
 	color = vvdred
 	thickness = 0.75
-	</plot> " >>${OUTDIR}/file.conf
+	</plot> " >>${OUTDIR}/${CONFILE}
 fi
 
 if [[ $filename =~ "plus" ]] || [[ $filename =~ "\.sense" ]]
@@ -66,7 +72,7 @@ echo "
 	r1    = ${rr1}r
 	color = vvdblue
 	thickness = 0.75
-	</plot> " >>${OUTDIR}/file.conf
+	</plot> " >>${OUTDIR}/${CONFILE}
 fi
 
 
@@ -82,4 +88,4 @@ echo "
 <image>
 <<include ../../etc/image.conf>>
 </image>
-<<include housekeeping.conf>> " >>${OUTDIR}/file.conf
+<<include housekeeping.conf>> " >>${OUTDIR}/${CONFILE}
