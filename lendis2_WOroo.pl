@@ -14,7 +14,7 @@ if($file=~/gz/)
 	{
 	chomp;
 	split(/\t/);
-	next if(/FBgn0000155_roo\./);
+	next if(/FBgn0000155_roo/);
 	if($normFac)
 	{
 		$nf=$normFac/1000000;
@@ -35,7 +35,7 @@ else
 	{
 		chomp;
 		split(/\t/);
-		next if(/FBgn0000155_roo\./);
+		next if(/FBgn0000155_roo/);
 		if($normFac)
 		{
 			$nf=$normFac/1000000;
