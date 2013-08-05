@@ -26,6 +26,7 @@ if($file=~/gz/)
 		$antisense{length($_[0])}+=$_[1]/$_[6]/$_[7] if ($_[3] eq 'antisense');
 	}
 	}
+	$gz->gzclose();
 }
 else
 {
@@ -46,6 +47,7 @@ else
 			$antisense{length($_[0])}+=$_[1]/$_[6]/$_[7] if ($_[3] eq 'antisense');
 		}
 	}
+	close(IN);
 }
 
 $file=~/(.*).gz/;

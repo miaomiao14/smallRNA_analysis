@@ -300,12 +300,12 @@ do
 	declare -a NORMFACTOR=(${nfnnc} ${nfdep}) #not in use now
 	
 	echo -ne "${PIPELINE_DIRECTORY}/lendis2_WOroo.pl ${i} $OUTDIR7 nnc $nfnnc &&" >>${paraFile}
-	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_lendis2 ${OUTDIR2}/$insertsname.xkxh.transposon.mapper2.nnc.lendis2 ${insertsname}" >>${paraFile}	
+	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_lendis2 ${OUTDIR7}/$insertsname.xkxh.transposon.mapper2.nnc.lendis2 ${insertsname}" >>${paraFile}	
 	echo -ne "${PIPELINE_DIRECTORY}/lendis2_WOroo.pl ${i} $OUTDIR7 seqDep $nfnnc &&" >>${paraFile}
-	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_lendis2 ${OUTDIR2}/$insertsname.xkxh.transposon.mapper2.seqDep.lendis2 ${insertsname}" >>${paraFile}		
+	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_lendis2 ${OUTDIR7}/$insertsname.xkxh.transposon.mapper2.seqDep.lendis2 ${insertsname}" >>${paraFile}		
 done
 [ $? == 0 ] && \
-	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
+	ParaFly -c $paraFile -CPU 4 -failed_cmds $paraFile.failed_commands &&
 	touch ${OUT}/.status.${STEP}.transposon_piRNA_WOroo.lendis2
 STEP=$((STEP+1))
 
@@ -355,7 +355,7 @@ do
 	
 done
 [ $? == 0 ] && \
-	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
+	ParaFly -c $paraFile -CPU 4 -failed_cmds $paraFile.failed_commands &&
 	touch ${OUT}/.status.${STEP}.transposon_piRNA.paired.lendis2WOroo
 STEP=$((STEP+1))
 
