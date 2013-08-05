@@ -305,7 +305,7 @@ do
 	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_lendis2 ${OUTDIR7}/$insertsname.xkxh.transposon.mapper2.seqDep.lendis2 ${insertsname}" >>${paraFile}		
 done
 [ $? == 0 ] && \
-	ParaFly -c $paraFile -CPU 4 -failed_cmds $paraFile.failed_commands &&
+	ParaFly -c $paraFile -CPU 2 -failed_cmds $paraFile.failed_commands &&
 	touch ${OUT}/.status.${STEP}.transposon_piRNA_WOroo.lendis2
 STEP=$((STEP+1))
 
