@@ -1,4 +1,13 @@
+library(ggplot2)
 library(calibrate)
+library(reshape)
+
+# copied from http://stackoverflow.com/questions/6461209/how-to-round-up-to-the-nearest-10-or-100-or-x
+roundUp <- function(x, nice=c(1,2,4,5,6,8,10)) {
+    if(length(x) != 1) stop("'x' must be of length 1")
+    10^floor(log10(x)) * nice[[which(x <= 10^floor(log10(x)) * nice)[[1]]]]
+}
+
 
 plot_lendis2 <- function (input,gt) {
 
@@ -76,7 +85,7 @@ dev.off();
 plot_transposon_abundance_zscore_barplot <- function (tlist,plist,z,nf,nftype,outdir) {
 a=read.table(tlist,T)
 
-group=read.table("/home/wangw1/pipeline/common/Zamore.group")
+group=read.table("/home/wangw1/pipeline/common/Zamore.group",F)
 colnames(group)=c("transposon","g")
 
 aGroup=merge(a,group,by.x="transposon",all.x=TRUE)
@@ -110,7 +119,7 @@ fcol=c("black","green","red","yellow")
 barplot(aGroupppmpp$zscore,border="lightgrey",col=fcol[aGroupppmpp$g],  axes=F, ylab="Z score")
 legend(x=1,y=max(aGroupppmpp$zscore,20),legend=c("group1","group2","group3","not in group"),pch=15,col=c("black","green","red","yellow"))
 
-axis(2, at=seq(-10,max(aGroupppmpp$zscore,20),by=10),las=2)
+axis(2,tck=0.01, at=seq(-10,max(aGroupppmpp$zscore,20),by=10),las=2)
 axis(2, at=1.96, labels="z=1.96",las=2,col.ticks ="red")
 abline(h=1.96,col="red",lty=2)
 
@@ -118,7 +127,7 @@ par(mar = c(12, 4, 4, 6),new=T)
 fcol=c("black","green","red","yellow")
 #barplot(aGroupppmpp$piRNA,col="lightgrey",axes=F,xlab="",ylab="", main=m,ylim=c(0,max(aGroupppmpp$piRNA)),col.lab="blue")
 barplot(aGroupppmpp$piRNA,col=fcol[aGroupppmpp$g],axes=F,names=aGroupppmpp$transposon,las=2,xlab="",ylab="", main=m,ylim=c(0,max(aGroupppmpp$piRNA)),col.lab="blue")
-axis(4, ylim=c(0,max(aGroupppmpp$piRNA)),las=2)
+axis(4,tck=0.01, ylim=c(0,max(aGroupppmpp$piRNA)),las=2)
 mtext(4,text="ppm",line=4)
 axis(4, at=500, labels="ppm=500",las=2,col="blue",col.ticks ="blue")
 abline(h=500,col="blue",lty=2)
@@ -126,3 +135,68 @@ abline(h=500,col="blue",lty=2)
 dev.off()
 
 }
+
+
+
+
+
+plot_transposon_abundance_comparison <- function (input1,input2,nf1,nf2,nftype,outdir) {
+
+group=read.table("/home/wangw1/pipeline/common/Zamore.group",F)
+colnames(group)=c("transposon","g")
+ 
+a_table=read.table(input1,T)
+b_table=read.table(input2,T)
+
+ab = merge (a_table, b_table, by.x='transposon', by.y='transposon')
+abg = merge (ab, group, by.x='transposon', by.y='transposon')
+
+file1=basename(input1)
+file2=basename(input2)
+#sampleA = strsplit(file1, '\\.')[[1]][1]
+#sampleB = strsplit(file2, '\\.')[[1]][1]
+
+file1=sub('\.transposon\.list','',file1,perl=TRUE)
+file1=sub('Phil\.SRA\.','',file1,perl=TRUE)
+sampleA=sub('\.ovary\.inserts','',file1,perl=TRUE)
+file2=sub('\.transposon\.list','',file2,perl=TRUE)
+file2=sub('Phil\.SRA\.','',file2,perl=TRUE)
+sampleB=sub('\.ovary\.inserts','',file2,perl=TRUE)
+
+fcol = c('black','green','red')
+pdfname=paste(outdir,'/','normalized_piRNA_abundance_', sampleA , '_', sampleB ,'.',nftype, '.jitterplot.pdf', sep='')
+attach(abg)
+limit=nrow(abg)
+a=rep(1,limit)
+boxes=data.frame((piRNA.y/nf2)/(piRNA.x/nf1),(piRNA_sense.y/nf2)/(piRNA_sense.x/nf1),(piRNA_antisense.y/nf2)/(piRNA_antisense.x/nf1))
+detach(abg)
+colnames(boxes)=c("total","sense","antisense")
+boxes=melt(boxes,variable_name="g")
+p=ggplot (aes(x=g,y=value,colour=g), data=boxes,ylab="changes in abundance by transposon family") 
+p=p+layer(geom="jitter",alpha=I(1/2))
+p=p+layer (geom="boxplot",colour=c("black") ,fill=c("lightyellow")) 
+print(p)
+ggsave(pdfname,width=7,height=7)
+dev.off ()
+
+pdfname=paste(outdir,'/','normalized_piRNA_abundance_', sampleA , '_', sampleB ,'.',nftype, '.boxplot.pdf', sep='')
+m=paste(sampleA,"vs",sampleB,sep=" ")
+boxplot (boxes, col=fcol,frame=F, axes=F, main=m,ylab="changes in abundance by transposon family",boxwex=0.25,at=c(1,1.5,2),outline=F)
+axis(1, tck=0.01,at=seq(0,max(boxes),roundUp(max(max(boxes)/5))))
+dev.off ()
+
+attach(abg)
+pdfname=paste(outdir,'/','normalized_piRNA_abundance_', sampleA , '_', sampleB ,'.',nftype, '.scatterplot.pdf', sep='')
+plot (piRNA.x/nf1, piRNA.y/nf2, frame=F, axes=F, ylim=c(0,max(piRNA.x,piRNA.y)), xlim=c(0,max(piRNA.x,piRNA.y)), col='white',pch=21, bg=fcol[g], cex=1.5, xlab= sampleA, ylab= sampleB, main='normalized piRNA abundance by trn family') + abline (0,1,lty=2, col='darkgrey')
+axis(1, tck=0.01,at=seq(0,max(piRNA.x,piRNA.y),roundUp(max(max(piRNA.x,piRNA.y)/10))))
+axis(2, tck=0.01,at=seq(0,max(piRNA.x,piRNA.y),roundUp(max(max(piRNA.x,piRNA.y)/10))))
+dev.off ()
+
+#,piRNA_sense_fraction.y/piRNA_sense_fraction.x
+
+
+detach(abg)
+
+
+}
+

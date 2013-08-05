@@ -242,6 +242,8 @@ do
 			
 			#echo ${TARGETS[@]} >> $LOG
 			#echo ${TARGETSUNIQ[@]} >> $LOG
+			#### can not use paraFly, because circos plot produce the plot with the same name: circos.svg and circos.png
+			#### multithreading will cause conflict
 			
 #			echo -ne " ${PIPELINE_DIRECTORY}/circos_conf_gnr.sh ${TARGETS[@]} ${g}.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
 #			#echo -ne " mv ${OUTDIR6}/etc/file.conf ${OUTDIR6}/etc/${g}.${NF}.${MT}.${BINSIZE}.conf && " >>${paraFile}
@@ -281,5 +283,80 @@ done
 STEP=$((STEP+1))
 
 
+echo -e "`date` "+$ISO_8601"\tDraw length distribution of transposon piRNAs, excluding roo transposon families" >> $LOG
+OUTDIR7=${INDIR}/transposon_piRNA/lendisWOroo
+[ ! -d $OUTDIR7 ] && mkdir -p ${OUTDIR7}
+[ ! -f ${OUT}/.status.${STEP}.transposon_piRNA_WOroo.lendis2 ] && \
+paraFile=${OUTDIR7}/${RANDOM}.drawlendis2WOroo.para && \
+for i in `ls ${INDIR}/*.inserts/*.xkxh.transposon.mapper2.gz`
+do 	
+	FILE=${i##*/}
+	insertsname=`basename $FILE .xkxh.transposon.mapper2.gz`
+	inserts=${FILE%%.inserts.*}
+	inserts=${inserts}.inserts
+	nfnnc=`cat ${INDIR}/${inserts}/output/${insertsname}_stats_table_reads|tail -1|cut -f4`
+	nfdep=`cat ${INDIR}/${inserts}/output/${insertsname}_stats_table_reads|tail -1|cut -f2`
+	
+	declare -a NORMFACTOR=(${nfnnc} ${nfdep}) #not in use now
+	
+	echo -ne "${PIPELINE_DIRECTORY}/lendis2_WOroo.pl ${i} $OUTDIR7 nnc $nfnnc &&" >>${paraFile}
+	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_lendis2 ${OUTDIR2}/$insertsname.xkxh.transposon.mapper2.nnc.lendis2 ${insertsname}" >>${paraFile}	
+	echo -ne "${PIPELINE_DIRECTORY}/lendis2_WOroo.pl ${i} $OUTDIR7 seqDep $nfnnc &&" >>${paraFile}
+	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_lendis2 ${OUTDIR2}/$insertsname.xkxh.transposon.mapper2.seqDep.lendis2 ${insertsname}" >>${paraFile}		
+done
+[ $? == 0 ] && \
+	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
+	touch ${OUT}/.status.${STEP}.transposon_piRNA_WOroo.lendis2
+STEP=$((STEP+1))
+
+
+echo -e "`date` "+$ISO_8601"\tDraw paired length distribution of transposon piRNAs WOroo" >> $LOG
+OUTDIR8=${INDIR}/transposon_piRNA/paired_lendis_WOroo
+[ ! -d $OUTDIR8 ] && mkdir -p ${OUTDIR8}
+[ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.paired.lendis2WOroo ] && \
+paraFile=${OUTDIR8}/${RANDOM}.drawpairedlendis2WOroo.para && \
+for g in "${GROUPGT[@]}"
+do
+	SUBGROUP="$g[@]"
+	echo $g  >> $LOG
+	#echo ${#(!SUBGROUP)} >> $LOG #not the value
+	#declare -a MAPPER2NNCLENDIS=()
+	#declare -a MAPPER2UNIQLENDIS=()
+	#MAPPER2NNCLENDIS=${MAPPER2NNCLENDIS}","${OUTDIR2}/${t}.xkxh.transposon.mapper2.nnc.lendis2 
+	#MAPPER2UNIQLENDIS=${MAPPER2UNIQLENDIS}","${OUTDIR2}/${t}.uniqmap.xkxh.transposon.mapper2.nnc.lendis2 
+	
+	
+	
+	for NF in "${NORMFACTORTYPE[@]}"
+	do
+		lendisFile=${OUTDIR8}/${g}.${NF}.${RANDOM}.lendis2
+		count=1
+		for t in ${!SUBGROUP}
+		do
+		cat ${OUTDIR7}/${t}.xkxh.transposon.mapper2.${NF}.lendis2| awk -v gt=$t -v rank=$count '{OFS="\t"}{print gt,$1,$2,$3,rank}' >> ${lendisFile}
+		count=$(($count+1))	 
+		done
+		echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 ${lendisFile} ${OUTDIR8}" >>${paraFile}
+	done
+	
+	
+	
+	for NF in "${NORMFACTORTYPE[@]}"
+	do
+		lendisFile=${OUTDIR8}/${g}.${NF}.uniqmap.${RANDOM}.lendis2
+		count=1
+		for t in ${!SUBGROUP}
+		do
+		cat ${OUTDIR7}/${t}.uniqmap.xkxh.transposon.mapper2.${NF}.lendis2| awk -v gt=$t -v rank=$count '{OFS="\t"}{ print gt".uniqmap",$1,$2,$3,rank}' >> ${lendisFile}
+		count=$(($count+1))		 
+		done
+		echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_paired_lendis2 ${lendisFile} ${OUTDIR8}" >>${paraFile}
+	done
+	
+done
+[ $? == 0 ] && \
+	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
+	touch ${OUT}/.status.${STEP}.transposon_piRNA.paired.lendis2WOroo
+STEP=$((STEP+1))
 
 
