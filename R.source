@@ -156,12 +156,12 @@ file2=basename(input2)
 #sampleA = strsplit(file1, '\\.')[[1]][1]
 #sampleB = strsplit(file2, '\\.')[[1]][1]
 
-file1=sub('\.transposon\.list','',file1,perl=TRUE)
-file1=sub('Phil\.SRA\.','',file1,perl=TRUE)
-sampleA=sub('\.ovary\.inserts','',file1,perl=TRUE)
-file2=sub('\.transposon\.list','',file2,perl=TRUE)
-file2=sub('Phil\.SRA\.','',file2,perl=TRUE)
-sampleB=sub('\.ovary\.inserts','',file2,perl=TRUE)
+file1=sub('\\.transposon\.list','',file1,perl=TRUE)
+file1=sub('Phil\\.SRA\\.','',file1,perl=TRUE)
+sampleA=sub('\\.ovary\\.inserts','',file1,perl=TRUE)
+file2=sub('\\.transposon\\.list','',file2,perl=TRUE)
+file2=sub('Phil\\.SRA\\.','',file2,perl=TRUE)
+sampleB=sub('\\.ovary\\.inserts','',file2,perl=TRUE)
 
 fcol = c('black','green','red')
 pdfname=paste(outdir,'/','normalized_piRNA_abundance_', sampleA , '_', sampleB ,'.',nftype, '.jitterplot.pdf', sep='')
