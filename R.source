@@ -200,3 +200,68 @@ detach(abg)
 
 }
 
+
+
+plot_transposon_abundance_senseFraction_comparison <- function (input,outdir) {
+
+group=read.table("/home/wangw1/pipeline/common/Zamore.group",F)
+colnames(group)=c("transposon","g")
+ 
+L=read.table(input,T)
+file=basename(input)
+
+#assuming only two files 
+a=as.data.frame(lapply(subset(L,as.character(rank)==1),'[',drop=TRUE))
+b=as.data.frame(lapply(subset(L,as.character(rank)==2),'[',drop=TRUE))
+ab = merge (a,b,by.x='transposon', by.y='transposon')
+abg = merge (ab, group, by.x='transposon', by.y='transposon')
+
+
+
+fcol = c('black','green','red')
+
+
+attach(abg)
+boxes=data.frame((piRNA.y/nf.y)/(piRNA.x/nf.x),(piRNA_sense.y/nf.y)/(piRNA_sense.x/nf.x),(piRNA_antisense.y/nf.y)/(piRNA_antisense.x/nf.x))
+detach(abg)
+colnames(boxes)=c("total","sense","antisense")
+boxes=melt(boxes,variable_name="g")
+
+#abundance jitterplot
+pdfname=paste(outdir,'/','normalized_piRNA_abundance_', file , '.jitterplot.pdf', sep='')
+p=ggplot (aes(x=g,y=value,colour=g), data=boxes,ylab="changes in abundance by transposon family") 
+p=p+layer(geom="jitter",alpha=I(1/2))
+p=p+layer (geom="boxplot",colour=c("black") ,fill=c("lightyellow")) 
+print(p)
+ggsave(pdfname,width=7,height=7)
+dev.off ()
+
+#abundance boxplot
+pdfname=paste(outdir,'/','normalized_piRNA_abundance_', file , '.boxplot.pdf', sep='')
+pdf(pdfname,width=7,height=10)
+boxplot (boxes, col=fcol,frame=F, axes=F, main=file,ylab="changes in abundance by transposon family",boxwex=0.25,at=c(1,1.5,2),outline=F)
+axis(1, tck=0.01,at=seq(0,max(boxes),roundUp(max(max(boxes)/5))))
+dev.off ()
+
+attach(abg)
+#abundance scatterplot
+pdfname=paste(outdir,'/','normalized_piRNA_abundance_',file , '.scatterplot.pdf', sep='')
+pdf(pdfname,width=7,height=7)
+plot (piRNA.x/nf.x, piRNA.y/nf.y, frame=F, axes=F, ylim=c(0,max(piRNA.x,piRNA.y)), xlim=c(0,max(piRNA.x,piRNA.y)), col='white',pch=21, bg=fcol[g], cex=1.5, xlab= sampleA, ylab= sampleB, main='normalized piRNA abundance by trn family') + abline (0,1,lty=2, col='darkgrey')
+axis(1, tck=0.01,at=seq(0,max(piRNA.x,piRNA.y),roundUp(max(max(piRNA.x,piRNA.y)/10))))
+axis(2, tck=0.01,at=seq(0,max(piRNA.x,piRNA.y),roundUp(max(max(piRNA.x,piRNA.y)/10))))
+dev.off ()
+
+#piRNA_sense_fraction
+pdfname=paste(outdir,'/','normalized_piRNA_senseFraction_',file , '.scatterplot.pdf', sep='')
+pdf(pdfname,width=7,height=7)
+plot (piRNA_sense_fraction.x, piRNA_sense_fraction.y, frame=F, axes=F, ylim=c(0,1), xlim=c(0,1), col='white',pch=21, bg=fcol[g], cex=1.5, xlab= sampleA, ylab= sampleB, main='normalized piRNA abundance by trn family') + abline (0,1,lty=2, col='darkgrey')
+axis(1, tck=0.01,at=seq(0,1,5))
+axis(2, tck=0.01,at=seq(0,1,5))
+dev.off ()
+
+
+detach(abg)
+
+
+}

@@ -329,7 +329,7 @@ do
 	
 	for NF in "${NORMFACTORTYPE[@]}"
 	do
-		lendisFile=${OUTDIR8}/${g}.${NF}.${RANDOM}.lendis2
+		lendisFile=${OUTDIR8}/${g}.${NF}.${RANDOM}.WOroo.lendis2
 		count=1
 		for t in ${!SUBGROUP}
 		do
@@ -343,7 +343,7 @@ do
 	
 	for NF in "${NORMFACTORTYPE[@]}"
 	do
-		lendisFile=${OUTDIR8}/${g}.${NF}.uniqmap.${RANDOM}.lendis2
+		lendisFile=${OUTDIR8}/${g}.${NF}.uniqmap.${RANDOM}.WOroo.lendis2
 		count=1
 		for t in ${!SUBGROUP}
 		do
@@ -360,3 +360,76 @@ done
 STEP=$((STEP+1))
 
 
+declare -a GROUPGT=("pago3cdmut_ox" "pago3wtmut_ox" "pago3cdwt_ox" "pago3cdmut_unox" "pago3wtmut_unox" "pago3cdwt_unox" "ago3cdmut_ox" "ago3wtmut_ox" "ago3cdwt_ox" "ago3cdmut_unox" "ago3wtmut_unox" "ago3cdwt_unox" "aubcdmut_ox" "aubwtmut_ox" "aubcdwt_ox" "aubcdmut_unox" "aubwtmut_unox" "aubcdwt_unox" "ago3mut_cor1_ox" "ago3mut_cor1_unox" "ago3CD_cor2_ox" "ago3CD_cor2_unox")
+
+declare -a pago3cdmut_ox=("Phil.SRA.nosAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.ago3MutsWW.ox.ovary.inserts")
+declare -a pago3wtmut_ox=("Phil.SRA.nosAgo3WTrescue.ox.ovary.inserts" "Phil.SRA.ago3MutsWW.ox.ovary.inserts")
+declare -a pago3cdwt_ox=("Phil.SRA.nosAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.nosAgo3WTrescue.ox.ovary.inserts")
+
+declare -a pago3cdmut_unox=("Phil.SRA.nosAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.ago3MutsWW.unox.ovary.inserts")
+declare -a pago3wtmut_unox=("Phil.SRA.nosAgo3WTrescue.unox.ovary.inserts" "Phil.SRA.ago3MutsWW.unox.ovary.inserts")
+declare -a pago3cdwt_unox=("Phil.SRA.nosAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.nosAgo3WTrescue.unox.ovary.inserts")
+
+declare -a ago3cdmut_ox=("Phil.SRA.aubvasAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.ago3MutsWW.ox.ovary.inserts")
+declare -a ago3wtmut_ox=("Phil.SRA.aubvasAgo3WTrescue.ox.ovary.inserts" "Phil.SRA.ago3MutsWW.ox.ovary.inserts")
+declare -a ago3cdwt_ox=("Phil.SRA.aubvasAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.aubvasAgo3WTrescue.ox.ovary.inserts")
+
+declare -a ago3cdmut_unox=("Phil.SRA.aubvasAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.ago3MutsWW.unox.ovary.inserts")
+declare -a ago3wtmut_unox=("Phil.SRA.aubvasAgo3WTrescue.unox.ovary.inserts" "Phil.SRA.ago3MutsWW.unox.ovary.inserts")
+declare -a ago3cdwt_unox=("Phil.SRA.aubvasAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.aubvasAgo3WTrescue.unox.ovary.inserts")
+
+declare -a aubcdmut_ox=("Phil.SRA.AubCDrescue.ox.ovary.inserts" "Phil.SRA.AubMutsWW.ox.ovary.inserts")
+declare -a aubwtmut_ox=("Phil.SRA.AubWTrescue.ox.ovary.inserts" "Phil.SRA.AubMutsWW.ox.ovary.inserts")
+declare -a aubcdwt_ox=("Phil.SRA.AubCDrescue.ox.ovary.inserts" "Phil.SRA.AubWTrescue.ox.ovary.inserts")
+
+declare -a aubcdmut_unox=("Phil.SRA.AubCDrescue.unox.ovary.inserts" "Phil.SRA.AubMutsWW.unox.ovary.inserts")
+declare -a aubwtmut_unox=("Phil.SRA.AubWTrescue.unox.ovary.inserts" "Phil.SRA.AubMutsWW.unox.ovary.inserts")
+declare -a aubcdwt_unox=("Phil.SRA.AubCDrescue.unox.ovary.inserts" "Phil.SRA.AubWTrescue.unox.ovary.inserts")
+
+
+
+declare -a ago3mut_cor1_ox=("Phil.SRA.ago3MutsWW.ox.ovary.inserts" "Phil.SRA.ago3MutsCJ.ox.ovary.inserts")
+declare -a ago3mut_cor1_unox=("Phil.SRA.ago3MutsWW.unox.ovary.inserts" "Phil.SRA.ago3MutsCJ.unox.ovary.inserts")
+
+declare -a ago3CD_cor2_ox=("Phil.SRA.nosAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.aubvasAgo3CDrescue.ox.ovary.inserts")
+declare -a ago3CD_cor2_unox=("Phil.SRA.nosAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.aubvasAgo3CDrescue.unox.ovary.inserts")
+
+echo -e "`date` "+$ISO_8601"\tDraw paired abundance,sense_fraction of transposon piRNAs" >> $LOG
+OUTDIR9=${INDIR}/transposon_piRNA/paired_abundance_senseFraction
+[ ! -d $OUTDIR9 ] && mkdir -p ${OUTDIR9}
+[ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.paired.abundance_senseFraction ] && \
+paraFile=${OUTDIR9}/${RANDOM}.drawpairedabundance_senseFraction.para && \
+for g in "${GROUPGT[@]}"
+do
+	SUBGROUP="$g[@]"
+	for NF in "${NORMFACTORTYPE[@]}"
+	do
+
+		count=1
+		transposonListFile=${OUTDIR9}/${g}.${NF}.transposon.list
+		transposonListUniqFile=${OUTDIR9}/${g}.${NF}.uniqmap.transposon.list
+
+		nnc=4 #the column in the stat file
+		seqDep=2 #the column in the stat file
+		for t in ${!SUBGROUP}
+		do
+			normFactor=`cat ${INDIR}/${t}/output/${t}_stats_table_reads|tail -1|cut -f${!NF}`
+	
+			tu=${t}.uniqmap
+			normFactorUniq=`cat ${INDIR}/${t}/output/${tu}_stats_table_reads|tail -1|cut -f${!NF}`
+	
+			cat ${INDIR}/${t}/output/${t}.transposon.list| awk -v gt=$t -v rank=$count -v nf=$normFactor '{OFS="\t"}{if($1=="transposon"){print "gt",$0,"rank","nf"}else{print gt,$0,rank,nf}}' >> ${transposonListFile}
+			cat ${INDIR}/${t}/output/${tu}.transposon.list| awk -v gt=$t -v rank=$count -v nf=$normFactorUniq '{OFS="\t"}{if($1=="transposon"){print "gt",$0,"rank","nf"}else{print gt,$0,rank,nf}}' >> ${transposonListUniqFile}
+
+			count=$(($count+1))
+		done
+		echo -e " ${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_transposon_abundance_senseFraction_comparison ${transposonListFile} ${OUTDIR9} " >>${paraFile}
+		echo -e " ${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_transposon_abundance_senseFraction_comparison ${transposonListUniqFile} ${OUTDIR9} " >>${paraFile}
+		
+	done
+	
+done
+#[ $? == 0 ] && \
+	#	ParaFly -c $paraFile -CPU 4 -failed_cmds $paraFile.failed_commands &&
+	#touch ${OUT}/.status.${STEP}.transposon_piRNA.paired.abundance_senseFraction
+#STEP=$((STEP+1))
