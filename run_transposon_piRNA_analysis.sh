@@ -299,9 +299,9 @@ do
 	
 	declare -a NORMFACTOR=(${nfnnc} ${nfdep}) #not in use now
 	
-	echo -ne "${PIPELINE_DIRECTORY}/lendis2_WOroo.pl ${i} $OUTDIR7 nnc $nfnnc &&" >>${paraFile}
+	echo -ne "[ ! -f ${OUTDIR7}/$insertsname.xkxh.transposon.mapper2.nnc.lendis2 ] && ${PIPELINE_DIRECTORY}/lendis2_WOroo.pl ${i} $OUTDIR7 nnc $nfnnc &&" >>${paraFile}
 	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_lendis2 ${OUTDIR7}/$insertsname.xkxh.transposon.mapper2.nnc.lendis2 ${insertsname}" >>${paraFile}	
-	echo -ne "${PIPELINE_DIRECTORY}/lendis2_WOroo.pl ${i} $OUTDIR7 seqDep $nfnnc &&" >>${paraFile}
+	echo -ne "[ ! -f ${OUTDIR7}/$insertsname.xkxh.transposon.mapper2.seqDep.lendis2 ] && ${PIPELINE_DIRECTORY}/lendis2_WOroo.pl ${i} $OUTDIR7 seqDep $nfnnc &&" >>${paraFile}
 	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_lendis2 ${OUTDIR7}/$insertsname.xkxh.transposon.mapper2.seqDep.lendis2 ${insertsname}" >>${paraFile}		
 done
 [ $? == 0 ] && \
