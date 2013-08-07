@@ -423,13 +423,13 @@ do
 
 			count=$(($count+1))
 		done
-		echo -e " ${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_transposon_abundance_senseFraction_comparison ${transposonListFile} ${OUTDIR9} " >>${paraFile}
-		echo -e " ${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_transposon_abundance_senseFraction_comparison ${transposonListUniqFile} ${OUTDIR9} " >>${paraFile}
+		echo -e " ${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_transposon_abundance_senseFraction_comparison ${transposonListFile} $NF ${OUTDIR9} " >>${paraFile}
+		echo -e " ${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_transposon_abundance_senseFraction_comparison ${transposonListUniqFile} $NF ${OUTDIR9} " >>${paraFile}
 		
 	done
 	
 done
-#[ $? == 0 ] && \
-	#	ParaFly -c $paraFile -CPU 4 -failed_cmds $paraFile.failed_commands &&
-	#touch ${OUT}/.status.${STEP}.transposon_piRNA.paired.abundance_senseFraction
-#STEP=$((STEP+1))
+[ $? == 0 ] && \
+		ParaFly -c $paraFile -CPU 4 -failed_cmds $paraFile.failed_commands &&
+	touch ${OUT}/.status.${STEP}.transposon_piRNA.paired.abundance_senseFraction
+STEP=$((STEP+1))
