@@ -246,9 +246,11 @@ boxes=melt(boxes,variable_name="g")
 colnames(boxes)=c("g","foldChange")
 pdfname=paste(outdir,'/','normalized_piRNA_abundance_', file , '.jitterplot.pdf', sep='')
 t=paste(sampleB,"/",sampleA," (",nftype,") ",sep="")
-p=ggplot (aes(x=g,y=foldChange,colour=g), data=boxes,ylab="fold changes in abundance by transposon family") +labs(title=t)
+p=ggplot (aes(x=g,y=foldChange,colour=g), data=boxes,ylab="fold changes in abundance by transposon family") 
+p <- p + opts(title = t)
+p<-p + opts(plot.title = theme_text(size = 12, colour = "black"))
 p=p+layer(geom="jitter",alpha=I(1/2))
-p=p+layer (geom="boxplot",colour=c("black") ,fill=c("yellow")) 
+p=p+layer (geom="boxplot",colour=c("black") ) +scale_fill_manual(values=c("total"="black","sense"="darkblue","antisense"="darkred"))
 print(p)
 ggsave(pdfname,width=4.5,height=10)
 dev.off ()
@@ -281,6 +283,12 @@ plot (piRNA.x, piRNA.y, frame=F, axes=F, ylim=c(0,max(piRNA.x,piRNA.y,8)), xlim=
 axis(1,pos=c(0,0), tck=0.01,at=seq(0,max(piRNA.x,piRNA.y,8),roundUp(max(max(piRNA.x,piRNA.y,8)/5))))
 axis(2, las=2,pos=c(0,0),tck=0.01,at=seq(0,max(piRNA.x,piRNA.y,8),roundUp(max(max(piRNA.x,piRNA.y,8)/5))))
 dev.off ()
+
+#clickme
+#library(clickme)
+#clickme(points, x = abg$piRNA.x, y = abg$piRNA.y,color_groups = abg$g ,names = abg$transposon,xlab = paste(sampleA,"(ppm)",sep=" "), ylab = paste(sampleB,"(ppm)",sep=" "))
+#,extra = list(zscore=abg$zscore.x)
+
 
 #piRNA_sense_fraction scatterplot
 pdfname=paste(outdir,'/','normalized_piRNA_senseFraction_',file , '.scatterplot.pdf', sep='')
