@@ -230,7 +230,7 @@ abg = merge (ab, group, by.x='transposon', by.y='transposon')
 
 
 abg$piRNA.x=abg$piRNA.x/abg$nf.x*1000000
-abg$piRNA.y=abg$piRNA.y/$abg$nf.y*1000000
+abg$piRNA.y=abg$piRNA.y/abg$nf.y*1000000
 abg$piRNA_sense.x=abg$piRNA_sense.x/abg$nf.x*1000000
 abg$piRNA_sense.y=abg$piRNA_sense.y/abg$nf.y*1000000
 abg$piRNA_antisense.x=abg$piRNA_antisense.x/abg$nf.x*1000000
