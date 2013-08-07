@@ -202,64 +202,93 @@ detach(abg)
 
 
 
-plot_transposon_abundance_senseFraction_comparison <- function (input,outdir) {
+plot_transposon_abundance_senseFraction_comparison <- function (input,nftype,outdir) {
 
 group=read.table("/home/wangw1/pipeline/common/Zamore.group",F)
 colnames(group)=c("transposon","g")
  
 L=read.table(input,T)
+L$piRNA=as.numeric(L$piRNA)
+L$piRNA_sense_fraction=as.numeric(as.character(L$piRNA_sense_fraction))
+L$piRNA_sense=as.numeric(L$piRNA_sense)
+L$piRNA_antisense=as.numeric(L$piRNA_antisense)
+L$nf=as.numeric(as.character(L$nf))
 file=basename(input)
 
 #assuming only two files 
 a=as.data.frame(lapply(subset(L,as.character(rank)==1),'[',drop=TRUE))
+sampleA=levels( as.factor(a$gt) )[1]  #a long trip to get the gtname
+sampleA=sub('\\.ovary\\.inserts','',sampleA,perl=TRUE)
+sampleA=sub('Phil\\.SRA\\.','',sampleA,perl=TRUE)
 b=as.data.frame(lapply(subset(L,as.character(rank)==2),'[',drop=TRUE))
+sampleB=levels( as.factor(b$gt) )[1]
+sampleB=sub('\\.ovary\\.inserts','',sampleB,perl=TRUE)
+sampleB=sub('Phil\\.SRA\\.','',sampleB,perl=TRUE)
 ab = merge (a,b,by.x='transposon', by.y='transposon')
 abg = merge (ab, group, by.x='transposon', by.y='transposon')
 
 
 
-fcol = c('black','green','red')
+abg$piRNA.x=abg$piRNA.x/abg$nf.x*1000000
+abg$piRNA.y=abg$piRNA.y/$abg$nf.y*1000000
+abg$piRNA_sense.x=abg$piRNA_sense.x/abg$nf.x*1000000
+abg$piRNA_sense.y=abg$piRNA_sense.y/abg$nf.y*1000000
+abg$piRNA_antisense.x=abg$piRNA_antisense.x/abg$nf.x*1000000
+abg$piRNA_antisense.y=abg$piRNA_antisense.y/abg$nf.y*1000000
 
-
+#abundance jitterplot
+fcol = c('white','darkblue','darkred')
 attach(abg)
-boxes=data.frame((piRNA.y/nf.y)/(piRNA.x/nf.x),(piRNA_sense.y/nf.y)/(piRNA_sense.x/nf.x),(piRNA_antisense.y/nf.y)/(piRNA_antisense.x/nf.x))
+boxes=data.frame((piRNA.y/piRNA.x),(piRNA_sense.y/piRNA_sense.x),(piRNA_antisense.y/piRNA_antisense.x))
 detach(abg)
 colnames(boxes)=c("total","sense","antisense")
 boxes=melt(boxes,variable_name="g")
-
-#abundance jitterplot
+colnames(boxes)=c("g","foldChange")
 pdfname=paste(outdir,'/','normalized_piRNA_abundance_', file , '.jitterplot.pdf', sep='')
-p=ggplot (aes(x=g,y=value,colour=g), data=boxes,ylab="changes in abundance by transposon family") 
+t=paste(sampleB,"/",sampleA," (",nftype,") ",sep="")
+p=ggplot (aes(x=g,y=foldChange,colour=g), data=boxes,ylab="fold changes in abundance by transposon family") +ggtitle(t)
 p=p+layer(geom="jitter",alpha=I(1/2))
-p=p+layer (geom="boxplot",colour=c("black") ,fill=c("lightyellow")) 
+p=p+layer (geom="boxplot",colour=c("black") ,fill=c("yellow")) 
 print(p)
-ggsave(pdfname,width=7,height=7)
+ggsave(pdfname,width=4.5,height=10)
 dev.off ()
 
 #abundance boxplot
-pdfname=paste(outdir,'/','normalized_piRNA_abundance_', file , '.boxplot.pdf', sep='')
-pdf(pdfname,width=7,height=10)
-boxplot (boxes, col=fcol,frame=F, axes=F, main=file,ylab="changes in abundance by transposon family",boxwex=0.25,at=c(1,1.5,2),outline=F)
-axis(1, tck=0.01,at=seq(0,max(boxes),roundUp(max(max(boxes)/5))))
-dev.off ()
-
 attach(abg)
+boxes=cbind((piRNA.x/piRNA.y),(piRNA_sense.x/piRNA_sense.y),(piRNA_antisense.x/piRNA_antisense.y))
+t=paste(sampleA,"/",sampleB," (",nftype,") ",sep="")
+detach(abg)
+colnames(boxes)=c("total","sense","antisense")
+fcol = c('white','darkblue','darkred')
+pdfname=paste(outdir,'/','normalized_piRNA_abundance_', file , '.boxplot.pdf', sep='')
+pdf(pdfname,width=4.5,height=10)
+boxplot (boxes, col=fcol,axes=F, names=c("total","sense","antisense"),main=t,ylab="fold changes in abundance by transposon family",boxwex=0.25,at=c(0.6,1.2,1.8))
+abline(h=1,col="red",lty=6)
+axis(2,las=2, tck=0.01,at=seq(0,max(boxes),roundUp( max(max(boxes)/10) ) ) )
+axis(2, at=1, labels="1",las=2,col="red",col.ticks ="red")
+mtext(1,at=0.6,text="total",col="black")
+mtext(1,at=1.2,text="sense",col="darkblue")
+mtext(1,at=1.8,text="antisense",col="darkred")
+dev.off()
+
+
 #abundance scatterplot
+attach(abg)
+fcol = c('black','green','red')
 pdfname=paste(outdir,'/','normalized_piRNA_abundance_',file , '.scatterplot.pdf', sep='')
 pdf(pdfname,width=7,height=7)
-plot (piRNA.x/nf.x, piRNA.y/nf.y, frame=F, axes=F, ylim=c(0,max(piRNA.x,piRNA.y)), xlim=c(0,max(piRNA.x,piRNA.y)), col='white',pch=21, bg=fcol[g], cex=1.5, xlab= sampleA, ylab= sampleB, main='normalized piRNA abundance by trn family') + abline (0,1,lty=2, col='darkgrey')
-axis(1, tck=0.01,at=seq(0,max(piRNA.x,piRNA.y),roundUp(max(max(piRNA.x,piRNA.y)/10))))
-axis(2, tck=0.01,at=seq(0,max(piRNA.x,piRNA.y),roundUp(max(max(piRNA.x,piRNA.y)/10))))
+plot (piRNA.x, piRNA.y, frame=F, axes=F, ylim=c(0,max(piRNA.x,piRNA.y,8)), xlim=c(0,max(piRNA.x,piRNA.y,8)), col='white',pch=21, bg=fcol[g], cex=1.5, xlab= paste(sampleA,"(ppm)",sep=" "), ylab= paste(sampleB,"(ppm)",sep=" "), main=paste('normalized piRNA abundance( ',nftype, ' )by trn family',sep="")) + abline (0,1,lty=2, col='darkgrey')
+axis(1,pos=c(0,0), tck=0.01,at=seq(0,max(piRNA.x,piRNA.y,8),roundUp(max(max(piRNA.x,piRNA.y,8)/5))))
+axis(2, las=2,pos=c(0,0),tck=0.01,at=seq(0,max(piRNA.x,piRNA.y,8),roundUp(max(max(piRNA.x,piRNA.y,8)/5))))
 dev.off ()
 
-#piRNA_sense_fraction
+#piRNA_sense_fraction scatterplot
 pdfname=paste(outdir,'/','normalized_piRNA_senseFraction_',file , '.scatterplot.pdf', sep='')
 pdf(pdfname,width=7,height=7)
-plot (piRNA_sense_fraction.x, piRNA_sense_fraction.y, frame=F, axes=F, ylim=c(0,1), xlim=c(0,1), col='white',pch=21, bg=fcol[g], cex=1.5, xlab= sampleA, ylab= sampleB, main='normalized piRNA abundance by trn family') + abline (0,1,lty=2, col='darkgrey')
-axis(1, tck=0.01,at=seq(0,1,5))
-axis(2, tck=0.01,at=seq(0,1,5))
+plot (piRNA_sense_fraction.x, piRNA_sense_fraction.y,  axes=F, ylim=c(0,1), xlim=c(0,1), col='white',pch=21, bg=fcol[g], cex=1.5, xlab= sampleA, ylab= sampleB, main='piRNA sense Fraction') + abline (0,1,lty=2, col='darkgrey')
+axis(1,pos=c(0,0), tck=0.01,at=seq(0,1,0.2))
+axis(2,las=2, pos=c(0,0),tck=0.01,at=seq(0,1,0.2))
 dev.off ()
-
 
 detach(abg)
 

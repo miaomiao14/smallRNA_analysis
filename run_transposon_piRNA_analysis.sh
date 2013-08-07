@@ -418,8 +418,8 @@ do
 			tu=${t}.uniqmap
 			normFactorUniq=`cat ${INDIR}/${t}/output/${tu}_stats_table_reads|tail -1|cut -f${!NF}`
 	
-			cat ${INDIR}/${t}/output/${t}.transposon.list| awk -v gt=$t -v rank=$count -v nf=$normFactor '{OFS="\t"}{if($1=="transposon"){print "gt",$0,"rank","nf"}else{print gt,$0,rank,nf}}' >> ${transposonListFile}
-			cat ${INDIR}/${t}/output/${tu}.transposon.list| awk -v gt=$t -v rank=$count -v nf=$normFactorUniq '{OFS="\t"}{if($1=="transposon"){print "gt",$0,"rank","nf"}else{print gt,$0,rank,nf}}' >> ${transposonListUniqFile}
+			cat ${INDIR}/${t}/output/${t}.transposon.list| awk -v gt=$t -v rank=$count -v nf=$normFactor '{OFS="\t"}{if(rank==1) {if($1=="transposon"){print "gt",$0,"rank","nf"}else{print gt,$0,rank,nf}}else{if($1!="transposon"){print gt,$0,rank,nf}}}' >> ${transposonListFile}
+			cat ${INDIR}/${t}/output/${tu}.transposon.list| awk -v gt=$t -v rank=$count -v nf=$normFactorUniq '{OFS="\t"}{if(rank==1) {if($1=="transposon"){print "gt",$0,"rank","nf"}else{print gt,$0,rank,nf}}else{if($1!="transposon"){print gt,$0,rank,nf}}}' >> ${transposonListUniqFile}
 
 			count=$(($count+1))
 		done
