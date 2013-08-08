@@ -91,8 +91,8 @@ declare -a aub_unox=("Phil.SRA.AubCDrescue.unox.ovary.inserts" "Phil.SRA.AubMuts
 declare -a qinago3muthet_ox=("Phil.SRA.QinAgo3Muts.ox.ovary.inserts" "Phil.SRA.QinAgo3Hets.ox.ovary.inserts")
 declare -a qinago3muthet_unox=("Phil.SRA.QinAgo3Muts.unox.ovary.inserts" "Phil.SRA.QinAgo3Hets.unox.ovary.inserts")
 
-declare -a ago3qinago3_ox=c("Phil.SRA.QinAgo3Muts.ox.ovary.inserts" "Phil.SRA.ago3MutsWW.ox.ovary.inserts")
-declare -a ago3qinago3_unox=c("Phil.SRA.QinAgo3Muts.unox.ovary.inserts" "Phil.SRA.ago3MutsWW.unox.ovary.inserts")
+declare -a ago3qinago3_ox=("Phil.SRA.QinAgo3Muts.ox.ovary.inserts" "Phil.SRA.ago3MutsWW.ox.ovary.inserts")
+declare -a ago3qinago3_unox=("Phil.SRA.QinAgo3Muts.unox.ovary.inserts" "Phil.SRA.ago3MutsWW.unox.ovary.inserts")
 
 declare -a ago3mut_cor1_ox=("Phil.SRA.ago3MutsWW.ox.ovary.inserts" "Phil.SRA.ago3MutsCJ.ox.ovary.inserts")
 declare -a ago3mut_cor1_unox=("Phil.SRA.ago3MutsWW.unox.ovary.inserts" "Phil.SRA.ago3MutsCJ.unox.ovary.inserts")
