@@ -1,0 +1,6 @@
+library(edgeR)
+argv = commandArgs (TRUE)
+insertFile = read.table (argv[1],FALSE)
+D <- DGEList(insertFile[,-1], group = c("unox","ox"))
+D <- calcNormFactors(D, method = "TMM")
+print (D$samples)
