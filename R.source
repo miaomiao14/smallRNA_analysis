@@ -303,3 +303,46 @@ detach(abg)
 
 
 }
+
+
+plot_zscore_FB_scatterplot <- function (input,tzfile,prefix,outdir) {
+
+group=read.table("/home/wangw1/pipeline/common/Zamore.group",F)
+colnames(group)=c("transposon","g")
+ 
+L=read.table(input,F)
+colnames(L)=c("gt","transposon","pair","zscore","p10","rank")
+L$zscore=as.numeric(L$zscore)
+L$p10=as.numeric(L$p10)
+file=basename(input)
+
+#assuming only two files 
+a=as.data.frame(lapply(subset(L,as.character(rank)==1),'[',drop=TRUE))
+sampleA=levels( as.factor(a$gt) )[1]  #a long trip to get the gtname
+sampleA=sub('\\.ovary\\.inserts','',sampleA,perl=TRUE)
+sampleA=sub('Phil\\.SRA\\.','',sampleA,perl=TRUE)
+b=as.data.frame(lapply(subset(L,as.character(rank)==2),'[',drop=TRUE))
+sampleB=levels( as.factor(b$gt) )[1]
+sampleB=sub('\\.ovary\\.inserts','',sampleB,perl=TRUE)
+sampleB=sub('Phil\\.SRA\\.','',sampleB,perl=TRUE)
+ab = merge (a,b,by.x='transposon', by.y='transposon')
+abg = merge (ab, group, by.x='transposon', by.y='transposon')
+
+Z=read.table(tzfile,F)
+colnames(Z)=c("gt","tz")
+sampleA=paste(sampleA,"(genome-wide zscore: " ,Z[grep(sampleA,Z$gt,perl=TRUE),]$zscore,  ")", sep="" )
+sampleB=paste(sampleB,"(genome-wide zscore: " ,Z[grep(sampleB,Z$gt,perl=TRUE),]$zscore,  ")", sep="" )
+
+attach(abg)
+
+pdfname=paste(outdir,'/',prefix, '.zscore.scatterplot.pdf', sep='')
+pdf(pdfname,width=7,height=7)
+plot (zsocre.x, zscore.y,  axes=F, ylim=c(0,max(zscore.x,zscore.y)), xlim=c(0,max(zscore.x,zscore.y)), col='white',pch=21, bg=fcol[g], cex=1.5, xlab= sampleA, ylab= sampleB, main='Zscore ') + abline (0,1,lty=2, col='darkgrey')
+axis(1,pos=c(0,0), tck=0.01,at=seq(0,max(zscore.x,zscore.y),roundUp( max(max(zscore.x,zscore.y)/10) )))
+axis(2,las=2, pos=c(0,0),tck=0.01,at=seq(0,max(zscore.x,zscore.y),roundUp( max(max(zscore.x,zscore.y)/10) )))
+dev.off ()
+
+detach(abg)
+
+
+}

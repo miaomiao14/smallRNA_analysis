@@ -464,3 +464,50 @@ done
 		ParaFly -c $paraFile -CPU 4 -failed_cmds $paraFile.failed_commands &&
 	touch ${OUT}/.status.${STEP}.transposon_piRNA.paired.abundance_senseFraction
 STEP=$((STEP+1))
+
+
+declare -a GROUPGT=("ago3cdmut_ox" "ago3wtmut_ox" "ago3cdwt_ox" "ago3cdmut_unox" "ago3wtmut_unox" "ago3cdwt_unox" \
+"aubcdmut_ox" "aubwtmut_ox" "aubcdwt_ox" "aubcdmut_unox" "aubwtmut_unox" "aubcdwt_unox" \
+)
+declare -a ago3cdmut_ox=("Phil.SRA.aubvasAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.ago3MutsWW.ox.ovary.inserts")
+declare -a ago3wtmut_ox=("Phil.SRA.aubvasAgo3WTrescue.ox.ovary.inserts" "Phil.SRA.ago3MutsWW.ox.ovary.inserts")
+declare -a ago3cdwt_ox=("Phil.SRA.aubvasAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.aubvasAgo3WTrescue.ox.ovary.inserts")
+
+declare -a ago3cdmut_unox=("Phil.SRA.aubvasAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.ago3MutsWW.unox.ovary.inserts")
+declare -a ago3wtmut_unox=("Phil.SRA.aubvasAgo3WTrescue.unox.ovary.inserts" "Phil.SRA.ago3MutsWW.unox.ovary.inserts")
+declare -a ago3cdwt_unox=("Phil.SRA.aubvasAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.aubvasAgo3WTrescue.unox.ovary.inserts")
+
+declare -a aubcdmut_ox=("Phil.SRA.AubCDrescue.ox.ovary.inserts" "Phil.SRA.AubMutsWW.ox.ovary.inserts")
+declare -a aubwtmut_ox=("Phil.SRA.AubWTrescue.ox.ovary.inserts" "Phil.SRA.AubMutsWW.ox.ovary.inserts")
+declare -a aubcdwt_ox=("Phil.SRA.AubCDrescue.ox.ovary.inserts" "Phil.SRA.AubWTrescue.ox.ovary.inserts")
+
+declare -a aubcdmut_unox=("Phil.SRA.AubCDrescue.unox.ovary.inserts" "Phil.SRA.AubMutsWW.unox.ovary.inserts")
+declare -a aubwtmut_unox=("Phil.SRA.AubWTrescue.unox.ovary.inserts" "Phil.SRA.AubMutsWW.unox.ovary.inserts")
+declare -a aubcdwt_unox=("Phil.SRA.AubCDrescue.unox.ovary.inserts" "Phil.SRA.AubWTrescue.unox.ovary.inserts")
+echo -e "`date` "+$ISO_8601"\tDraw paired transposon piRNA zscore scatterplot..." >> $LOG
+OUTDIR10=${INDIR}/transposon_piRNA/paired_zscore_scatterplot
+[ ! -d $OUTDIR10 ] && mkdir -p ${OUTDIR10}
+[ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.pairedZscore ] && \
+paraFile=${OUTDIR10}/${RANDOM}.pairedZscore.para && \
+
+for g in "${GROUPGT[@]}"
+do
+	SUBGROUP="$g[@]"
+	[ -f ${OUTDIR10}/${g}.FB.zscore ] && rm ${OUTDIR10}/${g}.FB.zscore
+	[ -f ${OUTDIR10}/${g}.total.zscore ] && rm ${OUTDIR10}/${g}.total.zscore
+	count=1
+	for t in ${!SUBGROUP}
+	do
+		cat ${INDIR}/pp6_FB/${t}/${t}.FB.pp6.out| awk -v gt=$t -v rank=$count '{OFS="\t"}{print gt,$1,$2,$3,$4,rank}' >> ${g}.FB.zscore
+		count=$(($count+1))
+		totalZscore=`cat ${INDIR}/pp6_FB/${t}/${t}.total.pp6.out|cut -f2`
+		TZ=`printf "%0.2f" $totalZscore
+		cat $t $TZ >>${OUTDIR10}/${g}.total.zscore
+	done
+	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_zscore_FB_scatterplot ${g}.FB.zscore ${g}.total.zscore $g $OUTDIR10 " >>${paraFile}
+done
+[ $? == 0 ] && \
+	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
+	touch ${OUT}/.status.${STEP}.transposon_piRNA.pairedZscore
+STEP=$((STEP+1))
+
