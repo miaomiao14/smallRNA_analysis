@@ -320,18 +320,18 @@ file=basename(input)
 a=as.data.frame(lapply(subset(L,as.character(rank)==1),'[',drop=TRUE))
 sampleA=levels( as.factor(a$gt) )[1]  #a long trip to get the gtname
 sampleA=sub('\\.ovary\\.inserts','',sampleA,perl=TRUE)
-sampleA=sub('Phil\\.SRA\\.','',sampleA,perl=TRUE)
+sampleAa=sub('Phil\\.SRA\\.','',sampleA,perl=TRUE)
 b=as.data.frame(lapply(subset(L,as.character(rank)==2),'[',drop=TRUE))
 sampleB=levels( as.factor(b$gt) )[1]
 sampleB=sub('\\.ovary\\.inserts','',sampleB,perl=TRUE)
-sampleB=sub('Phil\\.SRA\\.','',sampleB,perl=TRUE)
+sampleBb=sub('Phil\\.SRA\\.','',sampleB,perl=TRUE)
 ab = merge (a,b,by.x='transposon', by.y='transposon')
 abg = merge (ab, group, by.x='transposon', by.y='transposon')
 
 Z=read.table(tzfile,F)
 colnames(Z)=c("gt","tz")
-sampleA=paste(sampleA,"(genome-wide zscore: " ,Z[grep(sampleA,Z$gt,perl=TRUE),]$zscore,  ")", sep="" )
-sampleB=paste(sampleB,"(genome-wide zscore: " ,Z[grep(sampleB,Z$gt,perl=TRUE),]$zscore,  ")", sep="" )
+sampleA=paste(sampleA,"(genome-wide zscore: " , Z[grep(as.character(sampleAa),Z$gt,perl=TRUE),]$zscore,  ")", sep="" )
+sampleB=paste(sampleB,"(genome-wide zscore: " , Z[grep(as.character(sampleBb),Z$gt,perl=TRUE),]$zscore,  ")", sep="" )
 
 fcol = c('black','green','red')
 
