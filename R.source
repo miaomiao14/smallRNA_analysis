@@ -333,6 +333,8 @@ colnames(Z)=c("gt","tz")
 sampleA=paste(sampleA,"(genome-wide zscore: " ,Z[grep(sampleA,Z$gt,perl=TRUE),]$zscore,  ")", sep="" )
 sampleB=paste(sampleB,"(genome-wide zscore: " ,Z[grep(sampleB,Z$gt,perl=TRUE),]$zscore,  ")", sep="" )
 
+fcol = c('black','green','red')
+
 attach(abg)
 
 pdfname=paste(outdir,'/',prefix, '.zscore.scatterplot.pdf', sep='')
