@@ -60,7 +60,7 @@ do
 	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_lendis2 ${OUTDIR2}/$insertsname.xkxh.transposon.mapper2.seqDep.lendis2 ${insertsname}" >>${paraFile}		
 done
 [ $? == 0 ] && \
-	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
+	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands && \
 	touch ${OUT}/.status.${STEP}.transposon_piRNA.lendis2
 STEP=$((STEP+1))
 
@@ -155,7 +155,7 @@ do
 	
 done
 [ $? == 0 ] && \
-	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
+	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands && \
 	touch ${OUT}/.status.${STEP}.transposon_piRNA.paired.lendis2
 STEP=$((STEP+1))
 
@@ -186,7 +186,7 @@ do
 	done
 done
 [ $? == 0 ] && \
-	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
+	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands && \
 	touch ${OUT}/.status.${STEP}.transposon_piRNA.abundance_zscore
 STEP=$((STEP+1))
 
@@ -295,7 +295,7 @@ do
 	done
 done
 [ $? == 0 ] && \
-	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
+	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands && \
 	touch ${OUT}/.status.${STEP}.transposon_piRNA.circosplot
 STEP=$((STEP+1))
 
@@ -322,7 +322,7 @@ do
 	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_lendis2 ${OUTDIR7}/$insertsname.xkxh.transposon.mapper2.seqDep.lendis2 ${insertsname}" >>${paraFile}		
 done
 [ $? == 0 ] && \
-	ParaFly -c $paraFile -CPU 4 -failed_cmds $paraFile.failed_commands &&
+	ParaFly -c $paraFile -CPU 4 -failed_cmds $paraFile.failed_commands && \
 	touch ${OUT}/.status.${STEP}.transposon_piRNA_WOroo.lendis2
 STEP=$((STEP+1))
 
@@ -372,7 +372,7 @@ do
 	
 done
 [ $? == 0 ] && \
-	ParaFly -c $paraFile -CPU 4 -failed_cmds $paraFile.failed_commands &&
+	ParaFly -c $paraFile -CPU 4 -failed_cmds $paraFile.failed_commands && \
 	touch ${OUT}/.status.${STEP}.transposon_piRNA.paired.lendis2WOroo
 STEP=$((STEP+1))
 
@@ -461,7 +461,7 @@ do
 	
 done
 [ $? == 0 ] && \
-		ParaFly -c $paraFile -CPU 4 -failed_cmds $paraFile.failed_commands &&
+		ParaFly -c $paraFile -CPU 4 -failed_cmds $paraFile.failed_commands && \
 	touch ${OUT}/.status.${STEP}.transposon_piRNA.paired.abundance_senseFraction
 STEP=$((STEP+1))
 
@@ -507,7 +507,7 @@ do
 	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_zscore_FB_scatterplot ${OUTDIR10}/${g}.FB.zscore ${OUTDIR10}/${g}.total.zscore $g $OUTDIR10 " >>${paraFile}
 done
 [ $? == 0 ] && \
-	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
+	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands && \
 	touch ${OUT}/.status.${STEP}.transposon_piRNA.pairedZscore
 STEP=$((STEP+1))
 
