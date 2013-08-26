@@ -330,8 +330,10 @@ abg = merge (ab, group, by.x='transposon', by.y='transposon')
 
 Z=read.table(tzfile,F)
 colnames(Z)=c("gt","tz")
-sampleA=paste(sampleA,"(genome-wide zscore: " , Z[grep(as.character(sampleAa),Z$gt,perl=TRUE),]$zscore,  ")", sep="" )
-sampleB=paste(sampleB,"(genome-wide zscore: " , Z[grep(as.character(sampleBb),Z$gt,perl=TRUE),]$zscore,  ")", sep="" )
+ztemp=Z[grep(sampleAa,Z$gt,perl=TRUE),]$tz
+sampleA=paste(sampleA,"(genome-wide zscore: " ,ztemp ,  ")", sep="" )
+ztemp=Z[grep(sampleBb,Z$gt,perl=TRUE),]$tz
+sampleB=paste(sampleB,"(genome-wide zscore: " , ztemp,  ")", sep="" )
 
 fcol = c('black','green','red')
 
