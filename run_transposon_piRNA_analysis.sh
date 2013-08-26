@@ -498,13 +498,13 @@ do
 	count=1
 	for t in ${!SUBGROUP}
 	do
-		cat ${INDIR}/pp6_FB/${t}/${t}.FB.pp6.out| awk -v gt=$t -v rank=$count '{OFS="\t"}{print gt,$1,$2,$3,$4,rank}' >> ${g}.FB.zscore
+		cat ${INDIR}/pp6_FB/${t}/${t}.FB.pp6.out| awk -v gt=$t -v rank=$count '{OFS="\t"}{print gt,$1,$2,$3,$4,rank}' >> ${OUTDIR10}/${g}.FB.zscore
 		count=$(($count+1))
 		totalZscore=`cat ${INDIR}/pp6_FB/${t}/${t}.total.pp6.out|cut -f2`
 		TZ=`printf "%0.2f" $totalZscore`
-		cat $t $TZ >>${OUTDIR10}/${g}.total.zscore
+		echo -e ${t}"\t"${TZ} >>${OUTDIR10}/${g}.total.zscore
 	done
-	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_zscore_FB_scatterplot ${g}.FB.zscore ${g}.total.zscore $g $OUTDIR10 " >>${paraFile}
+	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_zscore_FB_scatterplot ${OUTDIR10}/${g}.FB.zscore ${OUTDIR10}/${g}.total.zscore $g $OUTDIR10 " >>${paraFile}
 done
 [ $? == 0 ] && \
 	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands &&
