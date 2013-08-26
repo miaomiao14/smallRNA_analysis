@@ -437,7 +437,9 @@ do
 
 		count=1
 		transposonListFile=${OUTDIR9}/${g}.${NF}.transposon.list
+		rm ${OUTDIR9}/${g}.${NF}.transposon.list
 		transposonListUniqFile=${OUTDIR9}/${g}.${NF}.uniqmap.transposon.list
+		rm ${OUTDIR9}/${g}.${NF}.uniqmap.transposon.list
 
 		nnc=4 #the column in the stat file
 		seqDep=2 #the column in the stat file
