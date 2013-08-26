@@ -1,0 +1,86 @@
+matchall2normbed $inserts.match2_all.out $inserts.norm.bed
+
+matchall2normbed
+#!/usr/bin/perl
+if(@ARGV<2) {print "usage: $0 inputmatchout outputnormbed\n"; exit;}
+
+$inputmatchout = shift @ARGV;
+$outputnormbed = shift @ARGV;
+
+$tempbed="$outputnormbed.temp";
+for(0..10) {$tempbed.=(0..9)[rand(10)];}
+
+`match2all2bed $inputmatchout > $tempbed`;
+`count_ntm_from_match2allbed.pl $tempbed > $outputnormbed`;
+`rm -f $tempbed`;
+
+
+match2all2bed
+#!/usr/bin/perl
+BEGIN { unshift @INC,"/home/lees2/pipeline/util/M";}
+require "beds.pl";
+&printbedheader;
+$"="\t"; #so that the delimt between array elements is tap instead of space
+while(<>){
+ chomp;
+ my @l=(split/\t/)[2,4,5,3,0,1,6];
+ print "@l\n";
+}
+
+count_ntm_from_match2allbed.pl
+#!/usr/bin/perl
+
+for $file (@ARGV){
+open IN,$file;
+while(<IN>){
+ chomp;
+ @line=split/\t/;
+ next if @line<5;
+ $hash{$line[4]}++; #the mapping times of a sequence 
+}
+close IN;
+}
+
+$"="\t";
+for $file (@ARGV){
+open IN,$file;
+$header=<IN>; print "$header";
+while(<IN>){
+ chomp;
+ @line=split/\t/;
+ next if @line<5;
+ print "@line[0..5]\t$hash{$line[4]}\n";
+}
+close IN;
+}
+
+normbed2mapper /home/wengz/pipelines/smallRNApipeline/pipeline_dm/common/transposons+mst40+suffix+dodeca+stellate+TARTA+P.map $inserts.norm.bed map> $inserts.transposon.mapper
+#use window index and do intersect here
+
+/home/wengz/pipelines/smallRNApipeline/pipeline_dm/common/transposons+mst40+suffix+dodeca+stellate+TARTA+P.map
+57050 entries
+FBgn0026065_Idefix.1021	Retroviral_elements	chrU:6648426-6648591	-
+FBgn0063439_diver2.449	Retroviral_elements	chr2L:22753369-22753532	-
+FBgn0000638_FB.4	Foldback_elements	chrX:2027006-2027388	-
+FBgn0002697_mdg1.212	Retroviral_elements	chr3L:930812-931841	+
+FBgn0015945_GATE.408	Retroviral_elements	chrU:1581222-1581508	-
+
+
+
+mapper2mapper2+ $inserts.transposon.mapper >  $inserts.transposon.mapper.temp
+mod_stellate.pl  $inserts.transposon.mapper.temp > $inserts.transposon.mapper2
+
+
+mod_stellate.pl
+#!/usr/bin/perl
+
+open IN, $ARGV[0]; 
+while(<IN>) { chomp; split(/\t/);
+$hash{$_[0]}=0 if ($_[5]=~/FBgn0005673_1360/); 
+}
+
+open IN, $ARGV[0];
+while(<IN>) { chomp; split(/\t/);
+next if ($_[5]=~/stellate/ && exists($hash{$_[0]}));
+print "$_\n";
+}
