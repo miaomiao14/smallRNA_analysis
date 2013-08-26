@@ -501,7 +501,7 @@ do
 		cat ${INDIR}/pp6_FB/${t}/${t}.FB.pp6.out| awk -v gt=$t -v rank=$count '{OFS="\t"}{print gt,$1,$2,$3,$4,rank}' >> ${g}.FB.zscore
 		count=$(($count+1))
 		totalZscore=`cat ${INDIR}/pp6_FB/${t}/${t}.total.pp6.out|cut -f2`
-		TZ=`printf "%0.2f" $totalZscore
+		TZ=`printf "%0.2f" $totalZscore`
 		cat $t $TZ >>${OUTDIR10}/${g}.total.zscore
 	done
 	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_zscore_FB_scatterplot ${g}.FB.zscore ${g}.total.zscore $g $OUTDIR10 " >>${paraFile}
