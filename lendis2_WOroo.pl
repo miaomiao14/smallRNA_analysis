@@ -9,7 +9,7 @@ $normFacType=$ARGV[2];
 $normFac=$ARGV[3];
 if($file=~/gz/)
 {
-	$gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
+	$gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[0]: $gzerrno\n" ;
 	
 	$rooReads=0;
 	%roo=();
@@ -20,12 +20,13 @@ if($file=~/gz/)
 	#needs to calculate the reads mapped to roo, update the nf;
 	if(/FBgn0000155_roo/){$roo{$_[0]}=$_[1];}
 	}
+	$gz->gzclose();
 	foreach $species (keys %roo)
 	{
 		$rooReads+=$roo{$species};
 	} 
 	
-	
+	$gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[0]: $gzerrno\n" ;
 	while($gz->gzreadline($_) > 0)
 	{
 	chomp;
@@ -57,11 +58,12 @@ else
 		split(/\t/);
 		if(/FBgn0000155_roo/){$roo{$_[0]}=$_[1];}
 	}
+	close(IN);
     foreach $species (keys %roo)
 	{
 		$rooReads+=$roo{$species};
 	}
-    
+    open IN, $ARGV[0];
 	while(<IN>)
 	{
 		chomp;
