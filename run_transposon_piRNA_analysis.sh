@@ -531,7 +531,7 @@ do
 		gt=${gt}" "${name}
 	done 
 	echo -e "echo $gt >${OUTDIR11}/colnames.txt  && " >>${paraFile}
-	echo -e "~hanb/bin2/myMerge -i $tar -o ${OUTDIR11}/species.merged.${i} -c 1 -t 2 -d 0  && " >>${paraFile} 
+	echo -e "[ ! -f ${OUTDIR11}/species.merged.${i} ] && ~hanb/bin2/myMerge -i $tar -o ${OUTDIR11}/species.merged.${i} -c 1 -t 2 -d 0  && " >>${paraFile} 
 	echo -e "cat ${OUTDIR11}/colnames.txt |awk '{ORS=\"\\\t\";OFS=\"\\\t\";FS=\" \"}{ for(i=1;i<=NF; i++) print \$i}' |awk '{ORS=\"\\\n\"} {print}' \>${OUTDIR11}/colnames.txt.temp && " >>${paraFile}
 	echo -e "cat ${OUTDIR11}/colnames.txt.temp ${OUTDIR11}/species.merged.${i} >${OUTDIR11}/species.merged.${i}.txt" >>${paraFile} 
 done
