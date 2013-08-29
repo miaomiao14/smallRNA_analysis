@@ -511,3 +511,30 @@ done
 	touch ${OUT}/.status.${STEP}.transposon_piRNA.pairedZscore
 STEP=$((STEP+1))
 
+
+
+##merged species abundance analysis
+OUTDIR11=${INDIR}/species_merge
+[ ! -d $OUTDIR11 ] && mkdir -p ${OUTDIR11}
+[ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.mergeSpecies ] && \
+paraFile=${OUTDIR11}/${RANDOM}.mergeSpecies.para && \
+for i in `cut -f1 /home/wangw1/pipeline/common/Zamore.group` ;do trn=${trn}" "$i; done;
+for i in $trn
+do 
+	gt="species "
+	tar=""
+	for j in `find ${INDIR}/pp6_FB/ -name "*.inserts.xkxh.transposon.mapper2*${i}"`
+	do
+		tar=${tar}" "$j
+		name=${j##*SRA\.}
+		name=${name%\.ovary.*}
+		gt=${gt}" "${name}
+	done 
+	echo -e "echo $gt >${OUTDIR11}/colnames.txt  && " >>${paraFile}
+	echo -e "~hanb/bin2/myMerge -i $tar -o ${OUTDIR11}/species.merged.${i} -c 1 -t 2 -d 0  && " >>${paraFile} 
+	echo -e "cat ${OUTDIR11}/colnames.txt ${OUTDIR11}/species.merged.${i} >${OUTDIR11}/species.merged.${i}.txt" >>${paraFile} 
+done
+[ $? == 0 ] && \
+	ParaFly -c $paraFile -CPU 12 -failed_cmds $paraFile.failed_commands && \
+	touch ${OUT}/.status.${STEP}.transposon_piRNA.mergeSpecies
+STEP=$((STEP+1))
