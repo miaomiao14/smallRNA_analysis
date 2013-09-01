@@ -13,18 +13,18 @@ declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubM
 #do
 	[ ! -d ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g} ] && mkdir -p ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g}
 	OUTDIR=${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g}
-	smmapper2=${smRNAINDIR}/Phil.SRA.${g}.ox.ovary.inserts/Phil.SRA.${g}.ox.ovary.inserts.xkxh.transposon.mapper2.gz
+	smmapper2=${smRNAINDIR}/Phil.SRA.${g}.ox.ovary.inserts/Phil.SRA.${g}.ox.ovary.inserts.xkxh.transposon.mapper2.23-29.gz
 	mv ${degraINDIR}/Phil.DEG.${g}.ovary.PE/bedIntersectWW/Phil.DEG.${g}.ovary.x_rRNA.dm3.sorted.f0x40.noS.5p.unique.bed.ntm.collapse.FLY_TRANSPOSON_ALL.nta.mapper2.gz ${degraINDIR}/Phil.DEG.${g}.ovary.PE/bedIntersectWW/Phil.DEG.${g}.ovary.x_rRNA.dm3.sorted.f0x40.noS.5p.unique.bed.ntm.collapse.xkxh.FLY_TRANSPOSON_ALL.nta.mapper2.gz
 	demapper2=${degraINDIR}/Phil.DEG.${g}.ovary.PE/bedIntersectWW/Phil.DEG.${g}.ovary.x_rRNA.dm3.sorted.f0x40.noS.5p.unique.bed.ntm.collapse.xkxh.FLY_TRANSPOSON_ALL.nta.mapper2.gz
 	
 	#length range: 23-29
-	${PIPELINE_DIRECTORY}/gzlenrangeselector.pl ${smmapper2} 23 29 >${smmapper2%.gz}.23-29
-	gzip ${smmapper2%.gz}.23-29
+	#${PIPELINE_DIRECTORY}/gzlenrangeselector.pl ${smmapper2} 23 29 >${smmapper2%.gz}.23-29
+	#gzip ${smmapper2%.gz}.23-29
 	#total Ping-Pong
-	[ ! -f ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g}.total.pp6.out ] && $script ${smmapper2%.gz}.23-29.gz ${demapper2} 2 ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome >${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g}.total.pp6.out &&
+	[ ! -f ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g}.total.pp6.out ] && $script ${smmapper2} ${demapper2} 2 ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome >${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g}.total.pp6.out &&
 	
 	
-	${PIPELINE_DIRECTORY}/FB.pl ${smmapper2%.gz}.23-29.gz ${OUTDIR} &&
+	${PIPELINE_DIRECTORY}/FB.pl ${smmapper2} ${OUTDIR} &&
 	${PIPELINE_DIRECTORY}/FB.pl ${demapper2} ${OUTDIR}	&& 
 	paraFile=${OUTDIR}/${g}.pp6.para
 	for j in `ls -1 ${OUTDIR}/Phil.SRA.${g}.ox.ovary.inserts.xkxh.transposon.mapper2.23-29.*`
