@@ -35,6 +35,7 @@ declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubM
 	for j in `ls -1 ${OUTDIR}/Phil.SRA.${g}.ox.ovary.inserts.xkxh.transposon.mapper2.23-29.*`
 	do
 	T1=${j##*mapper2.23-29.}
+	[ -s $OUTDIR/${g}.FB.pp6.temp ] && rm $OUTDIR/${g}.FB.pp6.temp
 	[ ! -d $OUTDIR/${T1} ] && mkdir -p $OUTDIR/${T1} 
 	echo -ne  " T1=${j##*mapper2.23-29.} && " >> ${paraFile}
 	echo -ne " $script ${j}  ${OUTDIR}/Phil.DEG.${g}.ovary.x_rRNA.dm3.sorted.f0x40.noS.5p.all.bed.ntm.collapse.xkxh.FLY_TRANSPOSON_ALL.nta.mapper2.${T1} 2 $OUTDIR/${T1} $T1 >> $OUTDIR/${T1}/${g}.FB.${T1}.pp6.out && " >> ${paraFile}
