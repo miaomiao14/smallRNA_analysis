@@ -5,7 +5,7 @@ smRNAINDIR=$1
 degraINDIR=$2
 declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubMutsWW" "AubCDrescue" "AubWTrescue")
 
-[ ! -d ${INDIR}/pp6_FB_smRNA_vs_degradome ] && mkdir -p ${INDIR}/pp6_FB_smRNA_vs_degradome
+[ ! -d ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome ] && mkdir -p ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome
 #step 1
 for g in "${GROUPGT[@]}"
 do
