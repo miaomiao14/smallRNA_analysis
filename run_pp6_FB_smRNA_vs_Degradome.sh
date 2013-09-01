@@ -34,10 +34,10 @@ declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubM
 	echo -ne " $script ${j}  ${OUTDIR}/Phil.DEG.${g}.ovary.x_rRNA.dm3.sorted.f0x40.noS.5p.unique.bed.ntm.collapse.xkxh.FLY_TRANSPOSON_ALL.nta.mapper2.${T1} 2 ${OUTDIR} $T1 >> $OUTDIR/${g}.FB.${T1}.pp6.out && \" >> ${paraFile}
 	echo -e " $script ${j} ${OUTDIR}/Phil.DEG.${g}.ovary.x_rRNA.dm3.sorted.f0x40.noS.5p.unique.bed.ntm.collapse.xkxh.FLY_TRANSPOSON_ALL.nta.mapper2.${T1} 2 ${OUTDIR} $T1 >> $OUTDIR/${g}.FB.pp6.temp  " >> ${paraFile}
 	done
-	if [[ ! -f \${paraFile}.completed ]] || [[ -f \$paraFile.failed_commands ]]
+	if [[ ! -f ${paraFile}.completed ]] || [[ -f $paraFile.failed_commands ]]
 	then
 	
-		ParaFly -c \$paraFile -CPU $c -failed_cmds \$paraFile.failed_commands
+		ParaFly -c $paraFile -CPU $c -failed_cmds $paraFile.failed_commands
 	fi
 	awk '{OFS="\t"}{print $1,$2,$3,$4}' ${OUTDIR}/${g}.FB.pp6.temp > ${OUTDIR}/${g}.FB.pp6
 #done
