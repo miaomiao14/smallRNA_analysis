@@ -18,7 +18,7 @@ do
 	${PIPELINE_DIRECTORY}/gzlenrangeselector.pl ${smmapper2} 23 29 >${smmapper2%.gz}.23-29
 	gzip ${smmapper2%.gz}.23-29
 	#total Ping-Pong
-	[ ! -f ${INDIR}/pp6_FB_smRNA_vs_degradome/${g}.total.pp6.out ] && $script ${smmapper2%.gz}.23-29.gz ${demapper2} 2 ${INDIR}/pp6_FB_smRNA_vs_degradome >${INDIR}/pp6_FB_smRNA_vs_degradome/${g}.total.pp6.out &&
+	[ ! -f ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g}.total.pp6.out ] && $script ${smmapper2%.gz}.23-29.gz ${demapper2} 2 ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome >${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g}.total.pp6.out &&
 	
 	
 	${PIPELINE_DIRECTORY}/FB.pl ${smmapper2%.gz}.23-29.gz ${OUTDIR} &&
