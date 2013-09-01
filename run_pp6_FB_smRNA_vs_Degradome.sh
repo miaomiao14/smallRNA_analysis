@@ -3,12 +3,14 @@ export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 script=${PIPELINE_DIRECTORY}/pp6_T_ww_smRNA_vs_DEG.pl
 smRNAINDIR=$1
 degraINDIR=$2
+g=$3
+c=$4 #cpu
 declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubMutsWW" "AubCDrescue" "AubWTrescue")
 
 [ ! -d ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome ] && mkdir -p ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome
 #step 1
-for g in "${GROUPGT[@]}"
-do
+#for g in "${GROUPGT[@]}"
+#do
 	[ ! -d ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g} ] && mkdir -p ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g}
 	OUTDIR=${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g}
 	smmapper2=${smRNAINDIR}/Phil.SRA.${g}.ox.ovary.inserts/Phil.SRA.${g}.ox.ovary.inserts.xkxh.transposon.mapper2.gz
@@ -34,7 +36,7 @@ do
 	if [[ ! -f \${paraFile}.completed ]] || [[ -f \$paraFile.failed_commands ]]
 	then
 	
-		ParaFly -c \$paraFile -CPU 20 -failed_cmds \$paraFile.failed_commands
+		ParaFly -c \$paraFile -CPU $c -failed_cmds \$paraFile.failed_commands
 	fi
 	awk '{OFS="\t"}{print $1,$2,$3,$4}' ${OUTDIR}/${g}.FB.pp6.temp > ${OUTDIR}/${g}.FB.pp6
-done
+#done
