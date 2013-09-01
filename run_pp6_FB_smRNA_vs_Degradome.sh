@@ -14,7 +14,8 @@ declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubM
 	[ ! -d ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g} ] && mkdir -p ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g}
 	OUTDIR=${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g}
 	smmapper2=${smRNAINDIR}/Phil.SRA.${g}.ox.ovary.inserts/Phil.SRA.${g}.ox.ovary.inserts.xkxh.transposon.mapper2.gz
-	demapper2=${degraINDIR}/Phil.DEG.${g}.ovary.PE/bedIntersectWW/Phil.DEG.${g}.ovary.x_rRNA.dm3.sorted.f0x40.noS.5p.unique.bed.ntm.collapse.FLY_TRANSPOSON_ALL.nta.mapper2.gz
+	mv ${degraINDIR}/Phil.DEG.${g}.ovary.PE/bedIntersectWW/Phil.DEG.${g}.ovary.x_rRNA.dm3.sorted.f0x40.noS.5p.unique.bed.ntm.collapse.FLY_TRANSPOSON_ALL.nta.mapper2.gz ${degraINDIR}/Phil.DEG.${g}.ovary.PE/bedIntersectWW/Phil.DEG.${g}.ovary.x_rRNA.dm3.sorted.f0x40.noS.5p.unique.bed.ntm.collapse.xkxh.FLY_TRANSPOSON_ALL.nta.mapper2.gz
+	demapper2=${degraINDIR}/Phil.DEG.${g}.ovary.PE/bedIntersectWW/Phil.DEG.${g}.ovary.x_rRNA.dm3.sorted.f0x40.noS.5p.unique.bed.ntm.collapse.xkxh.FLY_TRANSPOSON_ALL.nta.mapper2.gz
 	
 	#length range: 23-29
 	${PIPELINE_DIRECTORY}/gzlenrangeselector.pl ${smmapper2} 23 29 >${smmapper2%.gz}.23-29
@@ -30,8 +31,8 @@ declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubM
 	do
 	T1=${j##*mapper2.}
 	echo -ne  " T1=\${j##*mapper2.} && \" >> ${paraFile}
-	echo -ne " $script ${j}  ${OUTDIR}/Phil.DEG.${g}.ovary.x_rRNA.dm3.sorted.f0x40.noS.5p.unique.bed.ntm.collapse.FLY_TRANSPOSON_ALL.nta.mapper2.${T1} 2 ${OUTDIR} $T1 >> $OUTDIR/${g}.FB.${T1}.pp6.out && \" >> ${paraFile}
-	echo -e " $script ${j} ${OUTDIR}/Phil.DEG.${g}.ovary.x_rRNA.dm3.sorted.f0x40.noS.5p.unique.bed.ntm.collapse.FLY_TRANSPOSON_ALL.nta.mapper2.${T1} 2 ${OUTDIR} $T1 >> $OUTDIR/${g}.FB.pp6.temp  " >> ${paraFile}
+	echo -ne " $script ${j}  ${OUTDIR}/Phil.DEG.${g}.ovary.x_rRNA.dm3.sorted.f0x40.noS.5p.unique.bed.ntm.collapse.xkxh.FLY_TRANSPOSON_ALL.nta.mapper2.${T1} 2 ${OUTDIR} $T1 >> $OUTDIR/${g}.FB.${T1}.pp6.out && \" >> ${paraFile}
+	echo -e " $script ${j} ${OUTDIR}/Phil.DEG.${g}.ovary.x_rRNA.dm3.sorted.f0x40.noS.5p.unique.bed.ntm.collapse.xkxh.FLY_TRANSPOSON_ALL.nta.mapper2.${T1} 2 ${OUTDIR} $T1 >> $OUTDIR/${g}.FB.pp6.temp  " >> ${paraFile}
 	done
 	if [[ ! -f \${paraFile}.completed ]] || [[ -f \$paraFile.failed_commands ]]
 	then
