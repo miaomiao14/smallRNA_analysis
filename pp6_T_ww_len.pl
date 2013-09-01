@@ -29,6 +29,8 @@ for ($i=0; $i<$ARGV[2]; $i++) {
    #total transposon piRNAs
    $totalReads1=0;
    $totalReads2=0;
+   $ppRead1=0;
+   $ppRead2=0;
    if($file1=~/gz/)
    {
     $gz = gzopen($ARGV[$i], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
@@ -43,7 +45,23 @@ for ($i=0; $i<$ARGV[2]; $i++) {
 	     { chomp; split(/\t/);$totalReads1+=$_[1]/$_[6]; }
 	     close(IN);
    	
-   }	
+   }
+   
+   if($file2=~/gz/)
+   {
+    $gz = gzopen($ARGV[$j], "rb") or die "Cannot open $ARGV[$j]: $gzerrno\n" ;
+	     while($gz->gzreadline($_) > 0)
+	     {chomp; split(/\t/); $totalReads2+=$_[1]/$_[6]; }
+	 $gz->gzclose();  
+   }
+   else
+   {
+   	 open IN, $ARGV[$j] or die "Cannot open $ARGV[$j]: $!\n";
+	     while(<IN>) 
+	     { chomp; split(/\t/);$totalReads2 +=$_[1]/$_[6]; }
+	     close(IN);
+   	
+   }
     
      $X=0; $Z=0; %score=();
 
@@ -107,6 +125,8 @@ for ($i=0; $i<$ARGV[2]; $i++) {
          {
          $score{$n}+=$pos{$_}*$pp{$_} ;
          print PPSEQ "$pp_seq{$_}\t$pp{$_}\t$pos_seq{$_}\t$pos{$_}\n" if ($n==10);
+         $ppRead1+=$pp{$_} if ($n==10);
+         $ppRead2+=$pos{$_} if ($n==10);
          }
       }
      #print "$n\t$score{$n}\n";
@@ -115,7 +135,11 @@ for ($i=0; $i<$ARGV[2]; $i++) {
      }
    $std=&standard_deviation(values %score);
    if ((scalar %score)>9 && $std>0) { $Z=($X-&mean(values %score))/$std;} else {$Z=-10;}
-   print "\t$Z\t$X\n";
+   $ppRatio1=$ppRead1/$totalReads1*100;
+   $ppRatio2=$ppRead2/$totalReads2*100;
+   $roundedppRatio1 = sprintf("%.2f", $ppRatio1);
+   $roundedppRatio2 = sprintf("%.2f", $ppRatio2);
+   print "\t$Z\t$X\t$ppRead1\t$totalReads1\t$roundedppRatio1%\t$ppRead2\t$totalReads2\t$roundedppRatio2%\n";
    }
    #print "\n";
 }

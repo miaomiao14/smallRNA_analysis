@@ -41,5 +41,5 @@ declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubM
 	
 		ParaFly -c $paraFile -CPU $c -failed_cmds $paraFile.failed_commands
 	fi
-	awk '{OFS="\t"}{print $1,$2,$3,$4}' ${OUTDIR}/${g}.FB.pp6.temp > ${OUTDIR}/${g}.FB.pp6
+	awk '{OFS="\t"}{print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' ${OUTDIR}/${g}.FB.pp6.temp > ${OUTDIR}/${g}.FB.pp6
 #done

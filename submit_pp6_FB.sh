@@ -6,9 +6,19 @@ export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 ## input: file1 file2 dir
 
 INDIR=$1 #this is the folder store all pipeline results outmost folders
-[ ! -d ${INDIR}/pp6_FB ] && mkdir -p ${INDIR}/pp6_FB
 
-for i in `ls ${INDIR}/*.inserts/*.xkxh.transposon.mapper2.gz`
+declare -a TARGETS=("Julius.SRA.MTD_shaub.unox.ovary.inserts" "Julius.SRA.MTD_shGFP.unox.ovary.inserts" \
+"Phil.AubIP.AubCDrescue.ox.ovary.inserts" "Phil.AubIP.AubCDrescue.unox.ovary.inserts" \
+"Phil.AubIP.AubWTrescue.ox.ovary.inserts" "Phil.AubIP.AubWTrescue.unox.ovary.inserts" \
+"Phil.SRA.aubHets.ox.ovary.inserts" "Phil.SRA.aubMutant.ox.ovary.inserts" \
+"Phil.SRA.QinAgo3Hets.ox.ovary.inserts" "Phil.SRA.QinAgo3Hets.unox.ovary.inserts" \
+"Phil.SRA.QinAgo3Muts.ox.ovary.inserts" "Phil.SRA.QinAgo3Muts.unox.ovary.inserts")
+
+[ ! -d ${INDIR}/pp6_FB ] && mkdir -p ${INDIR}/pp6_FB
+for t in ${TARGETS[@]}
+do
+for i in `ls ${INDIR}/${t}/*.xkxh.transposon.mapper2.gz`
+#for i in `ls ${INDIR}/*.inserts/*.xkxh.transposon.mapper2.gz`
 do 
 	#ln -s $i ${OUTDIR}
 	FILE=${i##*/}
@@ -55,11 +65,11 @@ do
 	
 		ParaFly -c \$paraFile -CPU 24 -failed_cmds \$paraFile.failed_commands
 	fi
-	awk '{OFS=\"\\t\"}{print \$0}' ${OUTDIR}/${insertsname}.FB.pp6.temp > ${OUTDIR}/${insertsname}.FB.pp6
+	awk '{OFS=\"\\t\"}{print \$1,\$2,\$3,\$4,\$5,\$6,\$7,\$8,\$9,\$10}' ${OUTDIR}/${insertsname}.FB.pp6.temp > ${OUTDIR}/${insertsname}.FB.pp6
 "> $SGE
 	
 	qsub $SGE
 	#sleep 5s
 
 done
- 
+done
