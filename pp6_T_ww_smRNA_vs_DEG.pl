@@ -21,10 +21,14 @@ for ($i=0; $i<$ARGV[2]; $i++) {
    $Transposon=$ARGV[4];
    print "$Transposon\t$filename1-$filename2";
    open PPSEQ, ">$ARGV[3]/$filename1.$filename2.$Transposon.ppseq";
+   open PPSCORE, ">$ARGV[3]/$filename1.$filename2.$Transposon.ppscore";
+   #print PPSCORE, "$Transposon\t$filename1-$filename2";
    }
    else
    {print "$filename1-$filename2";
    	open PPSEQ, ">$ARGV[3]/$filename1.$filename2.ppseq";
+   	open PPSCORE, ">$ARGV[3]/$filename1.$filename2.ppscore";
+   	#print PPSCORE, "$filename1-$filename2";
    }
    #total transposon piRNAs
    $totalReads1=0;
@@ -132,7 +136,7 @@ for ($i=0; $i<$ARGV[2]; $i++) {
          $ppRead2+=$pos{$_} if ($n==10);
          }
       }
-     #print "$n\t$score{$n}\n";
+     print PPSCORE, "$n\t$score{$n}\n";
      $score{$n}=0 if (!exists $score{$n});
      if ($n==10) { $X=$score{$n}; delete $score{$n};}
      }
@@ -153,7 +157,8 @@ for ($i=0; $i<$ARGV[2]; $i++) {
    }
    #print "\n";
 }
-
+close(PPSCORE);
+close(PPSEQ);
 
 sub mean {
 my $count=0;
