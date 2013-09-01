@@ -24,7 +24,7 @@ for ($i=0; $i<$ARGV[2]; $i++) {
    }
    else
    {print "$filename1-$filename2";
-   	open PPSEQ, ">$ARGV[3]/$filename1_$filename2.ppseq";
+   	open PPSEQ, ">$ARGV[3]/$filename1.$filename2.ppseq";
    }
    #total transposon piRNAs
    $totalReads1=0;
