@@ -9,8 +9,8 @@ declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubM
 #step 1
 for g in "${GROUPGT[@]}"
 do
-	[ ! -d ${INDIR}/pp6_FB_smRNA_vs_degradome/${g} ] && mkdir -p ${INDIR}/pp6_FB_smRNA_vs_degradome/${g}
-	OUTDIR=${INDIR}/pp6_FB_smRNA_vs_degradome/${g}
+	[ ! -d ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g} ] && mkdir -p ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g}
+	OUTDIR=${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g}
 	smmapper2=${smRNAINDIR}/Phil.SRA.${g}.ox.ovary.inserts/Phil.SRA.${g}.ox.ovary.inserts.xkxh.transposon.mapper2.gz
 	demapper2=${degraINDIR}/Phil.DEG.${g}.ovary.PE/bedIntersectWW/Phil.DEG.${g}.ovary.x_rRNA.dm3.sorted.f0x40.noS.5p.unique.bed.ntm.collapse.FLY_TRANSPOSON_ALL.nta.mapper2.gz
 	
