@@ -22,7 +22,7 @@ do
 	mkdir -p ${OUTDIR}
 	SGE=${INDIR}/pp6_FB/${insertsname}.pp6_FB.sge
 
-	script=${PIPELINE_DIRECTORY}/pp6_T_ww.pl
+	script=${PIPELINE_DIRECTORY}/pp6_T_ww_len.pl
 	
 #echo "spliting transposon family..."
 	echo "#!/bin/sh
