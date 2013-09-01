@@ -14,9 +14,9 @@ declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubM
 	[ ! -d ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g} ] && mkdir -p ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g}
 	OUTDIR=${smRNAINDIR}/pp6_FB_smRNA_vs_degradome/${g}
 	smmapper2=${smRNAINDIR}/Phil.SRA.${g}.ox.ovary.inserts/Phil.SRA.${g}.ox.ovary.inserts.xkxh.transposon.mapper2.23-29.gz
-	demapper2=${degraINDIR}/Phil.DEG.${g}.ovary.PE/bedIntersectWW/Phil.DEG.${g}.ovary.x_rRNA.dm3.sorted.f0x40.noS.5p.unique.bed.ntm.collapse.xkxh.FLY_TRANSPOSON_ALL.nta.mapper2.gz
+	demapper2=${degraINDIR}/Phil.DEG.${g}.ovary.PE/bedIntersectWW/Phil.DEG.${g}.ovary.x_rRNA.dm3.sorted.f0x40.noS.5p.all.bed.ntm.collapse.xkxh.FLY_TRANSPOSON_ALL.nta.mapper2.gz
 	[ ! -f $demapper2 ] && \
-		mv ${degraINDIR}/Phil.DEG.${g}.ovary.PE/bedIntersectWW/Phil.DEG.${g}.ovary.x_rRNA.dm3.sorted.f0x40.noS.5p.unique.bed.ntm.collapse.FLY_TRANSPOSON_ALL.nta.mapper2.gz 
+		mv ${degraINDIR}/Phil.DEG.${g}.ovary.PE/bedIntersectWW/Phil.DEG.${g}.ovary.x_rRNA.dm3.sorted.f0x40.noS.5p.all.bed.ntm.collapse.FLY_TRANSPOSON_ALL.nta.mapper2.gz $demapper2
 	
 	#length range: 23-29
 	[ ! -f ${smmapper2%.gz}.23-29.gz ] && \
