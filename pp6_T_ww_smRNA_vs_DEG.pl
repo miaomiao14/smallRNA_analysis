@@ -148,11 +148,11 @@ for ($i=0; $i<$ARGV[2]; $i++) {
    $roundedppRatio2 = sprintf("%.2f", $ppRatio2);
    $roundedZ = sprintf("%.2f", $Z);
    $roundedX = sprintf("%.2f", $X);
-   $roundedppRead1 = sprintf("%.2f", $ppRead1);
-   $roundedppRead2 = sprintf("%.2f", $ppRead2);
-   $roundedtotalRead1 = sprintf("%.2f", $totalRead1);
-   $roundedtotalRead2 = sprintf("%.2f", $totalRead2);
-   print "\t$roundedZ\t$roundedX\t$roundedppRead1\t$roundedtotalRead1\t$roundedppRatio1%\t$roundedppRead2\t$roundedtotalRead2\t$roundedppRatio2%\n";
+   $roundedppReads1 = sprintf("%.2f", $ppRead1);
+   $roundedppReads2 = sprintf("%.2f", $ppRead2);
+   $roundedtotalReads1 = sprintf("%.2f", $totalReads1);
+   $roundedtotalReads2 = sprintf("%.2f", $totalReads2);
+   print "\t$roundedZ\t$roundedX\t$roundedppReads1\t$roundedtotalReads1\t$roundedppRatio1%\t$roundedppReads2\t$roundedtotalReads2\t$roundedppRatio2%\n";
 
    }
    #print "\n";
