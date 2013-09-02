@@ -213,6 +213,7 @@ L$piRNA_sense_fraction=as.numeric(as.character(L$piRNA_sense_fraction))
 L$piRNA_sense=as.numeric(L$piRNA_sense)
 L$piRNA_antisense=as.numeric(L$piRNA_antisense)
 L$nf=as.numeric(as.character(L$nf))
+
 file=basename(input)
 
 #assuming only two files 
@@ -248,8 +249,8 @@ colnames(boxes)=c("g","foldChange")
 pdfname=paste(outdir,'/','normalized_piRNA_abundance_', file , '.jitterplot.pdf', sep='')
 t=paste(sampleB,"/",sampleA," (",nftype,") ",sep="")
 p=ggplot (aes(x=g,y=foldChange,colour=g), data=boxes,ylab="fold changes in abundance by transposon family") 
-p <- p + opts(title = t)
-p<-p + opts(plot.title = theme_text(size = 12, colour = "black"))
+p <- p + ggtitle(t)
+p<-p + opts(plot.title = element_text(size = 12, colour = "black"))
 p=p+layer(geom="jitter",alpha=I(1/2))
 p=p+layer (geom="boxplot",colour=c("black") ) +scale_fill_manual(values=c("total"="black","sense"="darkblue","antisense"="darkred"))
 print(p)

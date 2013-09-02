@@ -484,6 +484,20 @@ declare -a aubcdwt_ox=("Phil.SRA.AubCDrescue.ox.ovary.inserts" "Phil.SRA.AubWTre
 declare -a aubcdmut_unox=("Phil.SRA.AubCDrescue.unox.ovary.inserts" "Phil.SRA.AubMutsWW.unox.ovary.inserts")
 declare -a aubwtmut_unox=("Phil.SRA.AubWTrescue.unox.ovary.inserts" "Phil.SRA.AubMutsWW.unox.ovary.inserts")
 declare -a aubcdwt_unox=("Phil.SRA.AubCDrescue.unox.ovary.inserts" "Phil.SRA.AubWTrescue.unox.ovary.inserts")
+
+declare -a aubmuthet_ox=("Phil.SRA.aubMutant.ox.ovary.inserts" "Phil.SRA.aubHets.ox.ovary.inserts")
+declare -a aubhetmut_ox=("Phil.SRA.aubHets.ox.ovary.inserts" "Phil.SRA.aubMutant.ox.ovary.inserts")
+
+declare -a MTD_shaub_shGFP=("Julius.SRA.MTD_shaub.unox.ovary.inserts" "Julius.SRA.MTD_shGFP.unox.ovary.inserts")
+
+declare -a qinago3muthet_ox=("Phil.SRA.QinAgo3Muts.ox.ovary.inserts" "Phil.SRA.QinAgo3Hets.ox.ovary.inserts")
+declare -a qinago3muthet_unox=("Phil.SRA.QinAgo3Muts.unox.ovary.inserts" "Phil.SRA.QinAgo3Hets.unox.ovary.inserts")
+
+declare -a AubIP_aubcdwt_ox=("Phil.AubIP.AubCDrescue.ox.ovary.inserts" "Phil.AubIP.AubWTrescue.ox.ovary.inserts")
+declare -a AubIP_aubcdwt_unox=("Phil.AubIP.Aubrescue.unox.ovary.inserts" "Phil.AubIP.AubWTrescue.unox.ovary.inserts")
+
+
+
 echo -e "`date` "+$ISO_8601"\tDraw paired transposon piRNA zscore scatterplot..." >> $LOG
 OUTDIR10=${INDIR}/transposon_piRNA/paired_zscore_scatterplot
 [ ! -d $OUTDIR10 ] && mkdir -p ${OUTDIR10}
