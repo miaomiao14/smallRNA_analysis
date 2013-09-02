@@ -8,11 +8,11 @@ export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 INDIR=$1 #this is the folder store all pipeline results outmost folders
 
 #declare -a TARGETS=("Julius.SRA.MTD_shaub.unox.ovary.inserts" "Julius.SRA.MTD_shGFP.unox.ovary.inserts" \
-"Phil.AubIP.AubCDrescue.ox.ovary.inserts" "Phil.AubIP.AubCDrescue.unox.ovary.inserts" \
-"Phil.AubIP.AubWTrescue.ox.ovary.inserts" "Phil.AubIP.AubWTrescue.unox.ovary.inserts" \
-"Phil.SRA.aubHets.ox.ovary.inserts" "Phil.SRA.aubMutant.ox.ovary.inserts" \
-"Phil.SRA.QinAgo3Hets.ox.ovary.inserts" "Phil.SRA.QinAgo3Hets.unox.ovary.inserts" \
-"Phil.SRA.QinAgo3Muts.ox.ovary.inserts" "Phil.SRA.QinAgo3Muts.unox.ovary.inserts")
+#"Phil.AubIP.AubCDrescue.ox.ovary.inserts" "Phil.AubIP.AubCDrescue.unox.ovary.inserts" \
+#"Phil.AubIP.AubWTrescue.ox.ovary.inserts" "Phil.AubIP.AubWTrescue.unox.ovary.inserts" \
+#"Phil.SRA.aubHets.ox.ovary.inserts" "Phil.SRA.aubMutant.ox.ovary.inserts" \
+#"Phil.SRA.QinAgo3Hets.ox.ovary.inserts" "Phil.SRA.QinAgo3Hets.unox.ovary.inserts" \
+#"Phil.SRA.QinAgo3Muts.ox.ovary.inserts" "Phil.SRA.QinAgo3Muts.unox.ovary.inserts")
 
 declare -a TARGET=("Phil.Ago3IPuniq.aubMutant.unox.ovary.inserts")
 
