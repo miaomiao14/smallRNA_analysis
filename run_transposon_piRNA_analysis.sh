@@ -468,6 +468,8 @@ STEP=$((STEP+1))
 
 declare -a GROUPGT=("ago3cdmut_ox" "ago3wtmut_ox" "ago3cdwt_ox" "ago3cdmut_unox" "ago3wtmut_unox" "ago3cdwt_unox" \
 "aubcdmut_ox" "aubwtmut_ox" "aubcdwt_ox" "aubcdmut_unox" "aubwtmut_unox" "aubcdwt_unox" \
+"aubmuthet_ox" "aubhetmut_ox" "MTD_shaub_shGFP" "qinago3muthet_ox" "qinago3muthet_unox" \
+"AubIP_aubcdwt_ox" "AubIP_aubcdwt_unox" \
 )
 declare -a ago3cdmut_ox=("Phil.SRA.aubvasAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.ago3MutsWW.ox.ovary.inserts")
 declare -a ago3wtmut_ox=("Phil.SRA.aubvasAgo3WTrescue.ox.ovary.inserts" "Phil.SRA.ago3MutsWW.ox.ovary.inserts")
