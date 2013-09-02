@@ -559,3 +559,38 @@ done
 	ParaFly -c $paraFile -CPU 12 -failed_cmds $paraFile.failed_commands && \
 	touch ${OUT}/.status.${STEP}.transposon_piRNA.mergeSpecies
 STEP=$((STEP+1))
+
+
+#declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubMutsWW" "AubCDrescue" "AubWTrescue")
+declare -a GROUPGT=("ago3cdmut" "ago3wtmut" "ago3cdwt")
+declare -a ago3cdmut=("aubvasAgo3CDrescue" "ago3MutsWW")
+declare -a ago3wtmut=("aubvasAgo3WTrescue" "ago3MutsWW")
+declare -a ago3cdwt=("aubvasAgo3CDrescue" "aubvasAgo3WTrescue")
+
+echo -e "`date` "+$ISO_8601"\tDraw paired transposon piRNA zscore(between smRNA and degradome) scatterplot..." >> $LOG
+OUTDIR10=${INDIR}/transposon_piRNA/paired_zscore_smRNA_vs_Degradome_scatterplot
+[ ! -d $OUTDIR12 ] && mkdir -p ${OUTDIR12}
+[ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.pairedZscore.smRNAvsDegradome ] && \
+paraFile=${OUTDIR12}/${RANDOM}.pairedZscore.para && \
+
+for g in "${GROUPGT[@]}"
+do
+	SUBGROUP="$g[@]"
+	[ -f ${OUTDIR12}/${g}.FB.zscore ] && rm ${OUTDIR12}/${g}.FB.zscore
+	[ -f ${OUTDIR12}/${g}.total.zscore ] && rm ${OUTDIR12}/${g}.total.zscore
+	count=1
+	for t in ${!SUBGROUP}
+	do
+		cat ${INDIR}/pp6_FB_smRNA_vs_degradome/${t}/${t}.FB.pp6| awk -v gt=$t -v rank=$count '{OFS="\t"}{print gt,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,rank}' >> ${OUTDIR12}/${g}.FB.zscore
+		cat ${INDIR}/pp6_FB_smRNA_vs_degradome/${t}.total.pp6.out | awk -v gt=$t -v rank=$count '{OFS="\t"}{print gt,$1,$2,$3,$4,$5,$6,$7,$8,$9,rank}' >> ${OUTDIR12}/${g}.total.zscore
+		count=$(($count+1))
+		#totalZscore=`cat ${INDIR}/pp6_FB_smRNA_vs_degradome/${t}.total.pp6.out|cut -f2`
+		#TZ=`printf "%0.2f" $totalZscore`
+		#echo -e ${t}"\t"${TZ} >>${OUTDIR12}/${g}.total.zscore
+	done
+	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_zscore_FB_smRNA_vs_DEG_scatterplot ${OUTDIR12}/${g}.FB.zscore ${OUTDIR12}/${g}.total.zscore $g $OUTDIR12 " >>${paraFile}
+done
+[ $? == 0 ] && \
+	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands && \
+	touch ${OUT}/.status.${STEP}.transposon_piRNA.pairedZscore.smRNAvsDegradome
+STEP=$((STEP+1))

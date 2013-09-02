@@ -67,7 +67,7 @@ do
 	
 		ParaFly -c \$paraFile -CPU 24 -failed_cmds \$paraFile.failed_commands
 	fi
-	awk '{OFS=\"\\t\"}{print \$1,\$2,\$3,\$4,\$5,\$6,\$7,\$8,\$9,\$10}' ${OUTDIR}/${insertsname}.FB.pp6.temp > ${OUTDIR}/${insertsname}.FB.pp6
+	awk '{OFS=\"\\t\"}{print \$1,\$2,\$3,\$4,\$5,\$6,\$7,\$8,\$9,\$10}' ${OUTDIR}/${insertsname}.FB.pp6.temp > ${OUTDIR}/${insertsname}.FB.pp6.out
 "> $SGE
 	
 	qsub $SGE
