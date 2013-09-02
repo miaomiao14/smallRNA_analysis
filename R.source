@@ -381,7 +381,7 @@ par(mfcol = c(2, 2))
 for ( i in 1:length(levels(L$pairs)) )
 {
 ppname=levels(L$pairs)[i]
-pp=as.data.frame(lapply(subset(L,L$pairs==levels(L$pairs)[i])),'[',drop=TRUE))
+pp=as.data.frame(lapply(subset(L,L$pairs==levels(L$pairs)[i]),'[',drop=TRUE))
 #assuming only two files 
 a=as.data.frame(lapply(subset(pp,as.character(rank)==1),'[',drop=TRUE))
 sampleA=levels( as.factor(a$gt) )[1]  #a long trip to get the gtname
@@ -394,7 +394,7 @@ sampleB=levels( as.factor(b$gt) )[1]
 ab = merge (a,b,by.x='transposon', by.y='transposon')
 abg = merge (ab, group, by.x='transposon', by.y='transposon')
 
-totalpp=as.data.frame(lapply(subset(Z,Z$pairs==levels(L$pairs)[i])),'[',drop=TRUE))
+totalpp=as.data.frame(lapply(subset(Z,Z$pairs==levels(L$pairs)[i]),'[',drop=TRUE))
 
 ztemp=formatC(totalpp[grep(sampleA,totalpp$gt,perl=TRUE),]$zscore,2)
 
