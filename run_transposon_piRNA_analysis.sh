@@ -496,7 +496,7 @@ declare -a qinago3muthet_ox=("Phil.SRA.QinAgo3Muts.ox.ovary.inserts" "Phil.SRA.Q
 declare -a qinago3muthet_unox=("Phil.SRA.QinAgo3Muts.unox.ovary.inserts" "Phil.SRA.QinAgo3Hets.unox.ovary.inserts")
 
 declare -a AubIP_aubcdwt_ox=("Phil.AubIP.AubCDrescue.ox.ovary.inserts" "Phil.AubIP.AubWTrescue.ox.ovary.inserts")
-declare -a AubIP_aubcdwt_unox=("Phil.AubIP.Aubrescue.unox.ovary.inserts" "Phil.AubIP.AubWTrescue.unox.ovary.inserts")
+declare -a AubIP_aubcdwt_unox=("Phil.AubIP.AubCDrescue.unox.ovary.inserts" "Phil.AubIP.AubWTrescue.unox.ovary.inserts")
 
 
 
