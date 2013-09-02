@@ -381,6 +381,7 @@ declare -a GROUPGT=("pago3cdmut_ox" "pago3wtmut_ox" "pago3cdwt_ox" "pago3cdmut_u
 "ago3cdmut_ox" "ago3wtmut_ox" "ago3cdwt_ox" "ago3cdmut_unox" "ago3wtmut_unox" "ago3cdwt_unox" \
 "aubcdmut_ox" "aubwtmut_ox" "aubcdwt_ox" "aubcdmut_unox" "aubwtmut_unox" "aubcdwt_unox" "aubmuthet_ox" "aubhetmut_ox" "aubKDgfpKD_unox" "gfpKDaubKD_unox" \
 "qinago3muthet_ox" "qinago3muthet_unox" \
+"AubIP_aubcdwt_ox" "AubIP_aubcdwt_ox" \
 "ago3mut_cor1_ox" "ago3mut_cor1_unox" "ago3CD_cor2_ox" "ago3CD_cor2_unox" "aubmut_cor3_ox" \
 )
 
@@ -415,6 +416,9 @@ declare -a gfpKDaubKD_unox=("Julius.SRA.MTD_shGFP.unox.ovary.inserts" "Julius.SR
 
 declare -a qinago3muthet_ox=("Phil.SRA.QinAgo3Muts.ox.ovary.inserts" "Phil.SRA.QinAgo3Hets.ox.ovary.inserts")
 declare -a qinago3muthet_unox=("Phil.SRA.QinAgo3Muts.unox.ovary.inserts" "Phil.SRA.QinAgo3Hets.unox.ovary.inserts")
+
+declare -a AubIP_aubcdwt_ox=("Phil.AubIP.AubCDrescue.ox.ovary.inserts" "Phil.AubIP.AubWTrescue.ox.ovary.inserts")
+declare -a AubIP_aubcdwt_unox=("Phil.AubIP.AubCDrescue.unox.ovary.inserts" "Phil.AubIP.AubWTrescue.unox.ovary.inserts")
 
 declare -a ago3mut_cor1_ox=("Phil.SRA.ago3MutsWW.ox.ovary.inserts" "Phil.SRA.ago3MutsCJ.ox.ovary.inserts")
 declare -a ago3mut_cor1_unox=("Phil.SRA.ago3MutsWW.unox.ovary.inserts" "Phil.SRA.ago3MutsCJ.unox.ovary.inserts")
