@@ -229,8 +229,7 @@ ab = merge (a,b,by.x='transposon', by.y='transposon')
 abg = merge (ab, group, by.x='transposon', by.y='transposon')
 abg = abg[complete.cases(abg[,c("piRNA_sense_fraction.x","piRNA_sense_fraction.y")]),]
 
-abg$nf.x
-abg$nf.y
+
 abg$piRNA.x=abg$piRNA.x/abg$nf.x*1000000
 abg$piRNA.y=abg$piRNA.y/abg$nf.y*1000000
 abg$piRNA_sense.x=abg$piRNA_sense.x/abg$nf.x*1000000
@@ -239,6 +238,8 @@ abg$piRNA_antisense.x=abg$piRNA_antisense.x/abg$nf.x*1000000
 abg$piRNA_antisense.y=abg$piRNA_antisense.y/abg$nf.y*1000000
 
 #abundance jitterplot
+test=paste(file,"jitterplot")
+test
 fcol = c('white','darkblue','darkred')
 attach(abg)
 boxes=data.frame((piRNA.y/piRNA.x),(piRNA_sense.y/piRNA_sense.x),(piRNA_antisense.y/piRNA_antisense.x))
@@ -250,7 +251,7 @@ pdfname=paste(outdir,'/','normalized_piRNA_abundance_', file , '.jitterplot.pdf'
 t=paste(sampleB,"/",sampleA," (",nftype,") ",sep="")
 p=ggplot (aes(x=g,y=foldChange,colour=g), data=boxes,ylab="fold changes in abundance by transposon family") 
 p <- p + ggtitle(t)
-p<-p + opts(plot.title = element_text(size = 12, colour = "black"))
+p<-p + theme(plot.title = element_text(size = 12, colour = "black"))
 p=p+layer(geom="jitter",alpha=I(1/2))
 p=p+layer (geom="boxplot",colour=c("black") ) +scale_fill_manual(values=c("total"="black","sense"="darkblue","antisense"="darkred"))
 print(p)
@@ -258,6 +259,8 @@ ggsave(pdfname,width=4.5,height=10)
 dev.off ()
 
 #abundance boxplot
+test=paste(file,"boxplot")
+test
 attach(abg)
 boxes=data.frame((piRNA.x/piRNA.y),(piRNA_sense.x/piRNA_sense.y),(piRNA_antisense.x/piRNA_antisense.y))
 t=paste(sampleA,"/",sampleB," (",nftype,") ",sep="")
@@ -277,6 +280,8 @@ dev.off()
 
 
 #abundance scatterplot
+test=paste(file,"abundance scatterplot")
+test
 attach(abg)
 fcol = c('black','green','red')
 pdfname=paste(outdir,'/','normalized_piRNA_abundance_',file , '.scatterplot.pdf', sep='')
@@ -293,6 +298,8 @@ dev.off ()
 
 
 #piRNA_sense_fraction scatterplot
+test=paste(file,"sense fraction scatterplot")
+test
 pdfname=paste(outdir,'/','normalized_piRNA_senseFraction_',file , '.scatterplot.pdf', sep='')
 pdf(pdfname,width=7,height=7)
 plot (piRNA_sense_fraction.x, piRNA_sense_fraction.y,  axes=F, ylim=c(0,1), xlim=c(0,1), col='white',pch=21, bg=fcol[g], cex=1.5, xlab= sampleA, ylab= sampleB, main='piRNA sense Fraction') + abline (0,1,lty=2, col='darkgrey')

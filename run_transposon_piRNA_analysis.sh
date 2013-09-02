@@ -68,8 +68,8 @@ STEP=$((STEP+1))
 
 #declare -a gt_g1_ox=("aubvasAgo3CDrescue.ox" "ago3MutsWW.ox" "aubvasAgo3WTrescue.ox")
 #declare -a gt_g1_unox=("aubvasAgo3CDrescue.unox" "ago3MutsWW.unox" "aubvasAgo3WTrescue.unox")
-#declare -a gt_g2_ox=("AubCDrescue.ox" "AubMutsWW.ox" "AubWTrescue.ox")
-#declare -a gt_g2_unox=("AubCDrescue.unox" "AubMutsWW.unox" "AubWTrescue.unox")
+#declare -a gt_g2_ox=("AubCDrescue.ox" "aubMutsWW.ox" "AubWTrescue.ox")
+#declare -a gt_g2_unox=("AubCDrescue.unox" "aubMutsWW.unox" "AubWTrescue.unox")
 #
 #declare -a gt_cor1_ox=("ago3MutsWW.ox" "ago3MutsCJ.ox")
 #declare -a gt_cor1_unox=("ago3MutsWW.unox" "ago3MutsCJ.unox")
@@ -86,8 +86,8 @@ declare -a pago3_ox=("Phil.SRA.nosAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.ago3M
 declare -a pago3_unox=("Phil.SRA.nosAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.ago3MutsWW.unox.ovary.inserts" "Phil.SRA.nosAgo3WTrescue.unox.ovary.inserts")
 declare -a ago3_ox=("Phil.SRA.aubvasAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.ago3MutsWW.ox.ovary.inserts" "Phil.SRA.aubvasAgo3WTrescue.ox.ovary.inserts")
 declare -a ago3_unox=("Phil.SRA.aubvasAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.ago3MutsWW.unox.ovary.inserts" "Phil.SRA.aubvasAgo3WTrescue.unox.ovary.inserts")
-declare -a aub_ox=("Phil.SRA.AubCDrescue.ox.ovary.inserts" "Phil.SRA.AubMutsWW.ox.ovary.inserts" "Phil.SRA.AubWTrescue.ox.ovary.inserts")
-declare -a aub_unox=("Phil.SRA.AubCDrescue.unox.ovary.inserts" "Phil.SRA.AubMutsWW.unox.ovary.inserts" "Phil.SRA.AubWTrescue.unox.ovary.inserts")
+declare -a aub_ox=("Phil.SRA.AubCDrescue.ox.ovary.inserts" "Phil.SRA.aubMutsWW.ox.ovary.inserts" "Phil.SRA.AubWTrescue.ox.ovary.inserts")
+declare -a aub_unox=("Phil.SRA.AubCDrescue.unox.ovary.inserts" "Phil.SRA.aubMutsWW.unox.ovary.inserts" "Phil.SRA.AubWTrescue.unox.ovary.inserts")
 declare -a qinago3muthet_ox=("Phil.SRA.QinAgo3Muts.ox.ovary.inserts" "Phil.SRA.QinAgo3Hets.ox.ovary.inserts")
 declare -a qinago3muthet_unox=("Phil.SRA.QinAgo3Muts.unox.ovary.inserts" "Phil.SRA.QinAgo3Hets.unox.ovary.inserts")
 
@@ -100,7 +100,7 @@ declare -a ago3mut_cor1_unox=("Phil.SRA.ago3MutsWW.unox.ovary.inserts" "Phil.SRA
 declare -a ago3CD_cor2_ox=("Phil.SRA.nosAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.aubvasAgo3CDrescue.ox.ovary.inserts")
 declare -a ago3CD_cor2_unox=("Phil.SRA.nosAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.aubvasAgo3CDrescue.unox.ovary.inserts")
 
-declare -a aubmut_cor3_ox=("Phil.SRA.AubMutsWW.ox.ovary.inserts" "Phil.SRA.aubMutant.ox.ovary.inserts")
+declare -a aubmut_cor3_ox=("Phil.SRA.aubMutsWW.ox.ovary.inserts" "Phil.SRA.aubMutant.ox.ovary.inserts")
 
 declare -a aubKDgfpKD_unox=("Julius.SRA.MTD_shaub.unox.ovary.inserts" "Julius.SRA.MTD_shGFP.unox.ovary.inserts")
 declare -a gfpKDaubKD_unox=("Julius.SRA.MTD_shGFP.unox.ovary.inserts" "Julius.SRA.MTD_shaub.unox.ovary.inserts")
@@ -215,8 +215,8 @@ declare -a pago3_ox=("Phil.SRA.nosAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.ago3M
 declare -a pago3_unox=("Phil.SRA.nosAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.ago3MutsWW.unox.ovary.inserts" "Phil.SRA.nosAgo3WTrescue.unox.ovary.inserts")
 declare -a ago3_ox=("Phil.SRA.aubvasAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.ago3MutsWW.ox.ovary.inserts" "Phil.SRA.aubvasAgo3WTrescue.ox.ovary.inserts")
 declare -a ago3_unox=("Phil.SRA.aubvasAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.ago3MutsWW.unox.ovary.inserts" "Phil.SRA.aubvasAgo3WTrescue.unox.ovary.inserts")
-declare -a aub_ox=("Phil.SRA.AubCDrescue.ox.ovary.inserts" "Phil.SRA.AubMutsWW.ox.ovary.inserts" "Phil.SRA.AubWTrescue.ox.ovary.inserts")
-declare -a aub_unox=("Phil.SRA.AubCDrescue.unox.ovary.inserts" "Phil.SRA.AubMutsWW.unox.ovary.inserts" "Phil.SRA.AubWTrescue.unox.ovary.inserts")
+declare -a aub_ox=("Phil.SRA.AubCDrescue.ox.ovary.inserts" "Phil.SRA.aubMutsWW.ox.ovary.inserts" "Phil.SRA.AubWTrescue.ox.ovary.inserts")
+declare -a aub_unox=("Phil.SRA.AubCDrescue.unox.ovary.inserts" "Phil.SRA.aubMutsWW.unox.ovary.inserts" "Phil.SRA.AubWTrescue.unox.ovary.inserts")
 
 
 
@@ -401,12 +401,12 @@ declare -a ago3cdmut_unox=("Phil.SRA.aubvasAgo3CDrescue.unox.ovary.inserts" "Phi
 declare -a ago3wtmut_unox=("Phil.SRA.aubvasAgo3WTrescue.unox.ovary.inserts" "Phil.SRA.ago3MutsWW.unox.ovary.inserts")
 declare -a ago3cdwt_unox=("Phil.SRA.aubvasAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.aubvasAgo3WTrescue.unox.ovary.inserts")
 
-declare -a aubcdmut_ox=("Phil.SRA.AubCDrescue.ox.ovary.inserts" "Phil.SRA.AubMutsWW.ox.ovary.inserts")
-declare -a aubwtmut_ox=("Phil.SRA.AubWTrescue.ox.ovary.inserts" "Phil.SRA.AubMutsWW.ox.ovary.inserts")
+declare -a aubcdmut_ox=("Phil.SRA.AubCDrescue.ox.ovary.inserts" "Phil.SRA.aubMutsWW.ox.ovary.inserts")
+declare -a aubwtmut_ox=("Phil.SRA.AubWTrescue.ox.ovary.inserts" "Phil.SRA.aubMutsWW.ox.ovary.inserts")
 declare -a aubcdwt_ox=("Phil.SRA.AubCDrescue.ox.ovary.inserts" "Phil.SRA.AubWTrescue.ox.ovary.inserts")
 
-declare -a aubcdmut_unox=("Phil.SRA.AubCDrescue.unox.ovary.inserts" "Phil.SRA.AubMutsWW.unox.ovary.inserts")
-declare -a aubwtmut_unox=("Phil.SRA.AubWTrescue.unox.ovary.inserts" "Phil.SRA.AubMutsWW.unox.ovary.inserts")
+declare -a aubcdmut_unox=("Phil.SRA.AubCDrescue.unox.ovary.inserts" "Phil.SRA.aubMutsWW.unox.ovary.inserts")
+declare -a aubwtmut_unox=("Phil.SRA.AubWTrescue.unox.ovary.inserts" "Phil.SRA.aubMutsWW.unox.ovary.inserts")
 declare -a aubcdwt_unox=("Phil.SRA.AubCDrescue.unox.ovary.inserts" "Phil.SRA.AubWTrescue.unox.ovary.inserts")
 
 declare -a aubmuthet_ox=("Phil.SRA.aubMutant.ox.ovary.inserts" "Phil.SRA.aubHets.ox.ovary.inserts")
@@ -426,7 +426,7 @@ declare -a ago3mut_cor1_unox=("Phil.SRA.ago3MutsWW.unox.ovary.inserts" "Phil.SRA
 declare -a ago3CD_cor2_ox=("Phil.SRA.nosAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.aubvasAgo3CDrescue.ox.ovary.inserts")
 declare -a ago3CD_cor2_unox=("Phil.SRA.nosAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.aubvasAgo3CDrescue.unox.ovary.inserts")
 
-declare -a aubmut_cor3_ox=("Phil.SRA.AubMutsWW.ox.ovary.inserts" "Phil.SRA.aubMutant.ox.ovary.inserts")
+declare -a aubmut_cor3_ox=("Phil.SRA.aubMutsWW.ox.ovary.inserts" "Phil.SRA.aubMutant.ox.ovary.inserts")
 
 echo -e "`date` "+$ISO_8601"\tDraw paired abundance,sense_fraction of transposon piRNAs" >> $LOG
 OUTDIR9=${INDIR}/transposon_piRNA/paired_abundance_senseFraction
@@ -483,12 +483,12 @@ declare -a ago3cdmut_unox=("Phil.SRA.aubvasAgo3CDrescue.unox.ovary.inserts" "Phi
 declare -a ago3wtmut_unox=("Phil.SRA.aubvasAgo3WTrescue.unox.ovary.inserts" "Phil.SRA.ago3MutsWW.unox.ovary.inserts")
 declare -a ago3cdwt_unox=("Phil.SRA.aubvasAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.aubvasAgo3WTrescue.unox.ovary.inserts")
 
-declare -a aubcdmut_ox=("Phil.SRA.AubCDrescue.ox.ovary.inserts" "Phil.SRA.AubMutsWW.ox.ovary.inserts")
-declare -a aubwtmut_ox=("Phil.SRA.AubWTrescue.ox.ovary.inserts" "Phil.SRA.AubMutsWW.ox.ovary.inserts")
+declare -a aubcdmut_ox=("Phil.SRA.AubCDrescue.ox.ovary.inserts" "Phil.SRA.aubMutsWW.ox.ovary.inserts")
+declare -a aubwtmut_ox=("Phil.SRA.AubWTrescue.ox.ovary.inserts" "Phil.SRA.aubMutsWW.ox.ovary.inserts")
 declare -a aubcdwt_ox=("Phil.SRA.AubCDrescue.ox.ovary.inserts" "Phil.SRA.AubWTrescue.ox.ovary.inserts")
 
-declare -a aubcdmut_unox=("Phil.SRA.AubCDrescue.unox.ovary.inserts" "Phil.SRA.AubMutsWW.unox.ovary.inserts")
-declare -a aubwtmut_unox=("Phil.SRA.AubWTrescue.unox.ovary.inserts" "Phil.SRA.AubMutsWW.unox.ovary.inserts")
+declare -a aubcdmut_unox=("Phil.SRA.AubCDrescue.unox.ovary.inserts" "Phil.SRA.aubMutsWW.unox.ovary.inserts")
+declare -a aubwtmut_unox=("Phil.SRA.AubWTrescue.unox.ovary.inserts" "Phil.SRA.aubMutsWW.unox.ovary.inserts")
 declare -a aubcdwt_unox=("Phil.SRA.AubCDrescue.unox.ovary.inserts" "Phil.SRA.AubWTrescue.unox.ovary.inserts")
 
 declare -a aubmuthet_ox=("Phil.SRA.aubMutant.ox.ovary.inserts" "Phil.SRA.aubHets.ox.ovary.inserts")
