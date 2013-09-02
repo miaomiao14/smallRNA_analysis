@@ -568,7 +568,7 @@ declare -a ago3wtmut=("aubvasAgo3WTrescue" "ago3MutsWW")
 declare -a ago3cdwt=("aubvasAgo3CDrescue" "aubvasAgo3WTrescue")
 
 echo -e "`date` "+$ISO_8601"\tDraw paired transposon piRNA zscore(between smRNA and degradome) scatterplot..." >> $LOG
-OUTDIR10=${INDIR}/transposon_piRNA/paired_zscore_smRNA_vs_Degradome_scatterplot
+OUTDIR12=${INDIR}/transposon_piRNA/paired_zscore_smRNA_vs_Degradome_scatterplot
 [ ! -d $OUTDIR12 ] && mkdir -p ${OUTDIR12}
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.pairedZscore.smRNAvsDegradome ] && \
 paraFile=${OUTDIR12}/${RANDOM}.pairedZscore.para && \
