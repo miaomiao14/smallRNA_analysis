@@ -421,10 +421,10 @@ abg = merge (ab, group, by.x='transposon', by.y='transposon')
 
 totalpp=as.data.frame(lapply(subset(Z,Z$pairs==levels(L$pairs)[i]),'[',drop=TRUE))
 
-ztemp=formatC(totalpp[grep(sampleA,totalpp$gt,perl=TRUE),]$zscore,2)
+ztemp=formatC(totalpp[grep(sampleA,totalpp$gt,perl=TRUE),]$zscore,3)
 
 sampleA=paste(sampleA,"\n(genome-wide zscore: " ,ztemp ,  ")", sep="" )
-ztemp=formatC(totalpp[grep(sampleB,totalpp$gt,perl=TRUE),]$zscore,2)
+ztemp=formatC(totalpp[grep(sampleB,totalpp$gt,perl=TRUE),]$zscore,3)
 sampleB=paste(sampleB,"\n(genome-wide zscore: " , ztemp,  ")", sep="" )
 
 fcol = c('black','green','red')
