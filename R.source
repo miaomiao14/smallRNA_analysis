@@ -470,9 +470,9 @@ totalpp=as.data.frame(lapply(subset(Z,Z$pairs==levels(L$pairs)[i]),'[',drop=TRUE
 
 ztemp=formatC(totalpp[grep(sampleA,totalpp$gt,perl=TRUE),]$ppRatio1,2)
 
-sampleA=paste(sampleA,"\n(genome-wide zscore: " ,ztemp ,  ")", sep="" )
+sampleA=paste(sampleA,"\n(genome-wide ppRatio1: " ,ztemp ,  ")", sep="" )
 ztemp=formatC(totalpp[grep(sampleB,totalpp$gt,perl=TRUE),]$ppRatio1,2)
-sampleB=paste(sampleB,"\n(genome-wide zscore: " , ztemp,  ")", sep="" )
+sampleB=paste(sampleB,"\n(genome-wide ppRatio1: " , ztemp,  ")", sep="" )
 
 fcol = c('black','green','red')
 
