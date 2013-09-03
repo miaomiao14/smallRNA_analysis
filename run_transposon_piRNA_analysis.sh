@@ -562,10 +562,13 @@ STEP=$((STEP+1))
 
 
 #declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubMutsWW" "AubCDrescue" "AubWTrescue")
-declare -a GROUPGT=("ago3cdmut" "ago3wtmut" "ago3cdwt")
+declare -a GROUPGT=("ago3cdmut" "ago3wtmut" "ago3cdwt" "aubcdmut" "aubwtmut" "aubcdwt")
 declare -a ago3cdmut=("aubvasAgo3CDrescue" "ago3MutsWW")
 declare -a ago3wtmut=("aubvasAgo3WTrescue" "ago3MutsWW")
 declare -a ago3cdwt=("aubvasAgo3CDrescue" "aubvasAgo3WTrescue")
+declare -a aubcdmut=("AubCDrescue" "aubMutsWW")
+declare -a aubwtmut=("AubWTrescue" "aubMutsWW")
+declare -a aubcdwt=("AubCDrescue" "AubWTrescue")
 
 echo -e "`date` "+$ISO_8601"\tDraw paired transposon piRNA zscore(between smRNA and degradome) scatterplot..." >> $LOG
 OUTDIR12=${INDIR}/transposon_piRNA/paired_zscore_smRNA_vs_Degradome_scatterplot
