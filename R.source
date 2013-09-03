@@ -442,4 +442,56 @@ detach(abg)
 
 }
 dev.off ()
+
+
+
+pdfname=paste(outdir,'/',prefix, '.smRNA_vs_DEG_ppRatio1.scatterplot.pdf', sep='')
+pdf(pdfname,width=7,height=7)
+par(mar=c(5,5,4,1))
+par(mfcol = c(2, 2))
+
+for ( i in 1:length(levels(L$pairs)) )
+{
+ppname=levels(L$pairs)[i]
+pp=as.data.frame(lapply(subset(L,L$pairs==levels(L$pairs)[i]),'[',drop=TRUE))
+#assuming only two files 
+a=as.data.frame(lapply(subset(pp,as.character(rank)==1),'[',drop=TRUE))
+sampleA=levels( as.factor(a$gt) )[1]  #a long trip to get the gtname
+#sampleA=sub('\\.ovary\\.inserts','',sampleA,perl=TRUE)
+#sampleAa=sub('Phil\\.SRA\\.','',sampleA,perl=TRUE)
+b=as.data.frame(lapply(subset(pp,as.character(rank)==2),'[',drop=TRUE))
+sampleB=levels( as.factor(b$gt) )[1]
+#sampleB=sub('\\.ovary\\.inserts','',sampleB,perl=TRUE)
+#sampleBb=sub('Phil\\.SRA\\.','',sampleB,perl=TRUE)
+ab = merge (a,b,by.x='transposon', by.y='transposon')
+abg = merge (ab, group, by.x='transposon', by.y='transposon')
+
+totalpp=as.data.frame(lapply(subset(Z,Z$pairs==levels(L$pairs)[i]),'[',drop=TRUE))
+
+ztemp=formatC(totalpp[grep(sampleA,totalpp$gt,perl=TRUE),]$ppRatio1,2)
+
+sampleA=paste(sampleA,"\n(genome-wide zscore: " ,ztemp ,  ")", sep="" )
+ztemp=formatC(totalpp[grep(sampleB,totalpp$gt,perl=TRUE),]$ppRatio1,2)
+sampleB=paste(sampleB,"\n(genome-wide zscore: " , ztemp,  ")", sep="" )
+
+fcol = c('black','green','red')
+
+attach(abg)
+
+m=paste("ppRation between",ppname)
+plot (ppRatio1.x, ppRatio1.y,  axes=F, ylim=c(min(ppRatio1.x,ppRatio1.y,-1),max(ppRatio1.x,ppRatio1.y,10)), xlim=c(min(ppRatio1.x,ppRatio1.y,-1),max(ppRatio1.x,ppRatio1.y,10)),xaxt="n", yaxt="n", xlab="",ylab="", col='white',pch=21, bg=fcol[g], cex=1,  main=m) + abline (0,1,lty=2, col='darkgrey')
+axis(1,pos=c(0,0), tck=0.01,at=seq(0,max(ppRatio1.x,ppRatio1.y,5),roundUp( max(max(ppRatio1.x,ppRatio1.y,5)/10) )))
+axis(2,las=2, pos=c(0,0),tck=0.01,at=seq(0,max(ppRatio1.x,ppRatio1.y,5),roundUp( max(max(ppRatio1.x,ppRatio1.y,5)/10) )))
+mtext(side = 1, text = sampleA, line = 3)
+mtext(side = 2, text = sampleB, line = 2)
+#xlab= sampleA, ylab= sampleB,
+detach(abg)
+
+}
+dev.off ()
+
+
+
+
+
 }
