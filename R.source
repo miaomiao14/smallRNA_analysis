@@ -432,7 +432,7 @@ fcol = c('black','green','red')
 attach(abg)
 
 m=paste("Zscore between",ppname)
-plot (zscore.x, zscore.y,  axes=F, ylim=c(min(zscore.x,zscore.y,-1),max(zscore.x,zscore.y,10)), xlim=c(min(zscore.x,zscore.y,-1),max(zscore.x,zscore.y,10)),ann = FALSE, col='white',pch=21, bg=fcol[g], cex=1,  main=m) + abline (0,1,lty=2, col='darkgrey')
+plot (zscore.x, zscore.y,  axes=F, ylim=c(min(zscore.x,zscore.y,-1),max(zscore.x,zscore.y,10)), xlim=c(min(zscore.x,zscore.y,-1),max(zscore.x,zscore.y,10)),xaxt="n", yaxt="n", xlab="",ylab="", col='white',pch=21, bg=fcol[g], cex=1,  main=m) + abline (0,1,lty=2, col='darkgrey')
 axis(1,pos=c(0,0), tck=0.01,at=seq(0,max(zscore.x,zscore.y,5),roundUp( max(max(zscore.x,zscore.y,5)/10) )))
 axis(2,las=2, pos=c(0,0),tck=0.01,at=seq(0,max(zscore.x,zscore.y,5),roundUp( max(max(zscore.x,zscore.y,5)/10) )))
 mtext(side = 1, text = sampleA, line = 3)
