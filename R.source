@@ -470,15 +470,15 @@ totalpp=as.data.frame(lapply(subset(Z,Z$pairs==levels(L$pairs)[i]),'[',drop=TRUE
 
 ztemp=formatC(totalpp[grep(sampleA,totalpp$gt,perl=TRUE),]$ppRatio1,2)
 
-sampleA=paste(sampleA,"\n(genome-wide ppRatio1: " ,ztemp ,  ")", sep="" )
+sampleA=paste(sampleA,"\n(genome-wide ppRatio: " ,ztemp ,  ")", sep="" )
 ztemp=formatC(totalpp[grep(sampleB,totalpp$gt,perl=TRUE),]$ppRatio1,2)
-sampleB=paste(sampleB,"\n(genome-wide ppRatio1: " , ztemp,  ")", sep="" )
+sampleB=paste(sampleB,"\n(genome-wide ppRatio: " , ztemp,  ")", sep="" )
 
 fcol = c('black','green','red')
 
 attach(abg)
 
-m=paste("ppRation between",ppname)
+m=paste("ppRatio between",ppname)
 plot (ppRatio1.x, ppRatio1.y,  axes=F, ylim=c(0,1), xlim=c(0,1),xaxt="n", yaxt="n", xlab="",ylab="", col='white',pch=21, bg=fcol[g], cex=1,  main=m) + abline (0,1,lty=2, col='darkgrey')
 axis(1,pos=c(0,0), tck=0.01,at=seq(0,1,0.1))
 axis(2,las=2, pos=c(0,0),tck=0.01,at=seq(0,1,0.1))
