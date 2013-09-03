@@ -381,8 +381,8 @@ L$pairs=sub('Phil.DEG.*-Phil.SRA.*','DEG-SRA',L$pairs,perl=TRUE)
 L$pairs=as.factor(L$pairs)
 
 
-L$ppRatio1=as.numeric(sub('%','',L$ppRatio1,perl=TRUE))
-L$ppRatio2=as.numeric(sub('%','',L$ppRatio2,perl=TRUE))
+L$ppRatio1=as.numeric(sub('%','',L$ppRatio1,perl=TRUE))/100
+L$ppRatio2=as.numeric(sub('%','',L$ppRatio2,perl=TRUE))/100
 
 Z=read.table(tzfile,F)
 colnames(Z)=c("gt","pairs", "zscore", "p10", "ppReads1", "totalReads1", "ppRatio1", "ppReads2","totalReads2","ppRatio2","rank")
