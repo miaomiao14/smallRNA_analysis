@@ -394,8 +394,8 @@ Z$pairs=sub('Phil.SRA.*-Phil.SRA.*','SRA-SRA',Z$pairs,perl=TRUE)
 Z$pairs=sub('Phil.DEG.*-Phil.SRA.*','DEG-SRA',Z$pairs,perl=TRUE)
 Z$pairs=as.factor(Z$pairs)
 
-Z$ppRatio1=as.numeric(sub('%','',Z$ppRatio1,perl=TRUE))
-Z$ppRatio2=as.numeric(sub('%','',Z$ppRatio2,perl=TRUE))
+Z$ppRatio1=as.numeric(sub('%','',Z$ppRatio1,perl=TRUE))/100
+Z$ppRatio2=as.numeric(sub('%','',Z$ppRatio2,perl=TRUE))/100
 
 
 pdfname=paste(outdir,'/',prefix, '.smRNA_vs_DEG_zscore.scatterplot.pdf', sep='')
