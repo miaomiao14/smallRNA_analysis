@@ -400,7 +400,7 @@ Z$ppRatio2=as.numeric(sub('%','',Z$ppRatio2,perl=TRUE))
 
 pdfname=paste(outdir,'/',prefix, '.smRNA_vs_DEG_zscore.scatterplot.pdf', sep='')
 pdf(pdfname,width=7,height=7)
-par(mar(5,5,4,1))
+par(mar(c(5,5,4,1)))
 par(mfcol = c(2, 2))
 
 for ( i in 1:length(levels(L$pairs)) )
