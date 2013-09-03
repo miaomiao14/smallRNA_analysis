@@ -373,15 +373,35 @@ L$p10=as.numeric(L$p10)
 L$pairs=as.factor(L$pairs)
 file=basename(input)
 
+
+L$pairs=sub('Phil.DEG.*-Phil.DEG.*','DEG-DEG',L$pairs,perl=TRUE)
+L$pairs=sub('Phil.SRA.*-Phil.DEG.*','SRA-DEG',L$pairs,perl=TRUE)
+L$pairs=sub('Phil.SRA.*-Phil.SRA.*','SRA-SRA',L$pairs,perl=TRUE)
+L$pairs=sub('Phil.DEG.*-Phil.SRA.*','DEG-SRA',L$pairs,perl=TRUE)
+L$pairs=as.factor(L$pairs)
+
+
+L$ppRatio1=as.numeric(sub('%','',L$ppRatio1,perl=TRUE))
+L$ppRatio2=as.numeric(sub('%','',L$ppRatio2,perl=TRUE))
+
 Z=read.table(tzfile,F)
 colnames(Z)=c("gt","pairs", "zscore", "p10", "ppReads1", "totalReads1", "ppRatio1", "ppReads2","totalReads2","ppRatio2","rank")
 Z$zscore=as.numeric(Z$zscore)
 Z$p10=as.numeric(Z$p10)
+Z$pairs=sub('Phil.DEG.*-Phil.DEG.*','DEG-DEG',Z$pairs,perl=TRUE)
+Z$pairs=sub('Phil.SRA.*-Phil.DEG.*','SRA-DEG',Z$pairs,perl=TRUE)
+Z$pairs=sub('Phil.SRA.*-Phil.SRA.*','SRA-SRA',Z$pairs,perl=TRUE)
+Z$pairs=sub('Phil.DEG.*-Phil.SRA.*','DEG-SRA',Z$pairs,perl=TRUE)
 Z$pairs=as.factor(Z$pairs)
+
+Z$ppRatio1=as.numeric(sub('%','',Z$ppRatio1,perl=TRUE))
+Z$ppRatio2=as.numeric(sub('%','',Z$ppRatio2,perl=TRUE))
+
 
 pdfname=paste(outdir,'/',prefix, '.smRNA_vs_DEG_zscore.scatterplot.pdf', sep='')
 pdf(pdfname,width=7,height=7)
 par(mfcol = c(2, 2))
+
 for ( i in 1:length(levels(L$pairs)) )
 {
 ppname=levels(L$pairs)[i]
