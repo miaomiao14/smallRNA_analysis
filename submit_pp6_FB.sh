@@ -14,13 +14,13 @@ INDIR=$1 #this is the folder store all pipeline results outmost folders
 #"Phil.SRA.QinAgo3Hets.ox.ovary.inserts" "Phil.SRA.QinAgo3Hets.unox.ovary.inserts" \
 #"Phil.SRA.QinAgo3Muts.ox.ovary.inserts" "Phil.SRA.QinAgo3Muts.unox.ovary.inserts")
 
-t="Phil.Ago3IPuniq.aubMutant.unox.ovary.inserts"
+#t="Phil.Ago3IPuniq.aubMutant.unox.ovary.inserts"
 
 [ ! -d ${INDIR}/pp6_FB ] && mkdir -p ${INDIR}/pp6_FB
 #for t in ${TARGETS[@]}
 #do
-for i in `ls ${INDIR}/${t}/*.xkxh.transposon.mapper2.gz`
-#for i in `ls ${INDIR}/*.inserts/*.xkxh.transposon.mapper2.gz`
+#for i in `ls ${INDIR}/${t}/*.xkxh.transposon.mapper2.gz`
+for i in `ls ${INDIR}/*.inserts/*.xkxh.transposon.mapper2.gz`
 do 
 	#ln -s $i ${OUTDIR}
 	FILE=${i##*/}
