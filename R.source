@@ -539,7 +539,7 @@ plot (degrsq$M.x, degrsq$M.y, xlim=c(min(degrsq$M.x,degrsq$M.y),max(degrsq$M.x,d
 		main=paste("Log2 fold changes between ", colnames(countsTableDEG)[1], " and ",colnames(countsTableDEG)[2],"\n",
 					"Correlation Coefficient between ",levels(degrsq$dt.x), " and ",levels(degrsq$dt.y), " is ",degrsq_Mcor,sep="" ), 
 		cex.main=1) + 
-lines( par()$usr[2:3], c(par()$usr[1],par()$usr[4]),lty=2,lwd=2 )+
+#lines( par()$usr[2:3], c(par()$usr[1],par()$usr[4]),lty=2,lwd=2 )+
 abline(0,-1,lty=2,lwd=2,col="green" )+
 abline(lm(degrsq$M.y~degrsq$M.x)$coefficients[1],lm(degrsq$M.y~degrsq$M.x)$coefficients[2],lty=2,lwd=2,col="blue")+
 axis (1,pos=c(0,0), tck=0.01, lwd=3, at=seq(floor(min(degrsq$M.x,degrsq$M.y)),ceiling(max(degrsq$M.x,degrsq$M.y)),roundUp( ceiling(max(max(degrsq$M.x,degrsq$M.y)/10)) )), cex.axis=1) + 
@@ -581,7 +581,7 @@ plot (sradeg$M.x, sradeg$M.y, xlim=c(min(sradeg$M.x,sradeg$M.y),max(sradeg$M.x,s
 		main=paste("Log2 fold changes between ", colnames(countsTableDEG)[1], " and ",colnames(countsTableDEG)[2],"\n",
 					"Correlation Coefficient between ",levels(sradeg$dt.x), " and ",levels(sradeg$dt.y), " is ",sradeg_Mcor,sep="" ), 
 		cex.main=1) + 
-lines( par()$usr[1:2], par()$usr[3:4],lty=2,lwd=2 )+
+#lines( par()$usr[1:2], par()$usr[3:4],lty=2,lwd=2 )+
 abline(0,1,lty=2,lwd=2,col="green" )+
 abline(lm(sradeg$M.y~sradeg$M.x)$coefficients[1],lm(sradeg$M.y~sradeg$M.x)$coefficients[2],lty=2,lwd=2,col="blue")+
 axis (1,pos=c(0,0), tck=0.01, lwd=3, at=seq(floor(min(sradeg$M.x,sradeg$M.y)),ceiling(max(sradeg$M.x,sradeg$M.y)),roundUp( ceiling(max(max(sradeg$M.x,sradeg$M.y)/10)) )), cex.axis=1) + 
@@ -623,7 +623,7 @@ plot (srarsq$M.x, srarsq$M.y, xlim=c(min(srarsq$M.x,srarsq$M.y),max(srarsq$M.x,s
 		main=paste("Log2 fold changes between ", colnames(countsTableRSQ)[1], " and ",colnames(countsTableRSQ)[2],"\n",
 					"Correlation Coefficient between ",levels(srarsq$dt.x), " and ",levels(srarsq$dt.y), " is ",srarsq_Mcor,sep="" ), 
 		cex.main=1) + 
-lines( par()$usr[2:3], c(par()$usr[1],par()$usr[4]),lty=2,lwd=2 )+
+#lines( par()$usr[2:3], c(par()$usr[1],par()$usr[4]),lty=2,lwd=2 )+
 abline(0,-1,lty=2,lwd=2,col="green" )+
 abline(lm(srarsq$M.y~srarsq$M.x)$coefficients[1],lm(srarsq$M.y~srarsq$M.x)$coefficients[2],lty=2,lwd=2,col="blue")+
 axis (1,pos=c(0,0), tck=0.01, lwd=3, at=seq(floor(min(srarsq$M.x,srarsq$M.y)),ceiling(max(srarsq$M.x,srarsq$M.y)),roundUp( ceiling(max(max(srarsq$M.x,srarsq$M.y)/10)) )), cex.axis=1) + 
