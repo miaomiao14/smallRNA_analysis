@@ -556,11 +556,10 @@ pdf(pdfname)
 plot (degrsq$A.x, degrsq$A.y, xlim=c(min(degrsq$A.x,degrsq$A.y),max(degrsq$A.x,degrsq$A.y)),
 		ylim=c(min(degrsq$A.x,degrsq$A.y), max(degrsq$A.x,degrsq$A.y)),xlab="", ylab="", pch=21, 
 		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.0, ex.lab=1.5,
-		main=paste("Log2 fold changes between ", colnames(countsTableDEG)[1], " and ",colnames(countsTableDEG)[2],"\n",
+		main=paste("mean of Log2 expression ", colnames(countsTableDEG)[1], " and ",colnames(countsTableDEG)[2],"\n",
 					"Correlation Coefficient between ",levels(degrsq$dt.x), " and ",levels(degrsq$dt.y), " is ",degrsq_Acor,sep="" ), 
 		cex.main=1) + 
-lines( par()$usr[2:3], c(par()$usr[1],par()$usr[4]),lty=2,lwd=2 )+
-abline(0,-1,lty=2,lwd=2,col="green" )+
+
 abline(lm(degrsq$A.y~degrsq$A.x)$coefficients[1],lm(degrsq$A.y~degrsq$A.x)$coefficients[2],lty=2,lwd=2,col="blue")+
 axis (1,pos=c(0,0), tck=0.01, lwd=3, at=seq(floor(min(degrsq$A.x,degrsq$A.y)),ceiling(max(degrsq$A.x,degrsq$A.y)),roundUp( ceiling(max(max(degrsq$A.x,degrsq$A.y)/10)) )), cex.axis=1) + 
 axis (2, pos=c(0,0),tck=0.01, lwd=3, at=seq(floor(min(degrsq$A.x,degrsq$A.y)),ceiling(max(degrsq$A.x,degrsq$A.y)),roundUp( ceiling(max(max(degrsq$A.x,degrsq$A.y)/10)) )), cex.axis=1)+
@@ -599,11 +598,10 @@ pdf(pdfname)
 plot (sradeg$A.x, sradeg$A.y, xlim=c(min(sradeg$A.x,sradeg$A.y),max(sradeg$A.x,sradeg$A.y)),
 		ylim=c(min(sradeg$A.x,sradeg$A.y), max(sradeg$A.x,sradeg$A.y)),xlab="", ylab="", pch=21, 
 		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.0, ex.lab=1.5,
-		main=paste("Log2 fold changes between ", colnames(countsTableDEG)[1], " and ",colnames(countsTableDEG)[2],"\n",
+		main=paste("mean of Log2 expression ", colnames(countsTableDEG)[1], " and ",colnames(countsTableDEG)[2],"\n",
 					"Correlation Coefficient between ",levels(sradeg$dt.x), " and ",levels(sradeg$dt.y), " is ",sradeg_Acor,sep="" ), 
 		cex.main=1) + 
-lines( par()$usr[1:2], par()$usr[3:4],lty=2,lwd=2 )+
-abline(0,1,lty=2,lwd=2,col="green" )+
+
 abline(lm(sradeg$A.y~sradeg$A.x)$coefficients[1],lm(sradeg$A.y~sradeg$A.x)$coefficients[2],lty=2,lwd=2,col="blue")+
 axis (1,pos=c(0,0), tck=0.01, lwd=3, at=seq(floor(min(sradeg$A.x,sradeg$A.y)),ceiling(max(sradeg$A.x,sradeg$A.y)),roundUp( ceiling(max(max(sradeg$A.x,sradeg$A.y)/10)) )), cex.axis=1) + 
 axis (2, pos=c(0,0),tck=0.01, lwd=3, at=seq(floor(min(sradeg$A.x,sradeg$A.y)),ceiling(max(sradeg$A.x,sradeg$A.y)),roundUp( ceiling(max(max(sradeg$A.x,sradeg$A.y)/10)) )), cex.axis=1)+
@@ -642,11 +640,10 @@ pdf(pdfname)
 plot (srarsq$A.x, srarsq$A.y, xlim=c(min(srarsq$A.x,srarsq$A.y),max(srarsq$A.x,srarsq$A.y)),
 		ylim=c(min(srarsq$A.x,srarsq$A.y), max(srarsq$A.x,srarsq$A.y)),xlab="", ylab="", pch=21, 
 		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.0, ex.lab=1.5,
-		main=paste("Log2 fold changes between ", colnames(countsTableRSQ)[1], " and ",colnames(countsTableRSQ)[2],"\n",
+		main=paste("mean of Log2 expression between ", colnames(countsTableRSQ)[1], " and ",colnames(countsTableRSQ)[2],"\n",
 					"Correlation Coefficient between ",levels(srarsq$dt.x), " and ",levels(srarsq$dt.y), " is ",srarsq_Acor,sep="" ), 
 		cex.main=1) + 
-lines( par()$usr[2:3], c(par()$usr[1],par()$usr[4]),lty=2,lwd=2 )+
-abline(0,-1,lty=2,lwd=2,col="green" )+
+
 abline(lm(srarsq$A.y~srarsq$A.x)$coefficients[1],lm(srarsq$A.y~srarsq$A.x)$coefficients[2],lty=2,lwd=2,col="blue")+
 axis (1,pos=c(0,0), tck=0.01, lwd=3, at=seq(floor(min(srarsq$A.x,srarsq$A.y)),ceiling(max(srarsq$A.x,srarsq$A.y)),roundUp( ceiling(max(max(srarsq$A.x,srarsq$A.y)/10)) )), cex.axis=1) + 
 axis (2, pos=c(0,0),tck=0.01, lwd=3, at=seq(floor(min(srarsq$A.x,srarsq$A.y)),ceiling(max(srarsq$A.x,srarsq$A.y)),roundUp( ceiling(max(max(srarsq$A.x,srarsq$A.y)/10)) )), cex.axis=1)+
