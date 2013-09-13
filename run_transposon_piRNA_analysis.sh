@@ -597,3 +597,4 @@ done
 	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands && \
 	touch ${OUT}/.status.${STEP}.transposon_piRNA.pairedZscore.smRNAvsDegradome
 STEP=$((STEP+1))
+

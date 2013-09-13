@@ -490,6 +490,71 @@ detach(abg)
 }
 dev.off ()
 
+}
+
+
+plot_correlation <- function (sra, rsq,deg,outdir )
+{
+htv <- read.table(sra,F);
+type="SRA"
+colnames(htv) <- c("gt","feature","count");
+htvReshape=cast(htv,feature~gt) #cast from reshape
+
+countsTable <- htvReshape[-1] #remove the feature column
+genotypes=factor(colnames(htvReshape)[-1]) #create the conditions, type: factor
+featureName=unlist(htvReshape[1]) #get the row names from the first column
+rownames(countsTable)=featureName 
+countsTable=as.data.frame(countsTable)
+#remove 0,0 
+##Go through each row and determine if a value is zero
+row_sub = apply(countsTable, 1, function(row) all(row !=0 ))
+##Subset as usual
+countsTable=countsTable[row_sub,]
+
+countsTable=transform(countsTable,M=log2(countsTable[,1]/countsTable[,2]),A=log2(countsTable[,1]*countsTable[,2])/2,ann=rep("transposon",nrow(countsTable)),feature=rownames(countsTable),dt=rep(type,nrow(countsTable)))
+fcname=paste(colnames(countsTable)[1],"/",colnames(countsTable)[2],sep="") #I don't know if the fcname here is the same as the fcname in RSQ and DEG...
+countsTableSRA=countsTable
+
+
+
+countsTableRSQ=read.table(rsq,T)
+countsTableDEG=read.table(deg,T)
+
+countsTableRSQ=transform(countsTableRSQ,category1=ifelse(M<(-1),-1,0),category2=ifelse(M>1,1,0) )
+countsTableRSQ=transform(countsTableRSQ,category=category1 + category2 )
+
+
+degrsq=merge(countsTableDEG,countsTableRSQ,by="feature")
+
+pdf(pdfname)
+plot (degrsq$M.x, degrsq$M.y, 
+		xlim=c(min(degrsq$M.x,degrsq$M.y),max(degrsq$M.x,degrsq$M.y)),
+		ylim=c(min(degrsq$M.x,degrsq$M.y), max(degrsq$M.x,degrsq$M.y)),
+		xlab="", 
+		ylab="", 
+		pch=21, 
+		col="white", 
+		bg="red", 
+		xaxt='n', 
+		yaxt='n', 
+		frame=F, 
+		cex=2.0, 
+		main=paste("Log2 fold changes between ", levels(degrsq$dt.x), " and ",levels(degrsq$dt.y),sep="" ), 
+		ex.lab=1.5, 
+		cex.main=1
+) + lines( par()$usr[2:3], c(par()$usr[1],par()$usr[4]),lty=2,lwd=2 )+
+	
+	axis (1, tck=0.01, lwd=3, at=seq(floor(min(degrsq$M.x,degrsq$M.y)),ceiling(max(degrsq$M.x,degrsq$M.y)),roundUp( ceiling(max(max(degrsq$M.x,degrsq$M.y)/10)) )), cex.axis=1) + 
+	axis (2, tck=0.01, lwd=3, at=seq(floor(min(degrsq$M.x,degrsq$M.y)),ceiling(max(degrsq$M.x,degrsq$M.y)),roundUp( ceiling(max(max(degrsq$M.x,degrsq$M.y)/10)) )), cex.axis=1)+
+	mtext(side = 1, text = paste("M in ", levels(degrsq$dt.x)), line = 3)
+	mtext(side = 2, text = paste("M in ",levels(degrsq$dt.y)), line = 2)
+
+dev.off()
+
+
+roundUp( max(max(degrsq$M.x,degrsq$M.y)/10) )
+abline (0,1, lty=2, lwd=2) + 
+
 
 
 
