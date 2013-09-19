@@ -62,7 +62,7 @@ done
 #ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands 
 
 
-OUTDIR2=${INDIR}/smRNA/antisense_sense_sense_correlation_analysis
+OUTDIR2=${INDIR}/smRNA/total_sense_sense_correlation_analysis
 [ ! -d ${OUTDIR2} ] && mkdir -p ${OUTDIR2}
 [ ! -d ${OUTDIR2}/DEG_VS_RSQ/A ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/A
 [ ! -d ${OUTDIR2}/DEG_VS_RSQ/M ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/M
@@ -74,7 +74,7 @@ paraFile=${OUTDIR2}/RSQDEGSRA.correlationanalysis.${RANDOM}.para && \
 for g in "${GROUPGT[@]}"
 do
 	OUTDIR3=${OUTDIR2}/${g}
-	SRA=${INDIR}/smRNA/diff_nalysis/Phil.SRA.${g}.ox.nnc.normlized.AS.transposonpiRNAs.list.txt
+	SRA=${INDIR}/smRNA/diff_nalysis/Phil.SRA.${g}.ox.nnc.normlized.transposonpiRNAs.list.txt
 	RSQ=${INDIR}/rnaseq/diff_analysis2/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.out.DESeqNF.transposon.normalizedcounts.txt
 	DEG=${INDIR}/degradome/diff_analysis2/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.out.DESeqNF.transposon.normalizedcounts.txt
 	
