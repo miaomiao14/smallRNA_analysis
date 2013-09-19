@@ -531,7 +531,7 @@ degrsq=merge(countsTableDEG,countsTableRSQ,by="feature")
 #M
 degrsq_Mcor=cor(degrsq$M.x, degrsq$M.y)
 degrsq_Mcor=formatC(degrsq_Mcor,3)
-pdfname=paste(outdir,"/DEG_VS_RSQ/","degrsq_correlation_M.pdf",sep="")
+pdfname=paste(outdir,"/DEG_VS_RSQ/",gtgroup,"degrsq_correlation_M.pdf",sep="")
 pdf(pdfname)
 plot (degrsq$M.x, degrsq$M.y, xlim=c(min(degrsq$M.x,degrsq$M.y),max(degrsq$M.x,degrsq$M.y)),
 		ylim=c(min(degrsq$M.x,degrsq$M.y), max(degrsq$M.x,degrsq$M.y)),xlab="", ylab="", pch=21, 
@@ -551,7 +551,7 @@ dev.off()
 #A
 degrsq_Acor=cor(degrsq$A.x, degrsq$A.y)
 degrsq_Acor=formatC(degrsq_Acor,3)
-pdfname=paste(outdir,"/DEG_VS_RSQ/","degrsq_correlation_A.pdf",sep="")
+pdfname=paste(outdir,"/DEG_VS_RSQ/",gtgroup,"degrsq_correlation_A.pdf",sep="")
 pdf(pdfname)
 plot (degrsq$A.x, degrsq$A.y, xlim=c(min(degrsq$A.x,degrsq$A.y),max(degrsq$A.x,degrsq$A.y)),
 		ylim=c(min(degrsq$A.x,degrsq$A.y), max(degrsq$A.x,degrsq$A.y)),xlab="", ylab="", pch=21, 
@@ -573,7 +573,7 @@ dev.off()
 sradeg=merge(countsTableSRA,countsTableDEG,by="feature")
 sradeg_Mcor=cor(sradeg$M.x, sradeg$M.y)
 sradeg_Mcor=formatC(sradeg_Mcor,3)
-pdfname=paste(outdir,"/SRA_VS_DEG/","sradeg_correlation_M.pdf",sep="")
+pdfname=paste(outdir,"/SRA_VS_DEG/",gtgroup,"sradeg_correlation_M.pdf",sep="")
 pdf(pdfname)
 plot (sradeg$M.x, sradeg$M.y, xlim=c(min(sradeg$M.x,sradeg$M.y),max(sradeg$M.x,sradeg$M.y)),
 		ylim=c(min(sradeg$M.x,sradeg$M.y), max(sradeg$M.x,sradeg$M.y)),xlab="", ylab="", pch=21, 
@@ -593,7 +593,7 @@ dev.off()
 #A
 sradeg_Acor=cor(sradeg$A.x, sradeg$A.y)
 sradeg_Acor=formatC(sradeg_Acor,3)
-pdfname=paste(outdir,"/SRA_VS_DEG/","sradeg_correlation_A.pdf",sep="")
+pdfname=paste(outdir,"/SRA_VS_DEG/",gtgroup,"sradeg_correlation_A.pdf",sep="")
 pdf(pdfname)
 plot (sradeg$A.x, sradeg$A.y, xlim=c(min(sradeg$A.x,sradeg$A.y),max(sradeg$A.x,sradeg$A.y)),
 		ylim=c(min(sradeg$A.x,sradeg$A.y), max(sradeg$A.x,sradeg$A.y)),xlab="", ylab="", pch=21, 
@@ -615,7 +615,7 @@ dev.off()
 srarsq=merge(countsTableSRA,countsTableRSQ,by="feature")
 srarsq_Mcor=cor(srarsq$M.x, srarsq$M.y)
 srarsq_Mcor=formatC(srarsq_Mcor,3)
-pdfname=paste(outdir,"/SRA_VS_RSQ/","srarsq_correlation_M.pdf",sep="")
+pdfname=paste(outdir,"/SRA_VS_RSQ/",gtgroup,"srarsq_correlation_M.pdf",sep="")
 pdf(pdfname)
 plot (srarsq$M.x, srarsq$M.y, xlim=c(min(srarsq$M.x,srarsq$M.y),max(srarsq$M.x,srarsq$M.y)),
 		ylim=c(min(srarsq$M.x,srarsq$M.y), max(srarsq$M.x,srarsq$M.y)),xlab="", ylab="", pch=21, 
@@ -635,7 +635,7 @@ dev.off()
 #A
 srarsq_Acor=cor(srarsq$A.x, srarsq$A.y)
 srarsq_Acor=formatC(srarsq_Acor,3)
-pdfname=paste(outdir,"/SRA_VS_RSQ/","srarsq_correlation_A.pdf",sep="")
+pdfname=paste(outdir,"/SRA_VS_RSQ/",gtgroup,"srarsq_correlation_A.pdf",sep="")
 pdf(pdfname)
 plot (srarsq$A.x, srarsq$A.y, xlim=c(min(srarsq$A.x,srarsq$A.y),max(srarsq$A.x,srarsq$A.y)),
 		ylim=c(min(srarsq$A.x,srarsq$A.y), max(srarsq$A.x,srarsq$A.y)),xlab="", ylab="", pch=21, 
