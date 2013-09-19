@@ -64,9 +64,12 @@ done
 
 OUTDIR2=${INDIR}/smRNA/sense_correlation_analysis
 [ ! -d ${OUTDIR2} ] && mkdir -p ${OUTDIR2}
-[ ! -d ${INDIR}/smRNA/sense_correlation_analysis/DEG_VS_RSQ ] && mkdir -p ${INDIR}/smRNA/sense_correlation_analysis/DEG_VS_RSQ
-[ ! -d ${INDIR}/smRNA/sense_correlation_analysis/DEG_VS_RSQ ] && mkdir -p ${INDIR}/smRNA/sense_correlation_analysis/SRA_VS_DEG
-[ ! -d ${INDIR}/smRNA/sense_correlation_analysis/DEG_VS_RSQ ] && mkdir -p ${INDIR}/smRNA/sense_correlation_analysis/SRA_VS_RSQ
+[ ! -d ${INDIR}/smRNA/sense_correlation_analysis/DEG_VS_RSQ/A ] && mkdir -p ${INDIR}/smRNA/sense_correlation_analysis/DEG_VS_RSQ/A
+[ ! -d ${INDIR}/smRNA/sense_correlation_analysis/DEG_VS_RSQ/M ] && mkdir -p ${INDIR}/smRNA/sense_correlation_analysis/DEG_VS_RSQ/M
+[ ! -d ${INDIR}/smRNA/sense_correlation_analysis/SRA_VS_DEG/A ] && mkdir -p ${INDIR}/smRNA/sense_correlation_analysis/SRA_VS_DEG/A
+[ ! -d ${INDIR}/smRNA/sense_correlation_analysis/SRA_VS_DEG/M ] && mkdir -p ${INDIR}/smRNA/sense_correlation_analysis/SRA_VS_DEG/M
+[ ! -d ${INDIR}/smRNA/sense_correlation_analysis/SRA_VS_RSQ/A ] && mkdir -p ${INDIR}/smRNA/sense_correlation_analysis/SRA_VS_RSQ/A
+[ ! -d ${INDIR}/smRNA/sense_correlation_analysis/SRA_VS_RSQ/M ] && mkdir -p ${INDIR}/smRNA/sense_correlation_analysis/SRA_VS_RSQ/M
 paraFile=${OUTDIR2}/RSQDEGSRA.correlationanalysis.${RANDOM}.para && \
 for g in "${GROUPGT[@]}"
 do
