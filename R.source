@@ -550,7 +550,7 @@ dev.off()
 
 #A
 degrsq_Acor=cor(degrsq$A.x, degrsq$A.y)
-degrsq_Acor=formatC(degrsq_Mcor,3)
+degrsq_Acor=formatC(degrsq_Acor,3)
 pdfname=paste(outdir,"/",gtgroup,"degrsq_correlation_A.pdf",sep="")
 pdf(pdfname)
 plot (degrsq$A.x, degrsq$A.y, xlim=c(min(degrsq$A.x,degrsq$A.y),max(degrsq$A.x,degrsq$A.y)),
