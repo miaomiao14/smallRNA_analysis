@@ -48,6 +48,10 @@ do
 	done
 done
 
+#AubCDrescue	AubWTrescue	M	A	ann	feature	dt
+#27.0282039640781	2.55288883019029	3.40426302768467	3.05426222838908	transposon	FBgn0000004_17.6	RSQ
+#56.4066865337283	10.2115553207612	2.46566357234881	4.58496250072116	transposon	FBgn0000005_297	RSQ
+
 #OUTDIR2=${INDIR}/smRNA/correlation_analysis
 #[ ! -d ${OUTDIR2} ] && mkdir -p ${OUTDIR2}
 #paraFile=${OUTDIR2}/RSQDEGSRA.correlationanalysis.${RANDOM}.para && \
@@ -83,6 +87,44 @@ done
 ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands 
 
 
-#AubCDrescue	AubWTrescue	M	A	ann	feature	dt
-#27.0282039640781	2.55288883019029	3.40426302768467	3.05426222838908	transposon	FBgn0000004_17.6	RSQ
-#56.4066865337283	10.2115553207612	2.46566357234881	4.58496250072116	transposon	FBgn0000005_297	RSQ
+OUTDIR2=${INDIR}/smRNA/sense_sense_sense_correlation_analysis
+[ ! -d ${OUTDIR2} ] && mkdir -p ${OUTDIR2}
+[ ! -d ${OUTDIR2}/DEG_VS_RSQ/A ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/A
+[ ! -d ${OUTDIR2}/DEG_VS_RSQ/M ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/M
+[ ! -d ${OUTDIR2}/SRA_VS_DEG/A ] && mkdir -p ${OUTDIR2}/SRA_VS_DEG/A
+[ ! -d ${OUTDIR2}/SRA_VS_DEG/M ] && mkdir -p ${OUTDIR2}/SRA_VS_DEG/M
+[ ! -d ${OUTDIR2}/SRA_VS_RSQ/A ] && mkdir -p ${OUTDIR2}/SRA_VS_RSQ/A
+[ ! -d ${OUTDIR2}/SRA_VS_RSQ/M ] && mkdir -p ${OUTDIR2}/SRA_VS_RSQ/M
+paraFile=${OUTDIR2}/RSQDEGSRA.correlationanalysis.${RANDOM}.para && \
+for g in "${GROUPGT[@]}"
+do
+	OUTDIR3=${OUTDIR2}/${g}
+	SRA=${INDIR}/smRNA/diff_nalysis/Phil.SRA.${g}.ox.nnc.normlized.S.transposonpiRNAs.list.txt
+	RSQ=${INDIR}/rnaseq/diff_analysis2/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.out.DESeqNF.transposon.normalizedcounts.txt
+	DEG=${INDIR}/degradome/diff_analysis2/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.out.DESeqNF.transposon.normalizedcounts.txt
+	
+	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_correlation $SRA $RSQ $DEG ${g} ${OUTDIR2}" >>${paraFile}	
+done
+ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands 
+
+
+OUTDIR2=${INDIR}/smRNA/antisense_sense_sense_correlation_analysis
+[ ! -d ${OUTDIR2} ] && mkdir -p ${OUTDIR2}
+[ ! -d ${OUTDIR2}/DEG_VS_RSQ/A ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/A
+[ ! -d ${OUTDIR2}/DEG_VS_RSQ/M ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/M
+[ ! -d ${OUTDIR2}/SRA_VS_DEG/A ] && mkdir -p ${OUTDIR2}/SRA_VS_DEG/A
+[ ! -d ${OUTDIR2}/SRA_VS_DEG/M ] && mkdir -p ${OUTDIR2}/SRA_VS_DEG/M
+[ ! -d ${OUTDIR2}/SRA_VS_RSQ/A ] && mkdir -p ${OUTDIR2}/SRA_VS_RSQ/A
+[ ! -d ${OUTDIR2}/SRA_VS_RSQ/M ] && mkdir -p ${OUTDIR2}/SRA_VS_RSQ/M
+paraFile=${OUTDIR2}/RSQDEGSRA.correlationanalysis.${RANDOM}.para && \
+for g in "${GROUPGT[@]}"
+do
+	OUTDIR3=${OUTDIR2}/${g}
+	SRA=${INDIR}/smRNA/diff_nalysis/Phil.SRA.${g}.ox.nnc.normlized.AS.transposonpiRNAs.list.txt
+	RSQ=${INDIR}/rnaseq/diff_analysis2/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.out.DESeqNF.transposon.normalizedcounts.txt
+	DEG=${INDIR}/degradome/diff_analysis2/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.out.DESeqNF.transposon.normalizedcounts.txt
+	
+	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_correlation $SRA $RSQ $DEG ${g} ${OUTDIR2}" >>${paraFile}	
+done
+ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands 
+

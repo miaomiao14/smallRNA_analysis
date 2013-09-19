@@ -535,7 +535,7 @@ pdfname=paste(outdir,"/DEG_VS_RSQ/M/",gtgroup,"degrsq_correlation_M.pdf",sep="")
 pdf(pdfname)
 plot (degrsq$M.x, degrsq$M.y, xlim=c(min(degrsq$M.x,degrsq$M.y),max(degrsq$M.x,degrsq$M.y)),
 		ylim=c(min(degrsq$M.x,degrsq$M.y), max(degrsq$M.x,degrsq$M.y)),xlab="", ylab="", pch=21, 
-		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.0, ex.lab=1.5,
+		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.5, ex.lab=1.5,
 		main=paste("Log2 fold changes between ", colnames(countsTableDEG)[1], " and ",colnames(countsTableDEG)[2],"\n",
 					"Correlation Coefficient between ",levels(degrsq$dt.x), " and ",levels(degrsq$dt.y), " is ",degrsq_Mcor,sep="" ), 
 		cex.main=1) + 
@@ -555,7 +555,7 @@ pdfname=paste(outdir,"/DEG_VS_RSQ/A/",gtgroup,"degrsq_correlation_A.pdf",sep="")
 pdf(pdfname)
 plot (degrsq$A.x, degrsq$A.y, xlim=c(min(degrsq$A.x,degrsq$A.y),max(degrsq$A.x,degrsq$A.y)),
 		ylim=c(min(degrsq$A.x,degrsq$A.y), max(degrsq$A.x,degrsq$A.y)),xlab="", ylab="", pch=21, 
-		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.0, ex.lab=1.5,
+		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.5, ex.lab=1.5,
 		main=paste("mean of Log2 expression ", colnames(countsTableDEG)[1], " and ",colnames(countsTableDEG)[2],"\n",
 					"Correlation Coefficient between ",levels(degrsq$dt.x), " and ",levels(degrsq$dt.y), " is ",degrsq_Acor,sep="" ), 
 		cex.main=1) + 
@@ -577,7 +577,7 @@ pdfname=paste(outdir,"/SRA_VS_DEG/M/",gtgroup,"sradeg_correlation_M.pdf",sep="")
 pdf(pdfname)
 plot (sradeg$M.x, sradeg$M.y, xlim=c(min(sradeg$M.x,sradeg$M.y),max(sradeg$M.x,sradeg$M.y)),
 		ylim=c(min(sradeg$M.x,sradeg$M.y), max(sradeg$M.x,sradeg$M.y)),xlab="", ylab="", pch=21, 
-		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.0, ex.lab=1.5,
+		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.5, ex.lab=1.5,
 		main=paste("Log2 fold changes between ", colnames(countsTableDEG)[1], " and ",colnames(countsTableDEG)[2],"\n",
 					"Correlation Coefficient between ",levels(sradeg$dt.x), " and ",levels(sradeg$dt.y), " is ",sradeg_Mcor,sep="" ), 
 		cex.main=1) + 
@@ -597,7 +597,7 @@ pdfname=paste(outdir,"/SRA_VS_DEG/A/",gtgroup,"sradeg_correlation_A.pdf",sep="")
 pdf(pdfname)
 plot (sradeg$A.x, sradeg$A.y, xlim=c(min(sradeg$A.x,sradeg$A.y),max(sradeg$A.x,sradeg$A.y)),
 		ylim=c(min(sradeg$A.x,sradeg$A.y), max(sradeg$A.x,sradeg$A.y)),xlab="", ylab="", pch=21, 
-		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.0, ex.lab=1.5,
+		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.5, ex.lab=1.5,
 		main=paste("mean of Log2 expression ", colnames(countsTableDEG)[1], " and ",colnames(countsTableDEG)[2],"\n",
 					"Correlation Coefficient between ",levels(sradeg$dt.x), " and ",levels(sradeg$dt.y), " is ",sradeg_Acor,sep="" ), 
 		cex.main=1) + 
@@ -619,7 +619,7 @@ pdfname=paste(outdir,"/SRA_VS_RSQ/M/",gtgroup,"srarsq_correlation_M.pdf",sep="")
 pdf(pdfname)
 plot (srarsq$M.x, srarsq$M.y, xlim=c(min(srarsq$M.x,srarsq$M.y),max(srarsq$M.x,srarsq$M.y)),
 		ylim=c(min(srarsq$M.x,srarsq$M.y), max(srarsq$M.x,srarsq$M.y)),xlab="", ylab="", pch=21, 
-		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.0, ex.lab=1.5,
+		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.5, ex.lab=1.5,
 		main=paste("Log2 fold changes between ", colnames(countsTableRSQ)[1], " and ",colnames(countsTableRSQ)[2],"\n",
 					"Correlation Coefficient between ",levels(srarsq$dt.x), " and ",levels(srarsq$dt.y), " is ",srarsq_Mcor,sep="" ), 
 		cex.main=1) + 
@@ -639,7 +639,7 @@ pdfname=paste(outdir,"/SRA_VS_RSQ/A/",gtgroup,"srarsq_correlation_A.pdf",sep="")
 pdf(pdfname)
 plot (srarsq$A.x, srarsq$A.y, xlim=c(min(srarsq$A.x,srarsq$A.y),max(srarsq$A.x,srarsq$A.y)),
 		ylim=c(min(srarsq$A.x,srarsq$A.y), max(srarsq$A.x,srarsq$A.y)),xlab="", ylab="", pch=21, 
-		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.0, ex.lab=1.5,
+		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.5, ex.lab=1.5,
 		main=paste("mean of Log2 expression between ", colnames(countsTableRSQ)[1], " and ",colnames(countsTableRSQ)[2],"\n",
 					"Correlation Coefficient between ",levels(srarsq$dt.x), " and ",levels(srarsq$dt.y), " is ",srarsq_Acor,sep="" ), 
 		cex.main=1) + 
