@@ -33,10 +33,10 @@ declare -a GROUPGT=("AubIP_ago3cdwt_ox" "AubIP_ago3cdwt_unox" \
 "AubIP_ago3cdw1_ox" "AubIP_ago3cdw1_unox" \
 )
 
-declare -a AubIP_aago3cdwt_ox=("Phil.AubIP.aubvasAgo3CDrescue.ox.ovary.inserts" "Phil.AubIP.aubvasAgo3WTrescue.ox.ovary.inserts")
+declare -a AubIP_ago3cdwt_ox=("Phil.AubIP.aubvasAgo3CDrescue.ox.ovary.inserts" "Phil.AubIP.aubvasAgo3WTrescue.ox.ovary.inserts")
 declare -a AubIP_ago3cdwt_unox=("Phil.AubIP.aubvasAgo3CDrescue.unox.ovary.inserts" "Phil.AubIP.aubvasAgo3WTrescue.unox.ovary.inserts")
 
-declare -a AubIP_aago3cdw1_ox=("Phil.AubIP.aubvasAgo3CDrescue.ox.ovary.inserts" "Phil.AubIP.w1.ox.ovary.inserts")
+declare -a AubIP_ago3cdw1_ox=("Phil.AubIP.aubvasAgo3CDrescue.ox.ovary.inserts" "Phil.AubIP.w1.ox.ovary.inserts")
 declare -a AubIP_ago3cdw1_unox=("Phil.AubIP.aubvasAgo3CDrescue.unox.ovary.inserts" "Phil.AubIP.w1.unox.ovary.inserts")
 
 echo -e "`date` "+$ISO_8601"\tDraw paired transposon piRNA zscore scatterplot..." >> $LOG
