@@ -78,30 +78,40 @@ STEP=$((STEP+1))
 #declare -a gt_cor2_ox=("nosAgo3CDrescue.ox" "aubvasAgo3CDrescue.ox")
 #declare -a gt_cor2_unox=("nosAgo3CDrescue.unox" "aubvasAgo3CDrescue.unox")
 
-declare -a GROUPGT=("armi_g1_ox" "armi_g1_unox" \
+#declare -a GROUPGT=("armi_g1_ox" "armi_g1_unox" \
 "armi_g2_ox" "armi_g2_unox" \
 "armi_g3_ox" "armi_g3_unox" \
 "armi_wtk729a_ox" "armi_wtk729a_unox" \
 "armi_wtrescue_cor1" "armi_k729arescue_cor1" \
 "armi_armi72_1Hets_cor1" "armi_wtinhets_cor1" \
-)
+#)
+#
+#declare -a armi_g1_ox=("Phil.SRA.nosGal4UASPArmiWTrescue.ox.ovary.inserts" "Phil.SRA.UASPArmiWTinHets.ox.ovary.inserts")
+#declare -a armi_g1_unox=("Phil.SRA.nosGal4UASPArmiWTrescue.unox.ovary.inserts" "Phil.SRA.UASPArmiWTinHets.unox.ovary.inserts")
+#
+#declare -a armi_g2_ox=("Phil.SRA.nosGal4UASPArmiK729Arescue.ox.ovary.inserts" "Phil.SRA.UASPArmiWTinHets.ox.ovary.inserts")
+#declare -a armi_g2_unox=("Phil.SRA.nosGal4UASPArmiK729Arescue.unox.ovary.inserts" "Phil.SRA.UASPArmiWTinHets.unox.ovary.inserts")
+#
+#declare -a armi_g3_ox=("Phil.SRA.armi72_1Hets.ox.ovary.inserts" "Phil.SRA.UASPArmiWTinHets.ox.ovary.inserts")
+#declare -a armi_g3_unox=("Phil.SRA.armi72_1Hets.unox.ovary.inserts" "Phil.SRA.UASPArmiWTinHets.unox.ovary.inserts")
+#
+#declare -a armi_wtk729a_ox=("Phil.SRA.nosGal4UASPArmiWTrescue.ox.ovary.inserts" "Phil.SRA.nosGal4UASPArmiK729Arescue.ox.ovary.inserts")
+#declare -a armi_wtk729a_unox=("Phil.SRA.nosGal4UASPArmiWTrescue.unox.ovary.inserts" "Phil.SRA.nosGal4UASPArmiK729Arescue.unox.ovary.inserts")
+#
+#declare -a armi_wtrescue_cor1=("Phil.SRA.nosGal4UASPArmiWTrescue.ox.ovary.inserts" "Phil.SRA.nosGal4UASPArmiWTrescue.unox.ovary.inserts")
+#declare -a armi_k729arescue_cor1=("Phil.SRA.nosGal4UASPArmiK729Arescue.ox.ovary.inserts" "Phil.SRA.nosGal4UASPArmiK729Arescue.unox.ovary.inserts")
+#declare -a armi_armi72_1Hets_cor1=("Phil.SRA.armi72_1Hets.ox.ovary.inserts" "Phil.SRA.armi72_1Hets.unox.ovary.inserts")
+#declare -a armi_wtinhets_cor1=("Phil.SRA.UASPArmiWTinHets.ox.ovary.inserts" "Phil.SRA.UASPArmiWTinHets.unox.ovary.inserts")
 
-declare -a armi_g1_ox=("Phil.SRA.nosGal4UASPArmiWTrescue.ox.ovary.inserts" "Phil.SRA.UASPArmiWTinHets.ox.ovary.inserts")
-declare -a armi_g1_unox=("Phil.SRA.nosGal4UASPArmiWTrescue.unox.ovary.inserts" "Phil.SRA.UASPArmiWTinHets.unox.ovary.inserts")
 
-declare -a armi_g2_ox=("Phil.SRA.nosGal4UASPArmiK729Arescue.ox.ovary.inserts" "Phil.SRA.UASPArmiWTinHets.ox.ovary.inserts")
-declare -a armi_g2_unox=("Phil.SRA.nosGal4UASPArmiK729Arescue.unox.ovary.inserts" "Phil.SRA.UASPArmiWTinHets.unox.ovary.inserts")
-
-declare -a armi_g3_ox=("Phil.SRA.armi72_1Hets.ox.ovary.inserts" "Phil.SRA.UASPArmiWTinHets.ox.ovary.inserts")
-declare -a armi_g3_unox=("Phil.SRA.armi72_1Hets.unox.ovary.inserts" "Phil.SRA.UASPArmiWTinHets.unox.ovary.inserts")
-
-declare -a armi_wtk729a_ox=("Phil.SRA.nosGal4UASPArmiWTrescue.ox.ovary.inserts" "Phil.SRA.nosGal4UASPArmiK729Arescue.ox.ovary.inserts")
-declare -a armi_wtk729a_unox=("Phil.SRA.nosGal4UASPArmiWTrescue.unox.ovary.inserts" "Phil.SRA.nosGal4UASPArmiK729Arescue.unox.ovary.inserts")
-
-declare -a armi_wtrescue_cor1=("Phil.SRA.nosGal4UASPArmiWTrescue.ox.ovary.inserts" "Phil.SRA.nosGal4UASPArmiWTrescue.unox.ovary.inserts")
-declare -a armi_k729arescue_cor1=("Phil.SRA.nosGal4UASPArmiK729Arescue.ox.ovary.inserts" "Phil.SRA.nosGal4UASPArmiK729Arescue.unox.ovary.inserts")
-declare -a armi_armi72_1Hets_cor1=("Phil.SRA.armi72_1Hets.ox.ovary.inserts" "Phil.SRA.armi72_1Hets.unox.ovary.inserts")
-declare -a armi_wtinhets_cor1=("Phil.SRA.UASPArmiWTinHets.ox.ovary.inserts" "Phil.SRA.UASPArmiWTinHets.unox.ovary.inserts")
+declare -a GROUPGT=("wtk729a_ox" "wthets_ox" "wtmut_ox" "k729amut_ox" "k729ahets_ox" "k729aPNK_unox" "acthets_ox" )
+declare -a wtk729a_ox=("Phil.SRA.nosactArmiWTrescue72D2.ox.ovary.inserts" "Phil.SRA.nosactArmiK729Arescue72D2.ox.ovary.inserts")
+declare -a wthets_ox=("Phil.SRA.nosactArmiWTrescue72D2.ox.ovary.inserts" "Phil.SRA.nosactinarmiD2Hets.ox.ovary.inserts")
+declare -a wtmut_ox=("Phil.SRA.nosactArmiWTrescue72D2.ox.ovary.inserts" "Phil.SRA.ArmiWTin72D2.ox.ovary.inserts")
+declare -a k729amut_ox=("Phil.SRA.nosactArmiK729Arescue72D2.ox.ovary.inserts" "Phil.SRA.ArmiWTin72D2.ox.ovary.inserts")
+declare -a k729ahets_ox=("Phil.SRA.nosactArmiK729Arescue72D2.ox.ovary.inserts" "Phil.SRA.nosactinarmiD2Hets.ox.ovary.inserts")
+declare -a k729aPNK_unox=("Phil.SRA.nosactArmiK729Arescue72D2.unox.ovary.inserts" "Phil.SRA.nosactArmiK729Arescue72D2_PNK.unox.ovary.inserts")
+declare -a acthets_ox=("Phil.SRA.armi72_1Hets.ox.ovary.inserts" "Phil.SRA.nosactinarmiD2Hets.ox.ovary.inserts")
 
 
 echo -e "`date` "+$ISO_8601"\tDraw paired length distribution of transposon piRNAs" >> $LOG
@@ -323,7 +333,7 @@ STEP=$((STEP+1))
 
 
 
-
+touch ${OUT}/.status.${STEP}.transposon_piRNA.pairedZscore
 echo -e "`date` "+$ISO_8601"\tDraw paired transposon piRNA zscore scatterplot..." >> $LOG
 OUTDIR10=${INDIR}/transposon_piRNA/paired_zscore_scatterplot
 [ ! -d $OUTDIR10 ] && mkdir -p ${OUTDIR10}
@@ -352,9 +362,9 @@ done
 STEP=$((STEP+1))
 
 
-echo -e "`date` "+$ISO_8601"\tDraw phasing analysis..." >> $LOG
-OUTDIR11=${INDIR}/transposon_piRNA/paired_zscore_scatterplot
-[ ! -d $OUTDIR11 ] && mkdir -p ${OUTDIR11}
-[ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.phasing ] && \
-paraFile=${OUTDIR11}/${RANDOM}.piRNAphasing.para && \
+#echo -e "`date` "+$ISO_8601"\tDraw phasing analysis..." >> $LOG
+#OUTDIR11=${INDIR}/transposon_piRNA/paired_zscore_scatterplot
+#[ ! -d $OUTDIR11 ] && mkdir -p ${OUTDIR11}
+#[ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.phasing ] && \
+#paraFile=${OUTDIR11}/${RANDOM}.piRNAphasing.para && \
 
