@@ -104,7 +104,7 @@ STEP=$((STEP+1))
 #declare -a armi_wtinhets_cor1=("Phil.SRA.UASPArmiWTinHets.ox.ovary.inserts" "Phil.SRA.UASPArmiWTinHets.unox.ovary.inserts")
 
 
-declare -a GROUPGT=("wtk729a_ox" "wthets_ox" "wtmut_ox" "k729amut_ox" "k729ahets_ox" "k729aPNK_unox" "acthets_ox" )
+declare -a GROUPGT=("wtk729a_ox" "wthets_ox" "wtmut_ox" "k729amut_ox" "k729ahets_ox" "k729aPNK_unox" "acthets_ox" "muthets_ox" "1vs2copy_ox")
 declare -a wtk729a_ox=("Phil.SRA.nosactArmiWTrescue72D2.ox.ovary.inserts" "Phil.SRA.nosactArmiK729Arescue72D2.ox.ovary.inserts")
 declare -a wthets_ox=("Phil.SRA.nosactArmiWTrescue72D2.ox.ovary.inserts" "Phil.SRA.nosactinarmiD2Hets.ox.ovary.inserts")
 declare -a wtmut_ox=("Phil.SRA.nosactArmiWTrescue72D2.ox.ovary.inserts" "Phil.SRA.ArmiWTin72D2.ox.ovary.inserts")
@@ -112,7 +112,8 @@ declare -a k729amut_ox=("Phil.SRA.nosactArmiK729Arescue72D2.ox.ovary.inserts" "P
 declare -a k729ahets_ox=("Phil.SRA.nosactArmiK729Arescue72D2.ox.ovary.inserts" "Phil.SRA.nosactinarmiD2Hets.ox.ovary.inserts")
 declare -a k729aPNK_unox=("Phil.SRA.nosactArmiK729Arescue72D2.unox.ovary.inserts" "Phil.SRA.nosactArmiK729Arescue72D2_PNK.unox.ovary.inserts")
 declare -a acthets_ox=("Phil.SRA.armi72_1Hets.ox.ovary.inserts" "Phil.SRA.nosactinarmiD2Hets.ox.ovary.inserts")
-
+declare -a muthets_ox=("Phil.SRA.ArmiWTin72D2.ox.ovary.inserts" "Phil.SRA.nosactinarmiD2Hets.ox.ovary.inserts")
+declare -a 1vs2copy_ox=("Phil.SRA.nosactinarmiD2Hets.ox.ovary.inserts" "Phil.SRA.UASPArmiWTinHets.ox.ovary.inserts")
 
 echo -e "`date` "+$ISO_8601"\tDraw paired length distribution of transposon piRNAs" >> $LOG
 OUTDIR3=${INDIR}/transposon_piRNA/paired_lendis
