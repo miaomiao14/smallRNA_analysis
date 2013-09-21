@@ -237,6 +237,13 @@ abg$piRNA_sense.y=abg$piRNA_sense.y/abg$nf.y*1000000
 abg$piRNA_antisense.x=abg$piRNA_antisense.x/abg$nf.x*1000000
 abg$piRNA_antisense.y=abg$piRNA_antisense.y/abg$nf.y*1000000
 
+outdf=subset(abg,select=c(piRNA.x,piRNA_sense.x,piRNA_antisense.x,piRNA_sense_fraction.x,piRNA.y,piRNA_sense.y,piRNA_antisense.y,piRNA_sense_fraction.y,transposon,g))
+outfilename=paste(outdir,"/",file,"normalized.abundance.txt",sep="")
+write.table(abg,outfilename,append = FALSE, quote = FALSE, sep = "\t",
+			eol = "\n", na = "NA", dec = ".", row.names = FALSE,
+			col.names = TRUE, qmethod = c("escape", "double"),
+			fileEncoding = "")
+
 #abundance jitterplot
 test=paste(file,"jitterplot")
 test
@@ -290,6 +297,22 @@ plot (piRNA.x, piRNA.y, frame=F, axes=F, ylim=c(0,max(piRNA.x,piRNA.y,8)), xlim=
 axis(1,pos=c(0,0), tck=0.01,at=seq(0,max(piRNA.x,piRNA.y,8),roundUp(max(max(piRNA.x,piRNA.y,8)/5))))
 axis(2, las=2,pos=c(0,0),tck=0.01,at=seq(0,max(piRNA.x,piRNA.y,8),roundUp(max(max(piRNA.x,piRNA.y,8)/5))))
 dev.off ()
+
+
+#abundance scatterplot in log2 scale
+test=paste(file,"abundance scatterplot")
+test
+attach(abg)
+fcol = c('black','green','red')
+pdfname=paste(outdir,'/','normalized_piRNA_abundance_',file , '.scatterplot.log2.pdf', sep='')
+pdf(pdfname,width=7,height=7)
+lb=min(log2(piRNA.x),log2(piRNA.y))
+ub=max(log2(piRNA.x),log2(piRNA.y))
+plot (log2(piRNA.x), log2(piRNA.y), frame=F, axes=F, ylim=c(0,max(ub,8)), xlim=c(0,max(ub,8)), col='white',pch=21, bg=fcol[g], cex=1.5, xlab= paste(sampleA,"(ppm)",sep=" "), ylab= paste(sampleB,"(ppm)",sep=" "), main=paste('normalized piRNA abundance( ',nftype, ' )by trn family',sep="")) + abline (0,1,lty=2, col='darkgrey')
+axis(1,pos=c(0,0), tck=0.01,at=seq(0,max(ub,8),roundUp(max(max(ub,8)/5))))
+axis(2, las=2,pos=c(0,0),tck=0.01,at=seq(0,max(ub,8),roundUp(max(max(ub,8)/5))))
+dev.off ()
+
 
 #clickme
 #library(clickme)

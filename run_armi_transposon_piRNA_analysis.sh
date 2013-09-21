@@ -338,7 +338,7 @@ STEP=$((STEP+1))
 
 
 
-touch ${OUT}/.status.${STEP}.transposon_piRNA.pairedZscore
+#touch ${OUT}/.status.${STEP}.transposon_piRNA.pairedZscore
 echo -e "`date` "+$ISO_8601"\tDraw paired transposon piRNA zscore scatterplot..." >> $LOG
 OUTDIR10=${INDIR}/transposon_piRNA/paired_zscore_scatterplot
 [ ! -d $OUTDIR10 ] && mkdir -p ${OUTDIR10}
