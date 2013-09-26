@@ -9,6 +9,14 @@ plot.MA <- function (input,nftype,type)
 	NFcountsTable=input
 	#add M and A columns by transform
 	normalizedCountsTable=transform(NFcountsTable,M=log2(NFcountsTable[,1]/NFcountsTable[,2]),A=log2(NFcountsTable[,1]*NFcountsTable[,2])/2,feature=rownames(NFcountsTable),dt=rep(type,nrow(NFcountsTable)))
+
+	#keep the intermediate results
+	outfilename<- paste(dir,"/",filename,".",nftype,".normalizedcounts.txt",sep="")
+	write.table(normalizedCountsTable, file = outfilename, append = FALSE, quote = FALSE, sep = "\t",
+			eol = "\n", na = "NA", dec = ".", row.names = FALSE,
+			col.names = TRUE, qmethod = c("escape", "double"),
+			fileEncoding = "")
+	
 	MA <- new("MAList")
 	MA$M = normalizedCountsTable$M
 	MA$A = normalizedCountsTable$A
@@ -22,12 +30,7 @@ plot.MA <- function (input,nftype,type)
 	abline(h=c(-1,1),col="darkgrey",lty=2)
 	dev.off()
 	
-	#keep the intermediate results
-	outfilename<- paste(dir,"/",filename,".",nftype,".normalizedcounts.txt",sep="")
-	write.table(normalizedCountsTable, file = outfilename, append = FALSE, quote = FALSE, sep = "\t",
-			eol = "\n", na = "NA", dec = ".", row.names = FALSE,
-			col.names = TRUE, qmethod = c("escape", "double"),
-			fileEncoding = "")
+
 	
 }
 
