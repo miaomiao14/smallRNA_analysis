@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 library(reshape)
-library(DESeq)
-library(edgeR)
+#library(DESeq)
+#library(edgeR)
 
 
 plot.MA <- function (input,nftype,type)
@@ -60,10 +60,10 @@ plot.MA(countsTable,"nncNF",type)
 
 ###use the sizeFactors from DESeq
 
-cds<-newCountDataSet (countsTable,genotypes)
-cds<-estimateSizeFactors(cds)
-lib.size=sizeFactors(cds)
-normalizedCountsTable1=sweep( countsTable, 2, lib.size, '/' )
-plot.MA(normalizedCountsTable1,"DESeqNF",type)
+## cds<-newCountDataSet (countsTable,genotypes)
+## cds<-estimateSizeFactors(cds)
+## lib.size=sizeFactors(cds)
+## normalizedCountsTable1=sweep( countsTable, 2, lib.size, '/' )
+## plot.MA(normalizedCountsTable1,"DESeqNF",type)
 
 
