@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 library(reshape)
-#library(DESeq)
-#library(edgeR)
+library(DESeq)
+library(edgeR)
 
 
 plot.MA <- function (input,nftype,type)
