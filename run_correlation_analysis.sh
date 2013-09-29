@@ -65,7 +65,7 @@ do
 	OUTDIR3=${OUTDIR2}/${g}
 	SRA=${INDIR}/smRNA/diff_nalysis/Phil.SRA.${g}.ox.nnc.normlized.transposonpiRNAs.list.txt
 	RSQ=${INDIR}/rnaseq/diff_analysis2/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.out.DESeqNF.transposon.normalizedcounts.txt
-	DEG=${INDIR}/degradome/diff_analysis2/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.out.DESeqNF.transposon.normalizedcounts.txt
+	DEG=${INDIR}/degradome/diff_analysis_S_AS/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.S.out.DESeqNF.transposon.normalizedcounts.txt
 	
 	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_correlation $SRA $RSQ $DEG ${g} ${OUTDIR2}" >>${paraFile}	
 done
@@ -86,7 +86,7 @@ do
 	OUTDIR3=${OUTDIR2}/${g}
 	SRA=${INDIR}/smRNA/diff_nalysis/Phil.SRA.${g}.ox.nnc.normlized.S.transposonpiRNAs.list.txt
 	RSQ=${INDIR}/rnaseq/diff_analysis2/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.out.DESeqNF.transposon.normalizedcounts.txt
-	DEG=${INDIR}/degradome/diff_analysis2/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.out.DESeqNF.transposon.normalizedcounts.txt
+	DEG=${INDIR}/degradome/diff_analysis_S_AS/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.S.out.DESeqNF.transposon.normalizedcounts.txt
 	
 	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_correlation $SRA $RSQ $DEG ${g} ${OUTDIR2}" >>${paraFile}	
 done
@@ -107,7 +107,7 @@ do
 	OUTDIR3=${OUTDIR2}/${g}
 	SRA=${INDIR}/smRNA/diff_nalysis/Phil.SRA.${g}.ox.nnc.normlized.AS.transposonpiRNAs.list.txt
 	RSQ=${INDIR}/rnaseq/diff_analysis2/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.out.DESeqNF.transposon.normalizedcounts.txt
-	DEG=${INDIR}/degradome/diff_analysis2/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.out.DESeqNF.transposon.normalizedcounts.txt
+	DEG=${INDIR}/degradome/diff_analysis_S_AS/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.S.out.DESeqNF.transposon.normalizedcounts.txt
 	
 	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_correlation $SRA $RSQ $DEG ${g} ${OUTDIR2}" >>${paraFile}	
 done
