@@ -518,6 +518,10 @@ dev.off ()
 
 plot_correlation <- function (sra,rsq,deg,gtgroup,outdir )
 {
+
+group=read.table("/home/wangw1/pipeline/common/Zamore.group",F)
+colnames(group)=c("feature","g")
+
 htv <- read.table(sra,F);
 type="SRA"
 colnames(htv) <- c("gt","feature","count");
@@ -549,8 +553,24 @@ countsTableRSQ=transform(countsTableRSQ,category=category1 + category2 )
 countsTableDEG=transform(countsTableDEG,category1=ifelse(M<(-1),-1,0),category2=ifelse(M>1,1,0) )
 countsTableDEG=transform(countsTableDEG,category=category1 + category2 )
 
+#GcountsTableSRA=merge(countsTableSRA,group,by="feature")
+#GcountsTableDEG=merge(countsTableDEG,group,by="feature")
+#GcountsTableRSQ=merge(countsTableRSQ,group,by="feature")
+
+#G1countsTableSRA=as.data.frame(lapply(subset(GcountsTableSRA,as.character(g)==1),'[',drop=TRUE))
+#G1countsTableDEG=as.data.frame(lapply(subset(GcountsTableDEG,as.character(g)==1),'[',drop=TRUE))
+#G1countsTableRSQ=as.data.frame(lapply(subset(GcountsTableRSQ,as.character(g)==1),'[',drop=TRUE))
+
 #DEG vs RSQ
 degrsq=merge(countsTableDEG,countsTableRSQ,by="feature")
+Gdegrsq=merge(degrsq, group, by="feature")
+
+outfilename=paste(outdir,"/DEG_VS_RSQ/M/",gtgroup,"degrsq.txt",sep="")
+write.table(Gdegrsq, file = outfilename, append = FALSE, quote = FALSE, sep = "\t",
+			eol = "\n", na = "NA", dec = ".", row.names = FALSE,
+			col.names = TRUE, qmethod = c("escape", "double"),
+			fileEncoding = "")
+#all transposons
 #M
 degrsq_Mcor=cor(degrsq$M.x, degrsq$M.y)
 degrsq_Mcor=formatC(degrsq_Mcor,3)
@@ -590,10 +610,64 @@ mtext(side = 1, text = paste("mean of Log2 expression in ", levels(degrsq$dt.x))
 mtext(side = 2, text = paste("mean of Log2 expression in ",levels(degrsq$dt.y)), line = 2)
 dev.off()
 
+#group I transposons
+
+G1degrsq=as.data.frame(lapply(subset(Gdegrsq,as.character(g)==1),'[',drop=TRUE))
+
+
+#M
+G1degrsq_Mcor=cor(G1degrsq$M.x, G1degrsq$M.y)
+G1degrsq_Mcor=formatC(G1degrsq_Mcor,3)
+pdfname=paste(outdir,"/DEG_VS_RSQ/M/",gtgroup,"G1degrsq_correlation_M.pdf",sep="")
+pdf(pdfname)
+plot (G1degrsq$M.x, G1degrsq$M.y, xlim=c(min(G1degrsq$M.x,G1degrsq$M.y),max(G1degrsq$M.x,G1degrsq$M.y)),
+		ylim=c(min(G1degrsq$M.x,G1degrsq$M.y), max(G1degrsq$M.x,G1degrsq$M.y)),xlab="", ylab="", pch=21, 
+		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.5, ex.lab=1.5,
+		main=paste("Log2 fold changes between ", colnames(countsTableDEG)[1], " and ",colnames(countsTableDEG)[2],"\n",
+					"Correlation Coefficient between ",levels(G1degrsq$dt.x), " and ",levels(G1degrsq$dt.y), " is ",G1degrsq_Mcor,sep="" ), 
+		cex.main=1) + 
+#lines( par()$usr[2:3], c(par()$usr[1],par()$usr[4]),lty=2,lwd=2 )+
+abline(0,-1,lty=2,lwd=2,col="green" )+
+abline(lm(G1degrsq$M.y~G1degrsq$M.x)$coefficients[1],lm(G1degrsq$M.y~G1degrsq$M.x)$coefficients[2],lty=2,lwd=2,col="blue")+
+axis (1,pos=c(0,0), tck=0.01, lwd=3, at=seq(floor(min(G1degrsq$M.x,G1degrsq$M.y)),ceiling(max(G1degrsq$M.x,G1degrsq$M.y)),roundUp( ceiling(max(max(G1degrsq$M.x,G1degrsq$M.y)/10)) )), cex.axis=1) + 
+axis (2, pos=c(0,0),tck=0.01, lwd=3, at=seq(floor(min(G1degrsq$M.x,G1degrsq$M.y)),ceiling(max(G1degrsq$M.x,G1degrsq$M.y)),roundUp( ceiling(max(max(G1degrsq$M.x,G1degrsq$M.y)/10)) )), cex.axis=1)+
+mtext(side = 1, text = paste("Log2 fold change in ", levels(G1degrsq$dt.x)), line = 3)
+mtext(side = 2, text = paste("Log2 fold change in ",levels(G1degrsq$dt.y)), line = 2)
+dev.off()
+
+#A
+G1degrsq_Acor=cor(G1degrsq$A.x, G1degrsq$A.y)
+G1degrsq_Acor=formatC(G1degrsq_Acor,3)
+pdfname=paste(outdir,"/DEG_VS_RSQ/A/",gtgroup,"G1degrsq_correlation_A.pdf",sep="")
+pdf(pdfname)
+plot (G1degrsq$A.x, G1degrsq$A.y, xlim=c(min(G1degrsq$A.x,G1degrsq$A.y),max(G1degrsq$A.x,G1degrsq$A.y)),
+		ylim=c(min(G1degrsq$A.x,G1degrsq$A.y), max(G1degrsq$A.x,G1degrsq$A.y)),xlab="", ylab="", pch=21, 
+		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.5, ex.lab=1.5,
+		main=paste("mean of Log2 expression ", colnames(countsTableDEG)[1], " and ",colnames(countsTableDEG)[2],"\n",
+					"Correlation Coefficient between ",levels(G1degrsq$dt.x), " and ",levels(G1degrsq$dt.y), " is ",G1degrsq_Acor,sep="" ), 
+		cex.main=1) + 
+
+abline(lm(G1degrsq$A.y~G1degrsq$A.x)$coefficients[1],lm(G1degrsq$A.y~G1degrsq$A.x)$coefficients[2],lty=2,lwd=2,col="blue")+
+axis (1,pos=c(0,0), tck=0.01, lwd=3, at=seq(floor(min(G1degrsq$A.x,G1degrsq$A.y)),ceiling(max(G1degrsq$A.x,G1degrsq$A.y)),roundUp( ceiling(max(max(G1degrsq$A.x,G1degrsq$A.y)/10)) )), cex.axis=1) + 
+axis (2, pos=c(0,0),tck=0.01, lwd=3, at=seq(floor(min(G1degrsq$A.x,G1degrsq$A.y)),ceiling(max(G1degrsq$A.x,G1degrsq$A.y)),roundUp( ceiling(max(max(G1degrsq$A.x,G1degrsq$A.y)/10)) )), cex.axis=1)+
+mtext(side = 1, text = paste("mean of Log2 expression in ", levels(G1degrsq$dt.x)), line = 3)
+mtext(side = 2, text = paste("mean of Log2 expression in ",levels(G1degrsq$dt.y)), line = 2)
+dev.off()
+
+
 
 #SRA vs DEG
-#M
+
 sradeg=merge(countsTableSRA,countsTableDEG,by="feature")
+Gsradeg=merge(sradeg, group, by="feature")
+
+outfilename=paste(outdir,"/SRA_VS_DEG/",gtgroup,"sradeg.txt",sep="")
+write.table(Gsradeg, file = outfilename, append = FALSE, quote = FALSE, sep = "\t",
+			eol = "\n", na = "NA", dec = ".", row.names = FALSE,
+			col.names = TRUE, qmethod = c("escape", "double"),
+			fileEncoding = "")
+#all transposons
+#M
 sradeg_Mcor=cor(sradeg$M.x, sradeg$M.y)
 sradeg_Mcor=formatC(sradeg_Mcor,3)
 pdfname=paste(outdir,"/SRA_VS_DEG/M/",gtgroup,"sradeg_correlation_M.pdf",sep="")
@@ -634,8 +708,16 @@ dev.off()
 
 
 #SRA vs RSQ
-#M
 srarsq=merge(countsTableSRA,countsTableRSQ,by="feature")
+Gsrarsq=merge(srarsq, group, by="feature")
+
+outfilename=paste(outdir,"/SRA_VS_RSQ/",gtgroup,"srarsq.txt",sep="")
+write.table(Gsrarsq, file = outfilename, append = FALSE, quote = FALSE, sep = "\t",
+			eol = "\n", na = "NA", dec = ".", row.names = FALSE,
+			col.names = TRUE, qmethod = c("escape", "double"),
+			fileEncoding = "")
+#M
+
 srarsq_Mcor=cor(srarsq$M.x, srarsq$M.y)
 srarsq_Mcor=formatC(srarsq_Mcor,3)
 pdfname=paste(outdir,"/SRA_VS_RSQ/M/",gtgroup,"srarsq_correlation_M.pdf",sep="")
