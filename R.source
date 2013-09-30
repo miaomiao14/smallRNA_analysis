@@ -613,7 +613,7 @@ dev.off()
 #raw
 degrsq_rawcor=cor(degrsq[,2], degrsq[,11])
 degrsq_rawcor=formatC(degrsq_rawcor,3)
-pdfname=paste(outdir,"/DEG_VS_RSQ/raw/",gtgroup,"degrsq_correlation_raw.pdf",sep="")
+pdfname=paste(outdir,"/DEG_VS_RSQ/RAW/",gtgroup,"degrsq_correlation_raw.pdf",sep="")
 pdf(pdfname)
 plot (degrsq[,2], degrsq[,11], xlim=c(min(degrsq[,2],degrsq[,11]),max(degrsq[,2],degrsq[,11])),
 		ylim=c(min(degrsq[,2],degrsq[,11]), max(degrsq[,2],degrsq[,11])),xlab="", ylab="", pch=21, 
@@ -632,7 +632,7 @@ dev.off()
 #raw gt2
 degrsq_rawcor=cor(degrsq[,3], degrsq[,12])
 degrsq_rawcor=formatC(degrsq_rawcor,3)
-pdfname=paste(outdir,"/DEG_VS_RSQ/raw/",gtgroup,"degrsq_correlation_raw.pdf",sep="")
+pdfname=paste(outdir,"/DEG_VS_RSQ/RAW/",gtgroup,"degrsq_correlation_raw.pdf",sep="")
 pdf(pdfname)
 plot (degrsq[,3], degrsq[,12], xlim=c(min(degrsq[,3],degrsq[,12]),max(degrsq[,3],degrsq[,12])),
 		ylim=c(min(degrsq[,3],degrsq[,12]), max(degrsq[,3],degrsq[,12])),xlab="", ylab="", pch=21, 
@@ -695,7 +695,7 @@ dev.off()
 #raw
 G1degrsq_rawcor=cor(G1degrsq[,2], G1degrsq[,11])
 G1degrsq_rawcor=formatC(G1degrsq_rawcor,3)
-pdfname=paste(outdir,"/DEG_VS_RSQ/raw/",gtgroup,"G1degrsq_correlation_raw.pdf",sep="")
+pdfname=paste(outdir,"/DEG_VS_RSQ/RAW/",gtgroup,"G1degrsq_correlation_raw.pdf",sep="")
 pdf(pdfname)
 plot (G1degrsq[,2], G1degrsq[,11], xlim=c(min(G1degrsq[,2],G1degrsq[,11]),max(G1degrsq[,2],G1degrsq[,11])),
 		ylim=c(min(G1degrsq[,2],G1degrsq[,11]), max(G1degrsq[,2],G1degrsq[,11])),xlab="", ylab="", pch=21, 
@@ -714,7 +714,7 @@ dev.off()
 #raw gt2
 G1degrsq_rawcor=cor(G1degrsq[,3], G1degrsq[,12])
 G1degrsq_rawcor=formatC(G1degrsq_rawcor,3)
-pdfname=paste(outdir,"/DEG_VS_RSQ/raw/",gtgroup,"G1degrsq_correlation_raw.pdf",sep="")
+pdfname=paste(outdir,"/DEG_VS_RSQ/RAW/",gtgroup,"G1degrsq_correlation_raw.pdf",sep="")
 pdf(pdfname)
 plot (G1degrsq[,3], G1degrsq[,12], xlim=c(min(G1degrsq[,3],G1degrsq[,12]),max(G1degrsq[,3],G1degrsq[,12])),
 		ylim=c(min(G1degrsq[,3],G1degrsq[,12]), max(G1degrsq[,3],G1degrsq[,12])),xlab="", ylab="", pch=21, 
@@ -783,7 +783,7 @@ dev.off()
 #raw gt1
 sradeg_rawcor=cor(sradeg[,2], sradeg[,11])
 sradeg_rawcor=formatC(sradeg_rawcor,3)
-pdfname=paste(outdir,"/SRA_VS_DEG/raw/",gtgroup,"sradeg_correlation_raw.pdf",sep="")
+pdfname=paste(outdir,"/SRA_VS_DEG/RAW/",gtgroup,"sradeg_correlation_raw.pdf",sep="")
 pdf(pdfname)
 plot (sradeg[,2], sradeg[,11], xlim=c(min(sradeg[,2],sradeg[,11]),max(sradeg[,2],sradeg[,11])),
 		ylim=c(min(sradeg[,2],sradeg[,11]), max(sradeg[,2],sradeg[,11])),xlab="", ylab="", pch=21, 
@@ -802,7 +802,7 @@ dev.off()
 #raw gt2
 sradeg_rawcor=cor(sradeg[,3], sradeg[,12])
 sradeg_rawcor=formatC(sradeg_rawcor,3)
-pdfname=paste(outdir,"/SRA_VS_DEG/raw/",gtgroup,"sradeg_correlation_raw.pdf",sep="")
+pdfname=paste(outdir,"/SRA_VS_DEG/RAW/",gtgroup,"sradeg_correlation_raw.pdf",sep="")
 pdf(pdfname)
 plot (sradeg[,3], sradeg[,12], xlim=c(min(sradeg[,3],sradeg[,12]),max(sradeg[,3],sradeg[,12])),
 		ylim=c(min(sradeg[,3],sradeg[,12]), max(sradeg[,3],sradeg[,12])),xlab="", ylab="", pch=21, 
@@ -870,7 +870,7 @@ dev.off()
 #raw gt1
 srarsq_rawcor=cor(srarsq[,2], srarsq[,11])
 srarsq_rawcor=formatC(srarsq_rawcor,3)
-pdfname=paste(outdir,"/SRA_VS_RSQ/raw/",gtgroup,"srarsq_correlation_raw.pdf",sep="")
+pdfname=paste(outdir,"/SRA_VS_RSQ/RAW/",gtgroup,"srarsq_correlation_raw.pdf",sep="")
 pdf(pdfname)
 plot (srarsq[,2], srarsq[,11], xlim=c(min(srarsq[,2],srarsq[,11]),max(srarsq[,2],srarsq[,11])),
 		ylim=c(min(srarsq[,2],srarsq[,11]), max(srarsq[,2],srarsq[,11])),xlab="", ylab="", pch=21, 
@@ -889,7 +889,7 @@ dev.off()
 #raw gt2
 srarsq_rawcor=cor(srarsq[,3], srarsq[,12])
 srarsq_rawcor=formatC(srarsq_rawcor,3)
-pdfname=paste(outdir,"/SRA_VS_RSQ/raw/",gtgroup,"srarsq_correlation_raw.pdf",sep="")
+pdfname=paste(outdir,"/SRA_VS_RSQ/RAW/",gtgroup,"srarsq_correlation_raw.pdf",sep="")
 pdf(pdfname)
 plot (srarsq[,3], srarsq[,12], xlim=c(min(srarsq[,3],srarsq[,12]),max(srarsq[,3],srarsq[,12])),
 		ylim=c(min(srarsq[,3],srarsq[,12]), max(srarsq[,3],srarsq[,12])),xlab="", ylab="", pch=21, 
