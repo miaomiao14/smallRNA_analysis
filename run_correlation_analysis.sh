@@ -55,10 +55,13 @@ OUTDIR2=${INDIR}/smRNA/total_sense_sense_correlation_analysis
 [ ! -d ${OUTDIR2} ] && mkdir -p ${OUTDIR2}
 [ ! -d ${OUTDIR2}/DEG_VS_RSQ/A ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/A
 [ ! -d ${OUTDIR2}/DEG_VS_RSQ/M ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/M
+[ ! -d ${OUTDIR2}/DEG_VS_RSQ/RAW ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/RAW
 [ ! -d ${OUTDIR2}/SRA_VS_DEG/A ] && mkdir -p ${OUTDIR2}/SRA_VS_DEG/A
 [ ! -d ${OUTDIR2}/SRA_VS_DEG/M ] && mkdir -p ${OUTDIR2}/SRA_VS_DEG/M
+[ ! -d ${OUTDIR2}/SRA_VS_DEG/RAW ] && mkdir -p ${OUTDIR2}/SRA_VS_DEG/RAW
 [ ! -d ${OUTDIR2}/SRA_VS_RSQ/A ] && mkdir -p ${OUTDIR2}/SRA_VS_RSQ/A
 [ ! -d ${OUTDIR2}/SRA_VS_RSQ/M ] && mkdir -p ${OUTDIR2}/SRA_VS_RSQ/M
+[ ! -d ${OUTDIR2}/SRA_VS_RSQ/RAW ] && mkdir -p ${OUTDIR2}/SRA_VS_RSQ/RAW
 paraFile=${OUTDIR2}/RSQDEGSRA.correlationanalysis.${RANDOM}.para && \
 for g in "${GROUPGT[@]}"
 do
@@ -76,10 +79,13 @@ OUTDIR2=${INDIR}/smRNA/sense_sense_sense_correlation_analysis
 [ ! -d ${OUTDIR2} ] && mkdir -p ${OUTDIR2}
 [ ! -d ${OUTDIR2}/DEG_VS_RSQ/A ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/A
 [ ! -d ${OUTDIR2}/DEG_VS_RSQ/M ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/M
+[ ! -d ${OUTDIR2}/DEG_VS_RSQ/RAW ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/RAW
 [ ! -d ${OUTDIR2}/SRA_VS_DEG/A ] && mkdir -p ${OUTDIR2}/SRA_VS_DEG/A
 [ ! -d ${OUTDIR2}/SRA_VS_DEG/M ] && mkdir -p ${OUTDIR2}/SRA_VS_DEG/M
+[ ! -d ${OUTDIR2}/SRA_VS_DEG/RAW ] && mkdir -p ${OUTDIR2}/SRA_VS_DEG/RAW
 [ ! -d ${OUTDIR2}/SRA_VS_RSQ/A ] && mkdir -p ${OUTDIR2}/SRA_VS_RSQ/A
 [ ! -d ${OUTDIR2}/SRA_VS_RSQ/M ] && mkdir -p ${OUTDIR2}/SRA_VS_RSQ/M
+[ ! -d ${OUTDIR2}/SRA_VS_RSQ/RAW ] && mkdir -p ${OUTDIR2}/SRA_VS_RSQ/RAW
 paraFile=${OUTDIR2}/RSQDEGSRA.correlationanalysis.${RANDOM}.para && \
 for g in "${GROUPGT[@]}"
 do
@@ -97,10 +103,13 @@ OUTDIR2=${INDIR}/smRNA/antisense_sense_sense_correlation_analysis
 [ ! -d ${OUTDIR2} ] && mkdir -p ${OUTDIR2}
 [ ! -d ${OUTDIR2}/DEG_VS_RSQ/A ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/A
 [ ! -d ${OUTDIR2}/DEG_VS_RSQ/M ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/M
+[ ! -d ${OUTDIR2}/DEG_VS_RSQ/RAW ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/RAW
 [ ! -d ${OUTDIR2}/SRA_VS_DEG/A ] && mkdir -p ${OUTDIR2}/SRA_VS_DEG/A
 [ ! -d ${OUTDIR2}/SRA_VS_DEG/M ] && mkdir -p ${OUTDIR2}/SRA_VS_DEG/M
+[ ! -d ${OUTDIR2}/SRA_VS_DEG/RAW ] && mkdir -p ${OUTDIR2}/SRA_VS_DEG/RAW
 [ ! -d ${OUTDIR2}/SRA_VS_RSQ/A ] && mkdir -p ${OUTDIR2}/SRA_VS_RSQ/A
 [ ! -d ${OUTDIR2}/SRA_VS_RSQ/M ] && mkdir -p ${OUTDIR2}/SRA_VS_RSQ/M
+[ ! -d ${OUTDIR2}/SRA_VS_RSQ/RAW ] && mkdir -p ${OUTDIR2}/SRA_VS_RSQ/RAW
 paraFile=${OUTDIR2}/RSQDEGSRA.correlationanalysis.${RANDOM}.para && \
 for g in "${GROUPGT[@]}"
 do
@@ -119,10 +128,13 @@ OUTDIR2=${INDIR}/smRNA/sense_antisense_sense_correlation_analysis
 [ ! -d ${OUTDIR2} ] && mkdir -p ${OUTDIR2}
 [ ! -d ${OUTDIR2}/DEG_VS_RSQ/A ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/A
 [ ! -d ${OUTDIR2}/DEG_VS_RSQ/M ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/M
+[ ! -d ${OUTDIR2}/DEG_VS_RSQ/RAW ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/RAW
 [ ! -d ${OUTDIR2}/SRA_VS_DEG/A ] && mkdir -p ${OUTDIR2}/SRA_VS_DEG/A
 [ ! -d ${OUTDIR2}/SRA_VS_DEG/M ] && mkdir -p ${OUTDIR2}/SRA_VS_DEG/M
+[ ! -d ${OUTDIR2}/SRA_VS_DEG/RAW ] && mkdir -p ${OUTDIR2}/SRA_VS_DEG/RAW
 [ ! -d ${OUTDIR2}/SRA_VS_RSQ/A ] && mkdir -p ${OUTDIR2}/SRA_VS_RSQ/A
 [ ! -d ${OUTDIR2}/SRA_VS_RSQ/M ] && mkdir -p ${OUTDIR2}/SRA_VS_RSQ/M
+[ ! -d ${OUTDIR2}/SRA_VS_RSQ/RAW ] && mkdir -p ${OUTDIR2}/SRA_VS_RSQ/RAW
 paraFile=${OUTDIR2}/RSQDEGSRA.correlationanalysis.${RANDOM}.para && \
 for g in "${GROUPGT[@]}"
 do
@@ -139,10 +151,13 @@ OUTDIR2=${INDIR}/smRNA/antisense_antisense_sense_correlation_analysis
 [ ! -d ${OUTDIR2} ] && mkdir -p ${OUTDIR2}
 [ ! -d ${OUTDIR2}/DEG_VS_RSQ/A ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/A
 [ ! -d ${OUTDIR2}/DEG_VS_RSQ/M ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/M
+[ ! -d ${OUTDIR2}/DEG_VS_RSQ/RAW ] && mkdir -p ${OUTDIR2}/DEG_VS_RSQ/RAW
 [ ! -d ${OUTDIR2}/SRA_VS_DEG/A ] && mkdir -p ${OUTDIR2}/SRA_VS_DEG/A
 [ ! -d ${OUTDIR2}/SRA_VS_DEG/M ] && mkdir -p ${OUTDIR2}/SRA_VS_DEG/M
+[ ! -d ${OUTDIR2}/SRA_VS_DEG/RAW ] && mkdir -p ${OUTDIR2}/SRA_VS_DEG/RAW
 [ ! -d ${OUTDIR2}/SRA_VS_RSQ/A ] && mkdir -p ${OUTDIR2}/SRA_VS_RSQ/A
 [ ! -d ${OUTDIR2}/SRA_VS_RSQ/M ] && mkdir -p ${OUTDIR2}/SRA_VS_RSQ/M
+[ ! -d ${OUTDIR2}/SRA_VS_RSQ/RAW ] && mkdir -p ${OUTDIR2}/SRA_VS_RSQ/RAW
 paraFile=${OUTDIR2}/RSQDEGSRA.correlationanalysis.${RANDOM}.para && \
 for g in "${GROUPGT[@]}"
 do

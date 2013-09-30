@@ -610,6 +610,44 @@ mtext(side = 1, text = paste("mean of Log2 expression in ", levels(degrsq$dt.x))
 mtext(side = 2, text = paste("mean of Log2 expression in ",levels(degrsq$dt.y)), line = 2)
 dev.off()
 
+#raw
+degrsq_rawcor=cor(degrsq[,2], degrsq[,11])
+degrsq_rawcor=formatC(degrsq_rawcor,3)
+pdfname=paste(outdir,"/DEG_VS_RSQ/raw/",gtgroup,"degrsq_correlation_raw.pdf",sep="")
+pdf(pdfname)
+plot (degrsq[,2], degrsq[,11], xlim=c(min(degrsq[,2],degrsq[,11]),max(degrsq[,2],degrsq[,11])),
+		ylim=c(min(degrsq[,2],degrsq[,11]), max(degrsq[,2],degrsq[,11])),xlab="", ylab="", pch=21, 
+		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.5, ex.lab=1.5,
+		main=paste("Log2 expression of ", colnames(degrsq)[2],"\n",
+					"Correlation Coefficient between ",levels(degrsq$dt.x), " and ",levels(degrsq$dt.y), " is ",degrsq_rawcor,sep="" ), 
+		cex.main=1) + 
+
+abline(lm(degrsq[,11]~degrsq[,2])$coefficients[1],lm(degrsq[,11]~degrsq[,2])$coefficients[2],lty=2,lwd=2,col="blue")+
+axis (1,pos=c(0,0), tck=0.01, lwd=3, at=seq(floor(min(degrsq[,2],degrsq[,11])),ceiling(max(degrsq[,2],degrsq[,11])),roundUp( ceiling(max(max(degrsq[,2],degrsq[,11])/10)) )), cex.axis=1) + 
+axis (2, pos=c(0,0),tck=0.01, lwd=3, at=seq(floor(min(degrsq[,2],degrsq[,11])),ceiling(max(degrsq[,2],degrsq[,11])),roundUp( ceiling(max(max(degrsq[,2],degrsq[,11])/10)) )), cex.axis=1)+
+mtext(side = 1, text = paste("Log2 expression in ", levels(degrsq$dt.x)), line = 3)
+mtext(side = 2, text = paste("Log2 expression in ",levels(degrsq$dt.y)), line = 2)
+dev.off()
+
+#raw gt2
+degrsq_rawcor=cor(degrsq[,3], degrsq[,12])
+degrsq_rawcor=formatC(degrsq_rawcor,3)
+pdfname=paste(outdir,"/DEG_VS_RSQ/raw/",gtgroup,"degrsq_correlation_raw.pdf",sep="")
+pdf(pdfname)
+plot (degrsq[,3], degrsq[,12], xlim=c(min(degrsq[,3],degrsq[,12]),max(degrsq[,3],degrsq[,12])),
+		ylim=c(min(degrsq[,3],degrsq[,12]), max(degrsq[,3],degrsq[,12])),xlab="", ylab="", pch=21, 
+		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.5, ex.lab=1.5,
+		main=paste("Log2 expression of ", colnames(degrsq)[2],"\n",
+					"Correlation Coefficient between ",levels(degrsq$dt.x), " and ",levels(degrsq$dt.y), " is ",degrsq_rawcor,sep="" ), 
+		cex.main=1) + 
+
+abline(lm(degrsq[,12]~degrsq[,3])$coefficients[1],lm(degrsq[,12]~degrsq[,3])$coefficients[2],lty=2,lwd=2,col="blue")+
+axis (1,pos=c(0,0), tck=0.01, lwd=3, at=seq(floor(min(degrsq[,3],degrsq[,12])),ceiling(max(degrsq[,3],degrsq[,12])),roundUp( ceiling(max(max(degrsq[,3],degrsq[,12])/10)) )), cex.axis=1) + 
+axis (2, pos=c(0,0),tck=0.01, lwd=3, at=seq(floor(min(degrsq[,3],degrsq[,12])),ceiling(max(degrsq[,3],degrsq[,12])),roundUp( ceiling(max(max(degrsq[,3],degrsq[,12])/10)) )), cex.axis=1)+
+mtext(side = 1, text = paste("Log2 expression in ", levels(degrsq$dt.x)), line = 3)
+mtext(side = 2, text = paste("Log2 expression in ",levels(degrsq$dt.y)), line = 2)
+dev.off()
+
 #group I transposons
 
 G1degrsq=as.data.frame(lapply(subset(Gdegrsq,as.character(g)==1),'[',drop=TRUE))
@@ -654,7 +692,43 @@ mtext(side = 1, text = paste("mean of Log2 expression in ", levels(G1degrsq$dt.x
 mtext(side = 2, text = paste("mean of Log2 expression in ",levels(G1degrsq$dt.y)), line = 2)
 dev.off()
 
+#raw
+G1degrsq_rawcor=cor(G1degrsq[,2], G1degrsq[,11])
+G1degrsq_rawcor=formatC(G1degrsq_rawcor,3)
+pdfname=paste(outdir,"/DEG_VS_RSQ/raw/",gtgroup,"G1degrsq_correlation_raw.pdf",sep="")
+pdf(pdfname)
+plot (G1degrsq[,2], G1degrsq[,11], xlim=c(min(G1degrsq[,2],G1degrsq[,11]),max(G1degrsq[,2],G1degrsq[,11])),
+		ylim=c(min(G1degrsq[,2],G1degrsq[,11]), max(G1degrsq[,2],G1degrsq[,11])),xlab="", ylab="", pch=21, 
+		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.5, ex.lab=1.5,
+		main=paste("Log2 expression of ", colnames(G1degrsq)[2],"\n",
+					"Correlation Coefficient between ",levels(G1degrsq$dt.x), " and ",levels(G1degrsq$dt.y), " is ",G1degrsq_rawcor,sep="" ), 
+		cex.main=1) + 
 
+abline(lm(G1degrsq[,11]~G1degrsq[,2])$coefficients[1],lm(G1degrsq[,11]~G1degrsq[,2])$coefficients[2],lty=2,lwd=2,col="blue")+
+axis (1,pos=c(0,0), tck=0.01, lwd=3, at=seq(floor(min(G1degrsq[,2],G1degrsq[,11])),ceiling(max(G1degrsq[,2],G1degrsq[,11])),roundUp( ceiling(max(max(G1degrsq[,2],G1degrsq[,11])/10)) )), cex.axis=1) + 
+axis (2, pos=c(0,0),tck=0.01, lwd=3, at=seq(floor(min(G1degrsq[,2],G1degrsq[,11])),ceiling(max(G1degrsq[,2],G1degrsq[,11])),roundUp( ceiling(max(max(G1degrsq[,2],G1degrsq[,11])/10)) )), cex.axis=1)+
+mtext(side = 1, text = paste("Log2 expression in ", levels(G1degrsq$dt.x)), line = 3)
+mtext(side = 2, text = paste("Log2 expression in ",levels(G1degrsq$dt.y)), line = 2)
+dev.off()
+
+#raw gt2
+G1degrsq_rawcor=cor(G1degrsq[,3], G1degrsq[,12])
+G1degrsq_rawcor=formatC(G1degrsq_rawcor,3)
+pdfname=paste(outdir,"/DEG_VS_RSQ/raw/",gtgroup,"G1degrsq_correlation_raw.pdf",sep="")
+pdf(pdfname)
+plot (G1degrsq[,3], G1degrsq[,12], xlim=c(min(G1degrsq[,3],G1degrsq[,12]),max(G1degrsq[,3],G1degrsq[,12])),
+		ylim=c(min(G1degrsq[,3],G1degrsq[,12]), max(G1degrsq[,3],G1degrsq[,12])),xlab="", ylab="", pch=21, 
+		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.5, ex.lab=1.5,
+		main=paste("Log2 expression of ", colnames(G1degrsq)[2],"\n",
+					"Correlation Coefficient between ",levels(G1degrsq$dt.x), " and ",levels(G1degrsq$dt.y), " is ",G1degrsq_rawcor,sep="" ), 
+		cex.main=1) + 
+
+abline(lm(G1degrsq[,12]~G1degrsq[,3])$coefficients[1],lm(G1degrsq[,12]~G1degrsq[,3])$coefficients[2],lty=2,lwd=2,col="blue")+
+axis (1,pos=c(0,0), tck=0.01, lwd=3, at=seq(floor(min(G1degrsq[,3],G1degrsq[,12])),ceiling(max(G1degrsq[,3],G1degrsq[,12])),roundUp( ceiling(max(max(G1degrsq[,3],G1degrsq[,12])/10)) )), cex.axis=1) + 
+axis (2, pos=c(0,0),tck=0.01, lwd=3, at=seq(floor(min(G1degrsq[,3],G1degrsq[,12])),ceiling(max(G1degrsq[,3],G1degrsq[,12])),roundUp( ceiling(max(max(G1degrsq[,3],G1degrsq[,12])/10)) )), cex.axis=1)+
+mtext(side = 1, text = paste("Log2 expression in ", levels(G1degrsq$dt.x)), line = 3)
+mtext(side = 2, text = paste("Log2 expression in ",levels(G1degrsq$dt.y)), line = 2)
+dev.off()
 
 #SRA vs DEG
 
@@ -706,6 +780,43 @@ mtext(side = 1, text = paste("mean of Log2 expression in ", levels(sradeg$dt.x))
 mtext(side = 2, text = paste("mean of Log2 expression in ",levels(sradeg$dt.y)), line = 2)
 dev.off()
 
+#raw gt1
+sradeg_rawcor=cor(sradeg[,2], sradeg[,11])
+sradeg_rawcor=formatC(sradeg_rawcor,3)
+pdfname=paste(outdir,"/SRA_VS_DEG/raw/",gtgroup,"sradeg_correlation_raw.pdf",sep="")
+pdf(pdfname)
+plot (sradeg[,2], sradeg[,11], xlim=c(min(sradeg[,2],sradeg[,11]),max(sradeg[,2],sradeg[,11])),
+		ylim=c(min(sradeg[,2],sradeg[,11]), max(sradeg[,2],sradeg[,11])),xlab="", ylab="", pch=21, 
+		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.5, ex.lab=1.5,
+		main=paste("Log2 expression of ", colnames(sradeg)[2],"\n",
+					"Correlation Coefficient between ",levels(sradeg$dt.x), " and ",levels(sradeg$dt.y), " is ",sradeg_rawcor,sep="" ), 
+		cex.main=1) + 
+
+abline(lm(sradeg[,11]~sradeg[,2])$coefficients[1],lm(sradeg[,11]~sradeg[,2])$coefficients[2],lty=2,lwd=2,col="blue")+
+axis (1,pos=c(0,0), tck=0.01, lwd=3, at=seq(floor(min(sradeg[,2],sradeg[,11])),ceiling(max(sradeg[,2],sradeg[,11])),roundUp( ceiling(max(max(sradeg[,2],sradeg[,11])/10)) )), cex.axis=1) + 
+axis (2, pos=c(0,0),tck=0.01, lwd=3, at=seq(floor(min(sradeg[,2],sradeg[,11])),ceiling(max(sradeg[,2],sradeg[,11])),roundUp( ceiling(max(max(sradeg[,2],sradeg[,11])/10)) )), cex.axis=1)+
+mtext(side = 1, text = paste("Log2 expression in ", levels(sradeg$dt.x)), line = 3)
+mtext(side = 2, text = paste("Log2 expression in ",levels(sradeg$dt.y)), line = 2)
+dev.off()
+
+#raw gt2
+sradeg_rawcor=cor(sradeg[,3], sradeg[,12])
+sradeg_rawcor=formatC(sradeg_rawcor,3)
+pdfname=paste(outdir,"/SRA_VS_DEG/raw/",gtgroup,"sradeg_correlation_raw.pdf",sep="")
+pdf(pdfname)
+plot (sradeg[,3], sradeg[,12], xlim=c(min(sradeg[,3],sradeg[,12]),max(sradeg[,3],sradeg[,12])),
+		ylim=c(min(sradeg[,3],sradeg[,12]), max(sradeg[,3],sradeg[,12])),xlab="", ylab="", pch=21, 
+		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.5, ex.lab=1.5,
+		main=paste("Log2 expression of ", colnames(sradeg)[2],"\n",
+					"Correlation Coefficient between ",levels(sradeg$dt.x), " and ",levels(sradeg$dt.y), " is ",sradeg_rawcor,sep="" ), 
+		cex.main=1) + 
+
+abline(lm(sradeg[,12]~sradeg[,3])$coefficients[1],lm(sradeg[,12]~sradeg[,3])$coefficients[2],lty=2,lwd=2,col="blue")+
+axis (1,pos=c(0,0), tck=0.01, lwd=3, at=seq(floor(min(sradeg[,3],sradeg[,12])),ceiling(max(sradeg[,3],sradeg[,12])),roundUp( ceiling(max(max(sradeg[,3],sradeg[,12])/10)) )), cex.axis=1) + 
+axis (2, pos=c(0,0),tck=0.01, lwd=3, at=seq(floor(min(sradeg[,3],sradeg[,12])),ceiling(max(sradeg[,3],sradeg[,12])),roundUp( ceiling(max(max(sradeg[,3],sradeg[,12])/10)) )), cex.axis=1)+
+mtext(side = 1, text = paste("Log2 expression in ", levels(sradeg$dt.x)), line = 3)
+mtext(side = 2, text = paste("Log2 expression in ",levels(sradeg$dt.y)), line = 2)
+dev.off()
 
 #SRA vs RSQ
 srarsq=merge(countsTableSRA,countsTableRSQ,by="feature")
@@ -756,5 +867,42 @@ mtext(side = 1, text = paste("mean of Log2 expression in ", levels(srarsq$dt.x))
 mtext(side = 2, text = paste("mean of Log2 expression in ",levels(srarsq$dt.y)), line = 2)
 dev.off()
 
+#raw gt1
+srarsq_rawcor=cor(srarsq[,2], srarsq[,11])
+srarsq_rawcor=formatC(srarsq_rawcor,3)
+pdfname=paste(outdir,"/SRA_VS_RSQ/raw/",gtgroup,"srarsq_correlation_raw.pdf",sep="")
+pdf(pdfname)
+plot (srarsq[,2], srarsq[,11], xlim=c(min(srarsq[,2],srarsq[,11]),max(srarsq[,2],srarsq[,11])),
+		ylim=c(min(srarsq[,2],srarsq[,11]), max(srarsq[,2],srarsq[,11])),xlab="", ylab="", pch=21, 
+		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.5, ex.lab=1.5,
+		main=paste("Log2 expression of ", colnames(srarsq)[2],"\n",
+					"Correlation Coefficient between",levels(srarsq$dt.x), " and ",levels(srarsq$dt.y), " is ",srarsq_rawcor,sep="" ), 
+		cex.main=1) + 
+
+abline(lm(srarsq[,11]~srarsq[,2])$coefficients[1],lm(srarsq[,11]~srarsq[,2])$coefficients[2],lty=2,lwd=2,col="blue")+
+axis (1,pos=c(0,0), tck=0.01, lwd=3, at=seq(floor(min(srarsq[,2],srarsq[,11])),ceiling(max(srarsq[,2],srarsq[,11])),roundUp( ceiling(max(max(srarsq[,2],srarsq[,11])/10)) )), cex.axis=1) + 
+axis (2, pos=c(0,0),tck=0.01, lwd=3, at=seq(floor(min(srarsq[,2],srarsq[,11])),ceiling(max(srarsq[,2],srarsq[,11])),roundUp( ceiling(max(max(srarsq[,2],srarsq[,11])/10)) )), cex.axis=1)+
+mtext(side = 1, text = paste("Log2 expression in ", levels(srarsq$dt.x)), line = 3)
+mtext(side = 2, text = paste("Log2 expression in ",levels(srarsq$dt.y)), line = 2)
+dev.off()
+
+#raw gt2
+srarsq_rawcor=cor(srarsq[,3], srarsq[,12])
+srarsq_rawcor=formatC(srarsq_rawcor,3)
+pdfname=paste(outdir,"/SRA_VS_RSQ/raw/",gtgroup,"srarsq_correlation_raw.pdf",sep="")
+pdf(pdfname)
+plot (srarsq[,3], srarsq[,12], xlim=c(min(srarsq[,3],srarsq[,12]),max(srarsq[,3],srarsq[,12])),
+		ylim=c(min(srarsq[,3],srarsq[,12]), max(srarsq[,3],srarsq[,12])),xlab="", ylab="", pch=21, 
+		col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.5, ex.lab=1.5,
+		main=paste("Log2 expression of ", colnames(srarsq)[2],"\n",
+					"Correlation Coefficient between ",levels(srarsq$dt.x), " and ",levels(srarsq$dt.y), " is ",srarsq_rawcor,sep="" ), 
+		cex.main=1) + 
+
+abline(lm(srarsq[,12]~srarsq[,3])$coefficients[1],lm(srarsq[,12]~srarsq[,3])$coefficients[2],lty=2,lwd=2,col="blue")+
+axis (1,pos=c(0,0), tck=0.01, lwd=3, at=seq(floor(min(srarsq[,3],srarsq[,12])),ceiling(max(srarsq[,3],srarsq[,12])),roundUp( ceiling(max(max(srarsq[,3],srarsq[,12])/10)) )), cex.axis=1) + 
+axis (2, pos=c(0,0),tck=0.01, lwd=3, at=seq(floor(min(srarsq[,3],srarsq[,12])),ceiling(max(srarsq[,3],srarsq[,12])),roundUp( ceiling(max(max(srarsq[,3],srarsq[,12])/10)) )), cex.axis=1)+
+mtext(side = 1, text = paste("Log2 expression in ", levels(srarsq$dt.x)), line = 3)
+mtext(side = 2, text = paste("Log2 expression in ",levels(srarsq$dt.y)), line = 2)
+dev.off()
 
 }
