@@ -547,19 +547,15 @@ countsTableSRA=countsTable
 countsTableRSQ=read.table(rsq,T)
 countsTableDEG=read.table(deg,T)
 
+countsTableSRA=transform(countsTableSRA,category1=ifelse(M<(-1),-1,0),category2=ifelse(M>1,1,0) )
+countsTableSRA=transform(countsTableSRA,category=category1 + category2 )
+
 countsTableRSQ=transform(countsTableRSQ,category1=ifelse(M<(-1),-1,0),category2=ifelse(M>1,1,0) )
 countsTableRSQ=transform(countsTableRSQ,category=category1 + category2 )
 
 countsTableDEG=transform(countsTableDEG,category1=ifelse(M<(-1),-1,0),category2=ifelse(M>1,1,0) )
 countsTableDEG=transform(countsTableDEG,category=category1 + category2 )
 
-#GcountsTableSRA=merge(countsTableSRA,group,by="feature")
-#GcountsTableDEG=merge(countsTableDEG,group,by="feature")
-#GcountsTableRSQ=merge(countsTableRSQ,group,by="feature")
-
-#G1countsTableSRA=as.data.frame(lapply(subset(GcountsTableSRA,as.character(g)==1),'[',drop=TRUE))
-#G1countsTableDEG=as.data.frame(lapply(subset(GcountsTableDEG,as.character(g)==1),'[',drop=TRUE))
-#G1countsTableRSQ=as.data.frame(lapply(subset(GcountsTableRSQ,as.character(g)==1),'[',drop=TRUE))
 
 #DEG vs RSQ
 degrsq=merge(countsTableDEG,countsTableRSQ,by="feature")
