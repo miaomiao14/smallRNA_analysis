@@ -611,6 +611,8 @@ mtext(side = 2, text = paste("mean of Log2 expression in ",levels(degrsq$dt.y)),
 dev.off()
 
 #raw gt1
+degrsq[,2]=log2(degrsq[,2])
+degrsq[,11]=log2(degrsq[,11])
 degrsq_rawcor=cor(degrsq[,2], degrsq[,11])
 degrsq_rawcor=formatC(degrsq_rawcor,3)
 pdfname=paste(outdir,"/DEG_VS_RSQ/RAW/",gtgroup,"_",colnames(degrsq)[2],"_degrsq_correlation_raw.pdf",sep="")
@@ -630,6 +632,8 @@ mtext(side = 2, text = paste("Log2 expression in ",levels(degrsq$dt.y)), line = 
 dev.off()
 
 #raw gt2
+degrsq[,3]=log2(degrsq[,3])
+degrsq[,12]=log2(degrsq[,12])
 degrsq_rawcor=cor(degrsq[,3], degrsq[,12])
 degrsq_rawcor=formatC(degrsq_rawcor,3)
 pdfname=paste(outdir,"/DEG_VS_RSQ/RAW/",gtgroup,"_",colnames(degrsq)[3],"_degrsq_correlation_raw.pdf",sep="")
@@ -693,6 +697,8 @@ mtext(side = 2, text = paste("mean of Log2 expression in ",levels(G1degrsq$dt.y)
 dev.off()
 
 #raw
+G1degrsq[,2]=log2(G1degrsq[,2])
+G1degrsq[,11]=log2(G1degrsq[,11])
 G1degrsq_rawcor=cor(G1degrsq[,2], G1degrsq[,11])
 G1degrsq_rawcor=formatC(G1degrsq_rawcor,3)
 pdfname=paste(outdir,"/DEG_VS_RSQ/RAW/",gtgroup,"_",colnames(degrsq)[2],"_G1degrsq_correlation_raw.pdf",sep="")
@@ -712,6 +718,8 @@ mtext(side = 2, text = paste("Log2 expression in ",levels(G1degrsq$dt.y)), line 
 dev.off()
 
 #raw gt2
+G1degrsq[,3]=log2(G1degrsq[,3])
+G1degrsq[,12]=log2(G1degrsq[,12])
 G1degrsq_rawcor=cor(G1degrsq[,3], G1degrsq[,12])
 G1degrsq_rawcor=formatC(G1degrsq_rawcor,3)
 pdfname=paste(outdir,"/DEG_VS_RSQ/RAW/",gtgroup,"_",colnames(G1degrsq)[3],"_G1degrsq_correlation_raw.pdf",sep="")
@@ -781,6 +789,8 @@ mtext(side = 2, text = paste("mean of Log2 expression in ",levels(sradeg$dt.y)),
 dev.off()
 
 #raw gt1
+sradeg[,2]=log2(sradeg[,2])
+sradeg[,11]=log2(sradeg[,11])
 sradeg_rawcor=cor(sradeg[,2], sradeg[,11])
 sradeg_rawcor=formatC(sradeg_rawcor,3)
 pdfname=paste(outdir,"/SRA_VS_DEG/RAW/",gtgroup,"_",colnames(sradeg)[2],"_sradeg_correlation_raw.pdf",sep="")
@@ -800,6 +810,8 @@ mtext(side = 2, text = paste("Log2 expression in ",levels(sradeg$dt.y)), line = 
 dev.off()
 
 #raw gt2
+sradeg[,3]=log2(sradeg[,3])
+sradeg[,12]=log2(sradeg[,12])
 sradeg_rawcor=cor(sradeg[,3], sradeg[,12])
 sradeg_rawcor=formatC(sradeg_rawcor,3)
 pdfname=paste(outdir,"/SRA_VS_DEG/RAW/",gtgroup,"_",colnames(sradeg)[3],"_sradeg_correlation_raw.pdf",sep="")
@@ -868,6 +880,8 @@ mtext(side = 2, text = paste("mean of Log2 expression in ",levels(srarsq$dt.y)),
 dev.off()
 
 #raw gt1
+srarsq[,2]=log2(srarsq[,2])
+srarsq[,11]=log2(srarsq[,11])
 srarsq_rawcor=cor(srarsq[,2], srarsq[,11])
 srarsq_rawcor=formatC(srarsq_rawcor,3)
 pdfname=paste(outdir,"/SRA_VS_RSQ/RAW/",gtgroup,"_",colnames(srarsq)[2],"_srarsq_correlation_raw.pdf",sep="")
@@ -887,6 +901,8 @@ mtext(side = 2, text = paste("Log2 expression in ",levels(srarsq$dt.y)), line = 
 dev.off()
 
 #raw gt2
+srarsq[,3]=log2(srarsq[,3])
+srarsq[,12]=log2(srarsq[,12])
 srarsq_rawcor=cor(srarsq[,3], srarsq[,12])
 srarsq_rawcor=formatC(srarsq_rawcor,3)
 pdfname=paste(outdir,"/SRA_VS_RSQ/RAW/",gtgroup,"_",colnames(srarsq)[3],"_srarsq_correlation_raw.pdf",sep="")
