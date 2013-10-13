@@ -80,6 +80,17 @@ dev.off();
 
 }
 
+plot_total_zscore_barplot <- function (file,outdir)
+{
+a=read.table(file,F)
+colnames(a)=c("overlap","ppscore")
+pdfname=paste(outdir,"/", file,".pdf",sep='')
+pdf (pdfname,width=9)
+barplot(a$ppscore, col="blue",border="white",names=a$overlap, xlab="overlap (nt)",ylab="paired Ping-Pong score")
+dev.off()
+
+
+}
 
 
 plot_transposon_abundance_zscore_barplot <- function (tlist,plist,z,nf,nftype,outdir) {
