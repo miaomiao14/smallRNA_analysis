@@ -25,6 +25,6 @@ do
 	gzip ${smmapper2%.gz}.23-29
 	echo -e "`date` "+$ISO_8601"\tSize select the smallRNA transposon mapper2 and gzip it..." >> $LOG
 	#total Ping-Pong
-	[ ! -s ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome_total_with_ppscore/${g}.total.pp6.out ] && submitsge 24 $g "$script ${smmapper2%.gz}.23-29.gz ${demapper2} 2 ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome_total_with_ppscore >${smRNAINDIR}/pp6_FB_smRNA_vs_degradome_total_with_ppscore/${g}.total.pp6.out" 
+	[ ! -s ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome_total_with_ppscore/${g}.total.pp6.out ] && submitsge 8 $g "$script ${smmapper2%.gz}.23-29.gz ${demapper2} 2 ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome_total_with_ppscore >${smRNAINDIR}/pp6_FB_smRNA_vs_degradome_total_with_ppscore/${g}.total.pp6.out" 
 	#echo -e "`date` "+$ISO_8601"\ttotal Ping-Pong analysis done..." >> $LOG
 done
