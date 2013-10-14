@@ -20,10 +20,10 @@ do
 		mv ${degraINDIR}/Phil.DEG.${g}.ovary/bedIntersectWW/Phil.DEG.${g}.ovary.x_rRNA.dm3.sorted.f0x40.noS.5p.all.bed.ntm.collapse.FLY_TRANSPOSON_ALL.nta.mapper2.gz $demapper2
 	echo -e "`date` "+$ISO_8601"\tChanged the name of degradome transposon mapper2..." >> $LOG
 	#length range: 23-29
-#	[ ! -f ${smmapper2%.gz}.23-29.gz ] && \
-#	${PIPELINE_DIRECTORY}/gzlenrangeselector.pl ${smmapper2} 23 29 >${smmapper2%.gz}.23-29 && \
-#	gzip ${smmapper2%.gz}.23-29
-#	echo -e "`date` "+$ISO_8601"\tSize select the smallRNA transposon mapper2 and gzip it..." >> $LOG
+	[ ! -f ${smmapper2%.gz}.23-29.gz ] && \
+	${PIPELINE_DIRECTORY}/gzlenrangeselector.pl ${smmapper2} 23 29 >${smmapper2%.gz}.23-29 && \
+	gzip ${smmapper2%.gz}.23-29
+	echo -e "`date` "+$ISO_8601"\tSize select the smallRNA transposon mapper2 and gzip it..." >> $LOG
 	#total Ping-Pong
 	[ ! -s ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome_total_with_ppscore/${g}.total.pp6.out ] && submitsge 24 $g "$script ${smmapper2%.gz}.23-29.gz ${demapper2} 2 ${smRNAINDIR}/pp6_FB_smRNA_vs_degradome_total_with_ppscore >${smRNAINDIR}/pp6_FB_smRNA_vs_degradome_total_with_ppscore/${g}.total.pp6.out" 
 	#echo -e "`date` "+$ISO_8601"\ttotal Ping-Pong analysis done..." >> $LOG
