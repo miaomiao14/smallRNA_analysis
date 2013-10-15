@@ -3,19 +3,32 @@
 
 ##QUESTIONS## (user input)
 
-$inputfilename1=&QQQ("What is the name of your 1st input file? Extention must be .transposon.mapper2. (ex. 29SEP08.s1.xkxh.transposon.mapper2)");
-$inputfilename2=&QQQ("What is the name of your 2nd input file? (ex. 29SEP08.s2.xkxh.transposon.mapper2)");
-$inputdir=&QQQ("What is input directory (full path)? (ex. /home/lees2/nearline/29SEP08/)");
-$outputdir=&QQQ("Where should the output files be placed (full path)? (Enter if same as input directory)");
+#$inputfilename1=&QQQ("What is the name of your 1st input file? Extention must be .transposon.mapper2. (ex. 29SEP08.s1.xkxh.transposon.mapper2)");
+#$inputfilename2=&QQQ("What is the name of your 2nd input file? (ex. 29SEP08.s2.xkxh.transposon.mapper2)");
+#$inputdir=&QQQ("What is input directory (full path)? (ex. /home/lees2/nearline/29SEP08/)");
+#$outputdir=&QQQ("Where should the output files be placed (full path)? (Enter if same as input directory)");
+#if($outputdir eq "") { $outputdir = $inputdir; }
+#
+#$samplename1=&QQQ("Describe your first samplename, in format of italic:plain. (ex. ago3/ago3:  or  ago3:/TM6B   or  :wt)");
+#$samplename2=&QQQ("Describe your second samplename likewise.");
+#
+#$seqdepth1=&QQQ("What is the normalizing factor for your first sample? (for example, sequencing depth or total ncRNA in unit of reads per million) (eg. 1.448)");
+#$seqdepth2=&QQQ("What is the normalizing factor for your second sample?");
+#
+#$email=&QQQ("Your email address");
+
+$inputfilename1=$ARGV[0];
+$inputfilename2=$ARGV[1];
+$inputdir=$ARGV[2];
+$outputdir=$ARGV[3];
 if($outputdir eq "") { $outputdir = $inputdir; }
+$samplename1=$ARGV[4];
+$samplename2=$ARGV[5];
 
-$samplename1=&QQQ("Describe your first samplename, in format of italic:plain. (ex. ago3/ago3:  or  ago3:/TM6B   or  :wt)");
-$samplename2=&QQQ("Describe your second samplename likewise.");
+$seqdepth1=$ARGV[6];
+$seqdepth2=$ARGV[7];
+$email=$ARGV[8];
 
-$seqdepth1=&QQQ("What is the normalizing factor for your first sample? (for example, sequencing depth or total ncRNA in unit of reads per million) (eg. 1.448)");
-$seqdepth2=&QQQ("What is the normalizing factor for your second sample?");
-
-$email=&QQQ("Your email address");
 
 my ($inputfileprefix1)=$inputfilename1=~/(.+)\.transposon.mapper2.gz$/;
 my ($inputfileprefix2)=$inputfilename2=~/(.+)\.transposon.mapper2.gz$/;
@@ -76,6 +89,7 @@ print SGE
 "\n".
 "#\$ -V\n".
 "#\$ -pe single 8\n".
+"#\$ -l mem_free=31G\n".
 "#\$ -o \$HOME/sge_jobs_output/sge_job.\$JOB_ID.out -j y\n".
 "#\$ -M zzpipeline.admin\@gmail.com\n".
 "#\$ -S /bin/bash  \n".
