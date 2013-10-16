@@ -82,14 +82,14 @@ OUTDIR1=$OUT
 
 for g in "${GROUPGT[@]}"
 do
-	SUBGROUP="$g[@]"
-
+	#SUBGROUP="$g[@]"
+		eval "SUBGROUP=(\"\${${g}[@]}\")"  #array in bash can not be assigned directly
 
 		[ ! -d ${OUTDIR1}/${g} ] && mkdir ${OUTDIR1}/${g}
 		outputdir=${OUTDIR1}/${g}
 		inputdir=$outputdir
-		inputfilename1=${!SUBGROUP[1]}
-		inputfilename2=${!SUBGROUP[2]}
+		inputfilename1=${SUBGROUP[0]}
+		inputfilename2=${SUBGROUP[1]}
 		ln -s ${INDIR}/${inputfilename1}/${inputfilename1}.xkxh.transposon.mapper2.gz ${outputdir}
 		ln -s ${INDIR}/${inputfilename2}/${inputfilename2}.xkxh.transposon.mapper2.gz ${outputdir}
 		samplename1b=${inputfilename1#Phil.SRA.*}
