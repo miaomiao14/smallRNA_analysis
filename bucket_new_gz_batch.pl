@@ -57,8 +57,8 @@ if($inputdir_exist_message ne "" || $inputfile1_exist_message ne "" || $inputfil
 
 
 
-$iscorrect=&QQQ("Correct? (Y or N)");
-if($iscorrect ne "Y") {die "Please start over.\n";}
+#$iscorrect=&QQQ("Correct? (Y or N)");
+#if($iscorrect ne "Y") {die "Please start over.\n";}
 
 
 
