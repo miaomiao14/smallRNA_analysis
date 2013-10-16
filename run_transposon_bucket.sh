@@ -100,7 +100,7 @@ do
 		seqdepth2=`cat ${INDIR}/${inputfilename2}/output/${inputfilename2}_stats_table_reads|tail -1|awk '{print $4/1000000}'`
 		email="weiwanghhq@gmail.com"
 		
-		${PIPELINE_DIRECTORY}/bucket_new_gz_batch.pl ${inputfilename1} ${inputfilename2} ${inputdir} ${outputdir} ${samplename1} ${samplename2} ${seqdepth1} ${seqdepth2} ${email}
+		${PIPELINE_DIRECTORY}/bucket_new_gz_batch.pl ${inputfilename1}.xkxh.transposon.mapper2.gz ${inputfilename2}.xkxh.transposon.mapper2.gz ${inputdir} ${outputdir} ${samplename1} ${samplename2} ${seqdepth1} ${seqdepth2} ${email}
 	
 	
 done
