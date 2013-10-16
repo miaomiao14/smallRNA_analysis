@@ -66,7 +66,7 @@ if($inputdir_exist_message ne "" || $inputfile1_exist_message ne "" || $inputfil
 $randomname=""; for(1..30) {$randomname.=(1..9)[rand(10)];}
 chomp($home = `echo \$HOME`);
 `mkdir -p $home/bucket_sge/`;
-$sgefile = "$home/bucket_sge/bucket.$randomname.sge";
+$sgefile = "$home/bucket_sge/bucket.$samplename1.vs.$samplename2.sge";
 print "$sgefile\n";
 
 
@@ -143,8 +143,8 @@ print SGE
 "#dividing to FB mappers\n".
 "echo \"Dividing mapper to FB mappers\" >> \$BUCKET_LOGFILE\n".
 "date >> \$BUCKET_LOGFILE\n".
-"FB_gz.pl \$HOME/scratch/jobid_\$JOB_ID/\$BUCKET_MAPPERPREFIX1.transposon.mapper2.gz\n".
-"FB_gz.pl \$HOME/scratch/jobid_\$JOB_ID/\$BUCKET_MAPPERPREFIX2.transposon.mapper2.gz\n".
+"FB_gz.pl \$HOME/scratch/jobid_\$JOB_ID/\$BUCKET_MAPPERPREFIX1.transposon.mapper2.gz \$HOME/scratch/jobid_\$JOB_ID/\n".
+"FB_gz.pl \$HOME/scratch/jobid_\$JOB_ID/\$BUCKET_MAPPERPREFIX2.transposon.mapper2.gz \$HOME/scratch/jobid_\$JOB_ID/\n".
 "date >> \$BUCKET_LOGFILE\n".
 "echo \"done\" >> \$BUCKET_LOGFILE\n".
 "echo \"\" >> \$BUCKET_LOGFILE\n".
