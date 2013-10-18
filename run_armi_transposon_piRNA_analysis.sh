@@ -17,20 +17,22 @@ INDIR=$1 #this is the folder store all pipeline results outmost folders
 BINSIZE=$2 #BINSIZE for cicos plot
 OUT=${INDIR}/transposon_piRNA
 LOG=${OUT}/log
+#
+#declare -a GROUPGT=("wtk729a_ox" "wthets_ox" "wtmut_ox" "k729amut_ox" "k729ahets_ox" "k729aPNK_unox" "acthets_ox" "muthets_ox" "copy1vscopy2_ox")
+#declare -a wtk729a_ox=("Phil.SRA.nosactArmiWTrescue72D2.ox.ovary.inserts" "Phil.SRA.nosactArmiK729Arescue72D2.ox.ovary.inserts")
+#declare -a wthets_ox=("Phil.SRA.nosactArmiWTrescue72D2.ox.ovary.inserts" "Phil.SRA.nosactinarmiD2Hets.ox.ovary.inserts")
+#declare -a wtmut_ox=("Phil.SRA.nosactArmiWTrescue72D2.ox.ovary.inserts" "Phil.SRA.ArmiWTin72D2.ox.ovary.inserts")
+#declare -a k729amut_ox=("Phil.SRA.nosactArmiK729Arescue72D2.ox.ovary.inserts" "Phil.SRA.ArmiWTin72D2.ox.ovary.inserts")
+#declare -a k729ahets_ox=("Phil.SRA.nosactArmiK729Arescue72D2.ox.ovary.inserts" "Phil.SRA.nosactinarmiD2Hets.ox.ovary.inserts")
+#declare -a k729aPNK_unox=("Phil.SRA.nosactArmiK729Arescue72D2.unox.ovary.inserts" "Phil.SRA.nosactArmiK729Arescue72D2_PNK.unox.ovary.inserts")
+#declare -a acthets_ox=("Phil.SRA.armi72_1Hets.ox.ovary.inserts" "Phil.SRA.nosactinarmiD2Hets.ox.ovary.inserts")
+#declare -a muthets_ox=("Phil.SRA.ArmiWTin72D2.ox.ovary.inserts" "Phil.SRA.nosactinarmiD2Hets.ox.ovary.inserts")
+#declare -a copy1vscopy2_ox=("Phil.SRA.nosactinarmiD2Hets.ox.ovary.inserts" "Phil.SRA.UASPArmiWTinHets.ox.ovary.inserts")
 
-declare -a GROUPGT=("wtk729a_ox" "wthets_ox" "wtmut_ox" "k729amut_ox" "k729ahets_ox" "k729aPNK_unox" "acthets_ox" "muthets_ox" "copy1vscopy2_ox")
-declare -a wtk729a_ox=("Phil.SRA.nosactArmiWTrescue72D2.ox.ovary.inserts" "Phil.SRA.nosactArmiK729Arescue72D2.ox.ovary.inserts")
-declare -a wthets_ox=("Phil.SRA.nosactArmiWTrescue72D2.ox.ovary.inserts" "Phil.SRA.nosactinarmiD2Hets.ox.ovary.inserts")
-declare -a wtmut_ox=("Phil.SRA.nosactArmiWTrescue72D2.ox.ovary.inserts" "Phil.SRA.ArmiWTin72D2.ox.ovary.inserts")
-declare -a k729amut_ox=("Phil.SRA.nosactArmiK729Arescue72D2.ox.ovary.inserts" "Phil.SRA.ArmiWTin72D2.ox.ovary.inserts")
-declare -a k729ahets_ox=("Phil.SRA.nosactArmiK729Arescue72D2.ox.ovary.inserts" "Phil.SRA.nosactinarmiD2Hets.ox.ovary.inserts")
-declare -a k729aPNK_unox=("Phil.SRA.nosactArmiK729Arescue72D2.unox.ovary.inserts" "Phil.SRA.nosactArmiK729Arescue72D2_PNK.unox.ovary.inserts")
-declare -a acthets_ox=("Phil.SRA.armi72_1Hets.ox.ovary.inserts" "Phil.SRA.nosactinarmiD2Hets.ox.ovary.inserts")
-declare -a muthets_ox=("Phil.SRA.ArmiWTin72D2.ox.ovary.inserts" "Phil.SRA.nosactinarmiD2Hets.ox.ovary.inserts")
-declare -a copy1vscopy2_ox=("Phil.SRA.nosactinarmiD2Hets.ox.ovary.inserts" "Phil.SRA.UASPArmiWTinHets.ox.ovary.inserts")
 
+declare -a GROUPGT=("ago3hetmut_piwiip_unox")
 
-
+declare -a ago3hetmut_piwiip_unox=("Phil.SRA.PiwiIPago3hets.unox.ovary.inserts" "Phil.SRA.PiwiIPago3muts.unox.ovary.inserts")
 
 declare -a NORMFACTORTYPE=("nnc" "seqDep")
 
@@ -367,37 +369,37 @@ done
 STEP=$((STEP+1))
 
 #transposon bucket
-echo -e "`date` "+$ISO_8601"\trun bucket of transposon piRNAs" >> $LOG
-OUTDIR11=${INDIR}/transposon_piRNA/transposon_bucket
-[ ! -d $OUTDIR11 ] && mkdir -p ${OUTDIR11}
-
-[ ! -f ${OUT}/.status.${STEP}.transposon_bucket ] && \
-for g in "${GROUPGT[@]}"
-do
+#echo -e "`date` "+$ISO_8601"\trun bucket of transposon piRNAs" >> $LOG
+#OUTDIR11=${INDIR}/transposon_piRNA/transposon_bucket
+#[ ! -d $OUTDIR11 ] && mkdir -p ${OUTDIR11}
+#
+#[ ! -f ${OUT}/.status.${STEP}.transposon_bucket ] && \
+#for g in "${GROUPGT[@]}"
+#do
 	#SUBGROUP="$g[@]"
-		eval "SUBGROUP=(\"\${${g}[@]}\")"  #array in bash can not be assigned directly
-
-		[ ! -d ${OUTDIR11}/${g} ] && mkdir ${OUTDIR11}/${g}
-		outputdir=${OUTDIR11}/${g}
-		inputdir=$outputdir
-		inputfilename1=${SUBGROUP[0]}
-		inputfilename2=${SUBGROUP[1]}
-		ln -s ${INDIR}/${inputfilename1}/${inputfilename1}.xkxh.transposon.mapper2.gz ${outputdir}
-		ln -s ${INDIR}/${inputfilename2}/${inputfilename2}.xkxh.transposon.mapper2.gz ${outputdir}
-		samplename1b=${inputfilename1#Phil.SRA.*}
-		samplename2b=${inputfilename2#Phil.SRA.*}
-		samplename1=${samplename1b%*.ox.ovary.inserts}
-		samplename2=${samplename2b%*.ox.ovary.inserts}
-		seqdepth1=`cat ${INDIR}/${inputfilename1}/output/${inputfilename1}_stats_table_reads|tail -1|awk '{print $4/1000000}'`
-		seqdepth2=`cat ${INDIR}/${inputfilename2}/output/${inputfilename2}_stats_table_reads|tail -1|awk '{print $4/1000000}'`
-		email="weiwanghhq@gmail.com"
-		
+#		eval "SUBGROUP=(\"\${${g}[@]}\")"  #array in bash can not be assigned directly
+#
+#		[ ! -d ${OUTDIR11}/${g} ] && mkdir ${OUTDIR11}/${g}
+#		outputdir=${OUTDIR11}/${g}
+#		inputdir=$outputdir
+#		inputfilename1=${SUBGROUP[0]}
+#		inputfilename2=${SUBGROUP[1]}
+#		ln -s ${INDIR}/${inputfilename1}/${inputfilename1}.xkxh.transposon.mapper2.gz ${outputdir}
+#		ln -s ${INDIR}/${inputfilename2}/${inputfilename2}.xkxh.transposon.mapper2.gz ${outputdir}
+#		samplename1b=${inputfilename1#Phil.SRA.*}
+#		samplename2b=${inputfilename2#Phil.SRA.*}
+#		samplename1=${samplename1b%*.ox.ovary.inserts}
+#		samplename2=${samplename2b%*.ox.ovary.inserts}
+#		seqdepth1=`cat ${INDIR}/${inputfilename1}/output/${inputfilename1}_stats_table_reads|tail -1|awk '{print $4/1000000}'`
+#		seqdepth2=`cat ${INDIR}/${inputfilename2}/output/${inputfilename2}_stats_table_reads|tail -1|awk '{print $4/1000000}'`
+#		email="weiwanghhq@gmail.com"
+#		
 ${PIPELINE_DIRECTORY}/bucket_new_gz_batch.pl ${inputfilename1}.xkxh.transposon.mapper2.gz ${inputfilename2}.xkxh.transposon.mapper2.gz ${inputdir} ${outputdir} ${samplename1} ${samplename2} ${seqdepth1} ${seqdepth2} ${email} >$LOG
+#	
 	
-	
-done
-touch ${OUT}/.status.${STEP}.transposon_bucket
-STEP=$((STEP+1))
+#done
+#touch ${OUT}/.status.${STEP}.transposon_bucket
+#STEP=$((STEP+1))
 
 #cluster bucket
 echo -e "`date` "+$ISO_8601"\trun cluster bucket of transposon piRNAs" >> $LOG
