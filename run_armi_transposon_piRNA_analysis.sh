@@ -399,6 +399,13 @@ done
 touch ${OUT}/.status.${STEP}.transposon_bucket
 STEP=$((STEP+1))
 
+#cluster bucket
+echo -e "`date` "+$ISO_8601"\trun cluster bucket of transposon piRNAs" >> $LOG
+OUTDIR12=${INDIR}/transposon_piRNA/cluster_bucket
+[ ! -d $OUTDIR12 ] && mkdir -p ${OUTDIR12}
+
+
+
 #echo -e "`date` "+$ISO_8601"\tDraw phasing analysis..." >> $LOG
 #OUTDIR11=${INDIR}/transposon_piRNA/paired_zscore_scatterplot
 #[ ! -d $OUTDIR11 ] && mkdir -p ${OUTDIR11}

@@ -22,15 +22,17 @@ declare -a NORMFACTORTYPE=("nnc" "seqDep")
 STEP=1
 
 #transposon bucket
-declare -a GROUPGT=( "pago3wtmut_ox" "pago3cdwt_ox" "pago3cdmut_unox" "pago3wtmut_unox" "pago3cdwt_unox" \
-"ago3cdmut_ox" "ago3wtmut_ox" "ago3cdwt_ox" "ago3cdmut_unox" "ago3wtmut_unox" "ago3cdwt_unox" \
-"aubcdmut_ox" "aubwtmut_ox" "aubcdwt_ox" "aubcdmut_unox" "aubwtmut_unox" "aubcdwt_unox" "aubmuthet_ox" "aubhetmut_ox" "aubKDgfpKD_unox" "gfpKDaubKD_unox" \
-"qinago3muthet_ox" "qinago3muthet_unox" \
-"AubIP_aubcdwt_ox" "AubIP_aubcdwt_unox" \
-"ago3mut_cor1_ox" "ago3mut_cor1_unox" "ago3CD_cor2_ox" "ago3CD_cor2_unox" "aubmut_cor3_ox" \
-)
+#declare -a GROUPGT=( "pago3wtmut_ox" "pago3cdwt_ox" "pago3cdmut_unox" "pago3wtmut_unox" "pago3cdwt_unox" \
+#"ago3cdmut_ox" "ago3wtmut_ox" "ago3cdwt_ox" "ago3cdmut_unox" "ago3wtmut_unox" "ago3cdwt_unox" \
+#"aubcdmut_ox" "aubwtmut_ox" "aubcdwt_ox" "aubcdmut_unox" "aubwtmut_unox" "aubcdwt_unox" "aubmuthet_ox" "aubhetmut_ox" "aubKDgfpKD_unox" "gfpKDaubKD_unox" \
+#"qinago3muthet_ox" "qinago3muthet_unox" \
+#"AubIP_aubcdwt_ox" "AubIP_aubcdwt_unox" \
+#"ago3mut_cor1_ox" "ago3mut_cor1_unox" "ago3CD_cor2_ox" "ago3CD_cor2_unox" "aubmut_cor3_ox" \
+#)
 
-#declare -a GROUPGT=("pago3cdmut_ox")
+declare -a GROUPGT=("ago3hetmut_piwiip_unox")
+
+declare -a ago3hetmut_piwiip_unox=("Phil.SRA.PiwiIPago3hets.unox.ovary.inserts" "Phil.SRA.PiwiIPago3muts.unox.ovary.inserts")
 
 declare -a pago3cdmut_ox=("Phil.SRA.nosAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.ago3MutsWW.ox.ovary.inserts")
 declare -a pago3wtmut_ox=("Phil.SRA.nosAgo3WTrescue.ox.ovary.inserts" "Phil.SRA.ago3MutsWW.ox.ovary.inserts")
