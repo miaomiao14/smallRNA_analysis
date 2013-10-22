@@ -25,7 +25,7 @@ for ($n=1;$n<=$ARGV[1];$n++)
   #while (<IN>) 
   { chomp; split(/\t/); $NTM{$_[4]}=$_[6];} ##$_[4] is the reads
   $gz->gzclose();
-  `grep -v track $ARGV[2*$n] | cut -f5,6 | uniq.lines+ 0 > $file.uniq.reads`; ##f5,f6 are the reads and their reads count
+  `zcat $ARGV[2*$n] |grep -v track  | cut -f5,6 | uniq.lines+ 0 > $file.uniq.reads`; ##f5,f6 are the reads and their reads count
   `run_bowtie.pl $file.uniq.reads 0 /home/wangw1/pipeline/common/indexes/cluster cluster`;  ##run_bowtie.pl will deal with the bowtie output
   `rm $file.uniq.reads.bowtie.out`;
   `rm $file.uniq.reads`;
