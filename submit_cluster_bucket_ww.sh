@@ -42,7 +42,7 @@ cp $3 .
 cp $5 .
 #/home/xuj1/nearline/cluster/cluster_bucket/cluster.convertseq.pl $S.cluster.all > $S.cluster.fa
 #bowtie-build $S.cluster.fa $S
-/home/wangw1/bin/cluster_bucket3_ww.pl /home/wangw1/pipeline/common/JB.allcluster.fa $n $F1 $3 $F2 $5
+/home/wangw1/git/smallRNA_analysis/cluster_bucket3_ww.pl /home/wangw1/pipeline/common/JB.allcluster.fa $n $F1 $3 $F2 $5
 cp \$HOME/scratch/jobid_\$JOB_ID/${F1}_${F2}.pdf \$OUTPUTDIR 
 #rm $OUTPUTDIR/$S.cluster.all 
 "> submit_${F1}_${F2}_cluster.sge

@@ -19,14 +19,14 @@ for ($n=1;$n<=$ARGV[1];$n++)
   while(<IN>) {chomp; split(/\t/); $norm_factor=1000000/$_[3];} ##normlization factor: excluding_ncRNAs (sequencing depth)
   #open IN, $ARGV[2*$n]; ##norm.bed
   #<IN>;
-  $gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
+  $gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[2*$n]: $gzerrno\n" ;
   $gz->gzreadline($_);
   while($gz->gzreadline($_) > 0)
   #while (<IN>) 
   { chomp; split(/\t/); $NTM{$_[4]}=$_[6];} ##$_[4] is the reads
   $gz->gzclose();
   `zcat $ARGV[2*$n] |grep -v track  | cut -f5,6 | uniq.lines+ 0 > $file.uniq.reads`; ##f5,f6 are the reads and their reads count
-  `run_bowtie.pl $file.uniq.reads 0 /home/wangw1/pipeline/common/indexes/cluster cluster`;  ##run_bowtie.pl will deal with the bowtie output
+  `run_bowtie.pl $file.uniq.reads 0 /home/wangw1/src/bowtie-0.12.9/indexes/cluster cluster`;  ##run_bowtie.pl will deal with the bowtie output
   `rm $file.uniq.reads.bowtie.out`;
   `rm $file.uniq.reads`;
 
