@@ -427,7 +427,7 @@ echo -e "`date` "+$ISO_8601"\tDraw phasing analysis..." >> $LOG
 OUTDIR13=${INDIR}/transposon_piRNA/phasing
 [ ! -d $OUTDIR13 ] && mkdir -p ${OUTDIR13}
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.phasing ] && \
-paraFile=${OUTDIR13}/${RANDOM}.piRNAphasing.para && \
+paraFile=${OUTDIR13}/${RANDOM}.piRNAphasing.para
 
 #for i in `ls ${INDIR}/*.inserts`
 #do
