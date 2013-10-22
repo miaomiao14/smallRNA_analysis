@@ -16,8 +16,8 @@ while($gz->gzreadline($_) > 0)
   $_[5] =~ /(.+)\./;
   $transposon{$1}.="$_\n";
 }
-close(IN);
-
+#close(IN);
+$gz->gzclose();
 foreach $F(keys %transposon)
  {
   open OUT,"> $OUTDIR/$filename.$F";

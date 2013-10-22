@@ -394,7 +394,7 @@ STEP=$((STEP+1))
 #		seqdepth2=`cat ${INDIR}/${inputfilename2}/output/${inputfilename2}_stats_table_reads|tail -1|awk '{print $4/1000000}'`
 #		email="weiwanghhq@gmail.com"
 #		
-${PIPELINE_DIRECTORY}/bucket_new_gz_batch.pl ${inputfilename1}.xkxh.transposon.mapper2.gz ${inputfilename2}.xkxh.transposon.mapper2.gz ${inputdir} ${outputdir} ${samplename1} ${samplename2} ${seqdepth1} ${seqdepth2} ${email} >$LOG
+#${PIPELINE_DIRECTORY}/bucket_new_gz_batch.pl ${inputfilename1}.xkxh.transposon.mapper2.gz ${inputfilename2}.xkxh.transposon.mapper2.gz ${inputdir} ${outputdir} ${samplename1} ${samplename2} ${seqdepth1} ${seqdepth2} ${email} >$LOG
 #	
 	
 #done
@@ -405,6 +405,21 @@ ${PIPELINE_DIRECTORY}/bucket_new_gz_batch.pl ${inputfilename1}.xkxh.transposon.m
 echo -e "`date` "+$ISO_8601"\trun cluster bucket of transposon piRNAs" >> $LOG
 OUTDIR12=${INDIR}/transposon_piRNA/cluster_bucket
 [ ! -d $OUTDIR12 ] && mkdir -p ${OUTDIR12}
+# USAGE: make_sge_cluster_bucket.sh <n> <input xkxh.norm.bed file1 with full path>  <stats table1> <input xkxh.norm.bed file2 with full path> <stats table2> <n> <option [empty: default Brennecke 142 ovary clusters;  custom defined cluster file]>
+for g in "${GROUPGT[@]}"
+do
+	eval "SUBGROUP=(\"\${${g}[@]}\")"
+	[ ! -d ${OUTDIR12}/${g} ] && mkdir ${OUTDIR12}/${g}
+	outputdir=${OUTDIR12}/${g}
+	inputdir=$outputdir
+	inputfilename1=${SUBGROUP[0]}
+	inputfilename2=${SUBGROUP[1]}
+	ln -s ${INDIR}/${inputfilename1}/${inputfilename1}.xkxh.norm.bed.gz ${outputdir}
+	ln -s ${INDIR}/${inputfilename2}/${inputfilename2}.xkxh.norm.bed.gz ${outputdir}
+	stattable1=${INDIR}/${inputfilename1}/output/${inputfilename1}_stats_table_reads
+	stattable2=${INDIR}/${inputfilename2}/output/${inputfilename2}_stats_table_reads
+	${PIPELINE_DIRECTORY}/submit_cluster_bucket_ww.sh 2 ${outputdir}/${inputfilename1}.xkxh.norm.bed.gz ${stattable1} ${outputdir}/${inputfilename2}.xkxh.norm.bed.gz ${stattable2}
+done
 
 
 

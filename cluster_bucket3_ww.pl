@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use File::Basename;
-if (@ARGV<1) { print "USAGE: cluster_bucket.pl <cluster.fa> <n> <norm.bed1> <stats table1> optional: <norm.bed2> <stats table2>\n"; exit 1; }
+if (@ARGV<1) { print "USAGE: cluster_bucket3_ww.pl <cluster.fa> <n> <norm.bed1> <stats table1> optional: <norm.bed2> <stats table2>\n"; exit 1; }
 
 # build bowtie index from cluster.fa with prefix dmel_cluster
 open IN, $ARGV[0]; while(<IN>) { if (/>(.+?)\(/) { $name=$1;}  ##cluster.fa
@@ -19,9 +19,13 @@ for ($n=1;$n<=$ARGV[1];$n++)
   while(<IN>) {chomp; split(/\t/); $norm_factor=1000000/$_[3];} ##normlization factor: excluding_ncRNAs (sequencing depth)
   open IN, $ARGV[2*$n]; ##norm.bed
   <IN>;
-  while (<IN>) { chomp; split(/\t/); $NTM{$_[4]}=$_[6];} ##$_[4] is the reads
+  $gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
+  while($gz->gzreadline($_) > 0)
+  #while (<IN>) 
+  { chomp; split(/\t/); $NTM{$_[4]}=$_[6];} ##$_[4] is the reads
+  $gz->gzclose();
   `grep -v track $ARGV[2*$n] | cut -f5,6 | uniq.lines+ 0 > $file.uniq.reads`; ##f5,f6 are the reads and their reads count
-  `run_bowtie.pl $file.uniq.reads 0 /home/wangw1/bowtie-0.12.5/indexes/cluster cluster`;  ##run_bowtie.pl will deal with the bowtie output
+  `run_bowtie.pl $file.uniq.reads 0 /home/wangw1/pipeline/common/indexes/cluster cluster`;  ##run_bowtie.pl will deal with the bowtie output
   `rm $file.uniq.reads.bowtie.out`;
   `rm $file.uniq.reads`;
 
@@ -115,7 +119,7 @@ open OUT,"> $file.$cluster.mapper2";
 print OUT $mapper{$cluster};
 close(OUT);
 $p=0;
-$p=`pp6_clusterbucket.pl $file.$cluster.mapper2`;
+$p=`/home/wangw1/git/smallRNA_analysis/pp6_clusterbucket.pl $file.$cluster.mapper2`;
 open OUT,"> $file.$cluster.pvalue";
 printf OUT "%3f\n",$p;
 close(OUT);
@@ -159,5 +163,5 @@ close(OUT);
 
 #=============pdf============================================
 $N=`grep ">"  $ARGV[0] | wc -l | cut -d ' ' -f1`; 
-`RRR /home/wangw1/bin/cluster_bucket_coarse_ww.R plot_cluster_bucket $filename{1} $filename{2} $N`;
+`RRR /home/wangw1/git/smallRNA_analysis/cluster_bucket_coarse_ww.R plot_cluster_bucket $filename{1} $filename{2} $N`;
 #`rm $file.*cluster*`;
