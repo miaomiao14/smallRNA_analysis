@@ -369,36 +369,35 @@ done
 STEP=$((STEP+1))
 
 #transposon bucket
-#echo -e "`date` "+$ISO_8601"\trun bucket of transposon piRNAs" >> $LOG
-#OUTDIR11=${INDIR}/transposon_piRNA/transposon_bucket
-#[ ! -d $OUTDIR11 ] && mkdir -p ${OUTDIR11}
-#
-#[ ! -f ${OUT}/.status.${STEP}.transposon_bucket ] && \
-#for g in "${GROUPGT[@]}"
-#do
+echo -e "`date` "+$ISO_8601"\trun bucket of transposon piRNAs" >> $LOG
+OUTDIR11=${INDIR}/transposon_piRNA/transposon_bucket
+[ ! -d $OUTDIR11 ] && mkdir -p ${OUTDIR11}
+[ ! -f ${OUT}/.status.${STEP}.transposon_bucket ] && \
+for g in "${GROUPGT[@]}"
+do
 	#SUBGROUP="$g[@]"
-#		eval "SUBGROUP=(\"\${${g}[@]}\")"  #array in bash can not be assigned directly
-#
-#		[ ! -d ${OUTDIR11}/${g} ] && mkdir ${OUTDIR11}/${g}
-#		outputdir=${OUTDIR11}/${g}
-#		inputdir=$outputdir
-#		inputfilename1=${SUBGROUP[0]}
-#		inputfilename2=${SUBGROUP[1]}
-#		ln -s ${INDIR}/${inputfilename1}/${inputfilename1}.xkxh.transposon.mapper2.gz ${outputdir}
-#		ln -s ${INDIR}/${inputfilename2}/${inputfilename2}.xkxh.transposon.mapper2.gz ${outputdir}
-#		samplename1b=${inputfilename1#Phil.SRA.*}
-#		samplename2b=${inputfilename2#Phil.SRA.*}
-#		samplename1=${samplename1b%*.ox.ovary.inserts}
-#		samplename2=${samplename2b%*.ox.ovary.inserts}
-#		seqdepth1=`cat ${INDIR}/${inputfilename1}/output/${inputfilename1}_stats_table_reads|tail -1|awk '{print $4/1000000}'`
-#		seqdepth2=`cat ${INDIR}/${inputfilename2}/output/${inputfilename2}_stats_table_reads|tail -1|awk '{print $4/1000000}'`
-#		email="weiwanghhq@gmail.com"
-#		
-#${PIPELINE_DIRECTORY}/bucket_new_gz_batch.pl ${inputfilename1}.xkxh.transposon.mapper2.gz ${inputfilename2}.xkxh.transposon.mapper2.gz ${inputdir} ${outputdir} ${samplename1} ${samplename2} ${seqdepth1} ${seqdepth2} ${email} >$LOG
-#	
+		eval "SUBGROUP=(\"\${${g}[@]}\")"  #array in bash can not be assigned directly
+
+		[ ! -d ${OUTDIR11}/${g} ] && mkdir ${OUTDIR11}/${g}
+		outputdir=${OUTDIR11}/${g}
+		inputdir=$outputdir
+		inputfilename1=${SUBGROUP[0]}
+		inputfilename2=${SUBGROUP[1]}
+		ln -s ${INDIR}/${inputfilename1}/${inputfilename1}.xkxh.transposon.mapper2.gz ${outputdir}
+		ln -s ${INDIR}/${inputfilename2}/${inputfilename2}.xkxh.transposon.mapper2.gz ${outputdir}
+		samplename1b=${inputfilename1#Phil.SRA.*}
+		samplename2b=${inputfilename2#Phil.SRA.*}
+		samplename1=${samplename1b%*.ox.ovary.inserts}
+		samplename2=${samplename2b%*.ox.ovary.inserts}
+		seqdepth1=`cat ${INDIR}/${inputfilename1}/output/${inputfilename1}_stats_table_reads|tail -1|awk '{print $4/1000000}'`
+		seqdepth2=`cat ${INDIR}/${inputfilename2}/output/${inputfilename2}_stats_table_reads|tail -1|awk '{print $4/1000000}'`
+		email="weiwanghhq@gmail.com"
+		
+${PIPELINE_DIRECTORY}/bucket_new_gz_batch.pl ${inputfilename1}.xkxh.transposon.mapper2.gz ${inputfilename2}.xkxh.transposon.mapper2.gz ${inputdir} ${outputdir} ${samplename1} ${samplename2} ${seqdepth1} ${seqdepth2} ${email} >$LOG
 	
-#done
-#touch ${OUT}/.status.${STEP}.transposon_bucket
+	
+done
+touch ${OUT}/.status.${STEP}.transposon_bucket
 STEP=$((STEP+1))
 
 #cluster bucket
@@ -415,18 +414,22 @@ do
 	inputdir=$outputdir
 	inputfilename1=${SUBGROUP[0]}
 	inputfilename2=${SUBGROUP[1]}
-	ln -s ${INDIR}/${inputfilename1}/${inputfilename1}.xkxh.norm.bed.gz ${outputdir}
-	ln -s ${INDIR}/${inputfilename2}/${inputfilename2}.xkxh.norm.bed.gz ${outputdir}
+	#ln -s ${INDIR}/${inputfilename1}/${inputfilename1}.xkxh.norm.bed.gz ${outputdir}
+	#ln -s ${INDIR}/${inputfilename2}/${inputfilename2}.xkxh.norm.bed.gz ${outputdir}
 	stattable1=${INDIR}/${inputfilename1}/output/${inputfilename1}_stats_table_reads
 	stattable2=${INDIR}/${inputfilename2}/output/${inputfilename2}_stats_table_reads
-	${PIPELINE_DIRECTORY}/submit_cluster_bucket_ww.sh 2 ${outputdir}/${inputfilename1}.xkxh.norm.bed.gz ${stattable1} ${outputdir}/${inputfilename2}.xkxh.norm.bed.gz ${stattable2}
+	${PIPELINE_DIRECTORY}/submit_cluster_bucket_ww.sh 2 ${INDIR}/${inputfilename1}/${inputfilename1}.xkxh.norm.bed.gz ${stattable1} ${INDIR}/${inputfilename2}/${inputfilename2}.xkxh.norm.bed.gz ${stattable2}
 done
 touch ${OUT}/.status.${STEP}.cluster_bucket
 
 
-#echo -e "`date` "+$ISO_8601"\tDraw phasing analysis..." >> $LOG
-#OUTDIR11=${INDIR}/transposon_piRNA/paired_zscore_scatterplot
-#[ ! -d $OUTDIR11 ] && mkdir -p ${OUTDIR11}
-#[ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.phasing ] && \
-#paraFile=${OUTDIR11}/${RANDOM}.piRNAphasing.para && \
+echo -e "`date` "+$ISO_8601"\tDraw phasing analysis..." >> $LOG
+OUTDIR13=${INDIR}/transposon_piRNA/phasing
+[ ! -d $OUTDIR13 ] && mkdir -p ${OUTDIR13}
+[ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.phasing ] && \
+paraFile=${OUTDIR13}/${RANDOM}.piRNAphasing.para && \
 
+#for i in `ls ${INDIR}/*.inserts`
+#do
+	#	inputfile=
+#${PIPELINE_DIRECTORY}/run_distance_analysis.sh
