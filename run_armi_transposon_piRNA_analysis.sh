@@ -427,9 +427,14 @@ echo -e "`date` "+$ISO_8601"\tDraw phasing analysis..." >> $LOG
 OUTDIR13=${INDIR}/transposon_piRNA/phasing
 [ ! -d $OUTDIR13 ] && mkdir -p ${OUTDIR13}
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.phasing ] && \
-paraFile=${OUTDIR13}/${RANDOM}.piRNAphasing.para
+#paraFile=${OUTDIR13}/${RANDOM}.piRNAphasing.para
 
-#for i in `ls ${INDIR}/*.inserts`
-#do
-	#	inputfile=
-#${PIPELINE_DIRECTORY}/run_distance_analysis.sh
+for i in `ls ${INDIR}/*.inserts/*.norm.bed.gz`
+do
+	inputfile=${i##*/}
+	samplenamepart=${inputfile#Phil.SRA.*}
+	samplename=${samplenamepart%*.xkxh.norm.bed.gz}
+	sample=${samplename/ovary.inserts./}
+	/home/wangw1/bin/submitsge 24 ${sample} "${PIPELINE_DIRECTORY}/run_distance_analysis.sh -i ${i} -o $OUTDIR13 -t normbed" 
+done
+touch ${OUT}/.status.${STEP}.transposon_piRNA.phasing
