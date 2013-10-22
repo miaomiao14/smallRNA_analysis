@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 use File::Basename;
+use Compress::Zlib;
 if (@ARGV<1) { print "USAGE: cluster_bucket3_ww.pl <cluster.fa> <n> <norm.bed1> <stats table1> optional: <norm.bed2> <stats table2>\n"; exit 1; }
 
 # build bowtie index from cluster.fa with prefix dmel_cluster
