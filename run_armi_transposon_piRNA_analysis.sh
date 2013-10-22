@@ -406,6 +406,7 @@ echo -e "`date` "+$ISO_8601"\trun cluster bucket of transposon piRNAs" >> $LOG
 OUTDIR12=${INDIR}/transposon_piRNA/cluster_bucket
 [ ! -d $OUTDIR12 ] && mkdir -p ${OUTDIR12}
 # USAGE: make_sge_cluster_bucket.sh <n> <input xkxh.norm.bed file1 with full path>  <stats table1> <input xkxh.norm.bed file2 with full path> <stats table2> <n> <option [empty: default Brennecke 142 ovary clusters;  custom defined cluster file]>
+[ ! -f ${OUT}/.status.${STEP}.cluster_bucket ] && \
 for g in "${GROUPGT[@]}"
 do
 	eval "SUBGROUP=(\"\${${g}[@]}\")"
@@ -420,7 +421,7 @@ do
 	stattable2=${INDIR}/${inputfilename2}/output/${inputfilename2}_stats_table_reads
 	${PIPELINE_DIRECTORY}/submit_cluster_bucket_ww.sh 2 ${outputdir}/${inputfilename1}.xkxh.norm.bed.gz ${stattable1} ${outputdir}/${inputfilename2}.xkxh.norm.bed.gz ${stattable2}
 done
-
+touch ${OUT}/.status.${STEP}.cluster_bucket
 
 
 #echo -e "`date` "+$ISO_8601"\tDraw phasing analysis..." >> $LOG
