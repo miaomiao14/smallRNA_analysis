@@ -17,9 +17,10 @@ for ($n=1;$n<=$ARGV[1];$n++)
   open IN,$ARGV[2*$n+1];
   <IN>;
   while(<IN>) {chomp; split(/\t/); $norm_factor=1000000/$_[3];} ##normlization factor: excluding_ncRNAs (sequencing depth)
-  open IN, $ARGV[2*$n]; ##norm.bed
-  <IN>;
+  #open IN, $ARGV[2*$n]; ##norm.bed
+  #<IN>;
   $gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
+  $gz->gzreadline($_);
   while($gz->gzreadline($_) > 0)
   #while (<IN>) 
   { chomp; split(/\t/); $NTM{$_[4]}=$_[6];} ##$_[4] is the reads
