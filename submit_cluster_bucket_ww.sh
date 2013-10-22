@@ -24,8 +24,9 @@ echo "#!/bin/sh
 #$ -V
 #$ -pe single 8
 #$ -o \$HOME/sge_jobs_output/sge_job.\$JOB_ID.out -j y
-#$ -S /bin/bash
 #$ -l mem_free=31G
+#$ -S /bin/bash
+
 
 export PIPELINEDIR=/home/xuj1/nearline/cluster/data:/home/xuj1/pipeline:/home/xuj1/pipeline/bowtie:/home/lees2/pipeline:
 export OUTPUTDIR=$6
