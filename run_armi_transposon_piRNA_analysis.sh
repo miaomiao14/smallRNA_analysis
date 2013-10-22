@@ -399,7 +399,7 @@ STEP=$((STEP+1))
 	
 #done
 #touch ${OUT}/.status.${STEP}.transposon_bucket
-#STEP=$((STEP+1))
+STEP=$((STEP+1))
 
 #cluster bucket
 echo -e "`date` "+$ISO_8601"\trun cluster bucket of transposon piRNAs" >> $LOG
