@@ -421,7 +421,7 @@ do
 	${PIPELINE_DIRECTORY}/submit_cluster_bucket_ww.sh 2 ${INDIR}/${inputfilename1}/${inputfilename1}.xkxh.norm.bed.gz ${stattable1} ${INDIR}/${inputfilename2}/${inputfilename2}.xkxh.norm.bed.gz ${stattable2} ${OUTDIR12}
 done
 touch ${OUT}/.status.${STEP}.cluster_bucket
-
+STEP=$((STEP+1))
 
 echo -e "`date` "+$ISO_8601"\tDraw phasing analysis..." >> $LOG
 OUTDIR13=${INDIR}/transposon_piRNA/phasing
