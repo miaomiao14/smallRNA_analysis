@@ -418,7 +418,7 @@ do
 	#ln -s ${INDIR}/${inputfilename2}/${inputfilename2}.xkxh.norm.bed.gz ${outputdir}
 	stattable1=${INDIR}/${inputfilename1}/output/${inputfilename1}_stats_table_reads
 	stattable2=${INDIR}/${inputfilename2}/output/${inputfilename2}_stats_table_reads
-	${PIPELINE_DIRECTORY}/submit_cluster_bucket_ww.sh 2 ${INDIR}/${inputfilename1}/${inputfilename1}.xkxh.norm.bed.gz ${stattable1} ${INDIR}/${inputfilename2}/${inputfilename2}.xkxh.norm.bed.gz ${stattable2}
+	${PIPELINE_DIRECTORY}/submit_cluster_bucket_ww.sh 2 ${INDIR}/${inputfilename1}/${inputfilename1}.xkxh.norm.bed.gz ${stattable1} ${INDIR}/${inputfilename2}/${inputfilename2}.xkxh.norm.bed.gz ${stattable2} ${OUTDIR12}
 done
 touch ${OUT}/.status.${STEP}.cluster_bucket
 

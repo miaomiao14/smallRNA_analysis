@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# USAGE: make_sge_cluster_bucket.sh <n> <input xkxh.norm.bed file1 with full path>  <stats table1> <input xkxh.norm.bed file2 with full path> <stats table2> <n> <option [empty: default Brennecke 142 ovary clusters;  custom defined cluster file]>
+# USAGE: make_sge_cluster_bucket.sh <n> <input xkxh.norm.bed file1 with full path>  <stats table1> <input xkxh.norm.bed file2 with full path> <stats table2> <outputdir> <option [empty: default Brennecke 142 ovary clusters;  custom defined cluster file]>
 n=$1
 F1=${2##*/}
 S1=${F1%.xkxh.norm.bed}

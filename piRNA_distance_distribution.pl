@@ -25,41 +25,85 @@ use File::Basename;
    $format=$ARGV[1];
    
    %plus=(); %plus_end=(); %minus=();$mins_end=();
-   open IN, $ARGV[0];
-    while(<IN>)
-    {
-        chomp; s/\s+/\t/g;split(/\t/);  
+   
+	if($file1=~/gz/)
+	{
+		my $gz="";
+		$gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[0]: $gzerrno\n" ;
+		while($gz->gzreadline($_) > 0)
+		{ 
+			chomp; s/\s+/\t/g;split(/\t/);  
+			next if (/data/);
         
-        next if (/data/);
-        
-        if($format eq "normbed")
-        {
-          next if (length($_[4])>29 || length($_[4])<23);
-	        if ($_[3] eq '+')
-	        {
-	            $plus{$_[0]}{$_[1]}+=$_[5]/$_[6];
-	            $plus_end{$_[0]}{$_[1]}=$_[2];
-	        }
-	        else
-	        {
-	            $minus{$_[0]}{$_[2]}+=$_[5]/$_[6];
-	        }
-        }
-        if($format eq "bed")
-        {
-
-        	($reads,$ntm,$dep)=split(/,/,$_[3]);
-        	if($file1=~/plus/i) #strand information is not included in the data, but in the file name
+        	if($format eq "normbed")
         	{
-	            $plus{$_[0]}{$_[1]}+=$reads/$ntm;
-	            $plus_end{$_[0]}{$_[1]}=$_[2];
-	        }
-	        if($file1=~/minus/i)
-	        {
-	            $minus{$_[0]}{$_[2]}+=$reads/$ntm;
-	        }
-        }
+				next if (length($_[4])>29 || length($_[4])<23);
+				if ($_[3] eq '+')
+				{
+	            	$plus{$_[0]}{$_[1]}+=$_[5]/$_[6];
+	            	$plus_end{$_[0]}{$_[1]}=$_[2];
+	        	}
+	        	else
+	        	{
+	            	$minus{$_[0]}{$_[2]}+=$_[5]/$_[6];
+	        	}
+        	}
+			if($format eq "bed")
+			{
+
+        		($reads,$ntm,$dep)=split(/,/,$_[3]);
+        		if($file1=~/plus/i) #strand information is not included in the data, but in the file name
+        		{
+	            	$plus{$_[0]}{$_[1]}+=$reads/$ntm;
+	            	$plus_end{$_[0]}{$_[1]}=$_[2];
+	        	}
+	        	if($file1=~/minus/i)
+	        	{
+	            	$minus{$_[0]}{$_[2]}+=$reads/$ntm;
+	        	}
+        	}		
+		}
+		$gz->gzclose();
+	}
+   else
+   {
+		open IN, $ARGV[0];
+    	while(<IN>)
+    	{
+        	chomp; s/\s+/\t/g;split(/\t/);  
+			next if (/data/);
+        
+        	if($format eq "normbed")
+        	{
+				next if (length($_[4])>29 || length($_[4])<23);
+				if ($_[3] eq '+')
+				{
+	            	$plus{$_[0]}{$_[1]}+=$_[5]/$_[6];
+	            	$plus_end{$_[0]}{$_[1]}=$_[2];
+	        	}
+	        	else
+	        	{
+	            	$minus{$_[0]}{$_[2]}+=$_[5]/$_[6];
+	        	}
+        	}
+			if($format eq "bed")
+			{
+
+        		($reads,$ntm,$dep)=split(/,/,$_[3]);
+        		if($file1=~/plus/i) #strand information is not included in the data, but in the file name
+        		{
+	            	$plus{$_[0]}{$_[1]}+=$reads/$ntm;
+	            	$plus_end{$_[0]}{$_[1]}=$_[2];
+	        	}
+	        	if($file1=~/minus/i)
+	        	{
+	            	$minus{$_[0]}{$_[2]}+=$reads/$ntm;
+	        	}
+        	}
+		}
+		close(IN);
     }
+    
     foreach $chr (keys %plus)
     {
         %plus_chr = %{$plus{$chr}};

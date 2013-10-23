@@ -7,7 +7,7 @@ $file=fileparse($ARGV[0]);
 $file=~/(.*).gz/;
 $filename=$1;
 $OUTDIR=$ARGV[1];
-$gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
+$gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[0]: $gzerrno\n" ;
 while($gz->gzreadline($_) > 0)
 #while(<IN>) 
 {
