@@ -14,7 +14,7 @@ require "Jia.pm";
 BEGIN { unshift @INC,"/home/wangw1/bin/";}
 require "sort_hash_key.pm";
 use File::Basename;
-
+use Compress::Zlib;
 # the distribution of 5'-5' end distance of piRNAs from the same strand.
 
    $file1=fileparse($ARGV[0]);  
