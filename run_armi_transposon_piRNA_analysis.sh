@@ -435,6 +435,6 @@ do
 	samplenamepart=${inputfile#Phil.SRA.*}
 	samplename=${samplenamepart%*.xkxh.norm.bed.gz}
 	sample=${samplename/ovary.inserts./}
-	/home/wangw1/bin/submitsge 8 ${sample} "${PIPELINE_DIRECTORY}/run_distance_analysis.sh -i ${i} -o $OUTDIR13 -t normbed" 
+	/home/wangw1/bin/submitsge 8 ${sample} $OUTDIR13 "${PIPELINE_DIRECTORY}/run_distance_analysis.sh -i ${i} -o $OUTDIR13 -t normbed" 
 done
 touch ${OUT}/.status.${STEP}.transposon_piRNA.phasing
