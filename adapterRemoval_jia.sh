@@ -2,7 +2,10 @@
 
 export PIPELINE_PATH=/home/wengz/pipelines/smallRNApipeline/pipeline_dm
 export PATH=${PIPELINE_PATH}:${PATH}
-ADAPTER=TGGAATTCTCGGGTGCCAAGG
+#old version TCGTATGCCGTCTTCTGCTTG
+#TrueSeq new version TGGAATTCTCGGGTGCCAAGG
+
+ADAPTER=$3
 INDIR=$1
 OUTDIR=$2
 paraFile=${OUTDIR}/${RANDOM}.para
