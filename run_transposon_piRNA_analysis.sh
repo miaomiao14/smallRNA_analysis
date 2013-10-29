@@ -14,13 +14,13 @@ export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 export PATH=${PIPELINE_DIRECTORY}/:$PATH
 
 INDIR=$1 #this is the folder store all pipeline results outmost folders
-OUT=${INDIR}/transposon_piRNA
+OUT=${2}/transposon_piRNA
 LOG=${OUT}/log
 
 declare -a NORMFACTORTYPE=("nnc" "seqDep")
 
 STEP=1
-OUTDIR1=${INDIR}/transposon_piRNA/polar
+OUTDIR1=${OUT}/polar
 [ ! -d $OUTDIR1 ] && mkdir -p ${OUTDIR1}
 echo -e "`date` "+$ISO_8601"\tDraw polar histogram of sense fraction" >> $LOG
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.senseFraction ] && \
@@ -39,7 +39,7 @@ STEP=$((STEP+1))
 
 
 echo -e "`date` "+$ISO_8601"\tDraw length distribution of transposon piRNAs" >> $LOG
-OUTDIR2=${INDIR}/transposon_piRNA/lendis
+OUTDIR2=${OUT}/lendis
 [ ! -d $OUTDIR2 ] && mkdir -p ${OUTDIR2}
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.lendis2 ] && \
 paraFile=${OUTDIR2}/${RANDOM}.drawlendis2.para && \
@@ -111,7 +111,7 @@ declare -a gfpKDaubKD_unox=("Julius.SRA.MTD_shGFP.unox.ovary.inserts" "Julius.SR
 
 
 echo -e "`date` "+$ISO_8601"\tDraw paired length distribution of transposon piRNAs" >> $LOG
-OUTDIR3=${INDIR}/transposon_piRNA/paired_lendis
+OUTDIR3=${OUT}/paired_lendis
 [ ! -d $OUTDIR3 ] && mkdir -p ${OUTDIR3}
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.paired.lendis2 ] && \
 paraFile=${OUTDIR3}/${RANDOM}.drawpairedlendis2.para && \
@@ -162,7 +162,7 @@ STEP=$((STEP+1))
 
 
 echo -e "`date` "+$ISO_8601"\tDraw transposon piRNA abundance and zscore barplot..." >> $LOG
-OUTDIR4=${INDIR}/transposon_piRNA/abundance_zscore
+OUTDIR4=${OUT}/abundance_zscore
 [ ! -d $OUTDIR4 ] && mkdir -p ${OUTDIR4}
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.abundance_zscore ] && \
 paraFile=${OUTDIR4}/${RANDOM}.drawbarplotAbundanceZscore.para && \
@@ -193,7 +193,7 @@ STEP=$((STEP+1))
 
 
 
-OUTDIR5=${INDIR}/transposon_piRNA/polar_allTrn
+OUTDIR5=${OUT}/polar_allTrn
 [ ! -d $OUTDIR5 ] && mkdir -p ${OUTDIR5}
 echo -e "`date` "+$ISO_8601"\tDraw polar histogram of sense fraction(including transposon families not in groups)" >> $LOG
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.senseFractionallTrn ] && \
@@ -229,7 +229,7 @@ declare -a ago3CD_cor2_unox=("Phil.SRA.nosAgo3CDrescue.unox.ovary.inserts" "Phil
 
 INDIR6=${INDIR}/circos
 OUTDIR6=/home/wangw1/src/circos-0.56/fly
-OUTDIR6_2=${INDIR}/transposon_piRNA/circos_conf
+OUTDIR6_2=${OUT}/circos_conf
 #/home/wangw1/src/circos-0.56/bin/circos -conf /home/wangw1/src/circos-0.56/fly/etc/
 BINSIZE=$2
 declare -a NORMFACTORTYPE=("nnc" "seqDep")
@@ -301,7 +301,7 @@ STEP=$((STEP+1))
 
 
 echo -e "`date` "+$ISO_8601"\tDraw length distribution of transposon piRNAs, excluding roo transposon families" >> $LOG
-OUTDIR7=${INDIR}/transposon_piRNA/lendisWOroo
+OUTDIR7=${OUT}/lendisWOroo
 [ ! -d $OUTDIR7 ] && mkdir -p ${OUTDIR7}
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA_WOroo.lendis2 ] && \
 paraFile=${OUTDIR7}/${RANDOM}.drawlendis2WOroo.para && \
@@ -328,7 +328,7 @@ STEP=$((STEP+1))
 
 
 echo -e "`date` "+$ISO_8601"\tDraw paired length distribution of transposon piRNAs WOroo" >> $LOG
-OUTDIR8=${INDIR}/transposon_piRNA/paired_lendis_WOroo
+OUTDIR8=${OUT}/paired_lendis_WOroo
 [ ! -d $OUTDIR8 ] && mkdir -p ${OUTDIR8}
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.paired.lendis2WOroo ] && \
 paraFile=${OUTDIR8}/${RANDOM}.drawpairedlendis2WOroo.para && \
@@ -429,7 +429,7 @@ declare -a ago3CD_cor2_unox=("Phil.SRA.nosAgo3CDrescue.unox.ovary.inserts" "Phil
 declare -a aubmut_cor3_ox=("Phil.SRA.aubMutsWW.ox.ovary.inserts" "Phil.SRA.aubMutant.ox.ovary.inserts")
 
 echo -e "`date` "+$ISO_8601"\tDraw paired abundance,sense_fraction of transposon piRNAs" >> $LOG
-OUTDIR9=${INDIR}/transposon_piRNA/paired_abundance_senseFraction
+OUTDIR9=${OUT}/paired_abundance_senseFraction
 [ ! -d $OUTDIR9 ] && mkdir -p ${OUTDIR9}
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.paired.abundance_senseFraction ] && \
 paraFile=${OUTDIR9}/${RANDOM}.drawpairedabundance_senseFraction.para && \
@@ -505,7 +505,7 @@ declare -a AubIP_aubcdwt_unox=("Phil.AubIP.AubCDrescue.unox.ovary.inserts" "Phil
 
 
 echo -e "`date` "+$ISO_8601"\tDraw paired transposon piRNA zscore scatterplot..." >> $LOG
-OUTDIR10=${INDIR}/transposon_piRNA/paired_zscore_scatterplot
+OUTDIR10=${OUT}/paired_zscore_scatterplot
 [ ! -d $OUTDIR10 ] && mkdir -p ${OUTDIR10}
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.pairedZscore ] && \
 paraFile=${OUTDIR10}/${RANDOM}.pairedZscore.para && \
@@ -571,7 +571,7 @@ declare -a aubwtmut=("AubWTrescue" "aubMutsWW")
 declare -a aubcdwt=("AubCDrescue" "AubWTrescue")
 
 echo -e "`date` "+$ISO_8601"\tDraw paired transposon piRNA zscore(between smRNA and degradome) scatterplot..." >> $LOG
-OUTDIR12=${INDIR}/transposon_piRNA/paired_zscore_smRNA_vs_Degradome_scatterplot
+OUTDIR12=${OUT}/paired_zscore_smRNA_vs_Degradome_scatterplot
 [ ! -d $OUTDIR12 ] && mkdir -p ${OUTDIR12}
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.pairedZscore.smRNAvsDegradome ] && \
 paraFile=${OUTDIR12}/${RANDOM}.pairedZscore.para && \
