@@ -585,9 +585,9 @@ do
 	for t in ${!SUBGROUP}
 	do
 		cat ${INDIR}/pp6_FB_smRNA_vs_degradome/${t}/${t}.FB.pp6| awk -v gt=$t -v rank=$count '{OFS="\t"}{print gt,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,rank}' >> ${OUTDIR12}/${g}.FB.zscore
-		cat ${INDIR}/pp6_FB_smRNA_vs_degradome/${t}.total.pp6.out | awk -v gt=$t -v rank=$count '{OFS="\t"}{print gt,$1,$2,$3,$4,$5,$6,$7,$8,$9,rank}' >> ${OUTDIR12}/${g}.total.zscore
+		cat ${INDIR}/pp6_FB_smRNA_vs_degradome_total_with_ppscore/${t}.total.pp6.out | awk -v gt=$t -v rank=$count '{OFS="\t"}{print gt,$1,$2,$3,$4,$5,$6,$7,$8,$9,rank}' >> ${OUTDIR12}/${g}.total.zscore
 		count=$(($count+1))
-		#totalZscore=`cat ${INDIR}/pp6_FB_smRNA_vs_degradome/${t}.total.pp6.out|cut -f2`
+		#totalZscore=`cat ${INDIR}/pp6_FB_smRNA_vs_degradome_total_with_ppscore/${t}.total.pp6.out|cut -f2`
 		#TZ=`printf "%0.2f" $totalZscore`
 		#echo -e ${t}"\t"${TZ} >>${OUTDIR12}/${g}.total.zscore
 	done
