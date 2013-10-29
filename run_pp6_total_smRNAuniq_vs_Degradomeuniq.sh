@@ -9,6 +9,7 @@ declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubM
 
 [ ! -d ${smRNAINDIR}/pp6_FB_smRNAuniq_vs_degradomeuniq_total_with_ppscore ] && mkdir -p ${smRNAINDIR}/pp6_FB_smRNAuniq_vs_degradomeuniq_total_with_ppscore
 #step 1
+OUT=${smRNAINDIR}/pp6_FB_smRNAuniq_vs_degradomeuniq_total_with_ppscore
 for g in "${GROUPGT[@]}"
 do
 	[ ! -d ${smRNAINDIR}/pp6_FB_smRNAuniq_vs_degradomeuniq_total_with_ppscore/${g} ] && mkdir -p ${smRNAINDIR}/pp6_FB_smRNAuniq_vs_degradomeuniq_total_with_ppscore/${g}
@@ -25,6 +26,6 @@ do
 	gzip ${smmapper2%.gz}.23-29
 	echo -e "`date` "+$ISO_8601"\tSize select the smallRNA transposon mapper2 and gzip it..." >> $LOG
 	#total Ping-Pong
-	[ ! -s ${smRNAINDIR}/pp6_FB_smRNAuniq_vs_degradomeuniq_total_with_ppscore/${g}.total.pp6.out ] && submitsge 8 $g "$script ${smmapper2%.gz}.23-29.gz ${demapper2} 2 ${smRNAINDIR}/pp6_FB_smRNAuniq_vs_degradomeuniq_total_with_ppscore >${smRNAINDIR}/pp6_FB_smRNAuniq_vs_degradomeuniq_total_with_ppscore/${g}.uniqmap.total.pp6.out" 
+	[ ! -s ${smRNAINDIR}/pp6_FB_smRNAuniq_vs_degradomeuniq_total_with_ppscore/${g}.total.pp6.out ] && submitsge 8 $g ${OUT} "$script ${smmapper2%.gz}.23-29.gz ${demapper2} 2 ${smRNAINDIR}/pp6_FB_smRNAuniq_vs_degradomeuniq_total_with_ppscore >${smRNAINDIR}/pp6_FB_smRNAuniq_vs_degradomeuniq_total_with_ppscore/${g}.uniqmap.total.pp6.out" 
 	#echo -e "`date` "+$ISO_8601"\ttotal Ping-Pong analysis done..." >> $LOG
 done
