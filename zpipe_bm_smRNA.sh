@@ -11,30 +11,6 @@
 
 
 
-#1. map to the rRNAs, tRNAs and other nncRNAs
-
-#2.map to the genome 
-echo "mapping to the genome...."  >> $dir/output/$insertsname.log
-echo `date` >> $dir/output/$insertsname.log
-/home/wangw1/git/smallRNA_analysis/bm_smRNA_pipeline/run_bowtie_bm.pl $inserts.uniq.reads $mm /home/wangw1/src/bowtie-0.12.9/indexes/silkwormv2 match2_all.out
-uniqmap.pl $inserts.match2_all.out > $inserts.uniqmap.match2_all.out
-echo `date` >> $dir/output/$insertsname.log
-echo "mapping to the genome done" >> $dir/output/$insertsname.log
-echo >> $dir/output/$insertsname.log
-
-cut -f1,2 $inserts.match2_all.out  |uniq.lines+ 0 > $inserts.match2_all.out.uniq.reads
-cut -f1,2 $inserts.uniqmap.match2_all.out  |uniq.lines+ 0 > $inserts.uniqmap.match2_all.out.uniq.reads
-
-#3. intersect with transposons,genes,miRNAs,
-
-
-
-
-
-
-
-
-
 ################
 # Major Config #
 ################
@@ -367,360 +343,56 @@ echo -e "Warning: Failed to source configure file $CONFIG_FILE"
 echo -e "`date "+$ISO_8601"`\tbeginning running Zamore Lab small RNA pipeline version $smallRNA_Pipeline_Version in one lib mode"   | tee -a $LOG || \
 echo -e "`date "+$ISO_8601"`\t...resuming running Zamore Lab small RNA pipeline version $smallRNA_Pipeline_Version in one lib mode" | tee -a $LOG 
 
-########################################
-## Pre Processing before any Mapping ###
-########################################
-# convering fastq to insert; quality information will be lost
-echo -e "`date "+$ISO_8601"`\tconverting fastq format into insert format" | tee -a $LOG
-[ ! -f .${JOBUID}.status.${STEP}.fq2insert ] && \
-	fastq2insert ${FULLPATH_FQ} ${INSERT} && \
-	touch .${JOBUID}.status.${STEP}.fq2insert 
+
+STEP=1
+########################################################
+#remove adapter and convert the fastq format to inserts
+########################################################
+
+
+file=${FQ##*/}
+filename=`basename $file .fastq`
+echo -e "`date "+$ISO_8601"`\tremove the adaptors and convert the format to inserts " | tee -a $LOG
+touch .${JOBUID}.status.${STEP}.preprocessing
+[ ! -f .${JOBUID}.status.${STEP}.preprocessing ] && \
+grep -A 1 "@" ${FULLPATH_FQ} | grep -v "@" | grep -v "\-\-"  | uniq.reads+   >${filename}.raw && \
+Extract_insert_10mer.pl ${filename}.raw $ADAPTER > ${OUTDIR}/${filename}.insertsout && \
+inserts2uniqreads.pl ${OUTDIR}/${filename}.insertsout 18 30 > ${OUTDIR}/${filename}.inserts.trimmed && \
+rm ${OUTDIR}/${filename}.insertsout && \
+	touch .${JOBUID}.status.${STEP}.preprocessing
 STEP=$((STEP+1))
-	
-#####################################
-# Pre Processing before any Mapping #
-#####################################
-# getting rid of sequences mapping to rRNA with 2 mismatches (by default) allowed
-## as soon as one read is mappable under -v 2 condition, it is dumped, so -k 1 is used for speed purpose, and no need to be "best" 
-echo -e "`date "+$ISO_8601"`\tmapping to rRNA, with $rRNA_MM mismatch(es) allowed" | tee -a $LOG
-[ ! -f .${JOBUID}.status.${STEP}.rRNA_mapping ] && \
-	bowtie -r -S -v $rRNA_MM -k 1 -p $CPU \
-		--un ${FQ%.f[qa]*}.x_rRNA.insert \
-		$BOWTIEINDEX_rRNA \
-		${INSERT} \
-		1> /dev/stdout \
-		2> /dev/null | \
-	samtools view -bSF 0x4 - 2>/dev/null | \
-	bedtools bamtobed -i - > ${FQ%.f[qa]*}.rRNA.insertBed && \
-	istBedToBed2 ${INSERT} ${FQ%.f[qa]*}.rRNA.insertBed > ${FQ%.f[qa]*}.rRNA.bed2 && rm -rf ${FQ%.f[qa]*}.rRNA.insertBed && \
-	totalReads=`awk '{a+=$2}END{printf "%d", a}' ${INSERT}` && \
-	rRNAReads=`bedwc ${FQ%.f[qa]*}.rRNA.bed2` && \
-	nonrRNAReads=$((totalReads-rRNAReads)) && \
-    touch .${JOBUID}.status.${STEP}.rRNA_mapping # by checking all the status, ll -a | grep status, you will know which step has finished 
-## increment the step counter, no matter previous step succeed or not. Using a variable will make it easy to insert/delete steps
-STEP=$((STEP+1))
-    
-#########################
-# miRNA hairpin Mapping #
-#########################
-# mapping to miRNA hairpins
-echo -e "`date "+$ISO_8601"`\tmapping to hairpin, with $hairpin_MM mismatch(es) allowed" | tee -a $LOG
-[ ! -f .${JOBUID}.status.${STEP}.hairpin_mapping ] && \
-	bowtie -r -v $hairpin_MM -a --best --strata -p $CPU -S \
-		${BOWTIE_PHRED_OPTION} \
-		--al ${FQ%.f[qa]*}.x_rRNA.hairpin.insert \
-		--un ${FQ%.f[qa]*}.x_rRNA.x_Hairpin.insert \
-		$BOWTIEINDEX_Hairpin \
-		${FQ%.f[qa]*}.x_rRNA.insert \
-		1> /dev/stdout \
-		2> /dev/null  | \
-	samtools view -bSF 0x4 - 2>/dev/null | \
-	bedtools bamtobed -i - | awk '$6=="+"' > ${FQ%.f[qa]*}.x_rRNA.hairpin.v${hairpin_MM}a.bed && \
-	istBedToBed2 ${FQ%.f[qa]*}.x_rRNA.insert ${FQ%.f[qa]*}.x_rRNA.hairpin.v${hairpin_MM}a.bed > ${FQ%.f[qa]*}.x_rRNA.hairpin.v${hairpin_MM}a.bed2 && \
-	rm -rf ${FQ%.f[qa]*}.x_rRNA.hairpin.v${hairpin_MM}a.bed && \
-	hairpinReads=`bedwc ${FQ%.f[qa]*}.x_rRNA.hairpin.v${hairpin_MM}a.bed2` && \
-	bed2lendis ${FQ%.f[qa]*}.x_rRNA.hairpin.v${hairpin_MM}a.bed2 > ${FQ%.f[qa]*}.x_rRNA.hairpin.v${hairpin_MM}a.lendis && \
-	bowtie -r -v $genome_MM -a --best --strata -p $CPU \
-		-S \
-		$BOWTIEINDEX_Genome \
-		${FQ%.f[qa]*}.x_rRNA.hairpin.insert \
-		1> /dev/stdout \
-		2> ${FQ%.f[qa]*}.x_rRNA.hairpin.${Genome}v${genome_MM}m1.log | \
-	samtools view -uS -F0x4 - 2>/dev/null | \
-	bedtools bamtobed -i - > ${FQ%.f[qa]*}.x_rRNA.hairpin.${Genome}v${genome_MM}a.bed && \
-	istBedToBed2 ${FQ%.f[qa]*}.x_rRNA.hairpin.insert ${FQ%.f[qa]*}.x_rRNA.hairpin.${Genome}v${genome_MM}a.bed > ${FQ%.f[qa]*}.x_rRNA.hairpin.${Genome}v${genome_MM}a.bed2 && \
-	rm -rf ${FQ%.f[qa]*}.x_rRNA.hairpin.${Genome}v${genome_MM}a.bed && \
-	touch .${JOBUID}.status.${STEP}.hairpin_mapping
-STEP=$((STEP+1))
-# run miRNA pipeline
-echo -e "`date "+$ISO_8601"`\trunning miRNA analysis pipeline" | tee -a $LOG
-[ ! -f .${JOBUID}.status.${STEP}.miRNA_pipeline ] && \
-	miRNA_pipeline.sh $BOWTIEINDEX_Hairpin $BOWTIEINDEX_Mature ${FQ%.f[qa]*}.x_rRNA.hairpin.v${hairpin_MM}a.bed2  && \
-	touch .${JOBUID}.status.${STEP}.miRNA_pipeline
-STEP=$((STEP+1))
-	
-######################
-# Pre Genome Mapping #
-######################
-# count how many indexed need to map
-COUNTER=0
-# running variable
-INPUT=${FQ%.f[qa]*}.x_rRNA.x_Hairpin.insert
-# if there are any indexes need to be run
-[[ ${#PreMappingList[@]} > 0 ]] && \
-for COUNTER in `seq 0 $((${#PreMappingList[@]}-1))`; do \
-	TARGET=${PreMappingList[$COUNTER]} && \
-	MM=${PreMappingMM[$COUNTER]} && \
-	echo -e "`date "+$ISO_8601"`\tmapping to ${TARGET}, with $MM mismatch(es) allowed" | tee -a $LOG && \
-	[ ! -f .${JOBUID}.status.${STEP}.${TARGET}_mapping ] && \
-		bowtie -r -v $MM -a --best --strata -p $CPU -S \
-			${BOWTIE_PHRED_OPTION} \
-			--un ${INPUT%.f[qa]*}.x_${TARGET}.insert \
-			${!TARGET} \
-			$INPUT \
-			1> /dev/stdout \
-			2> /dev/null | \
-		samtools view -bSF 0x4 - 2>/dev/null | bedtools bamtobed -i - > ${INPUT%.f[qa]*}.${TARGET}.v${hairpin_MM}a.bed && \
-		istBedToBed2 $INPUT ${INPUT%.f[qa]*}.${TARGET}.v${hairpin_MM}a.bed > ${INPUT%.f[qa]*}.${TARGET}.v${hairpin_MM}a.bed2 && \
-		rm -rf ${INPUT%.f[qa]*}.${TARGET}.v${hairpin_MM}a.bed && \
-		mappingReads=`bedwc ${INPUT%.f[qa]*}.${TARGET}.v${hairpin_MM}a.bed2` && \
-		touch .${JOBUID}.status.${STEP}.${TARGET}_mapping
-	STEP=$((STEP+1))
-# set OUPUT of this loop to the INPUT of next
-	INPUT=${INPUT%.f[qa]*}.x_${TARGET}.insert
-done
+
 
 ##################
 # Genome Mapping #
 ##################
 # take the OUTPUT of last step as INPUT
-INSERT=${INPUT}
+INSERT=${OUTDIR}/${filename}.inserts.trimmed
 # bed2 format storing all mappers for genomic mapping
-allBed2=${INPUT%.insert}.${Genome}v${genome_MM}.all.bed2
+allBed2=${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}.all.bed2
 # bed2 format storing unique mappers for genomic mapping
-uniqueBed2=${INPUT%.insert}.${Genome}v${genome_MM}.unique.bed2
+uniqueBed2=${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}.unique.bed2
 # bed2 format storing multiple mappers for genomic mapping
-multipBed2=${INPUT%.insert}.${Genome}v${genome_MM}.multip.bed2
+multipBed2=${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}.multip.bed2
 # bed2 format storing unique mappers for genomic mapping and miRNA hairpin mapper
-uniqueBed2_hairpin=${INPUT%.insert}.${Genome}v${genome_MM}.unique.+hairpin.bed2
+uniqueBed2_hairpin=${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}.unique.+hairpin.bed2
 # mapping insert file to genome
 echo -e "`date "+$ISO_8601"`\tmapping to genome, with ${genome_MM} mismatch(es) allowed " | tee -a $LOG
 [ ! -f .${JOBUID}.status.${STEP}.genome_mapping ] && \
 	bowtie -r -v $genome_MM -a --best --strata -p $CPU \
-		--al  ${INPUT%.insert}.${Genome}v${genome_MM}a.al.insert \
-		--un  ${INPUT%.insert}.${Genome}v${genome_MM}a.un.insert \
+		--al  ${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}a.al.insert \
+		--un  ${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}a.un.insert \
 		-S \
 		$BOWTIEINDEX_Genome \
-		${INPUT} \
+		${INSERT} \
 		1> /dev/stdout \
-		2> ${INPUT%.insert}.${Genome}v${genome_MM}m1.insert.log | \
+		2> ${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}m1.insert.log | \
 	samtools view -uS -F0x4 - 2>/dev/null | \
-	bedtools bamtobed -i - > ${INPUT%.insert}.${Genome}v${genome_MM}a.insert.bed && \
-	istBedToBed2 $INPUT ${INPUT%.insert}.${Genome}v${genome_MM}a.insert.bed > ${allBed2} && \
-	rm -rf ${INPUT%.insert}.${Genome}v${genome_MM}a.insert.bed && \
+	bedtools bamtobed -i - > ${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}a.insert.bed && \
+	istBedToBed2 $INSERT ${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}a.insert.bed > ${allBed2} && \
+	rm -rf ${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}a.insert.bed && \
 	touch .${JOBUID}.status.${STEP}.genome_mapping
 STEP=$((STEP+1))
-
-# produce iit format for intron annotation used in gsnap, if it doesn't exist
-[ ! -f ${COMMON_FOLDER}/${Genome}/${Genome}.splicesites.iit ] && \
-	cat $GTF | gtf_splicesites > ${COMMON_FOLDER}/${Genome}/${Genome}.splicesites && \
-	cat ${COMMON_FOLDER}/${Genome}/${Genome}.splicesites | iit_store -o ${COMMON_FOLDER}/${Genome}/${Genome}.splicesites.iit
-# converting non-mapped insert file to fasta for gsnap mapping
-echo -e "`date "+$ISO_8601"`\tmapping unmapped read to genome using gsnap [warning: gsnap cannot handle reads less than 17nt]" | tee -a $LOG
-[ ! -f .${JOBUID}.status.${STEP}.gsnap_genome_mapping ] && \
-	awk '{print ">"$1"_"$2"\n"$1}' ${INPUT%.insert}.${Genome}v${genome_MM}a.un.insert > ${INPUT%.insert}.${Genome}v${genome_MM}a.un.fa && \
-	gsnap -A sam -D $COMMON_FOLDER -d $Genome \
-		-m ${genome_MM} \
-		--query-unk-mismatch=1 \
-		--genome-unk-mismatch=1 \
-		--maxsearch=1000000 \
-		-n 1000000 \
-		--quiet-if-excessive \
-		-t $CPU \
-		-N 0 \
-		-s ${COMMON_FOLDER}/${Genome}/${Genome}.splicesites.iit \
-		${INPUT%.insert}.${Genome}v${genome_MM}a.un.fa \
-		2> ${INPUT%.insert}.${Genome}v${genome_MM}a.un.gsnap.v${genome_MM}.log | \
-	samtools view -bS -F0x4 - 2>/dev/null | bedtools bamtobed -bed12 -i - > ${INPUT%.insert}.${Genome}v${genome_MM}a.un.gsnap.v${genome_MM}.bed1 && \
-	spliceMapTotal=`awk '{split($4,arr,"_"); ct[$4]=arr[2]}END{for (a in ct){total+=ct[a]} print total}' ${INPUT%.insert}.${Genome}v${genome_MM}a.un.gsnap.v${genome_MM}.bed1` && \
-	awk 'BEGIN{OFS="\t"}NR==FNR{++ct[$4]} {$5=ct[$4]; split($4,arr,"_"); $4=arr[2];print}' ${INPUT%.insert}.${Genome}v${genome_MM}a.un.gsnap.v${genome_MM}.bed1 ${INPUT%.insert}.${Genome}v${genome_MM}a.un.gsnap.v${genome_MM}.bed1 > ${INPUT%.insert}.${Genome}v${genome_MM}a.un.gsnap.v${genome_MM}.bed2 && \
-	awk '$5==1' ${INPUT%.insert}.${Genome}v${genome_MM}a.un.gsnap.v${genome_MM}.bed2 | bedtools bed12tobed6 -i stdin > ${INPUT%.insert}.${Genome}v${genome_MM}a.un.gsnap.v${genome_MM}.unique.bed6 && \
-	rm -rf ${INPUT%.insert}.${Genome}v${genome_MM}a.un.gsnap.v${genome_MM}.bed1 ${INPUT%.insert}.${Genome}v${genome_MM}a.un.fa && \
-	touch .${JOBUID}.status.${STEP}.gsnap_genome_mapping
-STEP=$((STEP+1))
-	
-# separating unique and multiple mappers
-echo -e "`date "+$ISO_8601"`\tseparating unique and multiple mappers" | tee -a $LOG
-[ ! -f .${JOBUID}.status.${STEP}.separate_unique_and_multiple ] && \
-	awk 'BEGIN{OFS="\t"}{if ($5==1) {print $0 >> "/dev/stdout"} else {print $0 >> "/dev/stderr"}}' ${allBed2} \
-		1> ${uniqueBed2} \
-		2> ${multipBed2} && \
-	uniqueMapCount=`bedwc ${uniqueBed2}` && \
-	multipMapCount=`bedwc ${multipBed2}` && \
-	touch .${JOBUID}.status.${STEP}.separate_unique_and_multiple
-STEP=$((STEP+1))
-
-#####################
-# Length Separation #
-#####################
-# length separation
-case ${ORGANISM} in
-mouse)
-	echo -e "`date "+$ISO_8601"`\tseparating reads based on length" | tee -a $LOG
-	[ ! -f .${JOBUID}.status.${STEP}.sep_length ] && \
-		paraFile=${RANDOM}${RANDOM}.para && \
-		echo "awk '\$3-\$2==19' 				${allBed2} > ${allBed2%bed2}19mer.bed2"			>  $paraFile && \
-		echo "awk '\$3-\$2 >19 && \$3-\$2<24'	${allBed2} > ${allBed2%bed2}20-23mer.bed2" 		>> $paraFile && \
-		echo "awk '\$3-\$2 >23'					${allBed2} > ${allBed2%bed2}L23mer.bed2"		>> $paraFile && \
-		ParaFly -c $paraFile -CPU $CPU && \
-		rm -rf ${paraFile}* && \
-		touch  .${JOBUID}.status.${STEP}.sep_length
-	  STEP=$((STEP+1))
-;;
-## fly specific analysis
-fly)
-	echo -e "`date "+$ISO_8601"`\tseparating reads based on length" | tee -a $LOG
-	[ ! -f .${JOBUID}.status.${STEP}.sep_length ] && \
-		paraFile=${RANDOM}${RANDOM}.para && \
-		echo "awk '\$3-\$2==21' ${allBed2} > ${allBed2%bed2}21mer.bed2"   > $paraFile && \
-		echo "awk '\$3-\$2 >22' ${allBed2} > ${allBed2%bed2}L22mer.bed2" >> $paraFile && \
-		ParaFly -c $paraFile -CPU $CPU && \
-		rm -rf ${paraFile}* && \
-		touch  .${JOBUID}.status.${STEP}.sep_length
-	STEP=$((STEP+1))
-;;
-*)
-	echo "[$LINENO] Error: unrecognized organism $ORGANISM"
-	exit 2
-;;
-esac
-
-
-# plotting length distribution
-echo -e "`date "+$ISO_8601"`\tmaking length distribution" | tee -a $LOG
-[ ! -f .${JOBUID}.status.${STEP}.plotting_length_dis ] && \
-	awk '{a[$7]=$4}END{m=0; for (b in a){c[length(b)]+=a[b]; if (length(b)>m) m=length(b)} for (d=1;d<=m;++d) {print d"\t"(c[d]?c[d]:0)}}' ${allBed2}  | sort -k1,1n > ${allBed2}.lendis && \
-	awk '{a[$7]=$4}END{m=0; for (b in a){c[length(b)]+=a[b]; if (length(b)>m) m=length(b)} for (d=1;d<=m;++d) {print d"\t"(c[d]?c[d]:0)}}' ${uniqueBed2}  | sort -k1,1n > ${uniqueBed2}.lendis && \
-	Rscript --slave ${PIPELINE_DIRECTORY}/bin/draw_lendis.R ${allBed2}.lendis ${allBed2%.bed*}.x_hairpin && \
-	Rscript --slave ${PIPELINE_DIRECTORY}/bin/draw_lendis.R ${uniqueBed2}.lendis ${uniqueBed2%.bed*}.x_hairpin && \
-	awk '{ct[$1]+=$2}END{for (l in ct) {print l"\t"ct[l]}}' ${allBed2}.lendis    ${FQ%.f[qa]*}.x_rRNA.hairpin.v${hairpin_MM}a.lendis | sort -k1,1n > ${allBed2}.+hairpin.lendis && \
-	awk '{ct[$1]+=$2}END{for (l in ct) {print l"\t"ct[l]}}' ${uniqueBed2}.lendis ${FQ%.f[qa]*}.x_rRNA.hairpin.v${hairpin_MM}a.lendis | sort -k1,1n > ${uniqueBed2}.+hairpin.lendis && \
-	Rscript --slave ${PIPELINE_DIRECTORY}/bin/draw_lendis.R ${allBed2}.+hairpin.lendis    ${allBed2%.bed*}.+hairpin && \
-	Rscript --slave ${PIPELINE_DIRECTORY}/bin/draw_lendis.R ${uniqueBed2}.+hairpin.lendis ${uniqueBed2%.bed*}.+hairpin && \
-	touch .${JOBUID}.status.${STEP}.plotting_length_dis
-STEP=$((STEP+1))
-
-
-##################
-# Print to table #
-##################
-
-echo -e "total reads as input of the pipeline\t${totalReads}" > $TABLE && \
-echo -e "rRNA reads with ${rRNA_MM} mismatches\t${rRNAReads}" >> $TABLE && \
-echo -e "genome mapping reads (-rRNA; +miRNA_hairpin)\t$((uniqueMapCount+multipMapCount+hairpinReads+spliceMapTotal))" >> $TABLE && \
-echo -e "miRNA hairpin reads\t${hairpinReads}" >> $TABLE && \
-echo -e "genome mapping reads (-rRNA; -miRNA_hairpin)\t$((uniqueMapCount+multipMapCount+spliceMapTotal))" >> $TABLE && \
-echo -e "genome mapping reads (-rRNA; -miRNA_hairpin; -exon_exon_junction_mapper)\t$((uniqueMapCount+multipMapCount))" >> $TABLE && \
-echo -e "genome unique mapping reads (-rRNA; -miRNA_hairpi; -exon_exon_junction_mapper)\t${uniqueMapCount}" >> $TABLE && \
-echo -e "genome multiple mapping reads (-rRNA; -miRNA_hairpi; -exon_exon_junction_mapper)\t${multipMapCount}" >> $TABLE && \
-echo -e "exon-exon junction reads (unmappable to genome)\t${spliceMapTotal}" >> $TABLE && \
-
-###############################
-# Intersecting Genome Feature #
-###############################
-# running intersecting bed
-echo -e "`date "+$ISO_8601"`\trunning intersectBed for all features" | tee -a $LOG
-[ ! -f .${JOBUID}.status.${STEP}.intersect_all ] && \
-intersect_all.sh \
-	${uniqueBed2} \
-	${multipBed2} \
-	${allBed2%.bed2}.summary \
-	$ORGANISM \
-	$GENOME_FA \
-	$CPU && \
-	touch .${JOBUID}.status.${STEP}.intersect_all
-STEP=$((STEP+1))
-
-########################
-# Makeing BigWig Files #
-########################
-# normalization factor, currently using unique genome mappers and all hairpin mappers
-NormScale=`echo $((uniqueMapCount+hairpinReads+spliceMapTotal)) | awk '{printf "%f",1000000.0/$1}'`
-# make BW files
-echo -e "`date "+$ISO_8601"`\tmaking bigWig file for genome browser" | tee -a $LOG
-[ ! -f .${JOBUID}.status.${STEP}.make_bigWig ] && \
-cat ${FQ%.f[qa]*}.x_rRNA.hairpin.${Genome}v${genome_MM}a.bed2 ${uniqueBed2} > $uniqueBed2_hairpin && \
-	bed22bw.sh \
-		${uniqueBed2_hairpin} \
-		$CHROM \
-		${NormScale} \
-		${INPUT%.insert}.${Genome}v${genome_MM}a.un.gsnap.v${genome_MM}.unique.bed6 \
-		$CPU && \
-	rm -rf $uniqueBed2_hairpin && \
-	touch .${JOBUID}.status.${STEP}.make_bigWig
-STEP=$((STEP+1))
-
-###################################
-# Mapping to transposons directly #
-###################################
-# run bowtie mapping to some transposons directly
-for transposon in ${transposon_list[@]}; do 
-	echo -e "`date "+$ISO_8601"`\trunning direct mapping to $transposon, with ${transposon_MM} mismatch(es) allowed " | tee -a $LOG
-	[ ! -f .${JOBUID}.status.${STEP}.${transposon} ] && \
-		bowtie -r -v ${transposon_MM} -a --best --strata -p $CPU \
-			--al ${INSERT%.insert}.${transposon}.v${transposon_MM}a.al.insert -S \
-			${!transposon} \
-			${INSERT} \
-			1> /dev/stdout \
-			2> /dev/null | \
-		samtools view -uS -F0x4 - 2>/dev/null | bedtools bamtobed -i - > ${INSERT%.insert}.${transposon}.v${transposon_MM}a.insert.bed  && \
-		istBedToBed2 $INSERT ${INSERT%.insert}.${transposon}.v${transposon_MM}a.insert.bed > ${INSERT%.insert}.${transposon}.v${transposon_MM}a.insert.bed2 && \
-		rm -rf ${INSERT%.insert}.${transposon}.v${transposon_MM}a.insert.bed && \
-		MapReads=`bedwc ${INSERT%.insert}.${transposon}.v${transposon_MM}a.insert.bed2` && \
-		echo -e "${transposon} direct mapper reads (independent of genome mapping)\t${MapReads}" >> $TABLE && \
-		ppbed2 -a  ${INSERT%.insert}.${transposon}.v${transposon_MM}a.insert.bed2 -b ${INSERT%.insert}.${transposon}.v${transposon_MM}a.insert.bed2 > ${INSERT%.insert}.${transposon}.v${transposon_MM}a.insert.ppbed2 && \
-		Rscript --slave ${PIPELINE_DIRECTORY}/bin/draw_pp.R ${INSERT%.insert}.${transposon}.v${transposon_MM}a.insert.ppbed2 ${INSERT%.insert}.${transposon}.v${transposon_MM}a && \
-		touch .${JOBUID}.status.${STEP}.${transposon}
-	STEP=$((STEP+1))
- done
-
-#####################################
-# Mapping to piRNA cluster directly #
-#####################################
-# mapping to piRNA cluster directly
-for cluster in ${piRNACLUSTER[@]}; do 
-	echo -e "`date "+$ISO_8601"`\trunning direct mapping to $cluster, with $cluster_MM mismatch(es) allowed" | tee -a $LOG
-	[ ! -f .${JOBUID}.status.${STEP}.${cluster} ] && \
-		bowtie -r -v $cluster_MM -a --best --strata -p $CPU \
-			-S \
-			${!cluster} \
-			${INSERT} \
-			1> /dev/stdout \
-			2> /dev/null | \
-		samtools view -uS -F0x4 - 2>/dev/null | bedtools bamtobed -i - > ${INSERT%.insert}.${cluster}.v${cluster_MM}a.insert.bed && \
-		istBedToBed2 ${INSERT} ${INSERT%.insert}.${cluster}.v${cluster_MM}a.insert.bed > ${INSERT%.insert}.${cluster}.v${cluster_MM}a.insert.bed2 && \
-		rm -rf ${INSERT%.insert}.${cluster}.v${cluster_MM}a.insert.bed && \
-		ppbed2each -o /dev/stdout -a ${INSERT%.insert}.${cluster}.v${cluster_MM}a.insert.bed2 -b ${INSERT%.insert}.${cluster}.v${cluster_MM}a.insert.bed2 | \
-		awk '{if (ARGIND==1) {a[$4]=1} else {b[$1]=$2}}END{for (c in a) {print c"\t"(b[c]?b[c]:0)}}' ${!cluster}".bed" - > ${INSERT%.insert}.${cluster}.zscores && \
-		touch  .${JOBUID}.status.${STEP}.${cluster}
-	STEP=$((STEP+1))
- done
-
-################
-# Joining Pdfs #
-################
-echo -e "`date "+$ISO_8601"`\tconcatenating pdfs" | tee -a $LOG
-[ ! -f .${JOBUID}.status.${STEP}.merge_pdfs ] && \
-	gs -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=${FQ%.fq}.pdf \
-		${uniqueBed2%.bed*}.+hairpin.lendis.pdf \
-		${uniqueBed2%.bed*}.x_hairpin.lendis.pdf \
-		${allBed2%.bed*}.+hairpin.lendis.pdf \
-		${allBed2%.bed*}.x_hairpin.lendis.pdf \
-		${uniqueBed2}.features.pdf && \
-	touch  .${JOBUID}.status.${STEP}.merge_pdfs
-STEP=$((STEP+1))
-
-###############
-# Final Table #
-###############
-
-###############
-# Cleaning up #
-###############
-[ ! -f .${JOBUID}.status.${STEP}.gzip ] && \
-	paraFile="clean.para" && rm -rf $paraFile ${paraFile}.completed && \
-	for file in `ls | grep '\.bed2$' && ls | grep insert$`;
-		do
-			echo "gzip $i" >> $paraFile;
-	done
-	ParaFly -c $paraFile -CPU $CPU && \
-touch .${JOBUID}.status.${STEP}.gzip
-
-# print out marker for finishing pipeline
-rm -rf ${OUTDIR}"/.finished_*" 
-touch  ${OUTDIR}"/.finished_${Genome}_${smallRNA_Pipeline_Version}"
-echo -e "`date "+$ISO_8601"`\trun finished" | tee -a $LOG
-echo -e "---------------------------------" | tee -a $LOG
 
 
 
