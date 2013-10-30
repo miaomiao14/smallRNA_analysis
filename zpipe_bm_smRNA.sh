@@ -235,6 +235,12 @@ bombyx)
 # using dm3 for fly
 	Genome=bmv2
 	COMMON_FOLDER=/home/wangw1/pipeline_bm/common
+	RRNA=${COMMON_FOLDER}/silkworm_rRNA.gff
+	TRNA=${COMMON_FOLDER}/silkworm_tRNA.gff
+	KNOWNTE=${COMMON_FOLDER}/silkworm_Publicknow_TE.gff
+	REASTE=${COMMON_FOLDER}/silkworm_ReAS_TE.gff
+	MIRNA=${COMMON_FOLDER}/silkworm_miRNA.gff
+	GENE=${COMMON_FOLDER}/silkworm_glean.gff
 # Bombyx piRNA cluster (bowtie index)
 	#piRNA_cluster=$COMMON_FOLDER/piRNA_cluster
 	#declare -a piRNACLUSTER=("piRNA_cluster")
@@ -394,5 +400,21 @@ echo -e "`date "+$ISO_8601"`\tmapping to genome, with ${genome_MM} mismatch(es) 
 	touch .${JOBUID}.status.${STEP}.genome_mapping
 STEP=$((STEP+1))
 
+#stat
+insertsReadNum=`sumcol ${INSERT} 2`
+genomeMapReadNum=`sumcol ${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}a.al.insert 2`
 
+insertsSpeciesNum=`wc -l ${INSERT} |cut -f1 -d" "`
+genomeMapSpeciesNum=`wc -l ${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}a.al.insert|cut -f1 -d" "`
 
+	#RRNA=${COMMON_FOLDER}/silkworm_rRNA.gff
+	#TRNA=${COMMON_FOLDER}/silkworm_tRNA.gff
+	#KNOWNTE=${COMMON_FOLDER}/silkworm_Publicknow_TE.gff
+	#REASTE=${COMMON_FOLDER}/silkworm_ReAS_TE.gff
+	#MIRNA=${COMMON_FOLDER}/silkworm_miRNA.gff
+	#GENE=${COMMON_FOLDER}/silkworm_glean.gff
+#x rRNAs,tRNAs by intersect with rRNA and tRNA annotations
+bedtools intersect -a ${allBed2} -b ${RRNA} -wb -f 0.99 -s >${allBed2%*.bed2}.rRNA.all.bed2
+bedtools intersect -a ${allBed2} -b ${RRNA} -v -f 0.99 -s |bedtools intersect -a - -b ${TRNA} -v -f 0.99 -s >${allBed2%*.bed2}.xrRNA.xtRNA.all.bed2
+
+ 
