@@ -259,7 +259,7 @@ esac
 # fasta file for the genome
 GENOME_FA=$COMMON_FOLDER/genome.fa
 # bowtie1 index for the genome
-BOWTIEINDEX_Genome=$COMMON_FOLDER/$Genome
+BOWTIEINDEX_Genome=$COMMON_FOLDER/$Genome/silkwormv2
 # bowtie1 index for rRNA, from iGenome
 BOWTIEINDEX_rRNA=$COMMON_FOLDER/ribosomal
 # bowtie1 index for the hairpin (miRNA) of this ORGANISM, from miRBase
