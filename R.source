@@ -968,7 +968,7 @@ main=paste(gtgroup,"\n","Correlation Coefficient of Log2 sense fraction between 
 		cex.main=1)+
 #abline(lm(gSRADEG$piRNA_sense_fraction.y~gSRADEG$piRNA_sense_fraction.x)$coefficients[1],lm(gSRADEG$piRNA_sense_fraction.y~gSRADEG$piRNA_sense_fraction.x)$coefficients[2],lty=2,lwd=2,col="blue")+		
 abline(0,1,lty=2,lwd=2,col="blue")+
-axis (1,pos=c(0,0), tck=0.01, lwd=3, at=seq(floor(ll),ceiling(ul),roundUp( ceiling(ul/10) ) ), cex.axis=1) + 
-axis (2, pos=c(0,0),tck=0.01, lwd=3, at=seq(floor(ll),ceiling(ul),roundUp( ceiling(ul/10) ) ), cex.axis=1)
+axis (1,pos=c(0,0), tck=0.01, lwd=3, at=seq(floor(ll),ceiling(ul),ceiling(ul/10)  ), cex.axis=1) + 
+axis (2, pos=c(0,0),tck=0.01, lwd=3, at=seq(floor(ll),ceiling(ul),ceiling(ul/10)  ), cex.axis=1)
 dev.off()
 }
