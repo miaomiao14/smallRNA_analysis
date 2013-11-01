@@ -36,7 +36,7 @@ do
 	OUTDIR3=${OUTDIR2}/${g}
 	SRA=${INDIR}/smRNA/jia_pipeline_results/Phil.SRA.${g}.ox.ovary.inserts/output/Phil.SRA.${g}.ox.ovary.inserts.transposon.list
 	
-	DEG=${INDIR}/degradome/pipeline_output_New/Phil.DEG.${g}.ovary/bedIntersectWW/Phil.DEG.${g}.ovary.PE.x_rRNA.dm3.sorted.f0x40.noS.5p.unique.bed.ntm.collapse.FLY_TRANSPOSON_ALL.nta.mapper2.gz.transposon.list
+	DEG=${INDIR}/degradome/pipeline_output_New/Phil.DEG.${g}.ovary/bedIntersectWW/Phil.DEG.${g}.ovary.PE.x_rRNA.dm3.sorted.f0x40.noS.5p.all.bed.ntm.collapse.FLY_TRANSPOSON_ALL.nta.mapper2.gz.transposon.list
 	
 	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_sf_correlation $SRA $DEG ${g} ${OUTDIR2}" >>${paraFile}	
 done
