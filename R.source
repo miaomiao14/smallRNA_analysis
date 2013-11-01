@@ -929,3 +929,24 @@ mtext(side = 2, text = paste("Log2 expression in ",levels(srarsq$dt.y)), line = 
 dev.off()
 
 }
+
+plot_sf_correlation<- function (sra,deg,gtgroup,outdir )
+{
+
+group=read.table("/home/wangw1/pipeline/common/Zamore.group",F)
+colnames(group)=c("transposon","g")
+#transposon	total	total_sense	total_antisense	total_sense_fraction	siRNA	siRNA_sense	siRNA_antisense	siRNA_sense_fraction	piRNA	piRNA_sense	piRNA_antisense	piRNA_sense_fraction
+SRA=read.table(sra,T)
+SRA=subset(SRA,select=c("transposon","piRNA","piRNA_sense","piRNA_antisense","piRNA_sense_fraction"))
+DEG=read.table(deg,T)
+SRADEG=merge(SRA,DEG,by="transposon")
+gSRADEG=merge(SRADEG,group,by="transposon")
+sradeg_rawcor=cor(SRADEG$piRNA_sense_fraction.x,SRADEG$piRNA_sense_fraction.y)
+sradeg_rawcor=formatC(sradeg_rawcor,3)
+pdfname=paste(outdir,"/",gtgroup,"_sradeg_senseFraction_correlation.pdf",sep="")
+pdf(pdfname)
+plot(gSRADEG$piRNA_sense_fraction.x,gSRADEG$piRNA_sense_fraction.y,xlim=c(0,1),ylim=c(0,1),xlab="SRA sense fraction",ylab="DEG sense fraction",pch=21,
+col="white", bg="red", xaxt='n', yaxt='n', frame=F, cex=1.5, ex.lab=1.5,
+main=paste("Correlation Coefficient of sense fraction between smRNA and Degradome is ",sradeg_rawcor,sep="" ), 
+		cex.main=1)
+}
