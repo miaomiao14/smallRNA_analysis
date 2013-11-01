@@ -947,7 +947,7 @@ sradeg_rawcor=formatC(sradeg_rawcor,3)
 pdfname=paste(outdir,"/",gtgroup,"_sradeg_senseFraction_correlation.pdf",sep="")
 pdf(pdfname)
 plot(gSRADEG$piRNA_sense_fraction.x,gSRADEG$piRNA_sense_fraction.y,xlim=c(0,1),ylim=c(0,1),xlab="SRA sense fraction",ylab="DEG sense fraction",pch=21,
-col="white", bg=fcol[gSRADEG$g], xaxt='n', yaxt='n', frame=F, cex=1.5, ex.lab=1.5,
+col="white", bg=fcol[gSRADEG$g], xaxt='n', yaxt='n', frame=F, cex=1.5, 
 main=paste(gtgroup,"\n","Correlation Coefficient of sense fraction between smRNA and Degradome is ",sradeg_rawcor,sep="" ), 
 		cex.main=1)+
 #abline(lm(gSRADEG$piRNA_sense_fraction.y~gSRADEG$piRNA_sense_fraction.x)$coefficients[1],lm(gSRADEG$piRNA_sense_fraction.y~gSRADEG$piRNA_sense_fraction.x)$coefficients[2],lty=2,lwd=2,col="blue")+		
@@ -962,12 +962,12 @@ pdfname=paste(outdir,"/",gtgroup,"_sradeg_senseFraction_log2_correlation.pdf",se
 pdf(pdfname)
 ul=max(log2(gSRADEG$piRNA_sense_fraction.x),log2(gSRADEG$piRNA_sense_fraction.y))
 plot(log2(gSRADEG$piRNA_sense_fraction.x),log2(gSRADEG$piRNA_sense_fraction.y),xlim=c(0,ul),ylim=c(0,ul),xlab="Log2 of SRA sense fraction",ylab="Log2 of DEG sense fraction",pch=21,
-col="white", bg=fcol[gSRADEG$g], xaxt='n', yaxt='n', frame=F, cex=1.5, ex.lab=1.5,
+col="white", bg=fcol[gSRADEG$g], xaxt='n', yaxt='n', frame=F, cex=1.5, 
 main=paste(gtgroup,"\n","Correlation Coefficient of Log2 sense fraction between smRNA and Degradome is ",sradeg_rawcor,sep="" ), 
 		cex.main=1)+
 #abline(lm(gSRADEG$piRNA_sense_fraction.y~gSRADEG$piRNA_sense_fraction.x)$coefficients[1],lm(gSRADEG$piRNA_sense_fraction.y~gSRADEG$piRNA_sense_fraction.x)$coefficients[2],lty=2,lwd=2,col="blue")+		
 abline(0,1,lty=2,lwd=2,col="blue")+
-axis (1,pos=c(0,0), tck=0.01, lwd=3, at=seq(0,1,by=0.2 ), cex.axis=1) + 
-axis (2, pos=c(0,0),tck=0.01, lwd=3, at=seq(0,1,by=0.2 ), cex.axis=1)
+axis (1,pos=c(0,0), tck=0.01, lwd=3, at=seq(0,ul ), cex.axis=1) + 
+axis (2, pos=c(0,0),tck=0.01, lwd=3, at=seq(0,ul ), cex.axis=1)
 dev.off()
 }
