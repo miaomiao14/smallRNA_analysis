@@ -962,7 +962,7 @@ pdfname=paste(outdir,"/",gtgroup,"_sradeg_senseFraction_log2_correlation.pdf",se
 pdf(pdfname)
 ul=max(log2(gSRADEG$piRNA_sense_fraction.x),log2(gSRADEG$piRNA_sense_fraction.y))
 ll=min(log2(gSRADEG$piRNA_sense_fraction.x),log2(gSRADEG$piRNA_sense_fraction.y))
-plot(log2(gSRADEG$piRNA_sense_fraction.x),log2(gSRADEG$piRNA_sense_fraction.y),xlim=c(0,ul),ylim=c(0,ul),xlab="Log2 of SRA sense fraction",ylab="Log2 of DEG sense fraction",pch=21,
+plot(log2(gSRADEG$piRNA_sense_fraction.x),log2(gSRADEG$piRNA_sense_fraction.y),xlim=c(ll,ul),ylim=c(ll,ul),xlab="Log2 of SRA sense fraction",ylab="Log2 of DEG sense fraction",pch=21,
 col="white", bg=fcol[gSRADEG$g], xaxt='n', yaxt='n', frame=F, cex=1.5, 
 main=paste(gtgroup,"\n","Correlation Coefficient of Log2 sense fraction between smRNA and Degradome is ",sradeg_rawcor,sep="" ), 
 		cex.main=1)+
