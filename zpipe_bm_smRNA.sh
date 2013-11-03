@@ -359,13 +359,13 @@ STEP=1
 file=${FQ##*/}
 filename=`basename $file .fastq`
 echo -e "`date "+$ISO_8601"`\tremove the adaptors and convert the format to inserts " | tee -a $LOG
-touch .${JOBUID}.status.${STEP}.preprocessing
-[ ! -f .${JOBUID}.status.${STEP}.preprocessing ] && \
+touch .status.${STEP}.preprocessing
+[ ! -f .status.${STEP}.preprocessing ] && \
 grep -A 1 "@" ${FULLPATH_FQ} | grep -v "@" | grep -v "\-\-"  | uniq.reads+   >${filename}.raw && \
 Extract_insert_10mer.pl ${filename}.raw $ADAPTER > ${OUTDIR}/${filename}.insertsout && \
 inserts2uniqreads.pl ${OUTDIR}/${filename}.insertsout 18 30 > ${OUTDIR}/${filename}.inserts.trimmed && \
 rm ${OUTDIR}/${filename}.insertsout && \
-	touch .${JOBUID}.status.${STEP}.preprocessing
+	touch .status.${STEP}.preprocessing
 STEP=$((STEP+1))
 
 
@@ -384,7 +384,7 @@ multipBed2=${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}.multip.bed2
 uniqueBed2_hairpin=${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}.unique.+hairpin.bed2
 # mapping insert file to genome
 echo -e "`date "+$ISO_8601"`\tmapping to genome, with ${genome_MM} mismatch(es) allowed " | tee -a $LOG
-[ ! -f .${JOBUID}.status.${STEP}.genome_mapping ] && \
+[ ! -f .status.${STEP}.genome_mapping ] && \
 	bowtie -r -v $genome_MM -a --best --strata -p $CPU \
 		--al  ${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}a.al.insert \
 		--un  ${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}a.un.insert \
@@ -397,7 +397,7 @@ echo -e "`date "+$ISO_8601"`\tmapping to genome, with ${genome_MM} mismatch(es) 
 	bedtools bamtobed -i - > ${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}a.insert.bed && \
 	istBedToBed2 $INSERT ${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}a.insert.bed > ${allBed2} && \
 	rm -rf ${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}a.insert.bed && \
-	touch .${JOBUID}.status.${STEP}.genome_mapping
+	touch .status.${STEP}.genome_mapping
 STEP=$((STEP+1))
 
 #stat
@@ -409,29 +409,36 @@ genomeMapSpeciesNum=`wc -l ${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}a.al
 
 
 #x rRNAs,tRNAs by intersect with rRNA and tRNA annotations,remove both sense and antisense mappers
+echo -e "`date "+$ISO_8601"`\tremove rRNAs and tRNAs, remove miRNA mappers" | tee -a $LOG
+[ ! -f .status.${STEP}.xrRNA.xtRNA ] && \
+[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.bed2 ] && bedtools intersect -a ${allBed2} -b ${RRNA} -v -f 0.99 |bedtools intersect -a - -b ${TRNA} -v -f 0.99 >${allBed2%*.bed2}.all.xrRNA.xtRNA.bed2 && \
+touch ${OUTDIR}/.status.${STEP}.xrRNA.xtRNA
+STEP=$((STEP+1))
 
-bedtools intersect -a ${allBed2} -b ${RRNA} -v -f 0.99 |bedtools intersect -a - -b ${TRNA} -v -f 0.99 >${allBed2%*.bed2}.all.xrRNA.xtRNA.bed2
 
 #stat
 TRRNA=${COMMON_FOLDER}/silkworm_rRNA_tRNA.gff
 [ ! -f ${TRRNA} ] && cat ${RRNA} ${TRNA} >${TRRNA}
-bedtools intersect -a ${allBed2} -b ${TRRNA} -wb -f 0.99 >${allBed2%*.bed2}.all.rRNA.tRNA.bed2
-awk '{OFS="\t"}{print $7,$4}' ${allBed2%*.bed2}.all.rRNA.tRNA.bed2 |sort -u >${allBed2%*.bed2}.all.rRNA.tRNA.uniq.reads
+[ ! -f ${allBed2%*.bed2}.all.rRNA.tRNA.bed2 ] && bedtools intersect -a ${allBed2} -b ${TRRNA} -wb -f 0.99 >${allBed2%*.bed2}.all.rRNA.tRNA.bed2
+[ ! -f ${allBed2%*.bed2}.all.rRNA.tRNA.uniq.reads ] && awk '{OFS="\t"}{print $7,$4}' ${allBed2%*.bed2}.all.rRNA.tRNA.bed2 |sort -u >${allBed2%*.bed2}.all.rRNA.tRNA.uniq.reads
+
 nncReadNum=`sumcol ${allBed2%*.bed2}.all.rRNA.tRNA.uniq.reads 2`
 nncReadSpecies=`wc -l ${allBed2%*.bed2}.all.rRNA.tRNA.uniq.reads|cut -f1 -d" "`
 
 #x miRNAs
-bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.bed2 -b ${MIRNA} -v -f 0.99 >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2
-
-
-
+echo -e "`date "+$ISO_8601"`\tremove miRNA mappers" | tee -a $LOG
+[ ! -f .status.${STEP}.xmiRNA ] && \
+[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 ] && bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.bed2 -b ${MIRNA} -v -f 0.99 >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 
 #intersect with miRNAs
-bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.bed2 -b ${MIRNA} -f 0.99 -s -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.S.bed2
-bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.bed2 -b ${MIRNA} -f 0.99 -S -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.AS.bed2
-#stat
+[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.S.bed2 ] && bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.bed2 -b ${MIRNA} -f 0.99 -s -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.S.bed2 
+[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.AS.bed2 ] && bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.bed2 -b ${MIRNA} -f 0.99 -S -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.AS.bed2 && \
+touch ${OUTDIR}/.status.${STEP}.xmiRNA
+STEP=$((STEP+1))
 
-awk '{OFS="\t"}{print $7,$4}'  ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.S.bed2 |sort -u > ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.S.uniq.reads
-awk '{OFS="\t"}{print $7,$4}'  ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.AS.bed2 |sort -u > ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.AS.uniq.reads
+
+#stat
+[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.S.uniq.reads ] && awk '{OFS="\t"}{print $7,$4}'  ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.S.bed2 |sort -u > ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.S.uniq.reads
+[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.AS.uniq.reads ] && awk '{OFS="\t"}{print $7,$4}'  ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.AS.bed2 |sort -u > ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.AS.uniq.reads
 
 miRNASReadNum=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.S.uniq.reads 2`
 miRNAASReadNum=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.AS.uniq.reads 2`
@@ -440,9 +447,12 @@ miRNASSpeciesNum=`wc -l ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.S.uniq.reads|cut
 miRNAASSpeciesNum=`wc -l ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.AS.uniq.reads|cut -f1 -d" "`
 #length distribution
 
+
 #interesect with gene, TE annotations
-parafly_file=${OUTDIR}/intersectTogeneTE.para
 declare -a TARGETS=("GENE" "KNOWNTE" "ReASTE")
+echo -e "`date "+$ISO_8601"`\tintersect with gene and TES, converting format to mapper2" | tee -a $LOG
+[ ! -f .status.${STEP}.intersectGeneandTE ] && \
+parafly_file=${OUTDIR}/intersectTogeneTE.para && \
 for t in ${TARGETS[@]}
 do
 echo -ne "bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 -b ${!t} -f 0.99 -s -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2 && " >> $parafly_file ; 
@@ -453,17 +463,22 @@ echo -ne "bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 -b ${!
 echo -ne "bedtools sort -i ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2  |bedtools groupby -i - -g 1,2,3,4,5,6,7 -c 8,9,10,11,12,13,14,15,16 -o collapse,collapse,collapse,collapse,collapse,collapse,collapse,collapse,collapse | \
 			awk 'BEGIN{OFS=\"\\\t\"}{a=split(\$8,ar,\",\");k=split(\$16,kr,\",\"); \$2+=1; for(i=1;i<=a;i++){print \$7,\$4,\$1\":\"\$2\"-\"\$3\"(\"\$6\")\",\"antisense\",kr[i],kr[i],\$5,a} }'  \
 			> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2 &&">> $parafly_file ;
-echo -e "cat ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2| gzip >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.mapper2.gz "
+echo -ne "cat ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.mapper2 &&  ">> $parafly_file ;
+echo -e "gzip  ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2">> $parafly_file ;
 done
 if [[ ! -f ${parafly_file}.completed ]] || [[ -f $parafly_file.failed_commands ]]
 then
 	ParaFly -c $parafly_file -CPU 8 -failed_cmds $parafly_file.failed_commands
 fi
+[ $? == 0 ] && \
+touch ${OUTDIR}/.status.${STEP}.intersectGeneandTE
+STEP=$((STEP+1))
+
 #stat
 for t in ${TARGETS[@]}
 do
-awk '{OFS="\t"}{print $7,$4}' ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2>${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads
-awk '{OFS="\t"}{print $7,$4}' ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2>${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads
+[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads ] && awk '{OFS="\t"}{print $7,$4}' ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2>${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads
+[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads ] && awk '{OFS="\t"}{print $7,$4}' ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2>${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads
 ${t}SReadNum=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads 2`
 ${t}ASReadNum=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads 2`
 
