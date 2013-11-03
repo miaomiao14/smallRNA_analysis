@@ -466,7 +466,7 @@ echo -ne "bedtools sort -i ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2  |b
 echo -ne "cat ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.mapper2 &&  ">> $parafly_file ;
 echo -e "gzip  ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2">> $parafly_file ;
 done
-if [[ ! -f ${parafly_file}.completed ]] || [[ -f $parafly_file.failed_commands ]]
+if [[ ! -s ${parafly_file}.completed ]] || [[ -f $parafly_file.failed_commands ]]
 then
 	ParaFly -c $parafly_file -CPU 8 -failed_cmds $parafly_file.failed_commands
 fi
