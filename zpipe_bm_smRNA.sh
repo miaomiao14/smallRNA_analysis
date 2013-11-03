@@ -237,10 +237,10 @@ bombyx)
 	COMMON_FOLDER=/home/wangw1/pipeline_bm/common
 	RRNA=${COMMON_FOLDER}/silkworm_rRNA.gff
 	TRNA=${COMMON_FOLDER}/silkworm_tRNA.gff
-	KNOWNTE=${COMMON_FOLDER}/silkworm_Publicknow_TE.gff
-	ReASTE=${COMMON_FOLDER}/silkworm_ReAS_TE.gff
-	MIRNA=${COMMON_FOLDER}/silkworm_miRNA.gff
-	GENE=${COMMON_FOLDER}/silkworm_glean.gff
+	KNOWNTE=${COMMON_FOLDER}/silkworm_Publicknow_TE.bed
+	ReASTE=${COMMON_FOLDER}/silkworm_ReAS_TE.bed
+	MIRNA=${COMMON_FOLDER}/silkworm_miRNA.bed
+	GENE=${COMMON_FOLDER}/silkworm_glean.bed
 # Bombyx piRNA cluster (bowtie index)
 	#piRNA_cluster=$COMMON_FOLDER/piRNA_cluster
 	#declare -a piRNACLUSTER=("piRNA_cluster")
@@ -456,15 +456,15 @@ parafly_file=${OUTDIR}/intersectTogeneTE.para && \
 for t in ${TARGETS[@]}
 do
 echo -ne "bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 -b ${!t} -f 0.99 -s -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2 && " >> $parafly_file ; 
-echo -ne "bedtools sort -i ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2  |bedtools groupby -i - -g 1,2,3,4,5,6,7 -c 8,9,10,11,12,13,14,15,16 -o collapse,collapse,collapse,collapse,collapse,collapse,collapse,collapse,collapse | \
-			awk 'BEGIN{OFS=\"\\\t\"}{a=split(\$8,ar,\",\");k=split(\$16,kr,\",\"); \$2+=1; for(i=1;i<=a;i++){print \$7,\$4,\$1\":\"\$2\"-\"\$3\"(\"\$6\")\",\"sense\",kr[i],kr[i],\$5,a} }'  \
-			> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 && ">> $parafly_file ;
+echo -e "bedtools sort -i ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2  |bedtools groupby -i - -g 1,2,3,4,5,6,7 -c 8,9,10,11,12,13 -o collapse,collapse,collapse,collapse,collapse,collapse | \
+			awk 'BEGIN{OFS=\"\\\t\"}{k=split(\$11,kr,\",\");l=split(\$11,lr,\",\"); \$2+=1; for(i=1;i<=k;i++){print \$7,\$4,\$1\":\"\$2\"-\"\$3\"(\"\$6\")\",\"sense\",kr[i],lr[i],\$5,k} }'  \
+			> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2 ">> $parafly_file ;
 echo -ne "bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 -b ${!t} -f 0.99 -S -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2 &&" >> $parafly_file ;
-echo -ne "bedtools sort -i ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2  |bedtools groupby -i - -g 1,2,3,4,5,6,7 -c 8,9,10,11,12,13,14,15,16 -o collapse,collapse,collapse,collapse,collapse,collapse,collapse,collapse,collapse | \
-			awk 'BEGIN{OFS=\"\\\t\"}{a=split(\$8,ar,\",\");k=split(\$16,kr,\",\"); \$2+=1; for(i=1;i<=a;i++){print \$7,\$4,\$1\":\"\$2\"-\"\$3\"(\"\$6\")\",\"antisense\",kr[i],kr[i],\$5,a} }'  \
-			> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2 &&">> $parafly_file ;
-echo -ne "cat ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.mapper2 &&  ">> $parafly_file ;
-echo -e "gzip  ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2">> $parafly_file ;
+echo -e "bedtools sort -i ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2  |bedtools groupby -i - -g 1,2,3,4,5,6,7 -c 8,9,10,11,12,13 -o collapse,collapse,collapse,collapse,collapse,collapse | \
+			awk 'BEGIN{OFS=\"\\\t\"}{k=split(\$11,kr,\",\");l=split(\$11,lr,\",\"); \$2+=1; for(i=1;i<=k;i++){print \$7,\$4,\$1\":\"\$2\"-\"\$3\"(\"\$6\")\",\"antisense\",kr[i],lr[i],\$5,k} }'  \
+			> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2 ">> $parafly_file ;
+#echo -ne "cat ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.mapper2 &&  ">> $parafly_file ;
+#echo -e "gzip  ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2">> $parafly_file ;
 done
 if [[ ! -s ${parafly_file}.completed ]] || [[ -f $parafly_file.failed_commands ]]
 then
