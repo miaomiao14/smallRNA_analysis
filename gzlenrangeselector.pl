@@ -6,7 +6,7 @@
 use Compress::Zlib;
 if(@ARGV<1) { print "USAGE:lenselector <file> <len1> <len2> \n"; exit 1;}
 #open IN, $ARGV[0];
-$gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
+$gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[0]: $gzerrno\n" ;
 while($gz->gzreadline($_) > 0)
 {
  chomp;

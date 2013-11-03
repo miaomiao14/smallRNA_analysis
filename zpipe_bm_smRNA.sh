@@ -238,7 +238,7 @@ bombyx)
 	RRNA=${COMMON_FOLDER}/silkworm_rRNA.gff
 	TRNA=${COMMON_FOLDER}/silkworm_tRNA.gff
 	KNOWNTE=${COMMON_FOLDER}/silkworm_Publicknow_TE.gff
-	REASTE=${COMMON_FOLDER}/silkworm_ReAS_TE.gff
+	ReASTE=${COMMON_FOLDER}/silkworm_ReAS_TE.gff
 	MIRNA=${COMMON_FOLDER}/silkworm_miRNA.gff
 	GENE=${COMMON_FOLDER}/silkworm_glean.gff
 # Bombyx piRNA cluster (bowtie index)
@@ -407,14 +407,77 @@ genomeMapReadNum=`sumcol ${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}a.al.i
 insertsSpeciesNum=`wc -l ${INSERT} |cut -f1 -d" "`
 genomeMapSpeciesNum=`wc -l ${INSERT%.inserts.trimmed}.${Genome}v${genome_MM}a.al.insert|cut -f1 -d" "`
 
-	#RRNA=${COMMON_FOLDER}/silkworm_rRNA.gff
-	#TRNA=${COMMON_FOLDER}/silkworm_tRNA.gff
-	#KNOWNTE=${COMMON_FOLDER}/silkworm_Publicknow_TE.gff
-	#REASTE=${COMMON_FOLDER}/silkworm_ReAS_TE.gff
-	#MIRNA=${COMMON_FOLDER}/silkworm_miRNA.gff
-	#GENE=${COMMON_FOLDER}/silkworm_glean.gff
-#x rRNAs,tRNAs by intersect with rRNA and tRNA annotations
-bedtools intersect -a ${allBed2} -b ${RRNA} -wb -f 0.99 -s >${allBed2%*.bed2}.rRNA.all.bed2
-bedtools intersect -a ${allBed2} -b ${RRNA} -v -f 0.99 -s |bedtools intersect -a - -b ${TRNA} -v -f 0.99 -s >${allBed2%*.bed2}.xrRNA.xtRNA.all.bed2
 
- 
+#x rRNAs,tRNAs by intersect with rRNA and tRNA annotations,remove both sense and antisense mappers
+
+bedtools intersect -a ${allBed2} -b ${RRNA} -v -f 0.99 |bedtools intersect -a - -b ${TRNA} -v -f 0.99 >${allBed2%*.bed2}.all.xrRNA.xtRNA.bed2
+
+#stat
+TRRNA=${COMMON_FOLDER}/silkworm_rRNA_tRNA.gff
+[ ! -f ${TRRNA} ] && cat ${RRNA} ${TRNA} >${TRRNA}
+bedtools intersect -a ${allBed2} -b ${TRRNA} -wb -f 0.99 >${allBed2%*.bed2}.all.rRNA.tRNA.bed2
+awk '{OFS="\t"}{print $7,$4}' ${allBed2%*.bed2}.all.rRNA.tRNA.bed2 |sort -u >${allBed2%*.bed2}.all.rRNA.tRNA.uniq.reads
+nncReadNum=`sumcol ${allBed2%*.bed2}.all.rRNA.tRNA.uniq.reads 2`
+nncReadSpecies=`wc -l ${allBed2%*.bed2}.all.rRNA.tRNA.uniq.reads|cut -f1 -d" "`
+
+#x miRNAs
+bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.bed2 -b ${MIRNA} -v -f 0.99 >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2
+
+
+
+#intersect with miRNAs
+bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.bed2 -b ${MIRNA} -f 0.99 -s -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.S.bed2
+bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.bed2 -b ${MIRNA} -f 0.99 -S -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.AS.bed2
+#stat
+
+awk '{OFS="\t"}{print $7,$4}'  ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.S.bed2 |sort -u > ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.S.uniq.reads
+awk '{OFS="\t"}{print $7,$4}'  ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.AS.bed2 |sort -u > ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.AS.uniq.reads
+
+miRNASReadNum=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.S.uniq.reads 2`
+miRNAASReadNum=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.AS.uniq.reads 2`
+
+miRNASSpeciesNum=`wc -l ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.S.uniq.reads|cut -f1 -d" "`
+miRNAASSpeciesNum=`wc -l ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.AS.uniq.reads|cut -f1 -d" "`
+#length distribution
+
+#interesect with gene, TE annotations
+parafly_file=${OUTDIR}/intersectTogeneTE.para
+declare -a TARGETS=("GENE" "KNOWNTE" "ReASTE")
+for t in ${TARGETS[@]}
+do
+echo -e "bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 -b ${!t} -f 0.99 -s -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2 " >> $parafly_file ; 
+echo -e "bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 -b ${!t} -f 0.99 -S -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2 " >> $parafly_file ;
+echo -e "bedtools sort -i ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2  |bedtools groupby -i - -g 1,2,3,4,5,6,7 -c 8,9,10,11,12,13,14,15,16 -o collapse,collapse,collapse,collapse,collapse,collapse,collapse,collapse,collapse | \
+			awk 'BEGIN{OFS=\"\\\t\"}{a=split(\$8,ar,\",\");k=split(\$16,kr,\",\"); \$2+=1; for(i=1;i<=a;i++){print \$7,\$4,\$1\":\"\$2\"-\"\$3\"(\"\$6\")\",\"sense\",kr[i],kr[i],\$5,a} }'  \
+			> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 ">> $parafly_file ;
+
+echo -e "bedtools sort -i ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2  |bedtools groupby -i - -g 1,2,3,4,5,6,7 -c 8,9,10,11,12,13,14,15,16 -o collapse,collapse,collapse,collapse,collapse,collapse,collapse,collapse,collapse | \
+			awk 'BEGIN{OFS=\"\\\t\"}{a=split(\$8,ar,\",\");k=split(\$16,kr,\",\"); \$2+=1; for(i=1;i<=a;i++){print \$7,\$4,\$1\":\"\$2\"-\"\$3\"(\"\$6\")\",\"antisense\",kr[i],kr[i],\$5,a} }'  \
+			> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2">> $parafly_file ;
+echo -e "cat ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2| gzip >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.mapper2.gz "
+done
+if [[ ! -f ${parafly_file}.completed ]] || [[ -f $parafly_file.failed_commands ]]
+then
+	ParaFly -c $parafly_file -CPU 8 -failed_cmds $parafly_file.failed_commands
+fi
+#stat
+for t in ${TARGETS[@]}
+do
+awk '{OFS="\t"}{print $7,$4}' ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2>${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads
+awk '{OFS="\t"}{print $7,$4}' ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2>${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads
+${t}SReadNum=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads 2`
+${t}ASReadNum=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads 2`
+
+${t}SSpeciesNum=`wc -l ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads|cut -f1 -d" "`
+${t}ASSpeciesNum=`wc -l ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads |cut -f1 -d" "`
+done
+
+READSTAT=${OUTDIR}/${filename}.reads.stat
+echo -ne "inserts\tgenome_mapping\trRNA&tRNAs\tmiRNA_S\tmiRNA_AS\tGENE_S\tGENE_AS\tKnownTE_S\tKnownTE_AS\tReASTE_S\tReASTE_AS\n" >${READSTAT}
+echo -ne "${insertsReadNum}\t${genomeMapReadNum}\t${nncReadNum}\t${miRNASReadNum}\t${miRNAASReadNum}\t${GENESReadNum}\t${GENEASReadNum}\t${KNOWNTESReadNum}\t${KNOWNTEASReadNum}\t${ReASTESReadNum}\t${ReASTEASReadNum}\n" >>${READSTAT}	
+SPECIESSTAT=${OUTDIR}/${filename}.species.stat
+echo -ne "inserts\tgenome_mapping\trRNA&tRNAs\tmiRNA_S\tmiRNA_AS\tGENE_S\tGENE_AS\tKnownTE_S\tKnownTE_AS\tReASTE_S\tReASTE_AS\n" >${SPECIESSTAT}
+echo -ne "${insertsSpeciesNum}\t${genomeMapSpeciesNum}\t${nncSpeciesNum}\t${miRNASSpeciesNum}\t${miRNAASSpeciesNum}\t${GENESSpeciesNum}\t${GENEASSpeciesNum}\t${KNOWNTESSpeciesNum}\t${KNOWNTEASSpeciesNum}\t${ReASTESSpeciesNum}\t${ReASTEASSpeciesNum}\n" >>${SPECIESSTAT}	
+
+
+	
