@@ -459,9 +459,9 @@ echo -ne "bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 -b ${!
 echo -e "bedtools sort -i ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2  |bedtools groupby -i - -g 1,2,3,4,5,6,7 -c 8,9,10,11,12,13 -o collapse,collapse,collapse,collapse,collapse,collapse | \
 			awk 'BEGIN{OFS=\"\\\t\"}{k=split(\$11,kr,\",\");l=split(\$11,lr,\",\"); \$2+=1; for(i=1;i<=k;i++){print \$7,\$4,\$1\":\"\$2\"-\"\$3\"(\"\$6\")\",\"sense\",kr[i],lr[i],\$5,k} }'  \
 			> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2 ">> $parafly_file ;
-echo -ne "bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 -b ${!t} -f 0.99 -S -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2 &&" >> $parafly_file ;
+echo -ne "bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 -b ${!t} -f 0.99 -S -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2 && " >> $parafly_file ;
 echo -e "bedtools sort -i ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2  |bedtools groupby -i - -g 1,2,3,4,5,6,7 -c 8,9,10,11,12,13 -o collapse,collapse,collapse,collapse,collapse,collapse | \
-			awk 'BEGIN{OFS=\"\\\t\"}{k=split(\$11,kr,\",\");l=split(\$11,lr,\",\"); \$2+=1; for(i=1;i<=k;i++){print \$7,\$4,\$1\":\"\$2\"-\"\$3\"(\"\$6\")\",\"antisense\",kr[i],lr[i],\$5,k} }'  \
+			awk 'BEGIN{OFS=\"\\\t\"}{k=split(\$11,kr,\",\");l=split(\$12,lr,\",\"); \$2+=1; for(i=1;i<=k;i++){print \$7,\$4,\$1\":\"\$2\"-\"\$3\"(\"\$6\")\",\"antisense\",kr[i],lr[i],\$5,k} }'  \
 			> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2 ">> $parafly_file ;
 #echo -ne "cat ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.mapper2 &&  ">> $parafly_file ;
 #echo -e "gzip  ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2">> $parafly_file ;
