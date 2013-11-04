@@ -423,7 +423,7 @@ TRRNA=${COMMON_FOLDER}/silkworm_rRNA_tRNA.gff
 [ ! -f ${allBed2%*.bed2}.all.rRNA.tRNA.uniq.reads ] && awk '{OFS="\t"}{print $7,$4}' ${allBed2%*.bed2}.all.rRNA.tRNA.bed2 |sort -u >${allBed2%*.bed2}.all.rRNA.tRNA.uniq.reads
 
 nncReadNum=`sumcol ${allBed2%*.bed2}.all.rRNA.tRNA.uniq.reads 2`
-nncReadSpecies=`wc -l ${allBed2%*.bed2}.all.rRNA.tRNA.uniq.reads|cut -f1 -d" "`
+nncSpeciesNum=`wc -l ${allBed2%*.bed2}.all.rRNA.tRNA.uniq.reads|cut -f1 -d" "`
 
 #x miRNAs
 echo -e "`date "+$ISO_8601"`\tremove miRNA mappers" | tee -a $LOG
@@ -458,17 +458,17 @@ do
 echo -ne "bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 -b ${!t} -f 0.99 -s -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2 && " >> $parafly_file ; 
 echo -e "bedtools sort -i ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2  |bedtools groupby -i - -g 1,2,3,4,5,6,7 -c 8,9,10,11,12,13 -o collapse,collapse,collapse,collapse,collapse,collapse | \
 			awk 'BEGIN{OFS=\"\\\t\"}{k=split(\$11,kr,\",\");l=split(\$11,lr,\",\"); \$2+=1; for(i=1;i<=k;i++){print \$7,\$4,\$1\":\"\$2\"-\"\$3\"(\"\$6\")\",\"sense\",kr[i],lr[i],\$5,k} }'  \
-			> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2 ">> $parafly_file ;
+			> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 ">> $parafly_file ;
 echo -ne "bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 -b ${!t} -f 0.99 -S -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2 && " >> $parafly_file ;
 echo -e "bedtools sort -i ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2  |bedtools groupby -i - -g 1,2,3,4,5,6,7 -c 8,9,10,11,12,13 -o collapse,collapse,collapse,collapse,collapse,collapse | \
 			awk 'BEGIN{OFS=\"\\\t\"}{k=split(\$11,kr,\",\");l=split(\$12,lr,\",\"); \$2+=1; for(i=1;i<=k;i++){print \$7,\$4,\$1\":\"\$2\"-\"\$3\"(\"\$6\")\",\"antisense\",kr[i],lr[i],\$5,k} }'  \
-			> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2 ">> $parafly_file ;
+			> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2 ">> $parafly_file ;
 #echo -ne "cat ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.mapper2 &&  ">> $parafly_file ;
 #echo -e "gzip  ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2">> $parafly_file ;
 done
-if [[ ! -s ${parafly_file}.completed ]] || [[ -f $parafly_file.failed_commands ]]
+if [[ ! -s ${parafly_file}.completed ]] || [[ -f ${parafly_file}.failed_commands ]]
 then
-	ParaFly -c $parafly_file -CPU 8 -failed_cmds $parafly_file.failed_commands
+	ParaFly -c $parafly_file -CPU 8 -failed_cmds ${parafly_file}.failed_commands
 fi
 [ $? == 0 ] && \
 touch ${OUTDIR}/.status.${STEP}.intersectGeneandTE
