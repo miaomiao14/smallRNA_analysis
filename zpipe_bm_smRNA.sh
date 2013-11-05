@@ -518,7 +518,7 @@ do
 done
 ParaFly -c ${OUTDIR}/parafile.gzip -CPU 8 
 gzip ${INSERT}
-gzip ${INSERT.inserts.trimmed}.raw
-gzip ${INSERT.inserts.trimmed}.fastq
-gzip ${INSERT.inserts.trimmed}.*.insert
+gzip ${INSERT%.inserts.trimmed}.raw
+gzip ${INSERT%.inserts.trimmed}.fastq
+gzip ${INSERT%.inserts.trimmed}.*.insert
 gzip ${allBed2%*.bed2}.all.xrRNA.xtRNA.bed2
