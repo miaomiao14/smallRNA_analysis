@@ -496,18 +496,19 @@ for t in ${TARGETS[@]}
 do
 [ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads ] && awk '{OFS="\t"}{print $1,$2}' ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 |sort -u >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads
 [ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads ] && awk '{OFS="\t"}{print $1,$2}' ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2 |sort -u >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads
-${t}SReadNum=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads 2`
-${t}ASReadNum=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads 2`
+SReadNum${t}=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads 2`
+ASReadNum${t}=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads 2`
 
-${t}SSpeciesNum=`wc -l ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads|cut -f1 -d" "`
-${t}ASSpeciesNum=`wc -l ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads |cut -f1 -d" "`
+SSpeciesNum${t}=`wc -l ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads|cut -f1 -d" "`
+ASSpeciesNum${t}=`wc -l ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads |cut -f1 -d" "`
 done
 
+#wrote the 
 READSTAT=${OUTDIR}/${filename}.reads.stat
 echo -ne "inserts\tgenome_mapping\trRNA&tRNAs\tmiRNA_S\tmiRNA_AS\tGENE_S\tGENE_AS\tKnownTE_S\tKnownTE_AS\tReASTE_S\tReASTE_AS\n" >${READSTAT}
-echo -ne "${insertsReadNum}\t${genomeMapReadNum}\t${nncReadNum}\t${miRNASReadNum}\t${miRNAASReadNum}\t${GENESReadNum}\t${GENEASReadNum}\t${KNOWNTESReadNum}\t${KNOWNTEASReadNum}\t${ReASTESReadNum}\t${ReASTEASReadNum}\n" >>${READSTAT}	
+echo -ne "${insertsReadNum}\t${genomeMapReadNum}\t${nncReadNum}\t${miRNASReadNum}\t${miRNAASReadNum}\t${SReadNumGENE}\t${ASReadNumGENE}\t${SReadNumKNOWNTE}\t${ASReadNumKNOWNTE}\t${SReadNumReASTE}\t${ASReadNumReASTE}\n" >>${READSTAT}	
 SPECIESSTAT=${OUTDIR}/${filename}.species.stat
 echo -ne "inserts\tgenome_mapping\trRNA&tRNAs\tmiRNA_S\tmiRNA_AS\tGENE_S\tGENE_AS\tKnownTE_S\tKnownTE_AS\tReASTE_S\tReASTE_AS\n" >${SPECIESSTAT}
-echo -ne "${insertsSpeciesNum}\t${genomeMapSpeciesNum}\t${nncSpeciesNum}\t${miRNASSpeciesNum}\t${miRNAASSpeciesNum}\t${GENESSpeciesNum}\t${GENEASSpeciesNum}\t${KNOWNTESSpeciesNum}\t${KNOWNTEASSpeciesNum}\t${ReASTESSpeciesNum}\t${ReASTEASSpeciesNum}\n" >>${SPECIESSTAT}	
+echo -ne "${insertsSpeciesNum}\t${genomeMapSpeciesNum}\t${nncSpeciesNum}\t${miRNASSpeciesNum}\t${miRNAASSpeciesNum}\t${SSpeciesNumGENE}\t${ASSpeciesNumGENE}\t${SSpeciesNumKNOWNTE}\t${ASSpeciesNumKNOWNTE}\t${SSpeciesNumReASTE}\t${ASSpeciesNumReASTE}\n" >>${SPECIESSTAT}	
 
 
