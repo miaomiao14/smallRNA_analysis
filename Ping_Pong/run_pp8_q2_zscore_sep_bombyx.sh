@@ -38,10 +38,12 @@ do
 	fasta=/home/wangw1/pipeline_bm/common/silkgenome.fa
 	A=/home/wangw1/isilon_temp/BmN4/Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell.inserts/Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell.bmv2v0.all.all.xrRNA.xtRNA.xh.${t}.AS.norm.bed.gz
 	B=/home/wangw1/isilon_temp/BmN4/Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell.inserts/Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell.bmv2v0.all.all.xrRNA.xtRNA.xh.${t}.S.norm.bed.gz
+	jobname=${t}_Ago3AS_SiwiS.pp8.q2
 	/home/wangw1/bin/submitsge 24 ${jobname} $OUTDIR "/home/wangw1/git/smRNA_analysis/Ping_Pong/pp8_q2_ww1_zscore_sep_11052013.pl ${A} ${B} 2 $fasta ${OUTDIR} ${indexFlag}>${OUTDIR}/${t}_Ago3AS_SiwiS.pp8.q2.UA_VA.log"
 
 	A=/home/wangw1/isilon_temp/BmN4/Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell.inserts/Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell.bmv2v0.all.all.xrRNA.xtRNA.xh.${t}.S.norm.bed.gz
 	B=/home/wangw1/isilon_temp/BmN4/Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell.inserts/Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell.bmv2v0.all.all.xrRNA.xtRNA.xh.${t}.AS.norm.bed.gz
+	jobname=${t}_Ago3S_SiwiAS.pp8.q2
 	/home/wangw1/bin/submitsge 24 ${jobname} $OUTDIR "/home/wangw1/git/smRNA_analysis/Ping_Pong/pp8_q2_ww1_zscore_sep_11052013.pl ${A} ${B} 2 $fasta ${OUTDIR} ${indexFlag} >${OUTDIR}/${t}_Ago3S_SiwiAS.pp8.q2.UA_VA.log"	
 done
 [ $? == 0 ] && \
