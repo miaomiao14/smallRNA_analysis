@@ -511,4 +511,14 @@ SPECIESSTAT=${OUTDIR}/${filename}.species.stat
 echo -ne "inserts\tgenome_mapping\trRNA&tRNAs\tmiRNA_S\tmiRNA_AS\tGENE_S\tGENE_AS\tKnownTE_S\tKnownTE_AS\tReASTE_S\tReASTE_AS\n" >${SPECIESSTAT}
 echo -ne "${insertsSpeciesNum}\t${genomeMapSpeciesNum}\t${nncSpeciesNum}\t${miRNASSpeciesNum}\t${miRNAASSpeciesNum}\t${SSpeciesNumGENE}\t${ASSpeciesNumGENE}\t${SSpeciesNumKNOWNTE}\t${ASSpeciesNumKNOWNTE}\t${SSpeciesNumReASTE}\t${ASSpeciesNumReASTE}\n" >>${SPECIESSTAT}	
 
-
+rm ${allBed2}
+for i `ls *.uniq.read`
+do 
+	echo -e "gzip $i" >>${OUTDIR}/parafile.gzip
+done
+ParaFly -c ${OUTDIR}/parafile.gzip -CPU 8 
+gzip ${INSERT}
+gzip ${INSERT.inserts.trimmed}.raw
+gzip ${INSERT.inserts.trimmed}.fastq
+gzip ${INSERT.inserts.trimmed}.*.insert
+gzip ${allBed2%*.bed2}.all.xrRNA.xtRNA.bed2
