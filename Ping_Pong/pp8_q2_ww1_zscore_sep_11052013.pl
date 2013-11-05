@@ -17,6 +17,12 @@ use Compress::Zlib;
 ## HC,DG,BT as controls
 ## separate Ago3-Aub and Aub-Ago3 PP
 
+#11/05/2013
+#fasta fiel as a input argument
+#outdir added
+#indexflag to indicate if we need to rebuild the index or not
+
+
 $fastafile=$ARGV[3];
 open IN, $fastafile or die "Fail to open $fastafile: $!";
 while(<IN>)
@@ -34,6 +40,9 @@ while(<IN>)
 @pairs=("AT","TA","GC","CG","AA","AC","AG","CA","CC","CT","GA","GG","GT","TC","TG","TT");
 
 $OUTDIR=$ARGV[4];
+$indexFlag=$ARGV[5];
+if($indexFlag)
+{
 # make bowtie index
 for ($i=0; $i<$ARGV[2]; $i++)
 {
@@ -87,7 +96,44 @@ for ($i=0; $i<$ARGV[2]; $i++)
       }
    }
 }
-
+}
+else
+{
+	for ($i=0; $i<$ARGV[2]; $i++)
+	{
+   		my $file=fileparse($ARGV[$i]);
+    	@namefield=split(/\./,$file);
+    	$name=$namefield[2]."_".$namefield[1];
+    	push @argos, $name;
+    	$file=$name;
+   		my $gz = gzopen($ARGV[$i], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
+   		while($gz->gzreadline($_) > 0)
+   		{
+	      chomp;
+	      split(/\t/);  
+	      next if (length($_[4])>29 || length($_[4])<23);
+	      next if (/data/);
+	      $total{$file}+=$_[5]/$_[6];
+	      $hash2{$file}{substr($_[4],0,16)}+=$_[5]/$_[6];
+	      for ($n=1;$n<=20;$n++)
+	      {
+	         if ($_[3] eq '+')
+	         {
+	            $start=$_[1]+$n-17;
+	            $str=substr($genome{$_[0]},$start,16);
+	            $str=&revfa($str);
+	            $hash1{$file}{$n}{$str}+=$_[5]/$_[6];
+	         }
+	         else
+	         {
+	            $start=$_[2]-$n;
+	            $str=substr($genome{$_[0]},$start,16);
+	            $hash1{$file}{$n}{$str}+=$_[5]/$_[6];
+	         }
+	      }
+	   }
+	}
+}
 
 
 # bowtie mapping and score calculating
