@@ -492,6 +492,8 @@ touch ${OUTDIR}/.status.${STEP}.bed2mapper2
 STEP=$((STEP+1))
 
 #stat
+touch .status.${STEP}.uniqreads.stat
+[ ! -f .status.${STEP}.uniqreads.stat ] && \
 for t in ${TARGETS[@]}
 do
 [ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads ] && awk '{OFS="\t"}{print $1,$2}' ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 |sort -u >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads
@@ -502,14 +504,17 @@ eval ASReadNum${t}=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.rea
 eval SSpeciesNum${t}=`wc -l ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads|cut -f1 -d" "`
 eval ASSpeciesNum${t}=`wc -l ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads |cut -f1 -d" "`
 done
-
+[ $? == 0 ] && \
 #wrote the 
-READSTAT=${OUTDIR}/${filename}.reads.stat
-echo -ne "inserts\tgenome_mapping\trRNA&tRNAs\tmiRNA_S\tmiRNA_AS\tGENE_S\tGENE_AS\tKnownTE_S\tKnownTE_AS\tReASTE_S\tReASTE_AS\n" >${READSTAT}
-echo -ne "${insertsReadNum}\t${genomeMapReadNum}\t${nncReadNum}\t${miRNASReadNum}\t${miRNAASReadNum}\t${SReadNumGENE}\t${ASReadNumGENE}\t${SReadNumKNOWNTE}\t${ASReadNumKNOWNTE}\t${SReadNumReASTE}\t${ASReadNumReASTE}\n" >>${READSTAT}	
-SPECIESSTAT=${OUTDIR}/${filename}.species.stat
-echo -ne "inserts\tgenome_mapping\trRNA&tRNAs\tmiRNA_S\tmiRNA_AS\tGENE_S\tGENE_AS\tKnownTE_S\tKnownTE_AS\tReASTE_S\tReASTE_AS\n" >${SPECIESSTAT}
-echo -ne "${insertsSpeciesNum}\t${genomeMapSpeciesNum}\t${nncSpeciesNum}\t${miRNASSpeciesNum}\t${miRNAASSpeciesNum}\t${SSpeciesNumGENE}\t${ASSpeciesNumGENE}\t${SSpeciesNumKNOWNTE}\t${ASSpeciesNumKNOWNTE}\t${SSpeciesNumReASTE}\t${ASSpeciesNumReASTE}\n" >>${SPECIESSTAT}	
+READSTAT=${OUTDIR}/${filename}.reads.stat && \
+echo -e "inserts\tgenome_mapping\trRNA&tRNAs\tmiRNA_S\tmiRNA_AS\tGENE_S\tGENE_AS\tKnownTE_S\tKnownTE_AS\tReASTE_S\tReASTE_AS\n" >${READSTAT} && \
+echo -e "${insertsReadNum}\t${genomeMapReadNum}\t${nncReadNum}\t${miRNASReadNum}\t${miRNAASReadNum}\t${SReadNumGENE}\t${ASReadNumGENE}\t${SReadNumKNOWNTE}\t${ASReadNumKNOWNTE}\t${SReadNumReASTE}\t${ASReadNumReASTE}\n" >>${READSTAT}	&& \
+SPECIESSTAT=${OUTDIR}/${filename}.species.stat && \
+echo -e "inserts\tgenome_mapping\trRNA&tRNAs\tmiRNA_S\tmiRNA_AS\tGENE_S\tGENE_AS\tKnownTE_S\tKnownTE_AS\tReASTE_S\tReASTE_AS\n" >${SPECIESSTAT} && \
+echo -e "${insertsSpeciesNum}\t${genomeMapSpeciesNum}\t${nncSpeciesNum}\t${miRNASSpeciesNum}\t${miRNAASSpeciesNum}\t${SSpeciesNumGENE}\t${ASSpeciesNumGENE}\t${SSpeciesNumKNOWNTE}\t${ASSpeciesNumKNOWNTE}\t${SSpeciesNumReASTE}\t${ASSpeciesNumReASTE}\n" >>${SPECIESSTAT} && \	
+
+touch ${OUTDIR}/.status.${STEP}.uniqreads.stat
+STEP=$((STEP+1))
 
 rm ${allBed2}
 for i in `ls *.uniq.reads`
