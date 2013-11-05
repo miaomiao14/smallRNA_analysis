@@ -449,14 +449,15 @@ miRNAASSpeciesNum=`wc -l ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.AS.uniq.reads|c
 
 
 #interesect with gene, TE annotations
+touch ${OUTDIR}/.status.${STEP}.intersectGeneandTE
 declare -a TARGETS=("GENE" "KNOWNTE" "ReASTE")
 echo -e "`date "+$ISO_8601"`\tintersect with gene and TES, converting format to mapper2" | tee -a $LOG
 [ ! -f .status.${STEP}.intersectGeneandTE ] && \
 parafly_file=${OUTDIR}/intersectTogeneTE.para && \
 for t in ${TARGETS[@]}
 do
-echo -e "bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 -b ${!t} -f 0.99 -s -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2 && " >> $parafly_file ; 
-echo -e "bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 -b ${!t} -f 0.99 -S -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2 && " >> $parafly_file ;
+echo -e "[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2 ] && bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 -b ${!t} -f 0.99 -s -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2 && " >> $parafly_file ; 
+echo -e "[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2 ] && bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 -b ${!t} -f 0.99 -S -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2 && " >> $parafly_file ;
 #echo -ne "cat ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.mapper2 &&  ">> $parafly_file ;
 #echo -e "gzip  ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2">> $parafly_file ;
 done
@@ -468,15 +469,15 @@ fi
 touch ${OUTDIR}/.status.${STEP}.intersectGeneandTE
 STEP=$((STEP+1))
 
-
+touch ${OUTDIR}/.status.${STEP}.bed2mapper2
 [ ! -f .status.${STEP}.bed2mapper2 ] && \
 parafly_file=${OUTDIR}/bed2mapper2.para && \
 for t in ${TARGETS[@]}
 do
-echo -e "bedtools sort -i ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2  |bedtools groupby -i - -g 1,2,3,4,5,6,7 -c 8,9,10,11,12,13 -o collapse,collapse,collapse,collapse,collapse,collapse | \
+echo -e "[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 ] && bedtools sort -i ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2  |bedtools groupby -i - -g 1,2,3,4,5,6,7 -c 8,9,10,11,12,13 -o collapse,collapse,collapse,collapse,collapse,collapse | \
 			awk 'BEGIN{OFS=\"\\\t\"}{k=split(\$11,kr,\",\");l=split(\$11,lr,\",\"); \$2+=1; for(i=1;i<=k;i++){print \$7,\$4,\$1\":\"\$2\"-\"\$3\"(\"\$6\")\",\"sense\",kr[i],lr[i],\$5,k} }'  \
 			> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 ">> $parafly_file ;
-echo -e "bedtools sort -i ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2  |bedtools groupby -i - -g 1,2,3,4,5,6,7 -c 8,9,10,11,12,13 -o collapse,collapse,collapse,collapse,collapse,collapse | \
+echo -e "[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2 ] && bedtools sort -i ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2  |bedtools groupby -i - -g 1,2,3,4,5,6,7 -c 8,9,10,11,12,13 -o collapse,collapse,collapse,collapse,collapse,collapse | \
 			awk 'BEGIN{OFS=\"\\\t\"}{k=split(\$11,kr,\",\");l=split(\$12,lr,\",\"); \$2+=1; for(i=1;i<=k;i++){print \$7,\$4,\$1\":\"\$2\"-\"\$3\"(\"\$6\")\",\"antisense\",kr[i],lr[i],\$5,k} }'  \
 			> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2 ">> $parafly_file ;
 #echo -ne "cat ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.mapper2 &&  ">> $parafly_file ;
@@ -493,8 +494,8 @@ STEP=$((STEP+1))
 #stat
 for t in ${TARGETS[@]}
 do
-[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads ] && awk '{OFS="\t"}{print $7,$4}' ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2>${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads
-[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads ] && awk '{OFS="\t"}{print $7,$4}' ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2>${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads
+[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads ] && awk '{OFS="\t"}{print $7,$4}' ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2 |sort -u >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads
+[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads ] && awk '{OFS="\t"}{print $7,$4}' ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2 |sort -u >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads
 ${t}SReadNum=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads 2`
 ${t}ASReadNum=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads 2`
 
@@ -510,4 +511,3 @@ echo -ne "inserts\tgenome_mapping\trRNA&tRNAs\tmiRNA_S\tmiRNA_AS\tGENE_S\tGENE_A
 echo -ne "${insertsSpeciesNum}\t${genomeMapSpeciesNum}\t${nncSpeciesNum}\t${miRNASSpeciesNum}\t${miRNAASSpeciesNum}\t${GENESSpeciesNum}\t${GENEASSpeciesNum}\t${KNOWNTESSpeciesNum}\t${KNOWNTEASSpeciesNum}\t${ReASTESSpeciesNum}\t${ReASTEASSpeciesNum}\n" >>${SPECIESSTAT}	
 
 
-	

@@ -30,4 +30,4 @@ fi
 /home/wangw1/bin/pp8_q2_ww1_zscore_sep.pl $F1 $F2 $n  > $OUTDIR/\${N1}_\${N2}_pp8_q2_UA_VA.log 
 ">submit_UA_VA.sh
 qsub submit_UA_VA.sh
-
+	
