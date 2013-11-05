@@ -512,7 +512,7 @@ echo -ne "inserts\tgenome_mapping\trRNA&tRNAs\tmiRNA_S\tmiRNA_AS\tGENE_S\tGENE_A
 echo -ne "${insertsSpeciesNum}\t${genomeMapSpeciesNum}\t${nncSpeciesNum}\t${miRNASSpeciesNum}\t${miRNAASSpeciesNum}\t${SSpeciesNumGENE}\t${ASSpeciesNumGENE}\t${SSpeciesNumKNOWNTE}\t${ASSpeciesNumKNOWNTE}\t${SSpeciesNumReASTE}\t${ASSpeciesNumReASTE}\n" >>${SPECIESSTAT}	
 
 rm ${allBed2}
-for i `ls *.uniq.reads`
+for i in `ls *.uniq.reads`
 do 
 	echo -e "gzip $i" >>${OUTDIR}/parafile.gzip
 done
