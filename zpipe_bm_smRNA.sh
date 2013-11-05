@@ -494,8 +494,8 @@ STEP=$((STEP+1))
 #stat
 for t in ${TARGETS[@]}
 do
-[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads ] && awk '{OFS="\t"}{print $7,$4}' ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2 |sort -u >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads
-[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads ] && awk '{OFS="\t"}{print $7,$4}' ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2 |sort -u >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads
+[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads ] && awk '{OFS="\t"}{print $1,$2}' ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 |sort -u >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads
+[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads ] && awk '{OFS="\t"}{print $1,$2}' ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2 |sort -u >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads
 ${t}SReadNum=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads 2`
 ${t}ASReadNum=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads 2`
 
