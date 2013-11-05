@@ -496,11 +496,11 @@ for t in ${TARGETS[@]}
 do
 [ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads ] && awk '{OFS="\t"}{print $1,$2}' ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 |sort -u >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads
 [ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads ] && awk '{OFS="\t"}{print $1,$2}' ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2 |sort -u >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads
-SReadNum${t}=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads 2`
-ASReadNum${t}=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads 2`
+eval SReadNum${t}=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads 2`
+eval ASReadNum${t}=`sumcol ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads 2`
 
-SSpeciesNum${t}=`wc -l ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads|cut -f1 -d" "`
-ASSpeciesNum${t}=`wc -l ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads |cut -f1 -d" "`
+eval SSpeciesNum${t}=`wc -l ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.uniq.reads|cut -f1 -d" "`
+eval ASSpeciesNum${t}=`wc -l ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.uniq.reads |cut -f1 -d" "`
 done
 
 #wrote the 
