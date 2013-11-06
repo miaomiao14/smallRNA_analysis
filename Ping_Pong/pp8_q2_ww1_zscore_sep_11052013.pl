@@ -80,11 +80,15 @@ for ($i=0; $i<$ARGV[2]; $i++)
    }
    if ($total{$file}>10)
    {
-      open OUT, ">$OUTDIR/$file.seq";
-      foreach (keys %{$hash2{$file}})
-      {
-         print OUT "$_\t$hash2{$file}{$_}\n" if (length($_)==16);
-      }
+   	  $seqFile=$OUTDIR/$file.seq;
+   	  if( ! -s $seqFile )
+   	  {
+	      open OUT, ">$seqFile";
+	      foreach (keys %{$hash2{$file}})
+	      {
+	         print OUT "$_\t$hash2{$file}{$_}\n" if (length($_)==16);
+	      }
+		}
       for ($n=1;$n<=20;$n++)
       {
          open OUT, ">$OUTDIR/$file.ref.$n.fa";
@@ -92,7 +96,7 @@ for ($i=0; $i<$ARGV[2]; $i++)
          {
             print OUT ">$_\t$hash1{$file}{$n}{$_}\n$_\n" if (length($_)==16);$k++;
          }
-      `bowtie-build $OUTDIR/$file.ref.$n.fa $OUTDIR/$file.$n`;
+      `bowtie-build $OUTDIR/$file.ref.$n.fa $OUTDIR/$file.$n && rm $OUTDIR/$file.ref.$n.fa`;
 #`rm $file.ref.$n.fa`;
       }
    }
