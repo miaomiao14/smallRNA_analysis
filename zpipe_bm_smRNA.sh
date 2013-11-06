@@ -516,7 +516,22 @@ echo -e "${insertsSpeciesNum}\t${genomeMapSpeciesNum}\t${nncSpeciesNum}\t${miRNA
 touch ${OUTDIR}/.status.${STEP}.uniqreads.stat
 STEP=$((STEP+1))
 
-rm ${allBed2}
+#seqLogo
+touch .status.${STEP}.seqLogo
+[ ! -f .status.${STEP}.seqLogo ] && \
+for i in `ls *.uniq.reads.gz`
+do
+ex $i
+awk '{OFS="\t"}{if(length($1)>=23 && length($1)<=30) print $0}' ${i%.gz} >${i%.gz}.23-29
+seqlogo_ww ${i%.gz}.23-29 29 /home/wangw1/isilon_temp/BmN4/seqLogo r && rm /home/wangw1/isilon_temp/BmN4/seqLogo/*.uniq.seq
+
+done
+
+[ $? == 0 ] && \
+touch .status.${STEP}.seqLogo
+STEP=$((STEP+1))
+
+[ -f ${allBed2} ] && rm ${allBed2}
 for i in `ls *.uniq.reads`
 do 
 	echo -e "gzip $i" >>${OUTDIR}/parafile.gzip

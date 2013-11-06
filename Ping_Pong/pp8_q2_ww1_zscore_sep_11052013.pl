@@ -27,14 +27,15 @@ $fastafile=$ARGV[3];
 open IN, $fastafile or die "Fail to open $fastafile: $!";
 while(<IN>)
 {
-   if (/>(.+) /)
+   if (/>(.+)\s*\//) #this is specific for the case: >nscaf100 /length=4083 /lengthwogaps=4073
    {
       $chr="$1";
+      @c=split(/ /,$chr);
    }
    else
    {
       chomp;
-      $genome{$chr}=$_;
+      $genome{$c[0]}=$_;
    }
 }
 @pairs=("AT","TA","GC","CG","AA","AC","AG","CA","CC","CT","GA","GG","GT","TC","TG","TT");
