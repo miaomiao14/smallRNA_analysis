@@ -49,7 +49,7 @@ for ($i=0; $i<$ARGV[2]; $i++)
 {
    my $file=fileparse($ARGV[$i]);
     @namefield=split(/\./,$file);
-    $name=$namefield[2]."_".$namefield[1];
+    $name=$namefield[2]."_".$namefield[12]."_".$namefield[13];
     push @argos, $name;
     $file=$name;
    my $gz = gzopen($ARGV[$i], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
