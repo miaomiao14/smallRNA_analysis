@@ -241,8 +241,8 @@ foreach ($n=1;$n<=20;$n++)
    
    if ($Z!=-10) { print OUT1 "$file2\-$file1\t",$X/$total{$file1}/$total{$file2}*1000000;} else { print OUT1 "$file2\-$file1\tNA";}
    #$N1=`match.pl $file1.$file2.1.ppseq $file1.seq | sumcol+ 2`; chomp($N1);
-   `cut -f2 $file1.$file2.1.ppseq > $file1.$file2.ppseq.1.temp`;
-   $N2=`match.pl $file1.$file2.ppseq.1.temp $file2.seq | sumcol+ 2`; chomp($N2);
+   `cut -f2 $file1.$file2.1.ppseq > $OUTDIR/$file1.$file2.ppseq.1.temp`;
+   $N2=`match.pl $OUTDIR/$file1.$file2.ppseq.1.temp $OUTDIR/$file2.seq | sumcol+ 2`; chomp($N2);
    open OUT3, ">$OUTDIR/$file1.$file2.1.pp_reads_percentage";
    print OUT3 "$file2\t$N2\t$total{$file2}\t",$N2/$total{$file2},"\n";
     
