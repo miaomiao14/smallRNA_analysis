@@ -44,73 +44,73 @@ $OUTDIR=$ARGV[4];
 $indexFlag=$ARGV[5];
 if($indexFlag)
 {
-# make bowtie index
-for ($i=0; $i<$ARGV[2]; $i++)
-{
-   my $file=fileparse($ARGV[$i]);
-    @namefield=split(/\./,$file);
-    $name=$namefield[2]."_".$namefield[12]."_".$namefield[13];
-    push @argos, $name;
-    $file=$name;
-   my $gz = gzopen($ARGV[$i], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
-   while($gz->gzreadline($_) > 0)
-   {
-      chomp;
-      split(/\t/);  
-      next if (length($_[4])>29 || length($_[4])<23);
-      next if (/data/);
-      $total{$file}+=$_[5]/$_[6];
-      $hash2{$file}{substr($_[4],0,16)}+=$_[5]/$_[6];
-      for ($n=1;$n<=20;$n++)
-      {
-         if ($_[3] eq '+')
-         {
-            $start=$_[1]+$n-17;
-            $str=substr($genome{$_[0]},$start,16);
-            $str=&revfa($str);
-            $hash1{$file}{$n}{$str}+=$_[5]/$_[6];
-         }
-         else
-         {
-            $start=$_[2]-$n;
-            $str=substr($genome{$_[0]},$start,16);
-            $hash1{$file}{$n}{$str}+=$_[5]/$_[6];
-         }
-      }
-   }
-   if ($total{$file}>10)
-   {
-   	  $seqFile="$OUTDIR/$file.seq";
-   	  if( ! -s $seqFile )
-   	  {
-	      open OUT, ">$seqFile";
-	      foreach (keys %{$hash2{$file}})
+	# make bowtie index
+	for ($i=0; $i<$ARGV[2]; $i++)
+	{
+	   my $file=fileparse($ARGV[$i]);
+	    @namefield=split(/\./,$file);
+	    $name=$namefield[2]."_".$namefield[12]."_".$namefield[13];
+	    push @argos, $name;
+	    $file=$name;
+	   my $gz = gzopen($ARGV[$i], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
+	   while($gz->gzreadline($_) > 0)
+	   {
+	      chomp;
+	      split(/\t/);  
+	      next if (length($_[4])>29 || length($_[4])<23);
+	      next if (/data/);
+	      $total{$file}+=$_[5]/$_[6];
+	      $hash2{$file}{substr($_[4],0,16)}+=$_[5]/$_[6];
+	      for ($n=1;$n<=20;$n++)
 	      {
-	         print OUT "$_\t$hash2{$file}{$_}\n" if (length($_)==16);
+	         if ($_[3] eq '+')
+	         {
+	            $start=$_[1]+$n-17;
+	            $str=substr($genome{$_[0]},$start,16);
+	            $str=&revfa($str);
+	            $hash1{$file}{$n}{$str}+=$_[5]/$_[6];
+	         }
+	         else
+	         {
+	            $start=$_[2]-$n;
+	            $str=substr($genome{$_[0]},$start,16);
+	            $hash1{$file}{$n}{$str}+=$_[5]/$_[6];
+	         }
 	      }
-		}
-      for ($n=1;$n<=20;$n++)
-      {
-      	 $fa="$OUTDIR/$file.ref.$n.fa";
-      	 $indexb="$OUTDIR/$file.ref.$n.fa";
-         open OUT, ">$fa";
-         foreach (keys %{$hash1{$file}{$n}})
-         {
-            print OUT ">$_\t$hash1{$file}{$n}{$_}\n$_\n" if (length($_)==16);$k++;
-         }
-      `bowtie-build $fa $indexb && rm $fa`;
-#`rm $file.ref.$n.fa`;
-      }
-   }
-}
-}
+	   } #while
+	   if ($total{$file}>10)
+	   {
+	   	  $seqFile="$OUTDIR/$file.seq";
+	   	  if( ! -s $seqFile )
+	   	  {
+		      open OUT, ">$seqFile";
+		      foreach (keys %{$hash2{$file}})
+		      {
+		         print OUT "$_\t$hash2{$file}{$_}\n" if (length($_)==16);
+		      }
+			}
+	      for ($n=1;$n<=20;$n++)
+	      {
+	      	 $fa="$OUTDIR/$file.ref.$n.fa";
+	      	 $indexb="$OUTDIR/$file.ref.$n.fa";
+	         open OUT, ">$fa";
+	         foreach (keys %{$hash1{$file}{$n}})
+	         {
+	            print OUT ">$_\t$hash1{$file}{$n}{$_}\n$_\n" if (length($_)==16);$k++;
+	         }
+	      `bowtie-build $fa $indexb && rm $fa`;
+	
+	      }#for loop of the n
+	   }#if the total
+	} #for loop of the file
+} #if
 else
 {
 	for ($i=0; $i<$ARGV[2]; $i++)
 	{
    		my $file=fileparse($ARGV[$i]);
     	@namefield=split(/\./,$file);
-    	$name=$namefield[2]."_".$namefield[1];
+    	$name=$namefield[2]."_".$namefield[12]."_".$namefield[13];
     	push @argos, $name;
     	$file=$name;
    		my $gz = gzopen($ARGV[$i], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
@@ -137,10 +137,10 @@ else
 	            $str=substr($genome{$_[0]},$start,16);
 	            $hash1{$file}{$n}{$str}+=$_[5]/$_[6];
 	         }
-	      }
-	   }
-	}
-}
+	      }#for loop of the n
+	   }#while
+	}#for loop of the file
+} #else
 
 
 # bowtie mapping and score calculating
@@ -149,11 +149,11 @@ for ($i=0; $i<$ARGV[2]; $i++) {
       
    $file1=fileparse($ARGV[$i]); 
    @namefield=split(/\./,$file1);
-   $name1=$namefield[2]."_".$namefield[1];
+   $name1=$namefield[2]."_".$namefield[12]."_".$namefield[13];
    $file1=$name1;
    $file2=fileparse($ARGV[$j]);
    @namefield=split(/\./,$file2);
-   $name2=$namefield[2]."_".$namefield[1];
+   $name2=$namefield[2]."_".$namefield[12]."_".$namefield[13];
    $file2=$name2;
    
    print O "$file1-$file2";
@@ -361,5 +361,5 @@ foreach ($n=1;$n<=20;$n++)
 }
 
 }
-`rm *.ebwt`;
-`rm *.bowtie.out`;
+#`rm *.ebwt`;
+#`rm *.bowtie.out`;
