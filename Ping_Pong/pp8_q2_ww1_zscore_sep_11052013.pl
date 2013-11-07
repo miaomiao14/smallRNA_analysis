@@ -80,7 +80,7 @@ for ($i=0; $i<$ARGV[2]; $i++)
    }
    if ($total{$file}>10)
    {
-   	  $seqFile=$OUTDIR/$file.seq;
+   	  $seqFile="$OUTDIR/$file.seq";
    	  if( ! -s $seqFile )
    	  {
 	      open OUT, ">$seqFile";
@@ -91,12 +91,14 @@ for ($i=0; $i<$ARGV[2]; $i++)
 		}
       for ($n=1;$n<=20;$n++)
       {
-         open OUT, ">$OUTDIR/$file.ref.$n.fa";
+      	 $fa="$OUTDIR/$file.ref.$n.fa";
+      	 $indexb="$OUTDIR/$file.ref.$n.fa";
+         open OUT, ">$fa";
          foreach (keys %{$hash1{$file}{$n}})
          {
             print OUT ">$_\t$hash1{$file}{$n}{$_}\n$_\n" if (length($_)==16);$k++;
          }
-      `bowtie-build $OUTDIR/$file.ref.$n.fa $OUTDIR/$file.$n && rm $OUTDIR/$file.ref.$n.fa`;
+      `bowtie-build $fa $indexb && rm $fa`;
 #`rm $file.ref.$n.fa`;
       }
    }
@@ -170,6 +172,7 @@ open OUA, ">$OUTDIR/$file1.$file2.1.UA_VA.zscore.out";
  
 open OUT, ">$OUTDIR/$file1.$file2.1.pp";
 open OUT0, ">$OUTDIR/$file1.$file2.1.VA.pp";
+$ppseq1="$OUTDIR/$file1.$file2.1.ppseq";
 open OUT2, ">$OUTDIR/$file1.$file2.1.ppseq";
 
 open OUT1,">$OUTDIR/$file1.$file2.1.pp_fraction";
@@ -177,7 +180,10 @@ open OUT1,">$OUTDIR/$file1.$file2.1.pp_fraction";
 foreach ($n=1;$n<=20;$n++)
 {
 # file1 as ref
- ` bowtie $OUTDIR/$file1.$n -r -a -v 1 -p 8 $OUTDIR/$file2.seq --suppress 1,4,6,7 | grep + > $OUTDIR/$file1.$file2.$n.bowtie.out`;
+	$indexb="$OUTDIR/$file1.$n";
+	$seqFile="$OUTDIR/$file2.seq";
+	$bowtieOut="$OUTDIR/$file1.$file2.$n.bowtie.out";
+ 	`bowtie $indexb -r -a -v 1 -p 8 $seqFile --suppress 1,4,6,7 | grep + > $bowtieOut`;
    %NTM=();
    open IN, "$OUTDIR/$file1.$file2.$n.bowtie.out";
    while($line=<IN>)
@@ -245,8 +251,10 @@ foreach ($n=1;$n<=20;$n++)
    
    if ($Z!=-10) { print OUT1 "$file2\-$file1\t",$X/$total{$file1}/$total{$file2}*1000000;} else { print OUT1 "$file2\-$file1\tNA";}
    #$N1=`match.pl $file1.$file2.1.ppseq $file1.seq | sumcol+ 2`; chomp($N1);
-   `cut -f2 $file1.$file2.1.ppseq > $OUTDIR/$file1.$file2.ppseq.1.temp`;
-   $N2=`match.pl $OUTDIR/$file1.$file2.ppseq.1.temp $OUTDIR/$file2.seq | sumcol+ 2`; chomp($N2);
+   $ppseq1temp="$OUTDIR/$file1.$file2.ppseq.1.temp";
+   $seqFile2="$OUTDIR/$file2.seq";
+   `cut -f2 $ppseq1 > $ppseq1temp`;
+   $N2=`match.pl $ppseq1temp $seqFile2 | sumcol+ 2`; chomp($N2);
    open OUT3, ">$OUTDIR/$file1.$file2.1.pp_reads_percentage";
    print OUT3 "$file2\t$N2\t$total{$file2}\t",$N2/$total{$file2},"\n";
     
@@ -259,6 +267,7 @@ foreach ($n=1;$n<=20;$n++)
    
    open OUT, ">$OUTDIR/$file2.$file1.2.pp";
    open OUT0, ">$OUTDIR/$file2.$file1.2.VA.pp";
+   $ppseq2="$OUTDIR/$file2.$file1.2.ppseq";
    open OUT2, ">$OUTDIR/$file2.$file1.2.ppseq";
    
 foreach ($n=1;$n<=20;$n++)
@@ -266,7 +275,10 @@ foreach ($n=1;$n<=20;$n++)
 # `rm $file1.$file2.$n.bowtie.out`;  
 # file2 as ref
    %NTM=();
-  `bowtie $OUTDIR/$file2.$n -r -a -v 1 -p 8 $OUTDIR/$file1.seq --suppress 1,4,6,7 | grep + > $OUTDIR/$file2.$file1.$n.bowtie.out`;
+   	$indexb="$OUTDIR/$file2.$n";
+	$seqFile="$OUTDIR/$file1.seq";
+	$bowtieOut="$OUTDIR/$file2.$file1.$n.bowtie.out";
+    `bowtie $indexb -r -a -v 1 -p 8 $seqFile --suppress 1,4,6,7 | grep + > $bowtieOut`;
    open IN, "$OUTDIR/$file2.$file1.$n.bowtie.out";
    while($line=<IN>)
    {
@@ -335,7 +347,9 @@ foreach ($n=1;$n<=20;$n++)
     }
    
    if ($Z!=-10) { print OUT1 "$file1\-$file2\t",$X/$total{$file1}/$total{$file2}*1000000;} else { print OUT1 "$file1\-$file2\tNA";}
-   $N1=`match.pl $file2.$file1.2.ppseq $file1.seq | sumcol+ 2`; chomp($N1);
+   $ppseq2="$OUTDIR/$file2.$file1.2.ppseq";
+   $seqFile1="$OUTDIR/$file1.seq";
+   $N1=`match.pl $ppseq2 $seqFile1 | sumcol+ 2`; chomp($N1);
    #`cut -f2 $file2.$file1.2.ppseq > $file2.$file1.2.ppseq.temp`;
    #$N2=`match.pl $file2.$file1.2.ppseq.temp $file2.seq | sumcol+ 2`; chomp($N2);
    open OUT3, ">$OUTDIR/$file2.$file1.2.pp_reads_percentage";
