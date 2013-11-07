@@ -92,7 +92,7 @@ if($indexFlag)
 	      for ($n=1;$n<=20;$n++)
 	      {
 	      	 $fa="$OUTDIR/$file.ref.$n.fa";
-	      	 $indexb="$OUTDIR/$file.ref.$n.fa";
+	      	 $indexb="$OUTDIR/$file.$n";
 	         open OUT, ">$fa";
 	         foreach (keys %{$hash1{$file}{$n}})
 	         {
