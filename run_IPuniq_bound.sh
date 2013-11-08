@@ -37,7 +37,7 @@ do
 	echo -ne " uniqReadsAgo3IP=\`sumcol \${A}.uniqA 2\` && " >>${parafile} 
 	echo -ne " uniqReadsAubIP=\`sumcol \${B}.uniqB 2\` && rm \${A} && rm \${B} && mv \${A}.uniqA \${ANEW} && mv \${B}.uniqB \${BNEW} &&  " >>${parafile}
 
-	echo -e " echo -e \"\${g}\\\t\${o}\\\t\${sharedSpecies}\\\t\${sharedReadsAgo3IP}\\\t\${sharedReadsAubIP}\\\t\${uniqSpeciesAgo3IP}\\\t\${uniqSpeciesAubIP}\\\t\${uniqReadsAgo3IP}\\\t\${uniqReadsAubIP}\\\n\" >> ${OUTPUTDIR}/stat.log " >>${parafile}
+	echo -e " echo -e \"${g}\\\t${o}\\\t\${sharedSpecies}\\\t\${sharedReadsAgo3IP}\\\t\${sharedReadsAubIP}\\\t\${uniqSpeciesAgo3IP}\\\t\${uniqSpeciesAubIP}\\\t\${uniqReadsAgo3IP}\\\t\${uniqReadsAubIP}\" >> ${OUTPUTDIR}/stat.log " >>${parafile}
 
 	done
 done
