@@ -70,22 +70,22 @@ foreach $i (keys %s_n)
 }
 close(OUT);
 
-
-open OUT, ">$ARGV[1]/$ARGV[0].score.out";
-#@field=split(/\./,$ARGV[0]);
-
-print OUT "PP pairs\tUA_reads_probability\tUA_pairs_probability\tAU_reads_probability\tAU_pairs_probability\n";
-foreach $i (keys %score)
-
-{
-    #$reads{UA}=$score{$i}{UA}*$total_r/($score{$i}{XA}*$score{$i}{UX});
-    #$species{UA}=$ncount{$i}{UA}*$total_s/($ncount{$i}{XA}*$ncount{$i}{UX});
-    $reads{UA}=$score{$i}{UA}/($score{$i}{UX});
-    $species{UA}=$ncount{$i}{UA}/($ncount{$i}{UX});
-    #$reads{AU}=$score{$i}{AU}*$total_r/($score{$i}{XU}*$score{$i}{AX});
-    #$species{AU}=$ncount{$i}{AU}*$total_s/($ncount{$i}{XU}*$ncount{$i}{AX});
-    $reads{AU}=$score{$i}{AU}/($score{$i}{AX});
-    $species{AU}=$ncount{$i}{AU}/($ncount{$i}{AX});
-    print OUT "$i\t$reads{UA}\t$species{UA}\t$reads{AU}\t$species{AU}\n"; 
-}
-close(OUT);
+#
+#open OUT, ">$ARGV[1]/$ARGV[0].score.out";
+##@field=split(/\./,$ARGV[0]);
+#
+#print OUT "PP pairs\tUA_reads_probability\tUA_pairs_probability\tAU_reads_probability\tAU_pairs_probability\n";
+#foreach $i (keys %score)
+#
+#{
+#    #$reads{UA}=$score{$i}{UA}*$total_r/($score{$i}{XA}*$score{$i}{UX});
+#    #$species{UA}=$ncount{$i}{UA}*$total_s/($ncount{$i}{XA}*$ncount{$i}{UX});
+#    $reads{UA}=$score{$i}{UA}/($score{$i}{UX});
+#    $species{UA}=$ncount{$i}{UA}/($ncount{$i}{UX});
+#    #$reads{AU}=$score{$i}{AU}*$total_r/($score{$i}{XU}*$score{$i}{AX});
+#    #$species{AU}=$ncount{$i}{AU}*$total_s/($ncount{$i}{XU}*$ncount{$i}{AX});
+#    $reads{AU}=$score{$i}{AU}/($score{$i}{AX});
+#    $species{AU}=$ncount{$i}{AU}/($ncount{$i}{AX});
+#    print OUT "$i\t$reads{UA}\t$species{UA}\t$reads{AU}\t$species{AU}\n"; 
+#}
+#close(OUT);
