@@ -64,14 +64,16 @@ do
 	do
 		fn=/home/wangw1/isilon_temp/BmN4/pp8_q2/${t}_${pp}
 		file=/home/wangw1/isilon_temp/BmN4/pp8_q2_summary/${t}_${pp}
+		[ -f ${file}.pair.count.txt ] &&  rm ${file}.pair.count.txt
 		for i in `ls ${fn}/*.UA_VA.zscore.out`
 		do
 			/home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore.pl ${i} $OUTDIR >> ${file}.pair.count.txt
 		done
-		
+		sort -k1,1 -k2,2 -k3,3 -k4,4 $file | uniq >${file}.pair.count.uniq.txt
+		RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va ${file}.pair.count.uniq.txt ${t}_${pp} ${OUTDIR}
 	done
-	sort -k1,1 -k2,2 -k3,3 -k4,4 $file |uniq >${file}.pair.count.uniq.txt
-	RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va ${file}.pair.count.uniq.txt ${t}_${pp} ${OUTDIR}
+	
+	
 done
 
 
