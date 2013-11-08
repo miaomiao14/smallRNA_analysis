@@ -49,7 +49,7 @@ close(IN);
  %rawscore=();
  %score=();
  %ncount=();
- open OUT, ">$ARGV[0].raw.pair.score.out";
+ open OUT, ">$ARGV[1]/$ARGV[0].raw.pair.score.out";
 foreach $i (keys %s_n) 
 {        foreach $pair ( keys %pairs)
         {
@@ -70,7 +70,7 @@ foreach $i (keys %s_n)
 close(OUT);
 
 
-open OUT, ">$ARGV[0].score.out";
+open OUT, ">$ARGV[1]/$ARGV[0].score.out";
 #@field=split(/\./,$ARGV[0]);
 
 print OUT "PP pairs\tUA_reads_probability\tUA_pairs_probability\tAU_reads_probability\tAU_pairs_probability\n";

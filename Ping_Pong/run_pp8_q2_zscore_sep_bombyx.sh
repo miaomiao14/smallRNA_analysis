@@ -41,7 +41,7 @@ do
 	jobname=${t}_Ago3AS_SiwiS.pp8.q2
 	OUT=${OUTDIR}/${t}_Ago3AS_SiwiS
 	[ ! -d ${OUT} ] && mkdir -p ${OUT}
-	/home/wangw1/bin/submitsge 24 ${jobname} $OUTDIR "/home/wangw1/git/smallRNA_analysis/Ping_Pong/pp8_q2_ww1_zscore_sep_11052013.pl ${A} ${B} 2 $fasta ${OUT} ${indexFlag}>${OUTDIR}/${t}_Ago3AS_SiwiS.pp8.q2.UA_VA.log"
+	/home/wangw1/bin/submitsge 24 ${jobname} $OUTDIR "/home/wangw1/git/smallRNA_analysis/Ping_Pong/pp8_q2_ww1_zscore_sep_11052013.pl ${A} ${B} 2 $fasta ${OUT} ${indexFlag} >${OUTDIR}/${t}_Ago3AS_SiwiS.pp8.q2.UA_VA.log"
 
 	A=/home/wangw1/isilon_temp/BmN4/Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell.inserts/Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell.bmv2v0.all.all.xrRNA.xtRNA.xh.${t}.S.norm.bed.gz
 	B=/home/wangw1/isilon_temp/BmN4/Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell.inserts/Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell.bmv2v0.all.all.xrRNA.xtRNA.xh.${t}.AS.norm.bed.gz
@@ -52,6 +52,22 @@ do
 done
 [ $? == 0 ] && \
 touch .status.${STEP}.pp8_UA_VA
+
+declare -a PPPAIR=("Ago3AS_SiwiS" "Ago3S_SiwiAS")
+OUTDIR=/home/wangw1/isilon_temp/BmN4/pp8_q2_summary
+[ ! -d ${OUTDIR} ] && mkdir $OUTDIR
+[ ! -f .status.${STEP}.pp8_UA_VA_summary ] && \
+for t in ${TARGETS[@]}
+do
+	for pp in ${PPPAIR[@]}
+	do
+		fn=/home/wangw1/isilon_temp/BmN4/pp8_q2/${t}_${pp}
+		for i in `ls ${fn}/*.UA_VA.zscore.out`
+		do
+			/home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore.pl ${i} $OUTDIR
+		done
+	done
+done
 
 
 #zip the mapper2 format, run pp6
