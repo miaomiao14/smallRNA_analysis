@@ -26,8 +26,8 @@ plot_ua_va <- function (input,gt,outdir) {
 		
 		ff=merge(f,pairg,by="pair")
 		ff$group=as.factor(ff$group)
-		f1=as.data.frame(lapply( subset(f,as.character(group)==1),'[',drop=TRUE))
-		f2=as.data.frame(lapply( subset(f,as.character(group)==0),'[',drop=TRUE))
+		f1=as.data.frame(lapply( subset(ff,as.character(group)==1),'[',drop=TRUE))
+		f2=as.data.frame(lapply( subset(ff,as.character(group)==0),'[',drop=TRUE))
 		#f1=subset(ff,group==1)
 		#f2=subset(ff,group==0)
 		#############################################
