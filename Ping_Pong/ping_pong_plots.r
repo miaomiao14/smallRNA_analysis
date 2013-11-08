@@ -71,3 +71,45 @@ plot_ua_va <- function (input,gt,outdir) {
 	}
 	dev.off()	
 }
+
+plot_ua_va_color <- function (input,gt,outdir) {
+	
+	pdfname=paste(outdir,"/",gt,"_UA_VA_pair_counts_color",".pdf",sep="")
+	pdf(pdfname,height=12,width=15)
+	layout(matrix(1:4,2,2,byrow=TRUE))
+	
+	pairg=data.frame(pair=c("AU","UA","GC","CG","BU","VA","HC","DG"),group=c(1,1,1,1,0,0,0,0))
+	
+	pp=read.table(input,F)
+	colnames(pp)=c("genotype","pair","NofPairs","raw");
+	for (j in (1:length(levels(pp$genotype))))
+	{
+		#df=as.data.frame(lapply(subset(L,as.character(rank)==r),'[',drop=TRUE))
+		piwipair=levels(pp$genotype)[j]
+		f=as.data.frame(lapply( subset(pp,as.character(genotype)==piwipair),'[',drop=TRUE))
+		m=paste(piwipair,"PP pair",sep=" ")
+		f_order=f[order(f$pair),]
+		f=f_order
+		
+		ff=merge(f,pairg,by="pair")
+		ff$group=as.factor(ff$group)
+		f1=as.data.frame(lapply( subset(ff,as.character(group)==1),'[',drop=TRUE))
+		f2=as.data.frame(lapply( subset(ff,as.character(group)==0),'[',drop=TRUE))
+
+	#############################################
+	b<-barplot(f1$NofPairs,space=0.5,xlim=c(0,8),width=0.55,names.arg=f1$pair,main=m,axes=F,ylim=c(0,1.2*max(f1$NofPairs)), col=rep("darkblue",4),border=NA,cex.names=1)
+	mtext("Paired Number of Pairs",side=2,col="darkblue",line=2) 
+	#text(x=b,y=f1$NofPairs+2.5,label=f1$raw,cex=1)
+	#grid(nx=NA,ny=NULL,lty=1,lwd=1,col="gray")
+	axis(2,ylim=c(0,1.2*max(f1$NofPairs)),col.axis="darkblue",col="darkblue")
+	par(new=TRUE)
+	
+	b<-barplot(f2$NofPairs,space=0.5,xlim=c(0,8),width=0.55,axes=F, ylab="",col=rep("darkgrey",4),border=NA,cex.names=1)
+	mtext("Unpaired Number of Pairs",side=4,col="darkgrey",line=-6) 
+	#(x=b,y=f2$NofPairs+2.5,label=f2$raw,cex=1)
+	#grid(nx=NA,ny=NULL,lty=1,lwd=1,col="gray")
+	axis(4, line=-8,ylim=c(0,1.2*max(f2$NofPairs)),col.axis="darkgrey",col="darkgrey",ylab="Unpaired Number of pairs")
+	#############################################
+	}
+dev.off()	
+}
