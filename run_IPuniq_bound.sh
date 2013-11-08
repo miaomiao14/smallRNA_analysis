@@ -8,7 +8,7 @@ OUTPUTDIR=/home/wangw1/isilon_temp/ipsmRNA/trimmed_uniqBound
 [ ! -d ${OUTPUTDIR} ] && mkdir -p ${OUTPUTDIR}
 declare -a GT=("w1" "AubCDrescue" "AubWTrescue" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue")
 declare -a OX=("ox" "unox")
-echo -e "genotype\tox\tsharedSpecies\tsharedReadsAgo3IP\tsharedReadsAubIP\tuniqSpeciesAgo3IP\tuniqSpeciesAubIP\tuniqReadsAgo3IP\tuniqReadsAubIP\n" >> ${OUTPUTDIR}/${g}.${o}.log
+echo -e "genotype\tox\tsharedSpecies\tsharedReadsAgo3IP\tsharedReadsAubIP\tuniqSpeciesAgo3IP\tuniqSpeciesAubIP\tuniqReadsAgo3IP\tuniqReadsAubIP\n" >> ${OUTPUTDIR}/stat.log
 parafile=${OUTPUTDIR}/para.uniq.bound
 [ -s ${parafile} ] && rm ${parafile}
 for g in "${GT[@]}"
@@ -35,7 +35,7 @@ do
 	echo -ne " uniqReadsAgo3IP=\`sumcol \${A}.uniqA 2\` && " >>${parafile} 
 	echo -ne " uniqReadsAubIP=\`sumcol \${B}.uniqB 2\` && " >>${parafile}
 
-	echo -e " echo -e \"\${g}\\t\${o}\\t\${sharedSpecies}\\t\${sharedReadsAgo3IP}\\t\${sharedReadsAubIP}\\t\${uniqSpeciesAgo3IP}\\t\${uniqSpeciesAubIP}\\t\${uniqReadsAgo3IP}\\t\${uniqReadsAubIP}\\n\" \>\> \${OUTPUTDIR}/\${g}.\${o}.log " >>${parafile}
+	echo -e " echo -e \"\${g}\\\t\${o}\\\t\${sharedSpecies}\\\t\${sharedReadsAgo3IP}\\\t\${sharedReadsAubIP}\\\t\${uniqSpeciesAgo3IP}\\\t\${uniqSpeciesAubIP}\\\t\${uniqReadsAgo3IP}\\\t\${uniqReadsAubIP}\\\n\" >> \${OUTPUTDIR}/stat.log " >>${parafile}
 
 	done
 done
