@@ -66,7 +66,7 @@ plot_ua_va <- function (input,gt,outdir) {
 	# draw data b, distance between two differents data sesÊ
 		rect (xleft=a+bar_dis-bar_width/2, xright=a+bar_dis+bar_width/2, ybottom=0, ytop=f2$NofPairs, ylim = c(0, 1.2*max(f2$NofPairs)), col="darkgrey", border=F )
 		axis (4, ylim = c(0, 1.2*max(f2$NofPairs)), at = seq (0, 1.2*max(f2$NofPairs), as.integer (1.2*max(f2$NofPairs)/5)))
-		title(m, cex.main = 2,   font.main= 4, col.main= "blue")
+		title(m, cex.main = 1,   font.main= 1, col.main= "blue")
 	
 	}
 	dev.off()	
