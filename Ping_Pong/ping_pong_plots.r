@@ -22,7 +22,7 @@ plot_ua_va <- function (input,gt,outdir) {
 		f_order=f[order(f$pair),]
 		f=f_order
 		
-		ff<-ddply(f,"pair",transform,group=groupingfun(pair))
+		ff<-transform(f,group=groupingfun(pair))
 		ff$group=as.factor(ff$group)
 		f1=as.data.frame(lapply( subset(f,as.character(group)==1),'[',drop=TRUE))
 		f2=as.data.frame(lapply( subset(f,as.character(group)==0),'[',drop=TRUE))
