@@ -69,7 +69,7 @@ do
 		do
 			/home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore.pl ${i} $OUTDIR >> ${file}.pair.count.txt
 		done
-		sort -k1,1 -k2,2 -k3,3 -k4,4 $file | uniq >${file}.pair.count.uniq.txt
+		sort -k1,1 -k2,2 -k3,3 -k4,4 $file.pair.count.txt | uniq >${file}.pair.count.uniq.txt
 		RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va ${file}.pair.count.uniq.txt ${t}_${pp} ${OUTDIR}
 	done
 	
