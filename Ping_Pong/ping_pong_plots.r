@@ -8,13 +8,13 @@ plot_ua_va <- function (input,gt,outdir) {
 	pdf(pdfname,height=12,width=15)
 	layout(matrix(1:4,2,2,byrow=TRUE))
 	
-	pp=read.table(files[j],F)
+	pp=read.table(input,F)
 	colnames(pp)=c("genotype","pair","NofPairs","raw");
 	for (j in (1:length(levels(pp$genotype))))
 	{
 		#df=as.data.frame(lapply(subset(L,as.character(rank)==r),'[',drop=TRUE))
 		piwipair=levels(pp$genotype)[j]
-		f=as.data.frame(lapply(subset(pp,as.character(genotype)==piwipair),'[',drop=TRUE))
+		f=as.data.frame(lapply( subset(pp,as.character(genotype)==piwipair),'[',drop=TRUE))
 		m=paste(piwipair,"PP pair",sep=" ")
 		f_order=f[order(f$pair),]
 		f=f_order
