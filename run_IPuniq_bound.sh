@@ -18,8 +18,8 @@ do
 	cd ${OUTPUTDIR}	
 	echo -ne " A=Phil.SRA.Ago3IP.${g}.${o}.ovary.trimmed && " >>${parafile}
 	echo -ne " B=Phil.SRA.AubIP.${g}.${o}.ovary.trimmed && " >>${parafile}
-	echo -ne " ln -s ${INPUTDIR}/\${A} ${OUTPUTDIR}" >>${parafile}
-	echo -ne " ln -s ${INPUTDIR}/\${B} ${OUTPUTDIR}" >>${parafile}
+	echo -ne " ln -s ${INPUTDIR}/\${A} ${OUTPUTDIR} && " >>${parafile}
+	echo -ne " ln -s ${INPUTDIR}/\${B} ${OUTPUTDIR} && " >>${parafile}
  
 	echo -ne " /home/wangw1/bin/inserts_file_methods.py -a \$A -b \$B -i && " >>${parafile}
 	echo -ne " sharedSpecies=\`wc -l \${A}.sharedA|cut -d" " -f1\` && " >>${parafile}
