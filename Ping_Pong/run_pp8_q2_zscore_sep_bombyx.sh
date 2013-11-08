@@ -54,6 +54,7 @@ done
 touch .status.${STEP}.pp8_UA_VA
 
 declare -a PPPAIR=("Ago3AS_SiwiS" "Ago3S_SiwiAS")
+declare -a TARGETS=("KNOWNTE" "ReASTE")
 OUTDIR=/home/wangw1/isilon_temp/BmN4/pp8_q2_summary
 [ ! -d ${OUTDIR} ] && mkdir $OUTDIR
 [ ! -f .status.${STEP}.pp8_UA_VA_summary ] && \
@@ -62,11 +63,15 @@ do
 	for pp in ${PPPAIR[@]}
 	do
 		fn=/home/wangw1/isilon_temp/BmN4/pp8_q2/${t}_${pp}
+		file=/home/wangw1/isilon_temp/BmN4/pp8_q2_summary/${t}_${pp}
 		for i in `ls ${fn}/*.UA_VA.zscore.out`
 		do
-			/home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore.pl ${i} $OUTDIR
+			/home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore.pl ${i} $OUTDIR >> ${file}.pair.count.txt
 		done
+		
 	done
+	sort $file |uniq >${file}.pair.count.uniq.txt
+	RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va ${file}.pair.count.uniq.txt ${t}_${pp} ${OUTDIR}
 done
 
 

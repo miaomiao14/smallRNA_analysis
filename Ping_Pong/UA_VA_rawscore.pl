@@ -12,17 +12,17 @@ use File::Basename;
 #@BT=("CT","GT","TT");
 
 %pairs=(
-    XA => ["AA","CA","GA","UA"],
+    #XA => ["AA","CA","GA","UA"],
     VA => ["AA","CA","GA"],
     HC => ["AC","CC","TC"],
     DG => ["AG","GG","TG"],
     BU => ["CT","GT","TT"],
-    UX => ["TA","TC","TG","TT"],	
+    #UX => ["TA","TC","TG","TT"],	
     UA => ["TA"],
-    UB => ["TC","TG","TT"],
+    #UB => ["TC","TG","TT"],
     AU => ["AT"],
-    AX => ["AT","AC","AG","AA"],
-    XU => ["AT","CT","GT","TT"],
+    #AX => ["AT","AC","AG","AA"],
+    #XU => ["AT","CT","GT","TT"],
     CG => ["CG"],
     GC => ["GC"]
         );
@@ -63,6 +63,7 @@ foreach $i (keys %s_n)
                 
             }
             print OUT "$i\t$pair\t$ncount{$i}{$pair}\t$score{$i}{$pair}\n";
+            print "$i\t$pair\t$ncount{$i}{$pair}\t$score{$i}{$pair}\n";
             #$count_N{$pair}++ if ($score{$pair}{$i}>0);
         }
 
