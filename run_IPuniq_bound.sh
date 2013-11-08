@@ -28,7 +28,7 @@ do
 	
 	#echo -ne " A=Phil.SRA.Ago3IP.${g}.${o}.ovary.trimmed && " >>${parafile}
 	#echo -ne " B=Phil.SRA.AubIP.${g}.${o}.ovary.trimmed && " >>${parafile}
-	echo -ne "/home/wangw1/bin/inserts_file_methods.py -a $A -b $B -u && " >>${parafile}
+	echo -ne "/home/wangw1/bin/inserts_file_methods.py -a \$A -b \$B -u && " >>${parafile}
 	
 	echo -ne " uniqSpeciesAgo3IP=\`wc -l \${A}.uniqA|cut -d\" \" -f1\` && " >>${parafile}
 	echo -ne " uniqSpeciesAubIP=\`wc -l \${B}.uniqB|cut -d\" \" -f1\` && " >>${parafile}
