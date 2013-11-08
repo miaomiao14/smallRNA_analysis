@@ -18,6 +18,8 @@ do
 	cd ${OUTPUTDIR}	
 	echo -ne " A=Phil.SRA.Ago3IP.${g}.${o}.ovary.trimmed && " >>${parafile}
 	echo -ne " B=Phil.SRA.AubIP.${g}.${o}.ovary.trimmed && " >>${parafile}
+	echo -ne " ANEW=Phil.SRA.Ago3IPuniq.${g}.${o}.ovary.trimmed && " >>${parafile}
+	echo -ne " BNEW=Phil.SRA.AubIPuniq.${g}.${o}.ovary.trimmed && " >>${parafile}
 	echo -ne " ln -s ${INPUTDIR}/\${A} ${OUTPUTDIR} && " >>${parafile}
 	echo -ne " ln -s ${INPUTDIR}/\${B} ${OUTPUTDIR} && " >>${parafile}
  
@@ -33,7 +35,7 @@ do
 	echo -ne " uniqSpeciesAgo3IP=\`wc -l \${A}.uniqA|cut -d\" \" -f1\` && " >>${parafile}
 	echo -ne " uniqSpeciesAubIP=\`wc -l \${B}.uniqB|cut -d\" \" -f1\` && " >>${parafile}
 	echo -ne " uniqReadsAgo3IP=\`sumcol \${A}.uniqA 2\` && " >>${parafile} 
-	echo -ne " uniqReadsAubIP=\`sumcol \${B}.uniqB 2\` && " >>${parafile}
+	echo -ne " uniqReadsAubIP=\`sumcol \${B}.uniqB 2\` && rm \${A} && rm \${B} && mv \${A}.uniqA \${ANEW} && mv \${B}.uniqB \${BNEW} &&  " >>${parafile}
 
 	echo -e " echo -e \"\${g}\\\t\${o}\\\t\${sharedSpecies}\\\t\${sharedReadsAgo3IP}\\\t\${sharedReadsAubIP}\\\t\${uniqSpeciesAgo3IP}\\\t\${uniqSpeciesAubIP}\\\t\${uniqReadsAgo3IP}\\\t\${uniqReadsAubIP}\\\n\" >> ${OUTPUTDIR}/stat.log " >>${parafile}
 
