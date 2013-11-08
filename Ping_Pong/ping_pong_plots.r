@@ -3,7 +3,7 @@ library(calibrate)
 library(reshape)
 library(plyr)
 
-groupingfun=function (x) {if (x == "AU" | x == "CG" | x == "GC" | x=="UA") {y=1} else { y=0}}
+groupingfun <- function (x) {if (x == "AU" | x == "CG" | x == "GC" | x=="UA") {y=1} else { y=0}}
 
 plot_ua_va <- function (input,gt,outdir) {
 
