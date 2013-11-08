@@ -3,13 +3,15 @@ library(calibrate)
 library(reshape)
 library(plyr)
 
-groupingfun <- function (x) {if (x == "AU" | x == "CG" | x == "GC" | x=="UA") {y=1} else { y=0}}
+groupingfun <- function (x) {if (x == "AU" || x == "CG" || x == "GC" || x=="UA") {y=1} else { y=0}}
 
 plot_ua_va <- function (input,gt,outdir) {
 
 	pdfname=paste(outdir,"/",gt,"_UA_VA_pair_counts",".pdf",sep="")
 	pdf(pdfname,height=12,width=15)
 	layout(matrix(1:4,2,2,byrow=TRUE))
+	
+	pairg=data.frame(pair=c("AU","UA","GC","CG","BU","VA","HC","DG"),group=c(1,1,1,1,0,0,0,0))
 	
 	pp=read.table(input,F)
 	colnames(pp)=c("genotype","pair","NofPairs","raw");
@@ -22,7 +24,7 @@ plot_ua_va <- function (input,gt,outdir) {
 		f_order=f[order(f$pair),]
 		f=f_order
 		
-		ff<-transform(f,group=groupingfun(pair))
+		ff=merge(f,pairg,by="pair")
 		ff$group=as.factor(ff$group)
 		f1=as.data.frame(lapply( subset(f,as.character(group)==1),'[',drop=TRUE))
 		f2=as.data.frame(lapply( subset(f,as.character(group)==0),'[',drop=TRUE))
