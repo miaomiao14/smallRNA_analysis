@@ -22,7 +22,7 @@ do
 	echo -ne " ln -s ${INPUTDIR}/\${B} ${OUTPUTDIR} && " >>${parafile}
  
 	echo -ne " /home/wangw1/bin/inserts_file_methods.py -a \$A -b \$B -i && " >>${parafile}
-	echo -ne " sharedSpecies=\`wc -l \${A}.sharedA|cut -d" " -f1\` && " >>${parafile}
+	echo -ne " sharedSpecies=\`wc -l \${A}.sharedA|cut -d\" \" -f1\` && " >>${parafile}
 	echo -ne " sharedReadsAgo3IP=\`sumcol \${A}.sharedA 2\` && " >>${parafile}
 	echo -ne " sharedReadsAubIP=\`sumcol \${B}.sharedB 2\` && " >>${parafile}
 	
@@ -30,8 +30,8 @@ do
 	#echo -ne " B=Phil.SRA.AubIP.${g}.${o}.ovary.trimmed && " >>${parafile}
 	echo -ne "/home/wangw1/bin/inserts_file_methods.py -a $A -b $B -u && " >>${parafile}
 	
-	echo -ne " uniqSpeciesAgo3IP=\`wc -l \${A}.uniqA\` && " >>${parafile}
-	echo -ne " uniqSpeciesAubIP=\`wc -l \${B}.uniqB\` && " >>${parafile}
+	echo -ne " uniqSpeciesAgo3IP=\`wc -l \${A}.uniqA|cut -d\" \" -f1\` && " >>${parafile}
+	echo -ne " uniqSpeciesAubIP=\`wc -l \${B}.uniqB|cut -d\" \" -f1\` && " >>${parafile}
 	echo -ne " uniqReadsAgo3IP=\`sumcol \${A}.uniqA 2\` && " >>${parafile} 
 	echo -ne " uniqReadsAubIP=\`sumcol \${B}.uniqB 2\` && " >>${parafile}
 
