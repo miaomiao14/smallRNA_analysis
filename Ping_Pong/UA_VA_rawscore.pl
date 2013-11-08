@@ -49,6 +49,7 @@ close(IN);
  %rawscore=();
  %score=();
  %ncount=();
+ open OUT, ">$ARGV[0].raw.pair.score.out";
 foreach $i (keys %s_n) 
 {        foreach $pair ( keys %pairs)
         {
@@ -61,11 +62,13 @@ foreach $i (keys %s_n)
 	
                 
             }
-            print "$i\t$pair\t$score{$i}{$pair}\n";
+            print OUT "$i\t$pair\t$score{$i}{$pair}\n";
             #$count_N{$pair}++ if ($score{$pair}{$i}>0);
         }
 
 }
+close(OUT);
+
 
 open OUT, ">$ARGV[0].score.out";
 #@field=split(/\./,$ARGV[0]);
