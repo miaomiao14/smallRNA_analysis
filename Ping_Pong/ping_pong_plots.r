@@ -54,7 +54,7 @@ plot_ua_va <- function (input,gt,outdir) {
 	# making new plot
 		plot.new ()
 	# making window for the scale of data a
-		plot.window (xlim=c(0,1.2*max(a)), ylim=c(0, 1.2*max(f1$NofPairs)))
+		plot.window (xlim=c(0,1.2*max(a)), ylim=c(0, 1.2*max(f1$NofPairs)),main=m)
 	# draw "bar", which is actually rectangle
 		rect (xleft = a-bar_width/2, xright=a+bar_width/2, ybottom=0, ytop=f1$NofPairs, ylim=c(0, 1.2*max(f1$NofPairs)), col="darkblue", border=F)
 	# draw X axis
