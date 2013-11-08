@@ -62,7 +62,7 @@ foreach $i (keys %s_n)
 	
                 
             }
-            print OUT "$i\t$pair\t$score{$i}{$pair}\n";
+            print OUT "$i\t$pair\t$ncount{$i}{$pair}\t$score{$i}{$pair}\n";
             #$count_N{$pair}++ if ($score{$pair}{$i}>0);
         }
 
