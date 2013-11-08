@@ -2,6 +2,9 @@ library(ggplot2)
 library(calibrate)
 library(reshape)
 library(plyr)
+
+groupingfun=function (x) {if (x == "AU" | x == "CG" | x == "GC" | x=="UA") {y=1} else { y=0}}
+
 plot_ua_va <- function (input,gt,outdir) {
 
 	pdfname=paste(outdir,"/",gt,"_UA_VA_pair_counts",".pdf",sep="")
@@ -18,8 +21,8 @@ plot_ua_va <- function (input,gt,outdir) {
 		m=paste(piwipair,"PP pair",sep=" ")
 		f_order=f[order(f$pair),]
 		f=f_order
-		fun=function (x) {if (x == "AU" | x == "CG" | x == "GC" | x=="UA") {y=1} else { y=0}}
-		ff<-ddply(f,"pair",transform,group=fun(pair))
+		
+		ff<-ddply(f,"pair",transform,group=groupingfun(pair))
 		ff$group=as.factor(ff$group)
 		f1=as.data.frame(lapply( subset(f,as.character(group)==1),'[',drop=TRUE))
 		f2=as.data.frame(lapply( subset(f,as.character(group)==0),'[',drop=TRUE))
