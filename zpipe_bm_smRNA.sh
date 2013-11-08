@@ -456,8 +456,8 @@ echo -e "`date "+$ISO_8601"`\tintersect with gene and TES, converting format to 
 parafly_file=${OUTDIR}/intersectTogeneTE.para && \
 for t in ${TARGETS[@]}
 do
-echo -e "[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2 ] && bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 -b ${!t} -f 0.99 -s -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2 && " >> $parafly_file ; 
-echo -e "[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2 ] && bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 -b ${!t} -f 0.99 -S -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2 && " >> $parafly_file ;
+echo -e "[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2 ] && bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 -b ${!t} -f 0.99 -s -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.bed2 " >> $parafly_file ; 
+echo -e "[ ! -f ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2 ] && bedtools intersect -a ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.bed2 -b ${!t} -f 0.99 -S -wb >${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.bed2 " >> $parafly_file ;
 #echo -ne "cat ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2> ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.mapper2 &&  ">> $parafly_file ;
 #echo -e "gzip  ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.S.mapper2 && rm ${allBed2%*.bed2}.all.xrRNA.xtRNA.xh.${t}.AS.mapper2">> $parafly_file ;
 done
