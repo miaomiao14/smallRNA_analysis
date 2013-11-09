@@ -75,8 +75,8 @@ plot_ua_va <- function (input,gt,outdir) {
 plot_ua_va_color <- function (input,gt,outdir) {
 	
 	pdfname=paste(outdir,"/",gt,"_UA_VA_pair_counts_color",".pdf",sep="")
-	pdf(pdfname,height=10,width=20)
-	layout(matrix(1:4,2,2,byrow=TRUE))
+	pdf(pdfname,height=20,width=10)
+	layout(matrix(1:4,4,1,byrow=TRUE))
 	
 	pairg=data.frame(pair=c("AU","UA","GC","CG","BU","VA","HC","DG"),group=c(1,1,1,1,0,0,0,0))
 	
