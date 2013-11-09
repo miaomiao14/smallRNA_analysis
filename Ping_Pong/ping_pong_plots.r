@@ -110,16 +110,16 @@ plot_ua_va_color <- function (input,gt,outdir) {
 		f2=f2[order(f2$pair),]
 
 	#############################################
-	b<-barplot(f1$NofPairs,space=0.5,xlim=c(0,8),width=0.55,names.arg=f1$pair,main=m,axes=F,ylim=c(0,1.2*max(f1$NofPairs)), col=rep("darkblue",4),border=NA,cex.names=1)
+	par(mar=c(12, 4, 5, 2))
+	b<-barplot(f1$NofPairs,space=0.5,xlim=c(0,8),width=0.55,names.arg=f1$pair,main=m,axes=F, col=rep("darkblue",4),border=NA,cex.names=1)
 	mtext("Paired Number of Pairs",side=2,col="darkblue",line=2) 
-
-	axis(2,ylim=c(0,1.2*max(f1$NofPairs)),col.axis="darkblue",col="darkblue")
-	par(new=TRUE)
+	axis(2,tck=0.01,ylim=c(0,1.2*max(f1$NofPairs)),col.axis="darkblue",col="darkblue")
 	
-	b<-barplot(f2$NofPairs,space=0.5,xlim=c(0,8),width=0.55,axes=F, ylab="",col=rep("darkgrey",4),border=NA,cex.names=1)
-	mtext("Unpaired Number of Pairs",side=4,col="darkgrey",line=-6) 
-
-	axis(4, line=-8,ylim=c(0,1.2*max(f2$NofPairs)),col.axis="darkgrey",col="darkgrey",ylab="Unpaired Number of pairs")
+	par(mar=c(12, 4, 5, 2),new=TRUE)
+	
+	b<-barplot(f2$NofPairs,space=0.5,xlim=c(0,8),width=0.55,axes=F, col=rep("darkgrey",4),border=NA,cex.names=1)
+	mtext("Unpaired Number of Pairs",side=4,col="darkgrey",line=-5) 
+	axis(4,tck=0.01,ylim=c(0,1.2*max(f2$NofPairs)),col.axis="darkgrey",col="darkgrey", line=-8)
 	#############################################
 	}
 dev.off()	
