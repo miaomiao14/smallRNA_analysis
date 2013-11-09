@@ -71,7 +71,9 @@ plot_ua_va <- function (input,gt,outdir) {
 	}
 	dev.off()	
 }
-
+fun=function (x) {if (x == "AU" | x == "CG" | x == "GC" | x=="UA") {y=1} else { y=0}}
+fun1=function (x,y) {if (x == "1") {y=y} else { y=0}}
+fun2=function (x,y) {if (x == "0") {y=y} else { y=0}}
 plot_ua_va_color <- function (input,gt,outdir) {
 	
 	pdfname=paste(outdir,"/",gt,"_UA_VA_pair_counts_color",".pdf",sep="")
@@ -97,13 +99,13 @@ plot_ua_va_color <- function (input,gt,outdir) {
 #		f2=as.data.frame(lapply( subset(ff,as.character(group)==0),'[',drop=TRUE))
 		
 		
-		fun=function (x) {if (x == "AU" | x == "CG" | x == "GC" | x=="UA") {y=1} else { y=0}}
+		
 		ff<-ddply(f,"pair",transform,group=fun(pair))
 		ff$group=as.factor(ff$group)
-		fun1=function (x,y) {if (x == "1") {y=y} else { y=0}}
+		
 		f1<-ddply(ff,"group",transform,NofPairs=fun1(group,NofPairs))
 		f1=f1[order(f1$pair),]
-		fun2=function (x,y) {if (x == "0") {y=y} else { y=0}}
+		
 		f2<-ddply(ff,"group",transform,NofPairs=fun2(group,NofPairs))
 		f2=f2[order(f2$pair),]
 
