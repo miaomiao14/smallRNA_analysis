@@ -91,10 +91,21 @@ plot_ua_va_color <- function (input,gt,outdir) {
 		f_order=f[order(f$pair),]
 		f=f_order
 		
-		ff=merge(f,pairg,by="pair")
+#		ff=merge(f,pairg,by="pair")
+#		ff$group=as.factor(ff$group)
+#		f1=as.data.frame(lapply( subset(ff,as.character(group)==1),'[',drop=TRUE))
+#		f2=as.data.frame(lapply( subset(ff,as.character(group)==0),'[',drop=TRUE))
+		
+		
+		fun=function (x) {if (x == "AU" | x == "CG" | x == "GC" | x=="UA") {y=1} else { y=0}}
+		ff<-ddply(f,"pair",transform,group=fun(pair))
 		ff$group=as.factor(ff$group)
-		f1=as.data.frame(lapply( subset(ff,as.character(group)==1),'[',drop=TRUE))
-		f2=as.data.frame(lapply( subset(ff,as.character(group)==0),'[',drop=TRUE))
+		fun1=function (x,y) {if (x == "1") {y=y} else { y=0}}
+		f1<-ddply(ff,"group",transform,NofPairs=fun1(group,NofPairs))
+		f1=f1[order(f1$pair),]
+		fun2=function (x,y) {if (x == "0") {y=y} else { y=0}}
+		f2<-ddply(ff,"group",transform,NofPairs=fun2(group,NofPairs))
+		f2=f2[order(f2$pair),]
 
 	#############################################
 	b<-barplot(f1$NofPairs,space=0.5,xlim=c(0,8),width=0.55,names.arg=f1$pair,main=m,axes=F,ylim=c(0,1.2*max(f1$NofPairs)), col=rep("darkblue",4),border=NA,cex.names=1)
