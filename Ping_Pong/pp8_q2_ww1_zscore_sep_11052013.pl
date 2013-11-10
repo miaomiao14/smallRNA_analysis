@@ -21,23 +21,44 @@ use Compress::Zlib;
 #fasta fiel as a input argument
 #outdir added
 #indexflag to indicate if we need to rebuild the index or not
-
-
-$fastafile=$ARGV[3];
-open IN, $fastafile or die "Fail to open $fastafile: $!";
-while(<IN>)
+$spe=$ARGV[3];
+if($spe=="fly")
 {
-   if (/>(.+)\s*\//) #this is specific for the case: >nscaf100 /length=4083 /lengthwogaps=4073
-   {
-      $chr="$1";
-      @c=split(/ /,$chr);
-   }
-   else
-   {
-      chomp;
-      $genome{$c[0]}=$_;
-   }
+	open IN, "/home/xuj1/pipeline/common/fasta/dmel-all-chromosome-r5.5_TAS.fasta";
+	while(<IN>)
+	{
+	   if (/>(.+) type/)
+	   {
+	      $chr="chr$1";
+	   }
+	   else
+	   {
+	      chomp;
+	      $genome{$chr}=$_;
+	   }
+	}
 }
+elsif($spe=="bombyx")
+{
+	$fastafile="/home/wangw1/pipeline_bm/common/silkgenome.fa";
+	open IN, $fastafile or die "Fail to open $fastafile: $!";
+	while(<IN>)
+	{
+	   if (/>(.+)\s*\//) #this is specific for the case: >nscaf100 /length=4083 /lengthwogaps=4073
+	   {
+	      $chr="$1";
+	      @c=split(/ /,$chr);
+	   }
+	   else
+	   {
+	      chomp;
+	      $genome{$c[0]}=$_;
+	   }
+	}
+}
+
+
+
 @pairs=("AT","TA","GC","CG","AA","AC","AG","CA","CC","CT","GA","GG","GT","TC","TG","TT");
 
 $OUTDIR=$ARGV[4];
