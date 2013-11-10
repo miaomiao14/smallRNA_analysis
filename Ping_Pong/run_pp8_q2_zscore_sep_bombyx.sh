@@ -3,8 +3,9 @@
 #11/05/2013
 #WEI WANG
 #for Ping-Pong method paper, analyze the data from Yuki lab
-export PIPELINE_DIRECTORY=/home/wagnw1/git/smallRNA_analysis
-
+export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
+INDIR=/home/wangw1/isilon_temp/BmN4
+LOG=${INDIR}/LOG
 indexFlag=$1
 
 STEP=1
@@ -82,7 +83,7 @@ touch .status.${STEP}.pp8_UA_VA_summary
 
 
 echo -e "`date` "+$ISO_8601"\tDraw phasing analysis..." >> $LOG
-INDIR=/home/wangw1/isilon_temp/BmN4
+
 OUTDIR=/home/wangw1/isilon_temp/BmN4/phasing
 [ ! -d $OUTDIR ] && mkdir -p ${OUTDIR}
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.phasing ] && \
@@ -98,5 +99,6 @@ do
 done
 touch ${OUT}/.status.${STEP}.transposon_piRNA.phasing
 
+echo -e "`date` "+$ISO_8601"\tDraw phasing analysis done" >> $LOG
 #zip the mapper2 format, run pp6
 #Ago3IP S: SiwiIP AS, Ago3IP AS: SiwiIP S, Ago3IP total: SiwiIP total	
