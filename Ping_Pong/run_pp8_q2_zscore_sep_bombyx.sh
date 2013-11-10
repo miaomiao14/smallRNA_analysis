@@ -33,6 +33,7 @@ STEP=$((STEP+1))
 declare -a GT=("Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell" "Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell" "Yuki.SRA.TOTAL.DMSO.ox.BmN4cell")
 declare -a TARGETS=("GENE" "KNOWNTE" "ReASTE")
 OUTDIR=/home/wangw1/isilon_temp/BmN4/pp8_q2
+touch .status.${STEP}.pp8_UA_VA
 [ ! -f .status.${STEP}.pp8_UA_VA ] && \
 for t in ${TARGETS[@]}
 do
