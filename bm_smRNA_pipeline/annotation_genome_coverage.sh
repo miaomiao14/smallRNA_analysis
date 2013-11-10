@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/sh 
 
 CHRSIZE=$1
 INDIR=$2
