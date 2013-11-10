@@ -3,6 +3,7 @@
 CHRSIZE=$1
 INDIR=$2
 OUTDIR=$3
+[ ! -d ${OUTDIR} ] && mkdir -p ${OUTDIR}
 prefix="bm"
 LOG=${OUTDIR}/coverage.log
 
