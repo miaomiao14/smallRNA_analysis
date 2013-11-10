@@ -16,6 +16,6 @@ do
 	name=${i##*/}
 bedtools coverage -a ${i} -b ${OUTDIR}/${prefix}.chrsize.bed > ${OUTDIR}/${name}.coverage && \
 echo -e "${i##*/}\tGenomeSize\tCoverageFraction" >> $LOG && \
-awk '{OFS="\t"}{a=a+$5;b=b+$6;}END{print a,b,a/b}' ${OUTDIR}/${i}.coverage >> $LOG
+awk '{OFS="\t"}{a=a+$5;b=b+$6;}END{print a,b,a/b}' ${OUTDIR}/${name}.coverage >> $LOG
 
 done
