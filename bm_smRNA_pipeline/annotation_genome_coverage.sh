@@ -11,7 +11,7 @@ LOG=${OUTDIR}/coverage.log
 rm $LOG
 awk '{OFS="\t"}{print $1,0,$2-1}' $CHRSIZE >${OUTDIR}/${prefix}.chrsize.bed
 
-for i in `ls ${INDIR}/*.bed`
+for i in `ls ${INDIR}/silkworm.*.bed`
 do
 bedtools coverage -a ${i} -b ${OUTDIR}/${prefix}.chrsize.bed > ${OUTDIR}/${i##*/}.coverage && \
 echo -e "${i##*/}\tGenomeSize\tCoverageFraction" >> $LOG && \
