@@ -98,6 +98,7 @@ do
 	sample=${samplename/DMSO.ox.BmN4cell.bmv2v0.all.all.xrRNA.xtRNA.xh./}
 	/home/wangw1/bin/submitsge 8 ${sample} $OUTDIR "${PIPELINE_DIRECTORY}/run_distance_analysis.sh -i ${i} -o $OUTDIR -t normbed" 
 done
+[ $? == 0 ] && \
 touch ${OUT}/.status.${STEP}.transposon_piRNA.phasing
 
 echo -e "`date` "+$ISO_8601"\tDraw phasing analysis done" >> $LOG
