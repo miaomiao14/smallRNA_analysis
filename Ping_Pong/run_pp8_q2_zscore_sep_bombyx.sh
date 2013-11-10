@@ -87,10 +87,10 @@ echo -e "`date` "+$ISO_8601"\tDraw phasing analysis..." >> $LOG
 
 OUTDIR=/home/wangw1/isilon_temp/BmN4/phasing
 [ ! -d $OUTDIR ] && mkdir -p ${OUTDIR}
-[ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.phasing ] && \
+[ ! -f .status.${STEP}.transposon_piRNA.phasing ] && \
 #paraFile=${OUTDIR13}/${RANDOM}.piRNAphasing.para
 
-for i in `ls ${INDIR}/*.inserts/*.norm.bed.gz`
+for i in `ls ${INDIR}/*.TOTAL.*.inserts/*.norm.bed.gz`
 do
 	inputfile=${i##*/}
 	samplenamepart=${inputfile#Yuki.SRA.*}
@@ -99,7 +99,7 @@ do
 	/home/wangw1/bin/submitsge 8 ${sample} $OUTDIR "${PIPELINE_DIRECTORY}/run_distance_analysis.sh -i ${i} -o $OUTDIR -t normbed" 
 done
 [ $? == 0 ] && \
-touch ${OUT}/.status.${STEP}.transposon_piRNA.phasing
+touch .status.${STEP}.transposon_piRNA.phasing
 
 echo -e "`date` "+$ISO_8601"\tDraw phasing analysis done" >> $LOG
 #zip the mapper2 format, run pp6
