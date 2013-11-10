@@ -3,7 +3,7 @@
 #11/05/2013
 #WEI WANG
 #for Ping-Pong method paper, analyze the data from Yuki lab
-
+export PIPELINE_DIRECTORY=/home/wagnw1/git/smallRNA_analysis
 
 indexFlag=$1
 
@@ -57,6 +57,7 @@ declare -a PPPAIR=("Ago3AS_SiwiS" "Ago3S_SiwiAS")
 declare -a TARGETS=("KNOWNTE" "ReASTE")
 OUTDIR=/home/wangw1/isilon_temp/BmN4/pp8_q2_summary
 [ ! -d ${OUTDIR} ] && mkdir $OUTDIR
+touch .status.${STEP}.pp8_UA_VA_summary
 [ ! -f .status.${STEP}.pp8_UA_VA_summary ] && \
 for t in ${TARGETS[@]}
 do
@@ -76,7 +77,26 @@ do
 	
 	
 done
+[ $? == 0 ] && \
+touch .status.${STEP}.pp8_UA_VA_summary
 
+
+echo -e "`date` "+$ISO_8601"\tDraw phasing analysis..." >> $LOG
+INDIR=/home/wangw1/isilon_temp/BmN4
+OUTDIR=/home/wangw1/isilon_temp/BmN4/phasing
+[ ! -d $OUTDIR ] && mkdir -p ${OUTDIR}
+[ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.phasing ] && \
+#paraFile=${OUTDIR13}/${RANDOM}.piRNAphasing.para
+
+for i in `ls ${INDIR}/*.inserts/*.norm.bed.gz`
+do
+	inputfile=${i##*/}
+	samplenamepart=${inputfile#Yuki.SRA.*}
+	samplename=${samplenamepart%*.norm.bed.gz}
+	sample=${samplename/DMSO.ox.BmN4cell.bmv2v0.all.all.xrRNA.xtRNA.xh./}
+	/home/wangw1/bin/submitsge 8 ${sample} $OUTDIR "${PIPELINE_DIRECTORY}/run_distance_analysis.sh -i ${i} -o $OUTDIR -t normbed" 
+done
+touch ${OUT}/.status.${STEP}.transposon_piRNA.phasing
 
 #zip the mapper2 format, run pp6
 #Ago3IP S: SiwiIP AS, Ago3IP AS: SiwiIP S, Ago3IP total: SiwiIP total	
