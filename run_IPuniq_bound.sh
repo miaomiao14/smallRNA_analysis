@@ -3,11 +3,13 @@
 
 export PIPELINEDIR=/home/lees2/pipeline:/home/xuj1/pipeline
 
-INPUTDIR=/home/wangw1/isilon_temp/ipsmRNA/trimmed
-OUTPUTDIR=/home/wangw1/isilon_temp/ipsmRNA/trimmed_uniqBound
+INPUTDIR=/home/wangw1/isilon_temp/ipsmRNA/raw
+OUTPUTDIR=/home/wangw1/isilon_temp/ipsmRNA/raw_uniqBound
 [ ! -d ${OUTPUTDIR} ] && mkdir -p ${OUTPUTDIR}
-declare -a GT=("w1" "AubCDrescue" "AubWTrescue" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue")
-declare -a OX=("ox" "unox")
+#declare -a GT=("w1" "AubCDrescue" "AubWTrescue" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue")
+#declare -a OX=("ox" "unox")
+declare -a GT=("ago3Hets" "aubHets" "qinHets" "nosAgo3CDrescue" "nosAgo3WTrescue")
+declare -a OX=("unox")
 echo -e "genotype\tox\tsharedSpecies\tsharedReadsAgo3IP\tsharedReadsAubIP\tuniqSpeciesAgo3IP\tuniqSpeciesAubIP\tuniqReadsAgo3IP\tuniqReadsAubIP\n" >> ${OUTPUTDIR}/stat.log
 parafile=${OUTPUTDIR}/para.uniq.bound
 [ -s ${parafile} ] && rm ${parafile}
