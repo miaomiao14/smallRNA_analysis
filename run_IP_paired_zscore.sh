@@ -1,15 +1,3 @@
-declare -a GROUPGT=("ago3cdmut_ox" "ago3wtmut_ox" "ago3cdwt_ox" "ago3cdmut_unox" "ago3wtmut_unox" "ago3cdwt_unox" \
-"aubcdmut_ox" "aubwtmut_ox" "aubcdwt_ox" "aubcdmut_unox" "aubwtmut_unox" "aubcdwt_unox" \
-"aubmuthet_ox" "aubhetmut_ox" "MTD_shaub_shGFP" "qinago3muthet_ox" "qinago3muthet_unox" \
-"AubIP_aubcdwt_ox" "AubIP_aubcdwt_unox" \
-)
-declare -a ago3cdmut_ox=("Phil.SRA.aubvasAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.ago3MutsWW.ox.ovary.inserts")
-declare -a ago3wtmut_ox=("Phil.SRA.aubvasAgo3WTrescue.ox.ovary.inserts" "Phil.SRA.ago3MutsWW.ox.ovary.inserts")
-declare -a ago3cdwt_ox=("Phil.SRA.aubvasAgo3CDrescue.ox.ovary.inserts" "Phil.SRA.aubvasAgo3WTrescue.ox.ovary.inserts")
-
-declare -a ago3cdmut_unox=("Phil.SRA.aubvasAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.ago3MutsWW.unox.ovary.inserts")
-declare -a ago3wtmut_unox=("Phil.SRA.aubvasAgo3WTrescue.unox.ovary.inserts" "Phil.SRA.ago3MutsWW.unox.ovary.inserts")
-declare -a ago3cdwt_unox=("Phil.SRA.aubvasAgo3CDrescue.unox.ovary.inserts" "Phil.SRA.aubvasAgo3WTrescue.unox.ovary.inserts")
 #!/bin/bash
 
 
@@ -25,9 +13,12 @@ export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 # set PATH to be aware of pipeline/bin; this bin directory needs to be searched first
 export PATH=${PIPELINE_DIRECTORY}/:$PATH
 
-INDIR=$1 #this is the folder store all pipeline results outmost folders
+INDIR=$1 #this is the folder store all pipeline results outmost folders 
+#/home/wangw1/isilon_temp/ipsmRNA/jia_pipeline_results
 OUT=${INDIR}/transposon_piRNA
 LOG=${OUT}/log
+
+STEP=1
 
 declare -a GROUPGT=("AubIP_ago3cdwt_ox" "AubIP_ago3cdwt_unox" \
 "AubIP_ago3cdw1_ox" "AubIP_ago3cdw1_unox" \
@@ -65,3 +56,70 @@ done
 	ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands && \
 	touch ${OUT}/.status.${STEP}.transposon_piRNA.pairedZscore
 STEP=$((STEP+1))
+
+
+
+#run UA_VA analysis
+#separate sense and antisense from normbed
+#Phil.AubIP.AubCDrescue.unox.ovary.inserts.xkxh.norm.bed.transposons.gz
+echo -e "`date` "+$ISO_8601"\t1U10A and 1V10A analysis..." >> $LOG
+echo -e "`date` "+$ISO_8601"\tseparate the sense and antisense transposon mappers in norm.bed format..." >> $LOG
+touch ${OUT}/.status.transposon_piRNA.S_AS
+[ ! -f ${OUT}/.status.transposon_piRNA.S_AS ] && \
+paraFile=${OUTDIR}/UA_VA.${RANDOM}.para && \
+for i in `ls ${INDIR}/*.inserts`
+do
+	name=${i##*/}
+	echo -ne "zcat ${i}/${name}.xkxh.norm.bed.transposons.gz |grep -w sense >${i}/${name}.xkxh.norm.bed.transposons.sense && ">>$paraFile;
+	echo -e "gzip ${i}/${name}.xkxh.norm.bed.transposons.sense ">>$paraFile;
+	echo -ne "zcat ${i}/${name}.xkxh.norm.bed.transposons.gz |grep -w antisense >${i}/${name}.xkxh.norm.bed.transposons.antisense && ">>$paraFile;
+	echo -e "gzip ${i}/${name}.xkxh.norm.bed.transposons.antisense ">>$paraFile;
+done
+[ $? == 0 ] && \
+	/home/wangw1/bin/submitsge 24 paraflyrun ${OUTDIR} "ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands"
+[ $? == 0 ] && \
+	touch ${OUT}/.status.transposon_piRNA.S_AS 
+echo -e "`date` "+$ISO_8601"\tseparate the sense and antisense transposon mappers in norm.bed format done!" >> $LOG	
+
+
+echo -e "`date` "+$ISO_8601"\trun pp8 UA and VA..." >> $LOG
+declare -a GT=("w1" "AubCDrescue" "AubWTrescue" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "ago3Hets" "aubHets" "qinHets" "nosAgo3CDrescue" "nosAgo3WTrescue")
+declare -a OX=("ox" "unox")
+declare -a UNIQ=("" "uniq" "shared")
+#total
+#uniq
+#shared
+indexFlag=1 #to indicate we need to build the index or not
+OUTDIR=${INDIR}/transposon_piRNA/UA_VA
+[ ! -d $OUTDIR ] && mkdir -p ${OUTDIR}	
+
+[ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.UA_VA ] && \
+for t in ${GT[@]}
+do
+	for o in ${OX[@]}
+	do
+		for s in ${UNIQ[@]}
+		do
+			A=${INDIR}/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.transposons.sense.gz
+			B=${INDIR}/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.transposons.antisense.gz
+			jobname=${t}${s}_Ago3S_AubAS.pp8.q2
+			jOUT=${OUTDIR}/${t}${s}_Ago3S_AubAS
+			[ ! -d ${jOUT} ] && mkdir -p ${jOUT}
+			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "/home/wangw1/git/smallRNA_analysis/Ping_Pong/pp8_q2_ww1_zscore_sep_11052013.pl ${A} ${B} 2 fly ${jOUT} ${indexFlag} >${jOUT}/${t}${s}_Ago3S_AubAS.pp8.q2.UA_VA.log"
+			
+			A=${INDIR}/Phil.SRA${s}.Ago3IP.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.transposons.antisense.gz
+			B=${INDIR}/Phil.SRA${s}.AubIP.${t}.${o}.ovary.inserts/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.transposons.sense.gz
+			jobname=${t}${s}_Ago3AS_AubS.pp8.q2
+			jOUT=${OUTDIR}/${t}${s}_Ago3AS_AubS
+			[ ! -d ${jOUT} ] && mkdir -p ${jOUT}
+			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "/home/wangw1/git/smallRNA_analysis/Ping_Pong/pp8_q2_ww1_zscore_sep_11052013.pl ${A} ${B} 2 fly ${jOUT} ${indexFlag} >${jOUT}/${t}${s}_Ago3AS_AubS.pp8.q2.UA_VA.log"			
+		done
+	done
+done
+[ $? == 0 ] && \
+touch ${OUT}/.status.${STEP}.transposon_piRNA.UA_VA
+
+
+
+
+

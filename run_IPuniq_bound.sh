@@ -5,6 +5,9 @@ export PIPELINEDIR=/home/lees2/pipeline:/home/xuj1/pipeline
 
 INPUTDIR=/home/wangw1/isilon_temp/ipsmRNA/raw
 OUTPUTDIR=/home/wangw1/isilon_temp/ipsmRNA/raw_uniqBound
+
+STEP=1
+
 [ ! -d ${OUTPUTDIR} ] && mkdir -p ${OUTPUTDIR}
 #declare -a GT=("w1" "AubCDrescue" "AubWTrescue" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue")
 #declare -a OX=("ox" "unox")
@@ -13,6 +16,7 @@ declare -a OX=("unox")
 echo -e "genotype\tox\tsharedSpecies\tsharedReadsAgo3IP\tsharedReadsAubIP\tuniqSpeciesAgo3IP\tuniqSpeciesAubIP\tuniqReadsAgo3IP\tuniqReadsAubIP\n" >> ${OUTPUTDIR}/stat.log
 parafile=${OUTPUTDIR}/para.uniq.bound
 [ -s ${parafile} ] && rm ${parafile}
+[ ! -f ${OUTPUTDIR}/.status.${STEP}.IPuniqBound ] && \
 for g in "${GT[@]}"
 do
 	for o in "${OX[@]}"
@@ -43,9 +47,12 @@ do
 
 	done
 done
-
+[ $? == 0 ] && \
 if [[ ! -f ${parafile}.completed ]] || [[ -f $parafile.failed_commands ]]
 then
 	CPUN=`wc -l $parafile |cut -f1 -d" "` && \
 	ParaFly -c $parafile -CPU $CPUN -failed_cmds $parafile.failed_commands
 fi
+[ $? == 0 ] && \
+touch ${OUTPUTDIR}/.status.${STEP}.IPuniqBound
+STEP=$((STEP+1))
