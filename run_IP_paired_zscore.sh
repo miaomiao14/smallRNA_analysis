@@ -64,10 +64,12 @@ STEP=$((STEP+1))
 #Phil.AubIP.AubCDrescue.unox.ovary.inserts.xkxh.norm.bed.transposons.gz
 echo -e "`date` "+$ISO_8601"\t1U10A and 1V10A analysis..." >> $LOG
 echo -e "`date` "+$ISO_8601"\tseparate the sense and antisense transposon mappers in norm.bed format..." >> $LOG
-touch ${OUT}/.status.transposon_piRNA.S_AS
+#touch ${OUT}/.status.transposon_piRNA.S_AS
+OUTDIR=${INDIR}/transposon_piRNA/UA_VA
+[ ! -d $OUTDIR ] && mkdir -p ${OUTDIR}
 [ ! -f ${OUT}/.status.transposon_piRNA.S_AS ] && \
 paraFile=${OUTDIR}/UA_VA.${RANDOM}.para && \
-for i in `ls ${INDIR}/*.inserts`
+for i in `find ${INDIR} -name "*.inserts" -maxdepth 1`
 do
 	name=${i##*/}
 	echo -ne "zcat ${i}/${name}.xkxh.norm.bed.transposons.gz |grep -w sense >${i}/${name}.xkxh.norm.bed.transposons.sense && ">>$paraFile;
@@ -90,8 +92,7 @@ declare -a UNIQ=("uniq" "shared")
 #uniq
 #shared
 indexFlag=1 #to indicate we need to build the index or not
-OUTDIR=${INDIR}/transposon_piRNA/UA_VA
-[ ! -d $OUTDIR ] && mkdir -p ${OUTDIR}	
+	
 
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.UA_VA ] && \
 for t in ${GT[@]}
@@ -146,6 +147,7 @@ done
 touch ${OUT}/.status.${STEP}.transposon_piRNA.UA_VA
 
 
+#IPed piRNA abundance normalzation
 
 
 
