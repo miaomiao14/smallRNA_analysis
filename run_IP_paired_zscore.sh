@@ -65,6 +65,8 @@ STEP=$((STEP+1))
 echo -e "`date` "+$ISO_8601"\t1U10A and 1V10A analysis..." >> $LOG
 echo -e "`date` "+$ISO_8601"\tseparate the sense and antisense transposon mappers in norm.bed format..." >> $LOG
 #touch ${OUT}/.status.transposon_piRNA.S_AS
+OUTDIR=${INDIR}/transposon_piRNA/UA_VA
+[ ! -d $OUTDIR ] && mkdir -p ${OUTDIR}
 [ ! -f ${OUT}/.status.transposon_piRNA.S_AS ] && \
 paraFile=${OUTDIR}/UA_VA.${RANDOM}.para && \
 for i in `ls ${INDIR}/*.inserts`
@@ -90,8 +92,7 @@ declare -a UNIQ=("uniq" "shared")
 #uniq
 #shared
 indexFlag=1 #to indicate we need to build the index or not
-OUTDIR=${INDIR}/transposon_piRNA/UA_VA
-[ ! -d $OUTDIR ] && mkdir -p ${OUTDIR}	
+	
 
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.UA_VA ] && \
 for t in ${GT[@]}
