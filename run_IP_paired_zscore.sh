@@ -69,7 +69,7 @@ OUTDIR=${INDIR}/transposon_piRNA/UA_VA
 [ ! -d $OUTDIR ] && mkdir -p ${OUTDIR}
 [ ! -f ${OUT}/.status.transposon_piRNA.S_AS ] && \
 paraFile=${OUTDIR}/UA_VA.${RANDOM}.para && \
-for i in `find ${INDIR} "*.inserts"`
+for i in `find ${INDIR} -name "*.inserts"`
 do
 	name=${i##*/}
 	echo -ne "zcat ${i}/${name}.xkxh.norm.bed.transposons.gz |grep -w sense >${i}/${name}.xkxh.norm.bed.transposons.sense && ">>$paraFile;
