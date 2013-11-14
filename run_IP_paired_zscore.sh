@@ -107,18 +107,18 @@ do
 			A=${INDIR}/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.transposons.sense.gz
 			B=${INDIR}/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.transposons.antisense.gz
 			[ -f ${A} ] && [ -f ${B} ] && \
-			jobname=${t}${s}_Ago3S_AubAS.pp8.q2 && \
-			jOUT=${OUTDIR}/${t}${s}_Ago3S_AubAS && \
+			jobname=${t}${s}_${o}_Ago3S_AubAS.pp8.q2 && \
+			jOUT=${OUTDIR}/${t}${s}_${o}_Ago3S_AubAS && \
 			[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
-			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "/home/wangw1/git/smallRNA_analysis/Ping_Pong/pp8_q2_ww1_zscore_sep_11052013.pl ${A} ${B} 2 fly ${jOUT} ${indexFlag} >${jOUT}/${t}${s}_Ago3S_AubAS.pp8.q2.UA_VA.log"
+			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "/home/wangw1/git/smallRNA_analysis/Ping_Pong/pp8_q2_ww1_zscore_sep_11052013.pl ${A} ${B} 2 fly ${jOUT} ${indexFlag} >${jOUT}/${t}${s}_${o}_Ago3S_AubAS.pp8.q2.UA_VA.log"
 #			
 			A=${INDIR}/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.transposons.antisense.gz
 			B=${INDIR}/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.transposons.sense.gz
 			[ -f ${A} ] && [ -f ${B} ] && \
-			jobname=${t}${s}_Ago3AS_AubS.pp8.q2 && \
-			jOUT=${OUTDIR}/${t}${s}_Ago3AS_AubS && \
+			jobname=${t}${s}_${o}_Ago3AS_AubS.pp8.q2 && \
+			jOUT=${OUTDIR}/${t}${s}_${o}_Ago3AS_AubS && \
 			[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
-			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "/home/wangw1/git/smallRNA_analysis/Ping_Pong/pp8_q2_ww1_zscore_sep_11052013.pl ${A} ${B} 2 fly ${jOUT} ${indexFlag} >${jOUT}/${t}${s}_Ago3AS_AubS.pp8.q2.UA_VA.log"			
+			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "/home/wangw1/git/smallRNA_analysis/Ping_Pong/pp8_q2_ww1_zscore_sep_11052013.pl ${A} ${B} 2 fly ${jOUT} ${indexFlag} >${jOUT}/${t}${s}_${o}_Ago3AS_AubS.pp8.q2.UA_VA.log"			
 		done
 	done
 done
@@ -131,18 +131,18 @@ do
 			A=${INDIR}/Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts.xkxh.norm.bed.transposons.sense.gz
 			B=${INDIR}/Phil.SRA.AubIP.${t}.${o}.ovary.inserts/Phil.SRA.AubIP.${t}.${o}.ovary.inserts.xkxh.norm.bed.transposons.antisense.gz
 			[ -f ${A} ] && [ -f ${B} ] && \
-			jobname=${t}_Ago3S_AubAS.pp8.q2 && \
-			jOUT=${OUTDIR}/${t}_Ago3S_AubAS && \
+			jobname=${t}_${o}_Ago3S_AubAS.pp8.q2 && \
+			jOUT=${OUTDIR}/${t}_${o}_Ago3S_AubAS && \
 			[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
-			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "/home/wangw1/git/smallRNA_analysis/Ping_Pong/pp8_q2_ww1_zscore_sep_11052013.pl ${A} ${B} 2 fly ${jOUT} ${indexFlag} >${jOUT}/${t}_Ago3S_AubAS.pp8.q2.UA_VA.log"
+			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "/home/wangw1/git/smallRNA_analysis/Ping_Pong/pp8_q2_ww1_zscore_sep_11052013.pl ${A} ${B} 2 fly ${jOUT} ${indexFlag} >${jOUT}/${t}_${o}_Ago3S_AubAS.pp8.q2.UA_VA.log"
 			
 			A=${INDIR}/Phil.SRA${s}.Ago3IP.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts.xkxh.norm.bed.transposons.antisense.gz
 			B=${INDIR}/Phil.SRA${s}.AubIP.${t}.${o}.ovary.inserts/Phil.SRA.AubIP.${t}.${o}.ovary.inserts.xkxh.norm.bed.transposons.sense.gz
 			[ -f ${A} ] && [ -f ${B} ] && \
-			jobname=${t}_Ago3AS_AubS.pp8.q2 && \
-			jOUT=${OUTDIR}/${t}_Ago3AS_AubS && \
+			jobname=${t}_${o}_Ago3AS_AubS.pp8.q2 && \
+			jOUT=${OUTDIR}/${t}_${o}_Ago3AS_AubS && \
 			[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
-			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "/home/wangw1/git/smallRNA_analysis/Ping_Pong/pp8_q2_ww1_zscore_sep_11052013.pl ${A} ${B} 2 fly ${jOUT} ${indexFlag} >${jOUT}/${t}_Ago3AS_AubS.pp8.q2.UA_VA.log"			
+			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "/home/wangw1/git/smallRNA_analysis/Ping_Pong/pp8_q2_ww1_zscore_sep_11052013.pl ${A} ${B} 2 fly ${jOUT} ${indexFlag} >${jOUT}/${t}_${o}_Ago3AS_AubS.pp8.q2.UA_VA.log"			
 
 	done
 done

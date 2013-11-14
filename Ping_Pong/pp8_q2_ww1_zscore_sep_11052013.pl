@@ -71,7 +71,7 @@ if($indexFlag)
 	   my $file=fileparse($ARGV[$i]);
 	    @namefield=split(/\./,$file);
 	    if($spe eq "fly")
-		{$name=$namefield[3]."_".$namefield[2];}
+		{$name=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
 		if($spe eq "bombyx")
 	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
 	    push @argos, $name;
@@ -135,7 +135,7 @@ else
    		my $file=fileparse($ARGV[$i]);
     	@namefield=split(/\./,$file);
     	if($spe eq "fly")
-		{$name=$namefield[2]."_".$namefield[1];}
+		{$name=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
 		if($spe eq "bombyx")
 	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
     	push @argos, $name;
@@ -177,14 +177,14 @@ for ($i=0; $i<$ARGV[2]; $i++) {
    $file1=fileparse($ARGV[$i]); 
    @namefield=split(/\./,$file1);
    	    if($spe eq "fly")
-		{$name1=$namefield[3]."_".$namefield[2];}
+		{$name1=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
 		if($spe eq "bombyx")
 	    {$name1=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
    $file1=$name1;
    $file2=fileparse($ARGV[$j]);
    @namefield=split(/\./,$file2);
    	    if($spe eq "fly")
-		{$name2=$namefield[3]."_".$namefield[2];}
+		{$name2=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
 		if($spe eq "bombyx")
 	    {$name2=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
    $file2=$name2;
