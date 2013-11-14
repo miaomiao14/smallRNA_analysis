@@ -72,7 +72,7 @@ paraFile=${OUTDIR}/UA_VA.${RANDOM}.para && \
 for i in `find ${INDIR} -name "*.inserts" -maxdepth 1`
 do
 	name=${i##*/}
-	echo -ne "gunzip ${i}/${name}.xkxh.transposon.mapper2.gz && mapper2normbed.pl ${i}/${name}.xkxh.transposon.mapper2 >${i}/${name}.xkxh.norm.bed.transposons && ">>$paraFile;
+	echo -ne "gunzip -f ${i}/${name}.xkxh.transposon.mapper2.gz && mapper2normbed.pl ${i}/${name}.xkxh.transposon.mapper2 >${i}/${name}.xkxh.norm.bed.transposons && ">>$paraFile;
 	echo -ne "grep -w sense ${i}/${name}.xkxh.norm.bed.transposons >${i}/${name}.xkxh.norm.bed.transposons.sense && ">>$paraFile;
 	
 	echo -ne "gzip -f ${i}/${name}.xkxh.norm.bed.transposons.sense && ">>$paraFile;
