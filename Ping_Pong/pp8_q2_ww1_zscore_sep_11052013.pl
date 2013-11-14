@@ -22,7 +22,7 @@ use Compress::Zlib;
 #outdir added
 #indexflag to indicate if we need to rebuild the index or not
 $spe=$ARGV[3];
-if($spe=="fly")
+if($spe eq "fly")
 {
 	open IN, "/home/xuj1/pipeline/common/fasta/dmel-all-chromosome-r5.5_TAS.fasta";
 	while(<IN>)
@@ -38,7 +38,7 @@ if($spe=="fly")
 	   }
 	}
 }
-elsif($spe=="bombyx")
+elsif($spe eq "bombyx")
 {
 	$fastafile="/home/wangw1/pipeline_bm/common/silkgenome.fa";
 	open IN, $fastafile or die "Fail to open $fastafile: $!";
@@ -70,9 +70,9 @@ if($indexFlag)
 	{
 	   my $file=fileparse($ARGV[$i]);
 	    @namefield=split(/\./,$file);
-	    if($spe=="fly")
+	    if($spe eq "fly")
 		{$name=$namefield[3]."_".$namefield[2];}
-		if($spe=="bombyx")
+		if($spe eq "bombyx")
 	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
 	    push @argos, $name;
 	    $file=$name;
@@ -134,9 +134,9 @@ else
 	{
    		my $file=fileparse($ARGV[$i]);
     	@namefield=split(/\./,$file);
-    	if($spe=="fly")
+    	if($spe eq "fly")
 		{$name=$namefield[2]."_".$namefield[1];}
-		if($spe=="bombyx")
+		if($spe eq "bombyx")
 	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
     	push @argos, $name;
     	$file=$name;
@@ -176,16 +176,16 @@ for ($i=0; $i<$ARGV[2]; $i++) {
       
    $file1=fileparse($ARGV[$i]); 
    @namefield=split(/\./,$file1);
-   	    if($spe=="fly")
+   	    if($spe eq "fly")
 		{$name1=$namefield[3]."_".$namefield[2];}
-		if($spe=="bombyx")
+		if($spe eq "bombyx")
 	    {$name1=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
    $file1=$name1;
    $file2=fileparse($ARGV[$j]);
    @namefield=split(/\./,$file2);
-   	    if($spe=="fly")
+   	    if($spe eq "fly")
 		{$name2=$namefield[3]."_".$namefield[2];}
-		if($spe=="bombyx")
+		if($spe eq "bombyx")
 	    {$name2=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
    $file2=$name2;
    
