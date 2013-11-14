@@ -75,10 +75,10 @@ do
 	echo -ne "gunzip ${i}/${name}.xkxh.transposon.mapper2.gz && mapper2normbed.pl ${i}/${name}.xkxh.transposon.mapper2 >${i}/${name}.xkxh.norm.bed.transposons && ">>$paraFile;
 	echo -ne "grep -w sense ${i}/${name}.xkxh.norm.bed.transposons >${i}/${name}.xkxh.norm.bed.transposons.sense && ">>$paraFile;
 	
-	echo -ne "gzip ${i}/${name}.xkxh.norm.bed.transposons.sense && ">>$paraFile;
+	echo -ne "gzip -f ${i}/${name}.xkxh.norm.bed.transposons.sense && ">>$paraFile;
 	echo -ne "grep -w antisense ${i}/${name}.xkxh.norm.bed.transposons >${i}/${name}.xkxh.norm.bed.transposons.antisense && ">>$paraFile;
-	echo -ne "gzip ${i}/${name}.xkxh.norm.bed.transposons.antisense && ">>$paraFile;
-	echo -e "gzip ${i}/${name}.xkxh.transposon.mapper2 ">>$paraFile;
+	echo -ne "gzip -f ${i}/${name}.xkxh.norm.bed.transposons.antisense && ">>$paraFile;
+	echo -e "gzip -f ${i}/${name}.xkxh.transposon.mapper2 && rm ${i}/${name}.xkxh.norm.bed.transposons ">>$paraFile;
 done
 [ $? == 0 ] && \
 	/home/wangw1/bin/submitsge 24 paraflyrun ${OUTDIR} "ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands"
