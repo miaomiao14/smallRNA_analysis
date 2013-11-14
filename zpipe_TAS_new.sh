@@ -177,6 +177,8 @@ echo >> $dir/output/$insertsname.log
 echo "endosiRNA" >> $dir/output/$insertsname.log
 echo `date` >> $dir/output/$insertsname.log
 paraFile=$dir/output/${RANDOM}.para
+##11/14/2013
+##these norm.bed are not true norm.bed files
 echo -ne "normbed2mapper /home/wengz/pipelines/smallRNApipeline/pipeline_dm/common/cisNAT.map  $inserts.xkxh.norm.bed  map  >  $inserts.xkxh.norm.bed.cisNAT &&" >>${paraFile}
 echo -e "lenselector $inserts.xkxh.norm.bed.cisNAT 21 >  $inserts.xkxh.norm.bed.cisNAT.seq.21nt" >>${paraFile}
 echo -ne "normbed2mapper /home/wengz/pipelines/smallRNApipeline/pipeline_dm/common/structured_loci.map  $inserts.xkxh.norm.bed  map  > $inserts.xkxh.norm.bed.structured_loci &&" >>${paraFile} 
