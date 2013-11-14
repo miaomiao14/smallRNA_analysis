@@ -290,7 +290,10 @@ foreach ($n=1;$n<=20;$n++)
    $N2=`match.pl $ppseq1temp $seqFile2 | sumcol+ 2`; chomp($N2);
    open OUT3, ">$OUTDIR/$file1.$file2.1.pp_reads_percentage";
    print OUT3 "$file2\t$N2\t$total{$file2}\t",$N2/$total{$file2},"\n";
-    
+
+
+if($file1 ne $file2 ) #added on 11/14/2013
+{    
    $X=0; $Z=0; %score=();$count_N=0;
    %X0=(); %Z0=(); %s=(); %suv=(); %count_N0=();
    %species=();
@@ -388,6 +391,7 @@ foreach ($n=1;$n<=20;$n++)
    open OUT3, ">$OUTDIR/$file2.$file1.2.pp_reads_percentage";
    print OUT3 "$file1\t$N1\t$total{$file1}\t",$N1/$total{$file1},"\n";
 }
+} #when file1 and file2 are the same the second iteration is skipped
   print O "\n";
   print "\n";
   print OUT1 "\n";
