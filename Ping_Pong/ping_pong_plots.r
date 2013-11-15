@@ -133,7 +133,7 @@ plot_ua_va_from_ppscore_color <- function (input,gt,outdir) {
 	pairg=data.frame(pair=c("AU","UA","GC","CG","BU","VA","HC","DG"),group=c(1,1,1,1,0,0,0,0))
 	
 	ppscore=read.table(input,F)
-	colnames(ppscore)=c("overlap","genotype","pair","NofPairs","raw");
+	colnames(ppscore)=c("overlap","genotype","pair","NofPairs","NofReads");
 	pdfname=paste(outdir,"/",gt,"_UA_VA_pair_counts",".pdf",sep="")
 	pdf(pdfname,height=20,width=10,onefile=TRUE)
 	for (i in (1:length(levels(as.factor(ppscore$overlap)))))
@@ -179,6 +179,56 @@ plot_ua_va_from_ppscore_color <- function (input,gt,outdir) {
 			b<-barplot(f2$NofPairs,space=0.5,xlim=c(0,8),width=0.55,axes=F, col=rep("darkgrey",4),border=NA,cex.names=1)
 			mtext("Unpaired Number of Pairs",side=4,col="darkgrey",line=-5) 
 			axis(4,tck=0.01,ylim=c(0,1.2*max(f2$NofPairs)),col.axis="darkgrey",col="darkgrey", line=-8)
+			#############################################
+		}
+		
+	}
+	dev.off()
+	pdfname=paste(outdir,"/",gt,"_UA_VA_pair_reads",".pdf",sep="")
+	pdf(pdfname,height=20,width=10,onefile=TRUE)
+	for (i in (1:length(levels(as.factor(ppscore$overlap)))))
+	{
+		ol=levels(as.factor(ppscore$overlap))[i]
+		
+		pp=as.data.frame(lapply( subset(ppscore,overlap==ol),'[',drop=TRUE))
+		
+		layout(matrix(1:4,4,1,byrow=TRUE))
+		for (j in (1:length(levels(pp$genotype))))
+		{
+			#df=as.data.frame(lapply(subset(L,as.character(rank)==r),'[',drop=TRUE))
+			piwipair=levels(pp$genotype)[j]
+			f=as.data.frame(lapply( subset(pp,as.character(genotype)==piwipair),'[',drop=TRUE))
+			m=paste(piwipair,"PP pair d=",ol,sep=" ")
+			f_order=f[order(f$pair),]
+			f=f_order
+			
+			#		ff=merge(f,pairg,by="pair")
+			#		ff$group=as.factor(ff$group)
+			#		f1=as.data.frame(lapply( subset(ff,as.character(group)==1),'[',drop=TRUE))
+			#		f2=as.data.frame(lapply( subset(ff,as.character(group)==0),'[',drop=TRUE))
+			
+			
+			
+			ff<-ddply(f,"pair",transform,group=fun(pair))
+			ff$group=as.factor(ff$group)
+			
+			f1<-ddply(ff,"group",transform,NofReads=fun1(group,NofReads))
+			f1=f1[order(f1$pair),]
+			
+			f2<-ddply(ff,"group",transform,NofReads=fun2(group,NofReads))
+			f2=f2[order(f2$pair),]
+			
+			#############################################
+			par(mar=c(12, 4, 5, 2))
+			b<-barplot(f1$NofReads,space=0.5,xlim=c(0,8),width=0.55,names.arg=f1$pair,main=m,axes=F, col=rep("darkblue",4),border=NA,cex.names=1)
+			mtext("Paired Number of Reads",side=2,col="darkblue",line=2) 
+			axis(2,tck=0.01,ylim=c(0,1.2*max(f1$NofReads)),col.axis="darkblue",col="darkblue")
+			
+			par(mar=c(12, 4, 5, 2),new=TRUE)
+			
+			b<-barplot(f2$NofReads,space=0.5,xlim=c(0,8),width=0.55,axes=F, col=rep("darkgrey",4),border=NA,cex.names=1)
+			mtext("Unpaired Number of Reads",side=4,col="darkgrey",line=-5) 
+			axis(4,tck=0.01,ylim=c(0,1.2*max(f2$NofReads)),col.axis="darkgrey",col="darkgrey", line=-8)
 			#############################################
 		}
 		
