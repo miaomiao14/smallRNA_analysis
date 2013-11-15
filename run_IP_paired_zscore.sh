@@ -251,7 +251,59 @@ touch ${OUT}/.status.${STEP}.all_piRNA.UA_VA
 STEP=$((STEP+1))
 
 
+declare -a PPPAIR=("Ago3_Aub")
+OUTDIR=${INDIR}/transposon_piRNA/UA_VA_allpiRNAs
+SUMMARYOUTDIR=${INDIR}/transposon_piRNA/UA_VA_allpiRNAs_summary
+[ ! -d ${SUMMARYOUTDIR} ] && mkdir $SUMMARYOUTDIR
+[ ! -f .status.${STEP}.pp8_all_piRNA.UA_VA_summary ] && \
+for t in ${GT[@]}
+do
+	for o in ${OX[@]}
+	do
+		for s in ${UNIQ[@]}
+		do
+			for pp in ${PPPAIR[@]}
 
+				fn=${OUTDIR}/${t}${s}_${o}_${pp} && \
+				file=${SUMMARYOUTDIR}/${t}${s}_${o}_${pp} && \
+				[ -f ${file}.pair.count.txt ] &&  rm ${file}.pair.count.txt && \
+				for i in `ls ${fn}/*.UA_VA.zscore.out`
+				do
+				[ -f $i ] && /home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore.pl ${i} $OUTDIR >> ${file}.pair.count.txt && \
+				done
+				#sort -k1,1 -k2,2 -k3,3 -k4,4 $file.pair.count.txt | uniq >${file}.pair.count.uniq.txt
+				#[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va ${file}.pair.count.txt ${t}${s}_${o}_${pp} ${SUMMARYOUTDIR}
+				[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va_color ${file}.pair.count.txt ${t}${s}_${o}_${pp} ${SUMMARYOUTDIR}
+
+			done
+		done
+	done		
+done
+[ ! -f .status.${STEP}.pp8_all_piRNA.UA_VA_summary ] && \
+for t in ${GT[@]}
+do
+	for o in ${OX[@]}
+	do
+
+			for pp in ${PPPAIR[@]}
+			do
+				fn=${OUTDIR}/${t}_${o}_${pp} && \
+				file=${SUMMARYOUTDIR}/${t}_${o}_${pp} && \
+				[ -f ${file}.pair.count.txt ] &&  rm ${file}.pair.count.txt && \
+				for i in `ls ${fn}/*.UA_VA.zscore.out`
+				do
+					[ -f $i ] && /home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore.pl ${i} $OUTDIR >> ${file}.pair.count.txt && \
+				done
+				#sort -k1,1 -k2,2 -k3,3 -k4,4 $file.pair.count.txt | uniq >${file}.pair.count.uniq.txt
+				#[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va ${file}.pair.count.txt ${t}_${o}_${pp} ${SUMMARYOUTDIR}
+				[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va_color ${file}.pair.count.txt ${t}_${o}_${pp} ${SUMMARYOUTDIR} && \
+			done
+
+	done		
+done
+[ $? == 0 ] && \
+touch .status.${STEP}.pp8_all_piRNA.UA_VA_summary
+STEP=$((STEP+1))
 
 
 #IPed piRNA abundance normalzation
