@@ -198,7 +198,7 @@ else {
 
  $X=0; $Z=0; %score=();$count_N=0;
   %X0=(); %Z0=(); %s=(); %suv=(); %count_N0=();
-  %species=();
+  %species=(); %speciesn10=();
 
 open O, ">$OUTDIR/$file1.$file2.1.zscore.out";
 open OUA, ">$OUTDIR/$file1.$file2.1.UA_VA.zscore.out";
@@ -237,7 +237,7 @@ foreach ($n=1;$n<=20;$n++)
       { 
        $g_0_nt=substr($l[2],0,1); $t_9_nt=&revfa($g_0_nt);  ##here are different from pp8_q2_ww1.pl
        $s{$g_0_nt.$t_9_nt}{$n}+=$hash1{$file1}{$n}{$l[1]}*$hash2{$file2}{$l[2]}/$NTM{$l[2]};
-       #$species{$g_0_nt.$t_9_nt}{$l[2]}=1 if ($n==10); ###
+       $speciesn10{$g_0_nt.$t_9_nt}{$l[2]}=1 if ($n==10); ###
        $species{$g_0_nt.$t_9_nt}{$l[2]}=1 ;
        $score{$n}+=$hash1{$file1}{$n}{$l[1]}*$hash2{$file2}{$l[2]}/$NTM{$l[2]};
        print OUT2 "NA\t$l[2]\n" if ($n==10);
@@ -247,7 +247,7 @@ foreach ($n=1;$n<=20;$n++)
        next if ($1!=0);  # allow 1mm at the 10th position of target strand
        $t_9_nt=&revfa($2);
        $s{$3.$t_9_nt}{$n}+=$hash1{$file1}{$n}{$l[1]}*$hash2{$file2}{$l[2]}/$NTM{$l[2]};
-       #$species{$3.$t_9_nt}{$l[2]}=1 if ($n==10); ###
+       $speciesn10{$3.$t_9_nt}{$l[2]}=1 if ($n==10); ###
        $species{$3.$t_9_nt}{$l[2]}=1 ;
        $score{$n}+=$hash1{$file1}{$n}{$l[1]}*$hash2{$file2}{$l[2]}/$NTM{$l[2]};
        print OUT2 "NA\t$l[2]\n" if ($n==10);
@@ -278,7 +278,7 @@ foreach ($n=1;$n<=20;$n++)
     $X0{$p}=$s{$p}{10}; delete $s{$p}{10};
     $std0=&std(values %{$s{$p}});
     if ($std0>0 && $count_N0{$p}>=5) { $Z0{$p}=($X0{$p}-&mean(values %{$s{$p}}))/$std0;} else {$Z0{$p}=-10;}
-    $n_of_species=scalar (keys %{$species{$p}});
+    $n_of_species=scalar (keys %{$speciesn10{$p}});
     print OUA "$file2\-$file1\t$p\t$n_of_species\t$Z0{$p}\n"; ##file2 is the guide and file1 is the target
     }
    
@@ -296,7 +296,7 @@ if($file1 ne $file2 ) #added on 11/14/2013
 {    
    $X=0; $Z=0; %score=();$count_N=0;
    %X0=(); %Z0=(); %s=(); %suv=(); %count_N0=();
-   %species=();
+   %species=();%speciesn10=();
    
    open O, ">$OUTDIR/$file2.$file1.2.zscore.out";
    open OUA, ">$OUTDIR/$file2.$file1.2.UA_VA.zscore.out";
@@ -334,7 +334,7 @@ foreach ($n=1;$n<=20;$n++)
        $g_0_nt=substr($l[2],0,1); $t_9_nt=&revfa($g_0_nt);  ##here are different from pp8_q2_ww1.pl  
        #$t_9_nt=substr($l[2],0,1); $g_0_nt=&revfa($t_9_nt);
        $s{$g_0_nt.$t_9_nt}{$n}+=$hash1{$file2}{$n}{$l[1]}*$hash2{$file1}{$l[2]}/$NTM{$l[2]};
-       #$species{$g_0_nt.$t_9_nt}{$l[2]}=1 if ($n==10); ###
+       $speciesn10{$g_0_nt.$t_9_nt}{$l[2]}=1 if ($n==10); ###
        $species{$g_0_nt.$t_9_nt}{$l[2]}=1 ;
        $score{$n}+=$hash1{$file2}{$n}{$l[1]}*$hash2{$file1}{$l[2]}/$NTM{$l[2]};
        print OUT2 "$l[2]\tNA\n" if ($n==10);
@@ -345,7 +345,7 @@ foreach ($n=1;$n<=20;$n++)
       #$g_0_nt=&revfa($2);
       $t_9_nt=&revfa($2);
       $s{$3.$t_9_nt}{$n}+=$hash1{$file2}{$n}{$l[1]}*$hash2{$file1}{$l[2]}/$NTM{$l[2]};
-      #$species{$3.$t_9_nt}{$l[2]}=1 if ($n==10); ###
+      $speciesn10{$3.$t_9_nt}{$l[2]}=1 if ($n==10); ###
       $species{$3.$t_9_nt}{$l[2]}=1 ;
       #$suv{$n}+=$hash1{$file2}{$n}{$_[1]}*$hash2{$file1}{$n}{$_[2]}/$NTM{$_[2]};
       $score{$n}+=$hash1{$file2}{$n}{$l[1]}*$hash2{$file1}{$l[2]}/$NTM{$l[2]};
@@ -378,7 +378,7 @@ foreach ($n=1;$n<=20;$n++)
     $X0{$p}=$s{$p}{10}; delete $s{$p}{10};
     $std0=&std(values %{$s{$p}});
     if ($std0>0 && $count_N0{$p}>=5) { $Z0{$p}=($X0{$p}-&mean(values %{$s{$p}}))/$std0;} else {$Z0{$p}=-10;}
-    $n_of_species=scalar (keys %{$species{$p}});
+    $n_of_species=scalar (keys %{$speciesn10{$p}}); #this is wrong, only records n=20
     print OUA "$file1\-$file2\t$p\t$n_of_species\t$Z0{$p}\n"; 
     }
    
