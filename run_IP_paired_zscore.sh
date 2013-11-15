@@ -318,7 +318,7 @@ STEP=$((STEP+1))
 
 
 ##summary from pp score
-
+declare -a PPPAIR=("Ago3AS_AubS" "Ago3S_AubAS")
 OUTDIR=${INDIR}/transposon_piRNA/UA_VA
 SUMMARYOUTDIR=${INDIR}/transposon_piRNA/UA_VA_summary_from_PP
 [ ! -d ${SUMMARYOUTDIR} ] && mkdir $SUMMARYOUTDIR
