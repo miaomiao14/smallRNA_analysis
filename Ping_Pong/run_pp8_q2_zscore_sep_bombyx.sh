@@ -88,6 +88,43 @@ fi
 touch .status.${STEP}.pp8_UA_VA_repeat_summary
 STEP=$((STEP+1))
 
+
+declare -a PPPAIR=("Ago3AS_SiwiS" "Ago3S_SiwiAS")
+declare -a TARGETS=("KNOWNTE" "ReASTE")
+OUTDIR=/home/wangw1/isilon_temp/BmN4/pp8_q2_repeat_summary_from_PP
+[ ! -d ${OUTDIR} ] && mkdir $OUTDIR
+
+if [ ! -f .status.${STEP}.pp8_UA_VA_repeat_summary_from_PP ] 
+then
+for t in ${TARGETS[@]}
+do
+	for pp in ${PPPAIR[@]}
+	do
+		fn=/home/wangw1/isilon_temp/BmN4/pp8_q2_repeat/${t}_${pp}
+		file=/home/wangw1/isilon_temp/BmN4/pp8_q2_repeat_summary_from_PP/${t}_${pp}
+		[ -f ${file}.pair.count.txt ] &&  rm ${file}.pair.count.txt
+		for i in `ls ${fn}/*.VA.pp`
+		do
+			filename=${i##*/}
+			pairname=`basename ${filename} .VA.pp`
+			[ -f $i ] && awk -v gt=${pairname} '{OFS="\t"}{print gt,$0}' ${i} >${i}.gt && \
+			/home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore_from_ppscore.pl ${i}.gt $OUTDIR >> ${file}.pair.count.txt 
+		
+		done
+		#sort -k1,1 -k2,2 -k3,3 -k4,4 $file.pair.count.txt | uniq >${file}.pair.count.uniq.txt
+		#RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va ${file}.pair.count.uniq.txt ${t}_${pp} ${OUTDIR}
+		[ -f ${file}.pair.count.uniq.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va_from_ppscore_color ${file}.pair.count.uniq.txt ${t}_${pp} ${OUTDIR}
+	done
+	
+	
+done
+fi
+[ $? == 0 ] && \
+touch .status.${STEP}.pp8_UA_VA_repeat_summary
+STEP=$((STEP+1))
+
+
+
 echo -e "`date` "+$ISO_8601"\tDraw phasing analysis..." >> $LOG
 
 OUTDIR=/home/wangw1/isilon_temp/BmN4/phasing
