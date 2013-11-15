@@ -270,9 +270,9 @@ then
 			for s in ${UNIQ[@]}
 			do
 				for pp in ${PPPAIR[@]}
-	
-					fn=${OUTDIR}/${t}${s}_${o}_${pp} 
-					file=${SUMMARYOUTDIR}/${t}${s}_${o}_${pp} 
+				do
+					fn=${OUTDIR}/${t}${s}_${o}_${pp}
+					file=${SUMMARYOUTDIR}/${t}${s}_${o}_${pp}
 					[ -f ${file}.pair.count.txt ] &&  rm ${file}.pair.count.txt 
 					for i in `ls ${fn}/*.UA_VA.zscore.out`
 					do
@@ -294,8 +294,8 @@ then
 	
 				for pp in ${PPPAIR[@]}
 				do
-					fn=${OUTDIR}/${t}_${o}_${pp} 
-					file=${SUMMARYOUTDIR}/${t}_${o}_${pp} 
+					fn=${OUTDIR}/${t}_${o}_${pp}
+					file=${SUMMARYOUTDIR}/${t}_${o}_${pp}
 					[ -f ${file}.pair.count.txt ] &&  rm ${file}.pair.count.txt 
 					for i in `ls ${fn}/*.UA_VA.zscore.out`
 					do
