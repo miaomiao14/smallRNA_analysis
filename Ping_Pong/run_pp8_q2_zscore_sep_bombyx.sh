@@ -78,7 +78,7 @@ do
 		done
 		#sort -k1,1 -k2,2 -k3,3 -k4,4 $file.pair.count.txt | uniq >${file}.pair.count.uniq.txt
 		#RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va ${file}.pair.count.uniq.txt ${t}_${pp} ${OUTDIR}
-		[ -f ${file}.pair.count.uniq.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va_color ${file}.pair.count.uniq.txt ${t}_${pp} ${OUTDIR}
+		[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va_color ${file}.pair.count.txt ${t}_${pp} ${OUTDIR}
 	done
 	
 	
@@ -113,7 +113,7 @@ do
 		done
 		#sort -k1,1 -k2,2 -k3,3 -k4,4 $file.pair.count.txt | uniq >${file}.pair.count.uniq.txt
 		#RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va ${file}.pair.count.uniq.txt ${t}_${pp} ${OUTDIR}
-		[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va_from_ppscore_color ${file}.pair.count.uniq.txt ${t}_${pp} ${OUTDIR}
+		[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va_from_ppscore_color ${file}.pair.count.txt ${t}_${pp} ${OUTDIR}
 	done
 	
 	
