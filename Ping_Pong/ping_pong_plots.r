@@ -134,13 +134,14 @@ plot_ua_va_from_ppscore_color <- function (input,gt,outdir) {
 	
 	ppscore=read.table(input,F)
 	colnames(ppscore)=c("overlap","genotype","pair","NofPairs","raw");
+	pdfname=paste(outdir,"/",gt,"_UA_VA_pair_counts",".pdf",sep="")
+	pdf(pdfname,height=20,width=10,onefile=TRUE)
 	for (i in (1:length(levels(as.factor(ppscore$overlap)))))
 	{
 		ol=levels(as.factor(ppscore$overlap))[i]
 		
 		pp=as.data.frame(lapply( subset(ppscore,overlap==ol),'[',drop=TRUE))
-		pdfname=paste(outdir,"/",gt,"_UA_VA_pair_counts_d",ol,".pdf",sep="")
-		pdf(pdfname,height=20,width=10)
+		
 		layout(matrix(1:4,4,1,byrow=TRUE))
 		for (j in (1:length(levels(pp$genotype))))
 		{
@@ -180,6 +181,7 @@ plot_ua_va_from_ppscore_color <- function (input,gt,outdir) {
 			axis(4,tck=0.01,ylim=c(0,1.2*max(f2$NofPairs)),col.axis="darkgrey",col="darkgrey", line=-8)
 			#############################################
 		}
-		dev.off()
+		
 	}
+	dev.off()
 }
