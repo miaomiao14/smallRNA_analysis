@@ -212,7 +212,7 @@ fi
 
 [ $? == 0 ] && \
 touch .status.${STEP}.pp8_UA_VA_summary
-
+STEP=$((STEP+1))
 
 
 #use xkxh.norm.bed instead of transposon mappers
@@ -380,7 +380,7 @@ fi
 
 [ $? == 0 ] && \
 touch .status.${STEP}.pp8_UA_VA_summary_from_PP
-
+STEP=$((STEP+1))
 
 
 ##summary from pp score
