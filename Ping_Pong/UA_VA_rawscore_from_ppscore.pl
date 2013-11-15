@@ -36,36 +36,40 @@ $total_r=0;
 while ($line=<IN>)
 {
     chomp $line;
-    @l=split(/\t/,$line);
-    $s_n{$l[0]}{$l[1]}=$l[3];    #number of reads
-    $total_r+=$l[3];
-    $n_of_p{$l[0]}{$l[1]}=$l[2]; #number of species
-    $total_s+=$l[2];
+    ($piwipair,$overlap,$basepair,$spe,$reads)=split(/\t/,$line);
+    $n_of_r{$overlap}{$piwipair}{$basepair}=$reads;    #number of reads
+    $total_r+=$reads;
+    $n_of_s{$overlap}{$piwipair}{$basepair}=$spe; #number of species
+    $total_s+=$reads;
     #$s_b{$l[1]}{$l[0]}=$l[2];
 }
 
 close(IN);
 
- %rawnReads=();
  %nReads=();
  %nSpecies=();
- open OUT, ">$ARGV[1]/$ARGV[0].raw.pair.nReads.out";
-foreach $i (keys %s_n) 
-{        foreach $pair ( keys %pairs)
+open OUT, ">$ARGV[1]/$ARGV[0].raw.pair.nReads.out";
+foreach $overlap (keys %n_of_s) 
+{        
+	foreach $piwipp (keys %{$n_of_s{$overlap}})
+	{
+		foreach $pair ( keys %pairs)
         {
             foreach $p (@{$pairs{$pair}})
             {
-                $s_n{$i}{$p}=0 if (!exists $s_n{$i}{$p});
+                $n_of_s{$overlap}{$piwipp}{$p}=0 if (!exists $n_of_s{$overlap}{$piwipp}{$p});
                 #$rawnReads{$i}{$pair}+=$s_n{$i}{$p};
-                $nReads{$i}{$pair}+=$s_n{$i}{$p};
-				$nSpecies{$i}{$pair}+=$n_of_p{$i}{$p};
+                $nReads{$overlap}{$piwipp}{$pair}+=$n_of_s{$overlap}{$piwipp}{$p};
+				$nSpecies{$overlap}{$piwipp}{$pair}+=$n_of_r{$overlap}{$piwipp}{$p};
 	
                 
             }
-            print OUT "$i\t$pair\t$nSpecies{$i}{$pair}\t$nReads{$i}{$pair}\n";
-            print "$i\t$pair\t$nSpecies{$i}{$pair}\t$nReads{$i}{$pair}\n";
-            #$count_N{$pair}++ if ($nReads{$pair}{$i}>0);
+            print OUT "$overlap\t$piwipp\t$pair\t$nSpecies{$overlap}{$piwipp}{$pair}\t$nReads{$overlap}{$piwipp}{$pair}\n"; 
         }
+        
+        #print "$i\t$pair\t$nSpecies{$i}{$pair}\t$nReads{$i}{$pair}\n";
+
+	}
 
 }
 close(OUT);
