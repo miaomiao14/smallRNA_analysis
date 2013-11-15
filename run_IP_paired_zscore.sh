@@ -208,6 +208,50 @@ done
 touch .status.${STEP}.pp8_UA_VA_summary
 
 
+#use xkxh.norm.bed instead of transposon mappers
+OUTDIR=${INDIR}/transposon_piRNA/UA_VA_allpiRNAs
+[ ! -f ${OUT}/.status.${STEP}.all_piRNA.UA_VA ] && \
+for t in ${GT[@]}
+do
+	for o in ${OX[@]}
+	do
+		for s in ${UNIQ[@]}
+		do
+			A=${INDIR}/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz
+			B=${INDIR}/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz
+			[ -f ${A} ] && [ -f ${B} ] && \
+			jobname=${t}${s}_${o}_Ago3_Aub.pp8.q2 && \
+			jOUT=${OUTDIR}/${t}${s}_${o}_Ago3_Aub && \
+			[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
+			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "/home/wangw1/git/smallRNA_analysis/Ping_Pong/pp8_q2_ww1_zscore_sep_11052013.pl ${A} ${B} 2 fly ${jOUT} ${indexFlag} >${jOUT}/${t}${s}_${o}_Ago3_Aub.pp8.q2.UA_VA.log"
+#			
+			done
+	done
+done
+#total
+for t in ${GT[@]}
+do
+	for o in ${OX[@]}
+	do
+
+			A=${INDIR}/Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz
+			B=${INDIR}/Phil.SRA.AubIP.${t}.${o}.ovary.inserts/Phil.SRA.AubIP.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz
+			[ -f ${A} ] && [ -f ${B} ] && \
+			jobname=${t}_${o}_Ago3_Aub.pp8.q2 && \
+			jOUT=${OUTDIR}/${t}_${o}_Ago3_Aub && \
+			[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
+			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "/home/wangw1/git/smallRNA_analysis/Ping_Pong/pp8_q2_ww1_zscore_sep_11052013.pl ${A} ${B} 2 fly ${jOUT} ${indexFlag} >${jOUT}/${t}_${o}_Ago3_Aub.pp8.q2.UA_VA.log"
+
+	done
+done
+[ $? == 0 ] && \
+touch ${OUT}/.status.${STEP}.all_piRNA.UA_VA
+STEP=$((STEP+1))
+
+
+
+
+
 #IPed piRNA abundance normalzation
 
 
