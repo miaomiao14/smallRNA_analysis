@@ -85,7 +85,7 @@ done
 [ $? == 0 ] && \
 	touch ${OUT}/.status.transposon_piRNA.S_AS 
 echo -e "`date` "+$ISO_8601"\tseparate the sense and antisense transposon mappers in norm.bed format done!" >> $LOG	
-
+STEP=$((STEP+1))
 
 echo -e "`date` "+$ISO_8601"\trun pp8 UA and VA..." >> $LOG
 declare -a GT=("w1" "AubCDrescue" "AubWTrescue" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "ago3Hets" "aubHets" "qinHets" "nosAgo3CDrescue" "nosAgo3WTrescue")
