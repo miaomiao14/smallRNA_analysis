@@ -107,7 +107,7 @@ do
 		do
 			filename=${i##*/}
 			pairname=`basename ${filename} .VA.pp`
-			arrName=(${pairname//-/ })
+			arrName=(${pairname//\./ })
 			pairnameNew=${arrName[1]}"-"${arrName[0]}
 				
 			[ -f $i ] && awk -v gt=${pairnameNew} '{OFS="\t"}{print gt,$0}' ${i} >${i}.gt && \
@@ -123,7 +123,7 @@ do
 done
 fi
 [ $? == 0 ] && \
-touch .status.${STEP}.pp8_UA_VA_repeat_summary
+touch .status.${STEP}.pp8_UA_VA_repeat_summary_from_PP
 STEP=$((STEP+1))
 
 

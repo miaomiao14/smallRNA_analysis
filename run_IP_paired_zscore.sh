@@ -340,7 +340,7 @@ do
 				do
 				filename=${i##*/}
 				pairname=`basename ${filename} .VA.pp`
-				arrName=(${pairname//-/ })
+				arrName=(${pairname//\./ })
 				pairnameNew=${arrName[1]}"-"${arrName[0]}
 				
 				[ -f $i ] && awk -v gt=${pairnameNew} '{OFS="\t"}{print gt,$0}' ${i} >${i}.gt && \
@@ -368,7 +368,7 @@ do
 				do
 					filename=${i##*/}
 					pairname=`basename ${filename} .VA.pp`
-					arrName=(${pairname//-/ })
+					arrName=(${pairname//\./ })
 					pairnameNew=${arrName[1]}"-"${arrName[0]}
 				
 					[ -f $i ] && awk -v gt=${pairnameNew} '{OFS="\t"}{print gt,$0}' ${i} >${i}.gt && \
@@ -411,7 +411,7 @@ then
 					do
 					filename=${i##*/}
 					pairname=`basename ${filename} .VA.pp`
-					arrName=(${pairname//-/ })
+					arrName=(${pairname//\./ })
 					pairnameNew=${arrName[1]}"-"${arrName[0]}
 				
 					[ -f $i ] && awk -v gt=${pairnameNew} '{OFS="\t"}{print gt,$0}' ${i} >${i}.gt && \
@@ -441,7 +441,7 @@ then
 					do
 						filename=${i##*/}
 					pairname=`basename ${filename} .VA.pp`
-					arrName=(${pairname//-/ })
+					arrName=(${pairname//\./ })
 					pairnameNew=${arrName[1]}"-"${arrName[0]}
 				
 					[ -f $i ] && awk -v gt=${pairnameNew} '{OFS="\t"}{print gt,$0}' ${i} >${i}.gt && \
