@@ -279,7 +279,7 @@ foreach ($n=1;$n<=20;$n++)
     $std0=&std(values %{$s{$p}});
     if ($std0>0 && $count_N0{$p}>=5) { $Z0{$p}=($X0{$p}-&mean(values %{$s{$p}}))/$std0;} else {$Z0{$p}=-10;}
     $n_of_species=scalar (keys %{$speciesn10{$p}});
-    print OUA "$file2\-$file1\t$p\t$n_of_species\t$Z0{$p}\n"; ##file2 is the guide and file1 is the target
+    print OUA "$file2\-$file1\t$p\t$n_of_species\t$X0{$p}\n"; ##file2 is the guide and file1 is the target
     }
    
    if ($Z!=-10) { print OUT1 "$file2\-$file1\t",$X/$total{$file1}/$total{$file2}*1000000;} else { print OUT1 "$file2\-$file1\tNA";}
@@ -379,7 +379,7 @@ foreach ($n=1;$n<=20;$n++)
     $std0=&std(values %{$s{$p}});
     if ($std0>0 && $count_N0{$p}>=5) { $Z0{$p}=($X0{$p}-&mean(values %{$s{$p}}))/$std0;} else {$Z0{$p}=-10;}
     $n_of_species=scalar (keys %{$speciesn10{$p}}); #this is wrong, only records n=20
-    print OUA "$file1\-$file2\t$p\t$n_of_species\t$Z0{$p}\n"; 
+    print OUA "$file1\-$file2\t$p\t$n_of_species\t$X0{$p}\n"; 
     }
    
    if ($Z!=-10) { print OUT1 "$file1\-$file2\t",$X/$total{$file1}/$total{$file2}*1000000;} else { print OUT1 "$file1\-$file2\tNA";}

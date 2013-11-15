@@ -107,7 +107,10 @@ do
 		do
 			filename=${i##*/}
 			pairname=`basename ${filename} .VA.pp`
-			[ -f $i ] && awk -v gt=${pairname} '{OFS="\t"}{print gt,$0}' ${i} >${i}.gt && \
+			arrName=(${pairname//-/ })
+			pairnameNew=${arrName[1]}"-"${arrName[0]}
+				
+			[ -f $i ] && awk -v gt=${pairnameNew} '{OFS="\t"}{print gt,$0}' ${i} >${i}.gt && \
 			/home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore_from_ppscore.pl ${i}.gt $OUTDIR >> ${file}.pair.count.txt 
 		
 		done
