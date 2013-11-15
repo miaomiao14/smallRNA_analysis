@@ -32,9 +32,10 @@ STEP=$((STEP+1))
 # run pp8_q2_ww1_zscore_sep_11052013.pl for UA_VA
 declare -a GT=("Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell" "Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell" "Yuki.SRA.TOTAL.DMSO.ox.BmN4cell")
 declare -a TARGETS=("GENE" "KNOWNTE" "ReASTE")
-OUTDIR=/home/wangw1/isilon_temp/BmN4/pp8_q2
-touch .status.${STEP}.pp8_UA_VA
-[ ! -f .status.${STEP}.pp8_UA_VA ] && \
+OUTDIR=/home/wangw1/isilon_temp/BmN4/pp8_q2_repeat
+
+if [ ! -f .status.${STEP}.pp8_UA_VA_repeat ] 
+then
 for t in ${TARGETS[@]}
 do
 	fasta=/home/wangw1/pipeline_bm/common/silkgenome.fa
@@ -52,21 +53,24 @@ do
 	[ ! -d ${OUT} ] && mkdir -p ${OUT}
 	/home/wangw1/bin/submitsge 24 ${jobname} $OUTDIR "/home/wangw1/git/smallRNA_analysis/Ping_Pong/pp8_q2_ww1_zscore_sep_11052013.pl ${A} ${B} 2 bombyx ${OUT} ${indexFlag} >${OUTDIR}/${t}_Ago3S_SiwiAS.pp8.q2.UA_VA.log"	
 done
+fi
 [ $? == 0 ] && \
-touch .status.${STEP}.pp8_UA_VA
+touch .status.${STEP}.pp8_UA_VA_repeat
+STEP=$((STEP+1))
 
 declare -a PPPAIR=("Ago3AS_SiwiS" "Ago3S_SiwiAS")
 declare -a TARGETS=("KNOWNTE" "ReASTE")
-OUTDIR=/home/wangw1/isilon_temp/BmN4/pp8_q2_summary
+OUTDIR=/home/wangw1/isilon_temp/BmN4/pp8_q2_repeat_summary
 [ ! -d ${OUTDIR} ] && mkdir $OUTDIR
-touch .status.${STEP}.pp8_UA_VA_summary
-[ ! -f .status.${STEP}.pp8_UA_VA_summary ] && \
+
+if [ ! -f .status.${STEP}.pp8_UA_VA_repeat_summary ] 
+then
 for t in ${TARGETS[@]}
 do
 	for pp in ${PPPAIR[@]}
 	do
-		fn=/home/wangw1/isilon_temp/BmN4/pp8_q2/${t}_${pp}
-		file=/home/wangw1/isilon_temp/BmN4/pp8_q2_summary/${t}_${pp}
+		fn=/home/wangw1/isilon_temp/BmN4/pp8_q2_repeat/${t}_${pp}
+		file=/home/wangw1/isilon_temp/BmN4/pp8_q2_repeat_summary/${t}_${pp}
 		[ -f ${file}.pair.count.txt ] &&  rm ${file}.pair.count.txt
 		for i in `ls ${fn}/*.UA_VA.zscore.out`
 		do
@@ -79,15 +83,18 @@ do
 	
 	
 done
+fi
 [ $? == 0 ] && \
-touch .status.${STEP}.pp8_UA_VA_summary
-
+touch .status.${STEP}.pp8_UA_VA_repeat_summary
+STEP=$((STEP+1))
 
 echo -e "`date` "+$ISO_8601"\tDraw phasing analysis..." >> $LOG
 
 OUTDIR=/home/wangw1/isilon_temp/BmN4/phasing
 [ ! -d $OUTDIR ] && mkdir -p ${OUTDIR}
-[ ! -f .status.${STEP}.transposon_piRNA.phasing ] && \
+touch .status.${STEP}.transposon_piRNA.phasing
+if [ ! -f .status.${STEP}.transposon_piRNA.phasing ] 
+then
 #paraFile=${OUTDIR13}/${RANDOM}.piRNAphasing.para
 
 for i in `ls ${INDIR}/*.TOTAL.*.inserts/*.norm.bed.gz`
@@ -98,6 +105,7 @@ do
 	sample=${samplename/DMSO.ox.BmN4cell.bmv2v0.all.all.xrRNA.xtRNA.xh./}
 	/home/wangw1/bin/submitsge 8 ${sample} $OUTDIR "${PIPELINE_DIRECTORY}/run_distance_analysis.sh -i ${i} -o $OUTDIR -t normbed" 
 done
+fi
 [ $? == 0 ] && \
 touch .status.${STEP}.transposon_piRNA.phasing
 
