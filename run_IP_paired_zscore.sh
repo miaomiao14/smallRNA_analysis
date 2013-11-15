@@ -341,7 +341,7 @@ do
 				filename=${i##*/}
 				pairname=`basename ${filename} .VA.pp`
 				[ -f $i ] && awk -v gt=${pairname} '{OFS="\t"}{print gt,$0}' ${i} >${i}.gt && \
-				/home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore_from_ppscoe.pl ${i}.gt $OUTDIR >> ${file}.pair.count.txt 
+				/home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore_from_ppscore.pl ${i}.gt $OUTDIR >> ${file}.pair.count.txt 
 				done
 				#sort -k1,1 -k2,2 -k3,3 -k4,4 $file.pair.count.txt | uniq >${file}.pair.count.uniq.txt
 				#[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va ${file}.pair.count.txt ${t}${s}_${o}_${pp} ${SUMMARYOUTDIR}
