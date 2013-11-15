@@ -48,7 +48,7 @@ close(IN);
 
  %nReads=();
  %nSpecies=();
-open OUT, ">$ARGV[1]/$ARGV[0].raw.pair.nReads.out";
+open OUT, ">$ARGV[1]/$ARGV[0].raw.pair.nSpecies.nReads.out";
 foreach $overlap (keys %n_of_s) 
 {        
 	foreach $piwipp (keys %{$n_of_s{$overlap}})
@@ -59,12 +59,13 @@ foreach $overlap (keys %n_of_s)
             {
                 $n_of_s{$overlap}{$piwipp}{$p}=0 if (!exists $n_of_s{$overlap}{$piwipp}{$p});
                 #$rawnReads{$i}{$pair}+=$s_n{$i}{$p};
-                $nReads{$overlap}{$piwipp}{$pair}+=$n_of_s{$overlap}{$piwipp}{$p};
-				$nSpecies{$overlap}{$piwipp}{$pair}+=$n_of_r{$overlap}{$piwipp}{$p};
+                $nReads{$overlap}{$piwipp}{$pair}+=$n_of_r{$overlap}{$piwipp}{$p};
+				$nSpecies{$overlap}{$piwipp}{$pair}+=$n_of_s{$overlap}{$piwipp}{$p};
 	
                 
             }
             print OUT "$overlap\t$piwipp\t$pair\t$nSpecies{$overlap}{$piwipp}{$pair}\t$nReads{$overlap}{$piwipp}{$pair}\n"; 
+            print "$overlap\t$piwipp\t$pair\t$nSpecies{$overlap}{$piwipp}{$pair}\t$nReads{$overlap}{$piwipp}{$pair}\n";
         }
         
         #print "$i\t$pair\t$nSpecies{$i}{$pair}\t$nReads{$i}{$pair}\n";
