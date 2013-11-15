@@ -96,7 +96,7 @@ declare -a UNIQ=("uniq" "shared")
 #shared
 indexFlag=1 #to indicate we need to build the index or not
 	
-
+touch ${OUT}/.status.${STEP}.transposon_piRNA.UA_VA
 [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.UA_VA ] && \
 for t in ${GT[@]}
 do
@@ -148,6 +148,40 @@ do
 done
 [ $? == 0 ] && \
 touch ${OUT}/.status.${STEP}.transposon_piRNA.UA_VA
+STEP=$((STEP+1))
+
+
+declare -a PPPAIR=("Ago3AS_AubS" "Ago3S_AubAS")
+
+OUTDIR=${INDIR}/transposon_piRNA/UA_VA
+SUMMARYOUTDIR=${INDIR}/transposon_piRNA//UA_VA_summary
+[ ! -d ${SUMMARYOUTDIR} ] && mkdir $SUMMARYOUTDIR
+touch .status.${STEP}.pp8_UA_VA_summary
+[ ! -f .status.${STEP}.pp8_UA_VA_summary ] && \
+for t in ${GT[@]}
+do
+	for o in ${OX[@]}
+	do
+		for s in ${UNIQ[@]}
+		do
+			for pp in ${PPPAIR[@]}
+			do
+				fn=${OUTDIR}/${t}${s}_${o}_${pp}
+				file=${OUTDIR}/${t}${s}_${o}_${pp}
+				[ -f ${file}.pair.count.txt ] &&  rm ${file}.pair.count.txt
+				for i in `ls ${fn}/*.UA_VA.zscore.out`
+				do
+					/home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore.pl ${i} $OUTDIR >> ${file}.pair.count.txt
+				done
+				#sort -k1,1 -k2,2 -k3,3 -k4,4 $file.pair.count.txt | uniq >${file}.pair.count.uniq.txt
+				RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va ${file}.pair.count.uniq.txt ${t}${s}_${o}_${pp} ${SUMMARYOUTDIR}
+				RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va_color ${file}.pair.count.uniq.txt ${t}${s}_${o}_${pp} ${SUMMARYOUTDIR}
+			done
+		done
+	done		
+done
+[ $? == 0 ] && \
+touch .status.${STEP}.pp8_UA_VA_summary
 
 
 #IPed piRNA abundance normalzation
