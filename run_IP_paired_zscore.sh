@@ -213,67 +213,6 @@ fi
 [ $? == 0 ] && \
 touch .status.${STEP}.pp8_UA_VA_summary
 
-OUTDIR=${INDIR}/transposon_piRNA/UA_VA
-SUMMARYOUTDIR=${INDIR}/transposon_piRNA/UA_VA_summary_from_PP
-[ ! -d ${SUMMARYOUTDIR} ] && mkdir $SUMMARYOUTDIR
-
-if [ ! -f .status.${STEP}.pp8_UA_VA_summary_from_PP ] 
-then
-for t in ${GT[@]}
-do
-	for o in ${OX[@]}
-	do
-		for s in ${UNIQ[@]}
-		do
-			for pp in ${PPPAIR[@]}
-			do
-				fn=${OUTDIR}/${t}${s}_${o}_${pp} 
-				file=${SUMMARYOUTDIR}/${t}${s}_${o}_${pp} 
-				[ -f ${file}.pair.count.txt ] &&  rm ${file}.pair.count.txt 
-				for i in `ls ${fn}/*.VA.pp`
-				do
-				filename=${i##*/}
-				pairname=`basename ${filename} .VA.pp`
-				[ -f $i ] && awk -v gt=${pairname} '{OFS="\t"}{print gt,$0}' >${i}.gt && \
-				/home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore_from_ppscoe.pl ${i}.gt $OUTDIR >> ${file}.pair.count.txt 
-				done
-				#sort -k1,1 -k2,2 -k3,3 -k4,4 $file.pair.count.txt | uniq >${file}.pair.count.uniq.txt
-				#[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va ${file}.pair.count.txt ${t}${s}_${o}_${pp} ${SUMMARYOUTDIR}
-				[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va_from_ppscore_color ${file}.pair.count.txt ${t}${s}_${o}_${pp} ${SUMMARYOUTDIR}
-			done
-		done
-	done		
-done
-
-for t in ${GT[@]}
-do
-	for o in ${OX[@]}
-	do
-
-			for pp in ${PPPAIR[@]}
-			do
-				fn=${OUTDIR}/${t}_${o}_${pp} 
-				file=${SUMMARYOUTDIR}/${t}_${o}_${pp} 
-				[ -f ${file}.pair.count.txt ] &&  rm ${file}.pair.count.txt 
-				for i in `ls ${fn}/*.VA.pp`
-				do
-					filename=${i##*/}
-					pairname=`basename ${filename} .VA.pp`
-					[ -f $i ] && awk -v gt=${pairname} '{OFS="\t"}{print gt,$0}' >${i}.gt && \
-					/home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore_from_ppscore.pl ${i}.gt $OUTDIR >> ${file}.pair.count.txt 
-				done
-				#sort -k1,1 -k2,2 -k3,3 -k4,4 $file.pair.count.txt | uniq >${file}.pair.count.uniq.txt
-				#[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va ${file}.pair.count.txt ${t}_${o}_${pp} ${SUMMARYOUTDIR}
-				[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va_from_ppscore_color ${file}.pair.count.txt ${t}_${o}_${pp} ${SUMMARYOUTDIR} 
-			done
-
-	done		
-done
-fi
-
-
-[ $? == 0 ] && \
-touch .status.${STEP}.pp8_UA_VA_summary_from_PP
 
 
 #use xkxh.norm.bed instead of transposon mappers
@@ -378,6 +317,73 @@ touch .status.${STEP}.pp8_all_piRNA.UA_VA_summary
 STEP=$((STEP+1))
 
 
+##summary from pp score
+
+OUTDIR=${INDIR}/transposon_piRNA/UA_VA
+SUMMARYOUTDIR=${INDIR}/transposon_piRNA/UA_VA_summary_from_PP
+[ ! -d ${SUMMARYOUTDIR} ] && mkdir $SUMMARYOUTDIR
+
+if [ ! -f .status.${STEP}.pp8_UA_VA_summary_from_PP ] 
+then
+for t in ${GT[@]}
+do
+	for o in ${OX[@]}
+	do
+		for s in ${UNIQ[@]}
+		do
+			for pp in ${PPPAIR[@]}
+			do
+				fn=${OUTDIR}/${t}${s}_${o}_${pp} 
+				file=${SUMMARYOUTDIR}/${t}${s}_${o}_${pp} 
+				[ -f ${file}.pair.count.txt ] &&  rm ${file}.pair.count.txt 
+				for i in `ls ${fn}/*.VA.pp`
+				do
+				filename=${i##*/}
+				pairname=`basename ${filename} .VA.pp`
+				[ -f $i ] && awk -v gt=${pairname} '{OFS="\t"}{print gt,$0}' >${i}.gt && \
+				/home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore_from_ppscoe.pl ${i}.gt $OUTDIR >> ${file}.pair.count.txt 
+				done
+				#sort -k1,1 -k2,2 -k3,3 -k4,4 $file.pair.count.txt | uniq >${file}.pair.count.uniq.txt
+				#[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va ${file}.pair.count.txt ${t}${s}_${o}_${pp} ${SUMMARYOUTDIR}
+				[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va_from_ppscore_color ${file}.pair.count.txt ${t}${s}_${o}_${pp} ${SUMMARYOUTDIR}
+			done
+		done
+	done		
+done
+
+for t in ${GT[@]}
+do
+	for o in ${OX[@]}
+	do
+
+			for pp in ${PPPAIR[@]}
+			do
+				fn=${OUTDIR}/${t}_${o}_${pp} 
+				file=${SUMMARYOUTDIR}/${t}_${o}_${pp} 
+				[ -f ${file}.pair.count.txt ] &&  rm ${file}.pair.count.txt 
+				for i in `ls ${fn}/*.VA.pp`
+				do
+					filename=${i##*/}
+					pairname=`basename ${filename} .VA.pp`
+					[ -f $i ] && awk -v gt=${pairname} '{OFS="\t"}{print gt,$0}' >${i}.gt && \
+					/home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore_from_ppscore.pl ${i}.gt $OUTDIR >> ${file}.pair.count.txt 
+				done
+				#sort -k1,1 -k2,2 -k3,3 -k4,4 $file.pair.count.txt | uniq >${file}.pair.count.uniq.txt
+				#[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va ${file}.pair.count.txt ${t}_${o}_${pp} ${SUMMARYOUTDIR}
+				[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va_from_ppscore_color ${file}.pair.count.txt ${t}_${o}_${pp} ${SUMMARYOUTDIR} 
+			done
+
+	done		
+done
+fi
+
+
+[ $? == 0 ] && \
+touch .status.${STEP}.pp8_UA_VA_summary_from_PP
+
+
+
+##summary from pp score
 declare -a PPPAIR=("Ago3_Aub")
 OUTDIR=${INDIR}/transposon_piRNA/UA_VA_allpiRNAs
 SUMMARYOUTDIR=${INDIR}/transposon_piRNA/UA_VA_allpiRNAs_summary_from_PP
