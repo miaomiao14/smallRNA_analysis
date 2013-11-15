@@ -167,7 +167,7 @@ do
 			for pp in ${PPPAIR[@]}
 			do
 				fn=${OUTDIR}/${t}${s}_${o}_${pp}
-				file=${OUTDIR}/${t}${s}_${o}_${pp}
+				file=${SUMMARYOUTDIR}/${t}${s}_${o}_${pp}
 				[ -f ${file}.pair.count.txt ] &&  rm ${file}.pair.count.txt
 				for i in `ls ${fn}/*.UA_VA.zscore.out`
 				do
@@ -188,7 +188,7 @@ do
 			for pp in ${PPPAIR[@]}
 			do
 				fn=${OUTDIR}/${t}_${o}_${pp}
-				file=${OUTDIR}/${t}_${o}_${pp}
+				file=${SUMMARYOUTDIR}/${t}_${o}_${pp}
 				[ -f ${file}.pair.count.txt ] &&  rm ${file}.pair.count.txt
 				for i in `ls ${fn}/*.UA_VA.zscore.out`
 				do
