@@ -166,12 +166,12 @@ do
 		do
 			for pp in ${PPPAIR[@]}
 			do
-				fn=${OUTDIR}/${t}${s}_${o}_${pp}
-				file=${SUMMARYOUTDIR}/${t}${s}_${o}_${pp}
-				[ -f ${file}.pair.count.txt ] &&  rm ${file}.pair.count.txt
+				fn=${OUTDIR}/${t}${s}_${o}_${pp} && \
+				file=${SUMMARYOUTDIR}/${t}${s}_${o}_${pp} && \
+				[ -f ${file}.pair.count.txt ] &&  rm ${file}.pair.count.txt && \
 				for i in `ls ${fn}/*.UA_VA.zscore.out`
 				do
-					[ -f $i ] && /home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore.pl ${i} $OUTDIR >> ${file}.pair.count.txt
+				[ -f $i ] && /home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore.pl ${i} $OUTDIR >> ${file}.pair.count.txt && \
 				done
 				#sort -k1,1 -k2,2 -k3,3 -k4,4 $file.pair.count.txt | uniq >${file}.pair.count.uniq.txt
 				#[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va ${file}.pair.count.txt ${t}${s}_${o}_${pp} ${SUMMARYOUTDIR}
@@ -180,6 +180,7 @@ do
 		done
 	done		
 done
+[ ! -f .status.${STEP}.pp8_UA_VA_summary ] && \
 for t in ${GT[@]}
 do
 	for o in ${OX[@]}
@@ -187,16 +188,16 @@ do
 
 			for pp in ${PPPAIR[@]}
 			do
-				fn=${OUTDIR}/${t}_${o}_${pp}
-				file=${SUMMARYOUTDIR}/${t}_${o}_${pp}
-				[ -f ${file}.pair.count.txt ] &&  rm ${file}.pair.count.txt
+				fn=${OUTDIR}/${t}_${o}_${pp} && \
+				file=${SUMMARYOUTDIR}/${t}_${o}_${pp} && \
+				[ -f ${file}.pair.count.txt ] &&  rm ${file}.pair.count.txt && \
 				for i in `ls ${fn}/*.UA_VA.zscore.out`
 				do
-					[ -f $i ] && /home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore.pl ${i} $OUTDIR >> ${file}.pair.count.txt
+					[ -f $i ] && /home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore.pl ${i} $OUTDIR >> ${file}.pair.count.txt && \
 				done
 				#sort -k1,1 -k2,2 -k3,3 -k4,4 $file.pair.count.txt | uniq >${file}.pair.count.uniq.txt
 				#[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va ${file}.pair.count.txt ${t}_${o}_${pp} ${SUMMARYOUTDIR}
-				[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va_color ${file}.pair.count.txt ${t}_${o}_${pp} ${SUMMARYOUTDIR}
+				[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va_color ${file}.pair.count.txt ${t}_${o}_${pp} ${SUMMARYOUTDIR} && \
 			done
 
 	done		
@@ -217,8 +218,8 @@ do
 	do
 		for s in ${UNIQ[@]}
 		do
-			A=${INDIR}/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz
-			B=${INDIR}/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz
+			A=${INDIR}/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz && \
+			B=${INDIR}/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz && \
 			[ -f ${A} ] && [ -f ${B} ] && \
 			jobname=${t}${s}_${o}_Ago3_Aub.pp8.q2 && \
 			jOUT=${OUTDIR}/${t}${s}_${o}_Ago3_Aub && \
@@ -229,13 +230,14 @@ do
 	done
 done
 #total
+[ ! -f ${OUT}/.status.${STEP}.all_piRNA.UA_VA ] && \
 for t in ${GT[@]}
 do
 	for o in ${OX[@]}
 	do
 
-			A=${INDIR}/Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz
-			B=${INDIR}/Phil.SRA.AubIP.${t}.${o}.ovary.inserts/Phil.SRA.AubIP.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz
+			A=${INDIR}/Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz && \
+			B=${INDIR}/Phil.SRA.AubIP.${t}.${o}.ovary.inserts/Phil.SRA.AubIP.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz && \
 			[ -f ${A} ] && [ -f ${B} ] && \
 			jobname=${t}_${o}_Ago3_Aub.pp8.q2 && \
 			jOUT=${OUTDIR}/${t}_${o}_Ago3_Aub && \
