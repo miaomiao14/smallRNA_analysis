@@ -459,6 +459,82 @@ fi
 touch .status.${STEP}.pp8_all_piRNA.UA_VA_summary_from_PP
 STEP=$((STEP+1))
 
+#uniq bound piRNAs exlude Piwi bound(less piRNA input, to be consistent with the analysis done in 2012)
+#use xkxh.norm.bed instead of transposon mappers
+INDIR=/home/wangw1/nearline/mpo/IP
+declare -a GT=("ago3Hets" "aubHets" "qinHets" "wt")
+declare -a OX=("unox")
+declare -a UNIQ=("uniq")
+OUTDIR=${INDIR}/transposon_piRNA/UA_VA_allpiRNAs_exclude_Piwi
+#touch ${OUT}/.status.${STEP}.all_piRNA_exclude_Piwi.UA_VA
+if [ ! -f ${OUT}/.status.${STEP}.all_piRNA_exclude_Piwi.UA_VA ]
+then 
+	for t in ${GT[@]}
+	do
+		for o in ${OX[@]}
+		do
+			for s in ${UNIQ[@]}
+			do
+				A=${INDIR}/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz 
+				B=${INDIR}/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz 
+				[ -f ${A} ] && [ -f ${B} ] && \
+				jobname=${t}${s}_${o}_Ago3_Aub.pp8.q2 && \
+				jOUT=${OUTDIR}/${t}${s}_${o}_Ago3_Aub && \
+				[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
+				/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "/home/wangw1/git/smallRNA_analysis/Ping_Pong/pp8_q2_ww1_zscore_sep_11052013.pl ${A} ${B} 2 fly ${jOUT} ${indexFlag} >${jOUT}/${t}${s}_${o}_Ago3_Aub.pp8.q2.UA_VA.log"
+#			
+				done
+		done
+	done
+
+fi
+[ $? == 0 ] && \
+touch ${OUT}/.status.${STEP}.all_piRNA_exclude_Piwi.UA_VA
+STEP=$((STEP+1))
+
+
+declare -a PPPAIR=("Ago3_Aub")
+OUTDIR=${INDIR}/transposon_piRNA/UA_VA_allpiRNAs_exclude_Piwi
+SUMMARYOUTDIR=${INDIR}/transposon_piRNA/UA_VA_allpiRNAs_exclude_Piwi_summary
+[ ! -d ${SUMMARYOUTDIR} ] && mkdir $SUMMARYOUTDIR
+if [ ! -f .status.${STEP}.pp8_all_piRNA_exclude_Piwi.UA_VA_summary ] 
+then
+	for t in ${GT[@]}
+	do
+		for o in ${OX[@]}
+		do
+			for s in ${UNIQ[@]}
+			do
+				for pp in ${PPPAIR[@]}
+				do
+					fn=${OUTDIR}/${t}${s}_${o}_${pp}
+					file=${SUMMARYOUTDIR}/${t}${s}_${o}_${pp}
+					[ -f ${file}.pair.count.txt ] &&  rm ${file}.pair.count.txt 
+					for i in `ls ${fn}/*.VA.pp`
+					do
+						filename=${i##*/}
+					pairname=`basename ${filename} .VA.pp`
+					arrName=(${pairname//\./ })
+					pairnameNew=${arrName[1]}"-"${arrName[0]}
+				
+					[ -f $i ] && awk -v gt=${pairnameNew} '{OFS="\t"}{print gt,$0}' ${i} >${i}.gt && \
+					/home/wangw1/git/smallRNA_analysis/Ping_Pong/UA_VA_rawscore_from_ppscore.pl ${i}.gt $OUTDIR >> ${file}.pair.count.txt
+					#sort -k1,1 -k2,2 -k3,3 -k4,4 $file.pair.count.txt | uniq >${file}.pair.count.uniq.txt
+					#[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va ${file}.pair.count.txt ${t}${s}_${o}_${pp} ${SUMMARYOUTDIR}
+					[ -f ${file}.pair.count.txt ] && RRR /home/wangw1/git/smallRNA_analysis/Ping_Pong/ping_pong_plots.r plot_ua_va_from_ppscore_color ${file}.pair.count.txt ${t}${s}_${o}_${pp} ${SUMMARYOUTDIR}
+	
+				done
+			done
+		done		
+	done
+
+fi
+[ $? == 0 ] && \
+touch .status.${STEP}.pp8_all_piRNA_exclude_Piwi.UA_VA_summary
+STEP=$((STEP+1))
+
+
+
 #IPed piRNA abundance normalzation
 
 
