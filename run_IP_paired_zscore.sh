@@ -495,8 +495,8 @@ STEP=$((STEP+1))
 
 
 declare -a PPPAIR=("Ago3_Aub")
-OUTDIR=${INDIR}/transposon_piRNA/UA_VA_allpiRNAs_exclude_Piwi
-SUMMARYOUTDIR=${INDIR}/transposon_piRNA/UA_VA_allpiRNAs_exclude_Piwi_summary
+OUTDIR=/home/wangw1/isilon_temp/ipsmRNA/jia_pipeline_results/transposon_piRNA/UA_VA_allpiRNAs_exclude_Piwi
+SUMMARYOUTDIR=/home/wangw1/isilon_temp/ipsmRNA/jia_pipeline_results/transposon_piRNA/UA_VA_allpiRNAs_exclude_Piwi_summary
 [ ! -d ${SUMMARYOUTDIR} ] && mkdir $SUMMARYOUTDIR
 #touch .status.${STEP}.pp8_all_piRNA_exclude_Piwi.UA_VA_summary
 if [ ! -f .status.${STEP}.pp8_all_piRNA_exclude_Piwi.UA_VA_summary ] 
