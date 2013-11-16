@@ -465,7 +465,8 @@ INDIR=/home/wangw1/nearline/mpo/IP
 declare -a GT=("ago3Hets" "aubHets" "qinHets" "wt")
 declare -a OX=("unox")
 declare -a UNIQ=("uniq")
-OUTDIR=${INDIR}/transposon_piRNA/UA_VA_allpiRNAs_exclude_Piwi
+OUTDIR=/home/wangw1/isilon_temp/ipsmRNA/jia_pipeline_results/transposon_piRNA/UA_VA_allpiRNAs_exclude_Piwi
+[ ! -d ${OUTDIR} ] && mkdir $OUTDIR
 #touch ${OUT}/.status.${STEP}.all_piRNA_exclude_Piwi.UA_VA
 if [ ! -f ${OUT}/.status.${STEP}.all_piRNA_exclude_Piwi.UA_VA ]
 then 
@@ -497,6 +498,7 @@ declare -a PPPAIR=("Ago3_Aub")
 OUTDIR=${INDIR}/transposon_piRNA/UA_VA_allpiRNAs_exclude_Piwi
 SUMMARYOUTDIR=${INDIR}/transposon_piRNA/UA_VA_allpiRNAs_exclude_Piwi_summary
 [ ! -d ${SUMMARYOUTDIR} ] && mkdir $SUMMARYOUTDIR
+#touch .status.${STEP}.pp8_all_piRNA_exclude_Piwi.UA_VA_summary
 if [ ! -f .status.${STEP}.pp8_all_piRNA_exclude_Piwi.UA_VA_summary ] 
 then
 	for t in ${GT[@]}
