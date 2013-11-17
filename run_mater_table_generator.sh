@@ -13,73 +13,59 @@ export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 export PATH=${PIPELINE_DIRECTORY}/:$PATH
 
 INDIR=$1 #this is the folder store all pipeline results outmost folders
-OUT=${2}/materTables
+OUT=${1}/masterTables
 LOG=${OUT}/log
 
-declare -a NORMFACTORTYPE=("nnc" "seqDep")
+declare -a NORMFACTORTYPE=("nnc")
 nnc=4 #the column in the stat file
 seqDep=2 #the column in the stat file
 
 STEP=1
 
 #get normalized total transposon mappers, transposon piRNAs, transposon sense piRNAs and transposon antisense piRNAs,sense fraction
-echo -e "`date` "+$ISO_8601"\tDraw paired abundance,sense_fraction of transposon piRNAs" >> $LOG
+
+TRNLISTCOLNAMES=("total" "total_sense" "total_antisense" "total_sense_fraction" "siRNA" "siRNA_sense" "siRNA_antisense" "siRNA_sense_fraction" "piRNA" "piRNA_sense" "piRNA_antisense" "piRNA_sense_fraction")
+echo -e "`date` "+$ISO_8601"\tcreate master table for all genotypes abundance,sense_fraction of transposon piRNAs" >> $LOG
 OUTDIR=${OUT}/transposon_piRNAs_abundance_senseFraction
 [ ! -d $OUTDIR ] && mkdir -p ${OUTDIR}
-[ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.abundance_senseFraction ] && \
-paraFile=${OUTDIR}/${RANDOM}.abundance_senseFraction.para && \
-
-for i in `ls ${INDIR}/*.inserts/output/*.transposon.list`
-do 
-
-	FILE=${i##*/}
-	insertsname=`basename $FILE .transposon.list`
-	for NF in "${NORMFACTORTYPE[@]}"
-	do
-	normFactor=`cat ${INDIR}/${t}/output/${t}_stats_table_reads|tail -1|cut -f${!NF}`
-	colNum=`awk '{print NF}' ${i} | sort -nu | tail -n 1`
-	done
-#polarHistogram for sense fraction
-${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/polarHistogram_sense_fraction.r plot_PolarHisto_senseFraction $i ${OUTDIR1}
-done
-
-
-for g in "${GROUPGT[@]}"
-do
-	SUBGROUP="$g[@]"
-	for NF in "${NORMFACTORTYPE[@]}"
-	do
-
-		count=1
-		transposonListFile=${OUTDIR}/${g}.${NF}.transposon.list
-		rm ${OUTDIR}/${g}.${NF}.transposon.list
-		transposonListUniqFile=${OUTDIR}/${g}.${NF}.uniqmap.transposon.list
-		rm ${OUTDIR}/${g}.${NF}.uniqmap.transposon.list
-
-		nnc=4 #the column in the stat file
-		seqDep=2 #the column in the stat file
-		for t in ${!SUBGROUP}
+if [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.abundance_senseFraction ]
+then
+	paraFile=${OUTDIR}/${RANDOM}.abundance_senseFraction.para && \
+	
+	for i in `ls ${INDIR}/*.inserts/output/*.transposon.list `
+	do 
+		
+		FILE=${i##*/}
+		insertsname=`basename $FILE .transposon.list` #genotype
+		for NF in "${NORMFACTORTYPE[@]}"
 		do
-			normFactor=`cat ${INDIR}/${t}/output/${t}_stats_table_reads|tail -1|cut -f${!NF}`
-	
-			tu=${t}.uniqmap
-			normFactorUniq=`cat ${INDIR}/${t}/output/${tu}_stats_table_reads|tail -1|cut -f${!NF}`
-	
-			cat ${INDIR}/${t}/output/${t}.transposon.list| awk -v gt=$t -v rank=$count -v nf=$normFactor '{OFS="\t"}{if(rank==1) {tmp=match($0,/transposon/); if(tmp){print "gt",$0,"rank","nf"}else{print gt,$0,rank,nf}}else{tmp=match($0,/transposon/); if(!tmp){print gt,$0,rank,nf}}}' >> ${transposonListFile}
-			cat ${INDIR}/${t}/output/${tu}.transposon.list| awk -v gt=$t -v rank=$count -v nf=$normFactorUniq '{OFS="\t"}{if(rank==1) { tmp=match($0,/transposon/); if(tmp) {print "gt",$0,"rank","nf"} else {print gt,$0,rank,nf} } else{tmp=match($0,/transposon/); if(!tmp){print gt,$0,rank,nf}}}' >> ${transposonListUniqFile}
-
-			count=$(($count+1))
+		normFactor=`cat ${INDIR}/${t}/output/${t}_stats_table_reads|tail -1|cut -f${!NF}`
+		#colNum=`awk '{print NF}' ${i} | sort -nu | tail -n 1`
+		awk -v nf=1000000/$normFactor -v gt=${insertsname} '{OFS="\t"}{print gt,$1,$2*nf,$3*nf,$4*nf,$5,$6*nf,$7*nf,$8*nf,$9,$10*nf,$11*nf,$12*nf,$13}' ${i} >${i%.transposon.list}.${NF}.normalized.transposon.list
 		done
-		echo -e " ${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_transposon_abundance_senseFraction_comparison ${transposonListFile} $NF ${OUTDIR} " >>${paraFile}
-		echo -e " ${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_transposon_abundance_senseFraction_comparison ${transposonListUniqFile} $NF ${OUTDIR} " >>${paraFile}
 	done
+	ParaFly -c $paraFile -CPU 24 -failed_cmds $paraFile.failed_commands && \
+	for NF in "${NORMFACTORTYPE[@]}"
+	do
+		for i in `ls ${INDIR}/*.inserts/output/*.${NF}.normalized.transposon.list`
+		do
+			COUNT=3
+			for j in "${TRNLISTCOLNAMES[@]}"
+			do
+				cut -f1,2,${COUNT} ${i}|tail -n +2 >> ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.txt
+				COUNT=$(($COUNT+1))
+			done
+		done
 	
-done
+	done
+fi
+#${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/polarHistogram_sense_fraction.r plot_PolarHisto_senseFraction $i ${OUTDIR1}
+
 [ $? == 0 ] && \
-		ParaFly -c $paraFile -CPU 4 -failed_cmds $paraFile.failed_commands && \
+	#ParaFly -c $paraFile -CPU 24 -failed_cmds $paraFile.failed_commands && \
 	touch ${OUT}/.status.${STEP}.transposon_piRNA.paired.abundance_senseFraction
 STEP=$((STEP+1))
-
+echo -e "`date` "+$ISO_8601"\tcreate master table for all genotypes abundance,sense_fraction of transposon piRNAs done" >> $LOG
 # transpose the table
-ruby -lane 'BEGIN{$arr=[]}; $arr.concat([$F]); END{$arr.transpose.each{ |a| puts a.join ("\t") } }' -F"\t" $OUT > ${OUT}.t  && \
-mv ${OUT}.t ${OUT} 
+#ruby -lane 'BEGIN{$arr=[]}; $arr.concat([$F]); END{$arr.transpose.each{ |a| puts a.join ("\t") } }' -F"\t" $OUT > ${OUT}.t  && \
+#mv ${OUT}.t ${OUT} 
