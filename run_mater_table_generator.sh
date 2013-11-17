@@ -13,7 +13,7 @@ export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 export PATH=${PIPELINE_DIRECTORY}/:$PATH
 
 INDIR=$1 #this is the folder store all pipeline results outmost folders
-OUT=${1}/masterTables
+OUT=${2}/masterTables
 LOG=${OUT}/log
 
 declare -a NORMFACTORTYPE=("nnc")
