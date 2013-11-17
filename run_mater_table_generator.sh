@@ -32,7 +32,7 @@ if [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.abundance_senseFraction ]
 then
 	paraFile=${OUTDIR}/${RANDOM}.abundance_senseFraction.para && \
 	
-	for i in `ls ${INDIR}/*.inserts/output/*.transposon.list `
+	for i in `ls ${INDIR}/*.inserts/output/*.transposon.list|grep -v uniqmap`
 	do 
 		
 		FILE=${i##*/}
