@@ -52,14 +52,22 @@ then
 			COUNT=3
 			for j in "${TRNLISTCOLNAMES[@]}"
 			do
-				cut -f1,2,${COUNT} ${i}|tail -n +2 >> ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.txt
+				cut -f1,2,${COUNT} ${i}|tail -n +2 >> ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.raw.txt
 				COUNT=$(($COUNT+1))
 			done
 		done
 	
 	done
+	for NF in "${NORMFACTORTYPE[@]}"
+	do
+		for j in "${TRNLISTCOLNAMES[@]}"
+		do
+			${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.raw.txt ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.txt
+		done
+	done
 fi
-#${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/polarHistogram_sense_fraction.r plot_PolarHisto_senseFraction $i ${OUTDIR1}
+
+
 
 [ $? == 0 ] && \
 	#ParaFly -c $paraFile -CPU 24 -failed_cmds $paraFile.failed_commands && \

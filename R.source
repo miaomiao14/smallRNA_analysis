@@ -8,6 +8,18 @@ roundUp <- function(x, nice=c(1,2,4,5,6,8,10)) {
     10^floor(log10(x)) * nice[[which(x <= 10^floor(log10(x)) * nice)[[1]]]]
 }
 
+cast_master_table <- function (input,outfilename) {
+a=read.table(input,F)
+colnames(a)=c("gt","feature","count")
+b=cast(a,feature~gt)
+
+write.table(b,outfilename,append = FALSE, quote = FALSE, sep = "\t",
+			eol = "\n", na = "NA", dec = ".", row.names = FALSE,
+			col.names = TRUE, qmethod = c("escape", "double"),
+			fileEncoding = "")
+
+}
+
 
 plot_lendis2 <- function (input,gt) {
 
