@@ -39,7 +39,7 @@ then
 		insertsname=`basename $FILE .transposon.list` #genotype
 		for NF in "${NORMFACTORTYPE[@]}"
 		do
-		normFactor=`cat ${INDIR}/${t}/output/${t}_stats_table_reads|tail -1|cut -f${!NF}`
+		normFactor=`cat ${INDIR}/${insertsname}/output/${insertsname}_stats_table_reads|tail -1|cut -f${!NF}`
 		#colNum=`awk '{print NF}' ${i} | sort -nu | tail -n 1`
 		awk -v nf=1000000/$normFactor -v gt=${insertsname} '{OFS="\t"}{print gt,$1,$2*nf,$3*nf,$4*nf,$5,$6*nf,$7*nf,$8*nf,$9,$10*nf,$11*nf,$12*nf,$13}' ${i} >${i%.transposon.list}.${NF}.normalized.transposon.list
 		done
