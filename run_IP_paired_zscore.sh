@@ -217,7 +217,7 @@ STEP=$((STEP+1))
 
 #use xkxh.norm.bed instead of transposon mappers
 OUTDIR=${INDIR}/transposon_piRNA/UA_VA_allpiRNAs
-touch ${OUT}/.status.${STEP}.all_piRNA.UA_VA
+#touch ${OUT}/.status.${STEP}.all_piRNA.UA_VA
 if [ ! -f ${OUT}/.status.${STEP}.all_piRNA.UA_VA ]
 then 
 	for t in ${GT[@]}
