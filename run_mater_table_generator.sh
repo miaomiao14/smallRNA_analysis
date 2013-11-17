@@ -44,7 +44,7 @@ then
 		awk -v nf=$normFactor -v gt=${insertsname} '{OFS="\t"}{print gt,$1,$2*1000000/nf,$3*1000000/nf,$4*1000000/nf,$5,$6*1000000/nf,$7*1000000/nf,$8*1000000/nf,$9,$10*1000000/nf,$11*1000000/nf,$12*1000000/nf,$13}' ${i} >${i%.transposon.list}.${NF}.normalized.transposon.list
 		done
 	done
-	ParaFly -c $paraFile -CPU 24 -failed_cmds $paraFile.failed_commands && \
+	#ParaFly -c $paraFile -CPU 24 -failed_cmds $paraFile.failed_commands && \
 	for NF in "${NORMFACTORTYPE[@]}"
 	do
 		for i in `ls ${INDIR}/*.inserts/output/*.${NF}.normalized.transposon.list`
