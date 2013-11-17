@@ -238,7 +238,7 @@ foreach ($n=1;$n<=20;$n++)
        $g_0_nt=substr($l[2],0,1); $t_9_nt=&revfa($g_0_nt);  ##here are different from pp8_q2_ww1.pl
        $s{$g_0_nt.$t_9_nt}{$n}+=$hash1{$file1}{$n}{$l[1]}*$hash2{$file2}{$l[2]}/$NTM{$l[2]};
        $speciesn10{$g_0_nt.$t_9_nt}{$l[2]}=1 if ($n==10); ###
-       $species{$g_0_nt.$t_9_nt}{$l[2]}=1 ;
+       $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}=1 ; #this was wrong, has to add {$n}, otherwise additive
        $score{$n}+=$hash1{$file1}{$n}{$l[1]}*$hash2{$file2}{$l[2]}/$NTM{$l[2]};
        print OUT2 "NA\t$l[2]\n" if ($n==10);
       }
@@ -248,7 +248,7 @@ foreach ($n=1;$n<=20;$n++)
        $t_9_nt=&revfa($2);
        $s{$3.$t_9_nt}{$n}+=$hash1{$file1}{$n}{$l[1]}*$hash2{$file2}{$l[2]}/$NTM{$l[2]};
        $speciesn10{$3.$t_9_nt}{$l[2]}=1 if ($n==10); ###
-       $species{$3.$t_9_nt}{$l[2]}=1 ;
+       $species{$3.$t_9_nt}{$n}{$l[2]}=1 ;
        $score{$n}+=$hash1{$file1}{$n}{$l[1]}*$hash2{$file2}{$l[2]}/$NTM{$l[2]};
        print OUT2 "NA\t$l[2]\n" if ($n==10);
       }
@@ -260,7 +260,7 @@ foreach ($n=1;$n<=20;$n++)
      foreach $p (@pairs)
      {
      $s{$p}{$n}=0 if (!exists $s{$p}{$n});
-     $n_of_species=scalar (keys %{$species{$p}});
+     $n_of_species=scalar (keys %{$species{$p}{$n}});
      print OUT0 "$n\t$p\t$n_of_species\t$s{$p}{$n}\n";
      $count_N0{$p}++ if ($s{$p}{$n}>0);
      }
@@ -335,7 +335,7 @@ foreach ($n=1;$n<=20;$n++)
        #$t_9_nt=substr($l[2],0,1); $g_0_nt=&revfa($t_9_nt);
        $s{$g_0_nt.$t_9_nt}{$n}+=$hash1{$file2}{$n}{$l[1]}*$hash2{$file1}{$l[2]}/$NTM{$l[2]};
        $speciesn10{$g_0_nt.$t_9_nt}{$l[2]}=1 if ($n==10); ###
-       $species{$g_0_nt.$t_9_nt}{$l[2]}=1 ;
+       $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}=1 ;
        $score{$n}+=$hash1{$file2}{$n}{$l[1]}*$hash2{$file1}{$l[2]}/$NTM{$l[2]};
        print OUT2 "$l[2]\tNA\n" if ($n==10);
       }
@@ -346,7 +346,7 @@ foreach ($n=1;$n<=20;$n++)
       $t_9_nt=&revfa($2);
       $s{$3.$t_9_nt}{$n}+=$hash1{$file2}{$n}{$l[1]}*$hash2{$file1}{$l[2]}/$NTM{$l[2]};
       $speciesn10{$3.$t_9_nt}{$l[2]}=1 if ($n==10); ###
-      $species{$3.$t_9_nt}{$l[2]}=1 ;
+      $species{$3.$t_9_nt}{$n}{$l[2]}=1 ;
       #$suv{$n}+=$hash1{$file2}{$n}{$_[1]}*$hash2{$file1}{$n}{$_[2]}/$NTM{$_[2]};
       $score{$n}+=$hash1{$file2}{$n}{$l[1]}*$hash2{$file1}{$l[2]}/$NTM{$l[2]};
       print OUT2 "$l[2]\tNA\n" if ($n==10);
@@ -360,7 +360,7 @@ foreach ($n=1;$n<=20;$n++)
      foreach $p (@pairs)
      {
      $s{$p}{$n}=0 if (!exists $s{$p}{$n});
-     $n_of_species=scalar (keys %{$species{$p}});
+     $n_of_species=scalar (keys %{$species{$p}{$n}});
      print OUT0 "$n\t$p\t$n_of_species\t$s{$p}{$n}\n";
      $count_N0{$p}++ if ($s{$p}{$n}>0);
      }
@@ -378,7 +378,7 @@ foreach ($n=1;$n<=20;$n++)
     $X0{$p}=$s{$p}{10}; delete $s{$p}{10};
     $std0=&std(values %{$s{$p}});
     if ($std0>0 && $count_N0{$p}>=5) { $Z0{$p}=($X0{$p}-&mean(values %{$s{$p}}))/$std0;} else {$Z0{$p}=-10;}
-    $n_of_species=scalar (keys %{$speciesn10{$p}}); #this is wrong, only records n=20
+    $n_of_species=scalar (keys %{$speciesn10{$p}}); #this was wrong, only records n=20
     print OUA "$file1\-$file2\t$p\t$n_of_species\t$X0{$p}\n"; 
     }
    
