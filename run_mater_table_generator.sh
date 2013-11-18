@@ -37,11 +37,13 @@ then
 		
 		FILE=${i##*/}
 		insertsname=`basename $FILE .transposon.list` #genotype
+		samplename=${insertsname#Phil.SRA.*}
+		sample=${samplename/.ovary.inserts/}
 		for NF in "${NORMFACTORTYPE[@]}"
 		do
 		normFactor=`cat ${INDIR}/${insertsname}/output/${insertsname}_stats_table_reads|tail -1|cut -f${!NF}`
 		#colNum=`awk '{print NF}' ${i} | sort -nu | tail -n 1`
-		awk -v nf=$normFactor -v gt=${insertsname} '{OFS="\t"}{print gt,$1,$2*1000000/nf,$3*1000000/nf,$4*1000000/nf,$5,$6*1000000/nf,$7*1000000/nf,$8*1000000/nf,$9,$10*1000000/nf,$11*1000000/nf,$12*1000000/nf,$13}' ${i} >${i%.transposon.list}.${NF}.normalized.transposon.list
+		awk -v nf=$normFactor -v gt=${sample} '{OFS="\t"}{print gt,$1,$2*1000000/nf,$3*1000000/nf,$4*1000000/nf,$5,$6*1000000/nf,$7*1000000/nf,$8*1000000/nf,$9,$10*1000000/nf,$11*1000000/nf,$12*1000000/nf,$13}' ${i} >${i%.transposon.list}.${NF}.normalized.transposon.list
 		done
 	done
 	#ParaFly -c $paraFile -CPU 24 -failed_cmds $paraFile.failed_commands && \
@@ -63,6 +65,14 @@ then
 		for j in "${TRNLISTCOLNAMES[@]}"
 		do
 			${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.raw.txt ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.txt
+		done
+	done
+	
+	for NF in "${NORMFACTORTYPE[@]}"
+	do
+		for j in "${TRNLISTCOLNAMES[@]}"
+		do
+			${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.txt ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.withgroup.txt && rm ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.raw.txt
 		done
 	done
 fi
