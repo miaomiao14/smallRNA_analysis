@@ -17,6 +17,9 @@ write.table(b,outfilename,append = FALSE, quote = FALSE, sep = "\t",
 			eol = "\n", na = "NA", dec = ".", row.names = FALSE,
 			col.names = TRUE, qmethod = c("escape", "double"),
 			fileEncoding = "")
+			
+
+			
 
 }
 
@@ -30,6 +33,21 @@ write.table(ag,outfilename,append = FALSE, quote = FALSE, sep = "\t",
 			eol = "\n", na = "NA", dec = ".", row.names = FALSE,
 			col.names = TRUE, qmethod = c("escape", "double"),
 			fileEncoding = "")
+cn=colnames(ag)
+for ( i in 1:length(levels(as.factor(ag$g))) )
+{
+r=levels(ag$g)[i]
+df=as.data.frame(lapply(subset(ag,as.character(g)==r),'[',drop=TRUE))
+outfilenamesub=paste(outfilename,".g",r,sep="")
+
+for (i in 1:length(cn)){cn[i]=paste(cn[i],".g",r,sep="")}
+colnames(df)=cn
+
+write.table(df,outfilenamesub,append = FALSE, quote = FALSE, sep = "\t",
+			eol = "\n", na = "NA", dec = ".", row.names = FALSE,
+			col.names = TRUE, qmethod = c("escape", "double"),
+			fileEncoding = "")
+
 
 }
 
