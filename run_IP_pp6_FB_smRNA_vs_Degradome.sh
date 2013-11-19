@@ -46,8 +46,8 @@ do
 	do
 		for s in ${UNIQ[@]}
 		do
-			A=${INDIR}/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts.xkxh.transposons.mapper2.gz
-			B=${INDIR}/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts.xkxh.transposons.mapper2.gz
+			A=${INDIR}/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
+			B=${INDIR}/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
 			[ -f ${A} ] && [ -f ${B} ] && \
 			jobname=${t}${s}_${o}_Ago3_Aub.pp6 && \
 			jOUT=${OUTDIR}/${t}${s}_${o}_Ago3_Aub && \
@@ -62,8 +62,8 @@ do
 	for o in ${OX[@]}
 	do
 
-			A=${INDIR}/Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts.xkxh.transposons.mapper2.gz
-			B=${INDIR}/Phil.SRA.AubIP.${t}.${o}.ovary.inserts/Phil.SRA.AubIP.${t}.${o}.ovary.inserts.xkxh.transposons.mapper2.gz
+			A=${INDIR}/Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
+			B=${INDIR}/Phil.SRA.AubIP.${t}.${o}.ovary.inserts/Phil.SRA.AubIP.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
 			[ -f ${A} ] && [ -f ${B} ] && \
 			jobname=${t}_${o}_Ago3_AubA.pp6 && \
 			jOUT=${OUTDIR}/${t}_${o}_Ago3_Aub && \
