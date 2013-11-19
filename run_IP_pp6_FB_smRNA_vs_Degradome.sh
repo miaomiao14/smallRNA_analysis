@@ -36,6 +36,7 @@ declare -a UNIQ=("uniq" "shared")
 #shared
 indexFlag=1 #to indicate we need to build the index or not
 OUTDIR=${OUT}/pp6_TOTAL
+[ ! -f ${OUTDIR} ] && mkdir -p ${OUTDIR}
 #touch ${OUT}/.status.${STEP}.pp6.SRA_vs_SRA
 if [ ! -f ${OUT}/.status.${STEP}.pp6.SRA_vs_SRA ] 
 then
