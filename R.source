@@ -47,6 +47,7 @@ write.table(df,outfilenamesub,append = FALSE, quote = FALSE, sep = "\t",
 			eol = "\n", na = "NA", dec = ".", row.names = FALSE,
 			col.names = TRUE, qmethod = c("escape", "double"),
 			fileEncoding = "")
+			}
 
 
 }
