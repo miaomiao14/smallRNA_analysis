@@ -77,3 +77,24 @@ fi
 touch ${OUT}/.status.${STEP}.pp6.SRA_vs_SRA
 STEP=$((STEP+1))
 
+OUTDIR=${OUT}/FB
+[ ! -f ${OUTDIR} ] && mkdir -p ${OUTDIR}
+if [ ! -f ${OUT}/.status.${STEP}.FB ] 
+then
+	for i in `ls ${INDIR}/*.inserts/*.inserts.xkxh.transposon.mapper2.gz`
+	do
+		gt=${i##*/}
+		gt=${gt/Phil.SRA./}
+		gt=${gt/.ovary.*/}
+		GTDIR=${OUTDIR}/${gt}
+		[ ! -f ${GTDIR} ] && mkdir -p ${GTDIR}
+		smmapper2=$i
+		[ ! -f ${smmapper2%.gz}.23-29.roo.gz ] && \
+		/home/wangw1/bin/submitsge 4 ${gt} $OUTDIR "${PIPELINE_DIRECTORY}/gzlenrangeselector.pl ${smmapper2} 23 29 >${smmapper2%.gz}.23-29 && \
+			gzip ${smmapper2%.gz}.23-29 && \
+			${PIPELINE_DIRECTORY}/FB.pl ${smmapper2%.gz}.23-29.gz ${GTDIR}"
+	done
+fi
+[ $? == 0 ] && \
+touch ${OUT}/.status.${STEP}.FB
+STEP=$((STEP+1))

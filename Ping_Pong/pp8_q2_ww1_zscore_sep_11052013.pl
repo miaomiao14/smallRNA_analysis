@@ -89,8 +89,8 @@ if($indexFlag)
 	      {
 	         if ($_[3] eq '+')
 	         {
-	            $start=$_[1]+$n-17;
-	            $str=substr($genome{$_[0]},$start,16);
+	            $start=$_[1]+$n-17; #1 based
+	            $str=substr($genome{$_[0]},$start,16); #substr function is 0 based
 	            $str=&revfa($str);
 	            $hash1{$file}{$n}{$str}+=$_[5]/$_[6];
 	         }
@@ -222,7 +222,9 @@ foreach ($n=1;$n<=20;$n++)
    while($line=<IN>)
    {
    chomp $line;
-   @l=split(/\t/,$line);  
+   @l=split(/\t/,$line);
+   #($strand, $bowtieindex,$seq,$mm)=split(/\t/,$line); 
+    
    if ($l[3]=~/(\d+):/)
    { next if ($1!=0);}  # no seed mismatches 0 based
    $NTM{$l[2]}++;
@@ -236,9 +238,10 @@ foreach ($n=1;$n<=20;$n++)
       if ($l[3] eq "")
       { 
        $g_0_nt=substr($l[2],0,1); $t_9_nt=&revfa($g_0_nt);  ##here are different from pp8_q2_ww1.pl
+       #hash1 index; hash2 seq
        $s{$g_0_nt.$t_9_nt}{$n}+=$hash1{$file1}{$n}{$l[1]}*$hash2{$file2}{$l[2]}/$NTM{$l[2]};
        $speciesn10{$g_0_nt.$t_9_nt}{$l[2]}=1 if ($n==10); ###
-       $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}=1 ; #this was wrong, has to add {$n}, otherwise additive
+       $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}=1 ; #this was wrong, has to add {$n}, otherwise accumulative
        $score{$n}+=$hash1{$file1}{$n}{$l[1]}*$hash2{$file2}{$l[2]}/$NTM{$l[2]};
        print OUT2 "NA\t$l[2]\n" if ($n==10);
       }
