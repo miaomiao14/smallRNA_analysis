@@ -96,7 +96,7 @@ then
 	done
 fi
 [ $? == 0 ] && \
-touch ${OUT}/.status.${STEP}.pp6_FB_SRA_vs_SRA
+touch ${OUT}/.status.${STEP}.pp6_FB
 STEP=$((STEP+1))
 
 OUTDIR=${OUT}/pp6_FB
