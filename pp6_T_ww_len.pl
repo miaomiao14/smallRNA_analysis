@@ -21,10 +21,12 @@ for ($i=0; $i<$ARGV[2]; $i++) {
    $Transposon=$ARGV[4];
    print "$Transposon\t$filename1-$filename2";
    open PPSEQ, ">$ARGV[3]/$filename1_$filename2.$Transposon.ppseq";
+   open PPSCORE, ">$ARGV[3]/$filename1.$filename2.$Transposon.ppscore";
    }
    else
    {print "$filename1-$filename2";
    	open PPSEQ, ">$ARGV[3]/$filename1_$filename2.ppseq";
+   	open PPSCORE, ">$ARGV[3]/$filename1.$filename2.ppscore";
    }
    #total transposon piRNAs
    $totalReads1=0;
@@ -74,7 +76,7 @@ for ($i=0; $i<$ARGV[2]; $i++) {
 	          { chomp; split(/\t/);
 	         	   
 		     next if (length($_[0])>29 || length($_[0])<23);
-		     $_[2]=~/(chr.+):(\d+)-(\d+)\((.+)\)/;
+		     $_[2]=~/(\w+\d+):(\d+)-(\d+)\((.+)\)/;
 		     if ($4 eq '+') { $start=$2+$n-1; $pp{"$1:$start-"}+=$_[1]/$_[6]; $pp_seq{"$1:$start-"}=$_[0];}
 		     else { $start=$3-$n+1;$pp{"$1:$start+"}+=$_[1]/$_[6];$pp_seq{"$1:$start+"}=$_[0];}
 		     }
@@ -86,7 +88,7 @@ for ($i=0; $i<$ARGV[2]; $i++) {
 	     while(<IN>) 
 	          { chomp; split(/\t/);
 			     next if (length($_[0])>29 || length($_[0])<23);
-			     $_[2]=~/(chr.+):(\d+)-(\d+)\((.+)\)/;
+			     $_[2]=~/(\w+\d+):(\d+)-(\d+)\((.+)\)/;
 			     if ($4 eq '+') { $start=$2+$n-1; $pp{"$1:$start-"}+=$_[1]/$_[6]; $pp_seq{"$1:$start-"}=$_[0];}
 			     else { $start=$3-$n+1;$pp{"$1:$start+"}+=$_[1]/$_[6];$pp_seq{"$1:$start+"}=$_[0];}
 			  }
@@ -100,7 +102,7 @@ for ($i=0; $i<$ARGV[2]; $i++) {
 	     while($gz->gzreadline($_) > 0)
 	          { chomp; split(/\t/);
 			     next if (length($_[0])>29 || length($_[0])<23);
-			     $_[2]=~/(chr.+):(\d+)-(\d+)\((.+)\)/; 
+			     $_[2]=~/(\w+\d+):(\d+)-(\d+)\((.+)\)/; 
 			     if ($4 eq '+') { $pos{"$1:$2+"}+=$_[1]/$_[6]; $pos_seq{"$1:$2+"}= $_[0]; }
 			     else { $pos{"$1:$3-"}+=$_[1]/$_[6]; $pos_seq{"$1:$3-"}=$_[0]; }
 			     } 
@@ -112,7 +114,7 @@ for ($i=0; $i<$ARGV[2]; $i++) {
 	     while(<IN>) 
 	          { chomp; split(/\t/);
 		     next if (length($_[0])>29 || length($_[0])<23);
-		     $_[2]=~/(chr.+):(\d+)-(\d+)\((.+)\)/; 
+		     $_[2]=~/(\w+\d+):(\d+)-(\d+)\((.+)\)/; 
 		     if ($4 eq '+') { $pos{"$1:$2+"}+=$_[1]/$_[6]; $pos_seq{"$1:$2+"}= $_[0]; }
 		     else { $pos{"$1:$3-"}+=$_[1]/$_[6]; $pos_seq{"$1:$3-"}=$_[0]; }
 		     } 
@@ -130,6 +132,7 @@ for ($i=0; $i<$ARGV[2]; $i++) {
          }
       }
      #print "$n\t$score{$n}\n";
+     print PPSCORE "$n\t$score{$n}\n";
      $score{$n}=0 if (!exists $score{$n});
      if ($n==10) { $X=$score{$n}; delete $score{$n};}
      }
