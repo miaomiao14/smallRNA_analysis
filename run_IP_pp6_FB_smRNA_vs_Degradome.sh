@@ -163,4 +163,35 @@ touch ${OUT}/.status.${STEP}.pp6_FB_SRA_vs_SRA
 STEP=$((STEP+1))	
 
 
+#use Chi-square enriched species 
+declare -a GT=("w1" "AubCDrescue" "AubWTrescue" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue")
+declare -a OX=("ox" "unox")
+declare -a UNIQ=("enriched")
+OUTDIR=${OUT}/pp6_TOTAL_enriched
+[ ! -f ${OUTDIR} ] && mkdir -p ${OUTDIR}
+#touch ${OUT}/.status.${STEP}.pp6.SRA_vs_SRA
+if [ ! -f ${OUT}/.status.${STEP}.pp6.enriched.SRA_vs_SRA ] 
+then
+for t in ${GT[@]}
+do
+	for o in ${OX[@]}
+	do
+		for s in ${UNIQ[@]}
+		do
+			A=/home/wangw1/isilon_temp/ipsmRNA/chi-square_enriched/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29
+			B=/home/wangw1/isilon_temp/ipsmRNA/chi-square_enriched/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29
+			[ -f ${A} ] && [ -f ${B} ] && \
+			jobname=${t}${s}_${o}_Ago3_Aub.pp6 && \
+			jOUT=${OUTDIR}/${t}${s}_${o}_Ago3_Aub && \
+			[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
+			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "${script} ${A} ${B} 2 ${jOUT} >${jOUT}/${t}${s}_${o}_Ago3_Aub.total.pp6.out"
+		done
+	done
+done
+
+
+fi
+[ $? == 0 ] && \
+touch ${OUT}/.status.${STEP}.pp6.enriched.SRA_vs_SRA
+STEP=$((STEP+1))
 
