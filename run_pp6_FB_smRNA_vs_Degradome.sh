@@ -12,6 +12,8 @@ declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubM
 #step 1
 #for g in "${GROUPGT[@]}"
 #do
+for g in "${GROUPGT[@]}"
+do
 	[ ! -d ${OUT0}/pp6_FB_smRNA_vs_degradome_FB_withppscore_11252013/${g} ] && mkdir -p ${OUT0}/pp6_FB_smRNA_vs_degradome_FB_withppscore_11252013/${g}
 	OUTDIR=${OUT0}/pp6_FB_smRNA_vs_degradome_FB_withppscore_11252013/${g}
 	LOG=${OUTDIR}/${g}.log
@@ -49,4 +51,4 @@ declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubM
 	fi
 	echo -e "`date` "+$ISO_8601"\ttrn PP done..." >> $LOG
 	awk '{OFS="\t"}{print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' ${OUTDIR}/${g}.FB.pp6.temp > ${OUTDIR}/${g}.FB.pp6
-#done
+done
