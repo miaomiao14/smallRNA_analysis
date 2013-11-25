@@ -13,7 +13,7 @@ declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubM
 OUT=${OUT0}/pp6_FB_smRNAtrn_vs_degradomecluster_total_with_ppscore_11252013
 for g in "${GROUPGT[@]}"
 do
-	OUTDIR=${smRNAINDIR}/pp6_FB_smRNAtrn_vs_degradomecluster_total_with_ppscore_11252013/${g}
+	OUTDIR=${OUT0}/pp6_FB_smRNAtrn_vs_degradomecluster_total_with_ppscore_11252013/${g}
 	[ ! -d ${OUTDIR} ] && mkdir -p ${OUTDIR}
 	
 	LOG=${OUTDIR}/${g}.log
