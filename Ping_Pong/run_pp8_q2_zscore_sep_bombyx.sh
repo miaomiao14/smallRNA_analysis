@@ -135,15 +135,24 @@ then
 for t in ${TARGETS[@]}
 do
 	fasta=/home/wangw1/pipeline_bm/common/silkgenome.fa
-	A=/home/wangw1/isilon_temp/BmN4/Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell.inserts/Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell.bmv2v0.all.all.xrRNA.xtRNA.xh.${t}.AS.mapper2.gz
-	B=/home/wangw1/isilon_temp/BmN4/Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell.inserts/Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell.bmv2v0.all.all.xrRNA.xtRNA.xh.${t}.S.mapper2.gz
+	
+	A_1=/home/wangw1/isilon_temp/BmN4/Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell.inserts/Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell.bmv2v0.all.all.xrRNA.xtRNA.xh.${t}.AS.mapper2.gz
+	A=/home/wangw1/isilon_temp/BmN4/Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell.inserts/Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell.${t}.AS.xkxh.mapper2.gz
+	mv ${A_1} ${A}
+	B_1=/home/wangw1/isilon_temp/BmN4/Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell.inserts/Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell.bmv2v0.all.all.xrRNA.xtRNA.xh.${t}.S.mapper2.gz
+	B=/home/wangw1/isilon_temp/BmN4/Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell.inserts/Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell.${t}.S.xkxh.mapper2.gz
+	mv ${B_1} ${B}
 	jobname=${t}_Ago3AS_SiwiS.pp6
 	OUT=${OUTDIR}/${t}_Ago3AS_SiwiS
 	[ ! -d ${OUT} ] && mkdir -p ${OUT}
 	/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "/home/wangw1/git/smallRNA_analysis/pp6_T_ww_len.pl ${A} ${B} 2 ${OUT} >${OUTDIR}/${t}_Ago3AS_SiwiS.pp6.out"
 
-	A=/home/wangw1/isilon_temp/BmN4/Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell.inserts/Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell.bmv2v0.all.all.xrRNA.xtRNA.xh.${t}.S.mapper2.gz
-	B=/home/wangw1/isilon_temp/BmN4/Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell.inserts/Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell.bmv2v0.all.all.xrRNA.xtRNA.xh.${t}.AS.mapper2.gz
+	A_1=/home/wangw1/isilon_temp/BmN4/Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell.inserts/Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell.bmv2v0.all.all.xrRNA.xtRNA.xh.${t}.S.mapper2.gz
+	A=/home/wangw1/isilon_temp/BmN4/Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell.inserts/Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell.${t}.S.xkxh.mapper2.gz
+	mv ${A_1} ${A}
+	B_1=/home/wangw1/isilon_temp/BmN4/Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell.inserts/Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell.bmv2v0.all.all.xrRNA.xtRNA.xh.${t}.AS.mapper2.gz
+	B=/home/wangw1/isilon_temp/BmN4/Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell.inserts/Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell.${t}.AS.xkxh.mapper2.gz
+	mv ${B_1} ${B}
 	jobname=${t}_Ago3S_SiwiAS.pp6
 	OUT=${OUTDIR}/${t}_Ago3S_SiwiAS
 	[ ! -d ${OUT} ] && mkdir -p ${OUT}
