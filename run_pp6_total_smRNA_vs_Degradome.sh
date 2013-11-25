@@ -13,8 +13,9 @@ declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubM
 OUT=${OUT0}/pp6_FB_smRNAtrn_vs_degradomecluster_total_with_ppscore_11252013
 for g in "${GROUPGT[@]}"
 do
-	[ ! -d ${smRNAINDIR}/pp6_FB_smRNAtrn_vs_degradomecluster_total_with_ppscore_11252013/${g} ] && mkdir -p ${smRNAINDIR}/pp6_FB_smRNAtrn_vs_degradomecluster_total_with_ppscore_11252013/${g}
 	OUTDIR=${smRNAINDIR}/pp6_FB_smRNAtrn_vs_degradomecluster_total_with_ppscore_11252013/${g}
+	[ ! -d ${OUTDIR} ] && mkdir -p ${OUTDIR}
+	
 	LOG=${OUTDIR}/${g}.log
 	smmapper2=${smRNAINDIR}/Phil.SRA.${g}.ox.ovary.inserts/Phil.SRA.${g}.ox.ovary.inserts.xkxh.transposon.mapper2.gz
 	demapper2=${OUTDIR}/Phil.DEG.${g}.ovary.PE.FLY_PIRNA_CLUSTER.xkxh.nta.mapper2.gz
