@@ -20,12 +20,12 @@ for ($i=0; $i<$ARGV[2]; $i++) {
    {
    $Transposon=$ARGV[4];
    print "$Transposon\t$filename1-$filename2";
-   open PPSEQ, ">$ARGV[3]/$filename1_$filename2.$Transposon.ppseq";
+   open PPSEQ, ">$ARGV[3]/$filename1.$filename2.$Transposon.ppseq";
    open PPSCORE, ">$ARGV[3]/$filename1.$filename2.$Transposon.ppscore";
    }
    else
    {print "$filename1-$filename2";
-   	open PPSEQ, ">$ARGV[3]/$filename1_$filename2.ppseq";
+   	open PPSEQ, ">$ARGV[3]/$filename1.$filename2.ppseq";
    	open PPSCORE, ">$ARGV[3]/$filename1.$filename2.ppscore";
    }
    #total transposon piRNAs
