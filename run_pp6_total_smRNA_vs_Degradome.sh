@@ -8,7 +8,7 @@ g=$4
 c=$5 #cpu
 declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubMutsWW" "AubCDrescue" "AubWTrescue")
 
-[ ! -d ${smRNAINDIR}/pp6_FB_smRNAtrn_vs_degradomecluster_total_with_ppscore_11252013 ] && mkdir -p ${smRNAINDIR}/pp6_FB_smRNAtrn_vs_degradomecluster_total_with_ppscore_11252013
+[ ! -d ${OUT0}/pp6_FB_smRNAtrn_vs_degradomecluster_total_with_ppscore_11252013 ] && mkdir -p ${OUT0}/pp6_FB_smRNAtrn_vs_degradomecluster_total_with_ppscore_11252013
 #step 1
 OUT=${OUT0}/pp6_FB_smRNAtrn_vs_degradomecluster_total_with_ppscore_11252013
 for g in "${GROUPGT[@]}"
