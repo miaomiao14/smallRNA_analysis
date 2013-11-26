@@ -18,7 +18,7 @@ do
 	OUTDIR=${OUT0}/pp6_FB_smRNA_vs_degradome_FB_withppscore_11252013/${g}
 	LOG=${OUTDIR}/${g}.log
 	smmapper2=${smRNAINDIR}/Phil.SRA.${g}.ox.ovary.inserts/Phil.SRA.${g}.ox.ovary.inserts.xkxh.transposon.mapper2.gz
-	demapper2=${OUT0}/Phil.DEG.${g}.ovary.PE.FLY_TRANSPOSON_ALL.xkxh.nta.mapper2.gz
+	demapper2=${OUT0}/pp6_FB_smRNA_vs_degradome_FB_withppscore_11252013/Phil.DEG.${g}.ovary.PE.FLY_TRANSPOSON_ALL.xkxh.nta.mapper2.gz
 	[ ! -f $demapper2 ] && \
 		ln -s ${degraINDIR}/Phil.DEG.${g}.ovary.PE/bedIntersectWW/Phil.DEG.${g}.ovary.PE.x_rRNA.dm3.sorted.f0x40.noS.5p.all.bed.ntm.collapse.FLY_TRANSPOSON_ALL.nta.mapper2.gz $demapper2
 	echo -e "`date` "+$ISO_8601"\tChanged the name of degradome transposon mapper2..." >> $LOG
