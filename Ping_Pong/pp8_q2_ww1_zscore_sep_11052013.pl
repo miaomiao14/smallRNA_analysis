@@ -40,7 +40,7 @@ if($spe eq "fly")
 }
 elsif($spe eq "bombyx")
 {
-	$fastafile="/home/wangw1/pipeline_bm/common/silkgenome.fa";
+	$fastafile="/home/wangw1/pipeline_bm/common/silkgenome.formatted.fa";
 	open IN, $fastafile or die "Fail to open $fastafile: $!";
 	while(<IN>)
 	{
@@ -120,7 +120,7 @@ if($indexFlag)
 	         open OUT, ">$fa";
 	         foreach (keys %{$hash1{$file}{$n}})
 	         {
-	            print OUT ">$_\t$hash1{$file}{$n}{$_}\n$_\n" if (length($_)==16);$k++;
+	            print OUT ">$_\t$hash1{$file}{$n}{$_}\n$_\n" if (length($_)==16);
 	         }
 	      `bowtie-build $fa $indexb && rm $fa`;
 	
