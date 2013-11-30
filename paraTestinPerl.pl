@@ -7,7 +7,8 @@ use strict;
 use warnings;
 use File::Basename;
 use Compress::Zlib;
-
+BEGIN { unshift @INC,"/home/wangw1/git/smallRNA_analysis/Utils";}
+require "split_chr.pm";
 my $parameters={};
 
 if(scalar(@ARGV)==0)
@@ -57,8 +58,8 @@ for (my $i=0; $i<@inputfiles; $i++)
 		$filename2=$1;
 		my $outdir=$parameters->{outdir};
 		`[ -s $parameters->{outdir}/parafile.split.command ] && rm $parameters->{outdir}/parafile.split.command;`;
-		`echo -e "&split_chr($file1,$parameters->{outdir})" >> $parameters->{outdir}/parafile.split.command`;
-		`echo -e "&split_chr($file2,$parameters->{outdir})" >> $parameters->{outdir}/parafile.split.command`;
+		`echo -e " split_chr.pl $file1 $parameters->{outdir}" >> $parameters->{outdir}/parafile.split.command`;
+		`echo -e " split_chr.pl $file2 $parameters->{outdir}" >> $parameters->{outdir}/parafile.split.command`;
 		`ParaFly -c $parameters->{outdir}/parafile.split.command -CPU 2 -failed_cmds $parameters->{outdir}/parafile.split.failed_commands`;
    		
 	}
@@ -93,41 +94,4 @@ sub parse_command_line {
         }
 }
 
-sub split_chr {
-	my ($file,$OUTDIR)=@_;
-	my %filehash=();
-	if($file=~/gz/)
-	{
-		my $gz="";
-		$gz = gzopen($file, "rb") or die "Cannot open $file: $gzerrno\n" ;
-		while($gz->gzreadline(my $record) > 0)
-		{ 
-			chomp $record;
-			my($chr,$start,$end,$name,$score,$strand) = split(/\t/,$record);
-			$filehash{$chr}{$record}=1;
-		}
-		$gz->gzclose();
-	}
-	else
-	{
-		open IN, $file or die "Cannot open $file: $!\n";
-		while(my $record=<IN>) 
-		{
-			chomp $record;
-			my($chr,$start,$end,$name,$score,$strand) = split(/\t/,$record);
-			$filehash{$chr}{$record}=1;
-		}
-		close(IN);
-	}
-	foreach my $chr (keys %filehash)
-	{
-		open OUT, ">$OUTDIR/$file.$chr" or die "Cannot open $OUTDIR/$file.$chr to write: $!\n";
-		foreach my $record (keys %{$filehash{$chr}})
-		{
-			print OUT $record,"\n";
-		}
-		close(OUT);
-	}
-	
-	
-}
+
