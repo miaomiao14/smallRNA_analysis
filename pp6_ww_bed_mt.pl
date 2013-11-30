@@ -7,7 +7,7 @@ use strict;
 use warnings;
 use File::Basename;
 use Compress::Zlib;
-
+$ENV{PATH} = "/home/wangw1/git/smallRNA_analysis/Utils:$ENV{PATH}";
 my $parameters={};
 
 if(scalar(@ARGV)==0)
@@ -56,10 +56,32 @@ for (my $i=0; $i<@inputfiles; $i++)
 		my $filename2="";
 		$filename2=$1;
 		my $outdir=$parameters->{outdir};
-		`[ -s \$outidr/parafile.split.command ] && rm \$outidr/parafile.split.command;`;
-		`echo -e "\&split_chr(\$file1,\$outdir)" >>\$outidr/parafile.split.command`;
-		`echo -e "\&split_chr(\$file2,\$outdir)" >>\$outidr/parafile.split.command`;
-		`ParaFly -c \$outidr/parafile.split.command -CPU 2 -failed_cmds \$outidr/parafile.split.failed_commands`;
+		`[ -s $parameters->{outdir}/parafile.split.command ] && rm $parameters->{outdir}/parafile.split.command;`;
+		`echo -e " split_chr.pl $file1 $parameters->{outdir}" >> $parameters->{outdir}/parafile.split.command`;
+		if($filename2 ne $filename1)
+		{
+		`echo -e " split_chr.pl $file2 $parameters->{outdir}" >> $parameters->{outdir}/parafile.split.command`;
+		}
+		
+		`ParaFly -c $parameters->{outdir}/parafile.split.command -CPU 2 -failed_cmds $parameters->{outdir}/parafile.split.failed_commands`;
+		my %chrs1=();my %chrs2=();
+   		open CHR,"$parameters->{outdir}/$filetemp1.chrlist.txt"; #the output from split_chr.pl
+   		while(my $line=<CHR>)
+   		{
+   			chomp $line;
+   			my @l=split(/\t/,$line);
+   			$chrs1{$l[0]}=1;
+   		}
+   		close(CHR);
+   		
+   		open CHR,"$parameters->{outdir}/$filetemp2.chrlist.txt";#the output from split_chr.pl
+   		while(my $line=<CHR>)
+   		{
+   			chomp $line;
+   			my @l=split(/\t/,$line);
+   			$chrs2{$l[0]}=1;
+   		}
+   		close(CHR);
    		
    		open PPZ, ">$outdir/${filename1}.${filename2}.zscore";
    		
@@ -85,21 +107,57 @@ for (my $i=0; $i<@inputfiles; $i++)
 		#the abundance of piRNA   
     	print PPSEQ "POSOFPARTNER\tPARTNERLEN\tPARTNERABUNDANCE\tpiRNALEN\tpiRNAABUDNACE\n";
     	print PPSCORE "OVERLAP\tPPSCORE\n";
-		my $X=0; my $Z=0; 
+		my $X=0; my $Z=0;
+		my %score=(); 
 		my $scoreref="";
+		my %scorechr=();
 		if($parameters->{format} eq "bed")
 		{
-			$scoreref= &calculate_ppscore($file1,$file2,"bed");
+			foreach my $chromosome (%chrs1)
+			{
+				if ($chrs2{$chromosome})
+				{
+					`[ -s $parameters->{outdir}/parafile.ppscore.command ] && rm $parameters->{outdir}/parafile.ppscore.command;`;
+					#`echo -e " split_chr.pl $file1 $parameters->{outdir}" >> $parameters->{outdir}/parafile.split.command`;
+					`echo -e " $scorechr{$chromosome} = &calculate_ppscore($outdir/$filetemp1.$chromosome,$outdir/$filetemp2.$chromosome,"bed") " >> $parameters->{outdir}/parafile.ppscore.command `;
+				}
+			}
+
 		} #format bed
 		if($parameters->{format} eq "bedscore")
 		{
-			$scoreref= &calculate_ppscore($file1,$file2,"bedscore");
+			foreach my $chromosome (%chrs1)
+			{
+				if ($chrs2{$chromosome})
+				{
+					`[ -s $parameters->{outdir}/parafile.ppscore.command ] && rm $parameters->{outdir}/parafile.ppscore.command;`;
+					#`echo -e " split_chr.pl $file1 $parameters->{outdir}" >> $parameters->{outdir}/parafile.split.command`;
+					`echo -e " $scorechr{$chromosome} = &calculate_ppscore($outdir/$filetemp1.$chromosome,$outdir/$filetemp2.$chromosome,"bedscore") " >> $parameters->{outdir}/parafile.ppscore.command `;
+				}
+			}
 		} #format bedscore
 		
-		if ($scoreref->{10}) { $X=$scoreref->{10}; delete $scoreref->{10};} #mean and standard deviation exclude ppscore10
+		my $CPUN=`wc -l $parameters->{outdir}/parafile.ppscore.commands|cut -f1 -d" "`;
+		$CPUN=int($CPUN/4);
+		`ParaFly -c $parameters->{outdir}/parafile.ppscore.command -CPU $CPUN -failed_cmds $parameters->{outdir}/parafile.split.failed_commands`;
+		
+		#sum the score from each chromosomes
+		for(my $n=1; $n<21; $n++)
+		{
+			foreach my $chromosome (%chrs1)
+			{
+				if ($chrs2{$chromosome})
+				{
+					$score{$n}+=$scorechr{$chromosome}->{$n};
+				}
+			}
+		}
+		
+		
+		if ($score{10}) { $X=$score{10}; delete $score{10};} #mean and standard deviation exclude ppscore10
 		my $std=0;
-		$std=&standard_deviation(values %$scoreref);
-		if ((scalar %$scoreref)>9 && $std>0) { $Z=($X-&mean(values %$scoreref))/$std;} else {$Z=-10;}
+		$std=&standard_deviation(values %score);
+		if ((scalar %score)>9 && $std>0) { $Z=($X-&mean(values %score))/$std;} else {$Z=-10;}
 		printf PPZ '%.2f', $Z;
 		print PPZ "\t$X\n";
 	}

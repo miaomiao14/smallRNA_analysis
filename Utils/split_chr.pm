@@ -1,3 +1,8 @@
+use strict;
+use warnings;
+use File::Basename;
+use Compress::Zlib;
+
 sub split_chr {
 	my ($file,$OUTDIR)=@_;
 	my %filehash=();
