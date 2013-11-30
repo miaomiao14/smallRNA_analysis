@@ -35,7 +35,7 @@ use Compress::Zlib;
 	open CHR, ">$OUTDIR/$filename.chrlist.txt";
 	foreach my $chr (keys %filehash)
 	{
-		print $chr, "\n";
+		print CHR $chr, "\n";
 		open OUT, ">$OUTDIR/$filename.$chr" or die "Cannot open $OUTDIR/$filename.$chr to write: $!\n";
 		foreach my $record (keys %{$filehash{$chr}})
 		{
