@@ -65,7 +65,7 @@ for (my $i=0; $i<@inputfiles; $i++)
 		
 		`ParaFly -c $parameters->{outdir}/parafile.split.command -CPU 2 -failed_cmds $parameters->{outdir}/parafile.split.failed_commands`;
 		my %chrs1=();my %chrs2=();
-   		open CHR,"$parameters->{outdir}/$filetemp1.chrlist.txt"; #the output from split_chr.pl
+   		open CHR,"$parameters->{outdir}/$filetemp1.chrlist.txt" or die "Cannot open $parameters->{outdir}/$filetemp1.chrlist.txt: $!\n"; #the output from split_chr.pl
    		while(my $line=<CHR>)
    		{
    			chomp $line;
@@ -74,7 +74,7 @@ for (my $i=0; $i<@inputfiles; $i++)
    		}
    		close(CHR);
    		
-   		open CHR,"$parameters->{outdir}/$filetemp2.chrlist.txt";#the output from split_chr.pl
+   		open CHR,"$parameters->{outdir}/$filetemp2.chrlist.txt" or die "Cannot open $parameters->{outdir}/$filetemp2.chrlist.txt: $!\n"; #the output from split_chr.pl
    		while(my $line=<CHR>)
    		{
    			chomp $line;
@@ -119,7 +119,7 @@ for (my $i=0; $i<@inputfiles; $i++)
 				{
 					`[ -s $parameters->{outdir}/parafile.ppscore.command ] && rm $parameters->{outdir}/parafile.ppscore.command;`;
 					#`echo -e " split_chr.pl $file1 $parameters->{outdir}" >> $parameters->{outdir}/parafile.split.command`;
-					`echo -e " $scorechr{$chromosome} = &calculate_ppscore($outdir/$filetemp1.$chromosome,$outdir/$filetemp2.$chromosome,"bed") " >> $parameters->{outdir}/parafile.ppscore.command `;
+					`echo -e " \$scorechr{\$chromosome} = &calculate_ppscore($outdir/$filetemp1.$chromosome,$outdir/$filetemp2.$chromosome,\"bed\") " >> $parameters->{outdir}/parafile.ppscore.command `;
 				}
 			}
 
@@ -132,7 +132,7 @@ for (my $i=0; $i<@inputfiles; $i++)
 				{
 					`[ -s $parameters->{outdir}/parafile.ppscore.command ] && rm $parameters->{outdir}/parafile.ppscore.command;`;
 					#`echo -e " split_chr.pl $file1 $parameters->{outdir}" >> $parameters->{outdir}/parafile.split.command`;
-					`echo -e " $scorechr{$chromosome} = &calculate_ppscore($outdir/$filetemp1.$chromosome,$outdir/$filetemp2.$chromosome,"bedscore") " >> $parameters->{outdir}/parafile.ppscore.command `;
+					`echo -e " \$scorechr{\$chromosome} = &calculate_ppscore($outdir/$filetemp1.$chromosome,$outdir/$filetemp2.$chromosome,\"bedscore\") " >> $parameters->{outdir}/parafile.ppscore.command `;
 				}
 			}
 		} #format bedscore
