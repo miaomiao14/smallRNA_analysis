@@ -1,7 +1,7 @@
 use File::Basename;
 use Compress::Zlib;
 
-	my ($file)=$ARGV[0];
+	my $file=$ARGV[0];
 	my $OUTDIR=$ARGV[1];
 	my %filehash=();
 	if($file=~/gz/)
