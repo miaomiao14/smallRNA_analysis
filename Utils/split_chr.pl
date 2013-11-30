@@ -6,6 +6,7 @@ use File::Basename;
 use Compress::Zlib;
 
 	my $file=$ARGV[0];
+	my $filename=fileparse($file);
 	my $OUTDIR=$ARGV[1];
 	my %filehash=();
 	if($file=~/gz/)
@@ -33,7 +34,7 @@ use Compress::Zlib;
 	}
 	foreach my $chr (keys %filehash)
 	{
-		open OUT, ">$OUTDIR/$file.$chr" or die "Cannot open $OUTDIR/$file.$chr to write: $!\n";
+		open OUT, ">$OUTDIR/$filename.$chr" or die "Cannot open $OUTDIR/$filename.$chr to write: $!\n";
 		foreach my $record (keys %{$filehash{$chr}})
 		{
 			print OUT $record,"\n";
