@@ -2,7 +2,7 @@
 #11/29/2013
 #WEI WANG
 #supposed to be the publised version?
-
+$ENV{PATH} = "/home/wangw1/git/smallRNA_analysis/Utils:$ENV{PATH}";
 use strict;
 use warnings;
 use File::Basename;
