@@ -56,10 +56,10 @@ for (my $i=0; $i<@inputfiles; $i++)
 		my $filename2="";
 		$filename2=$1;
 		my $outdir=$parameters->{outdir};
-		`[ -s \$outidr/parafile.split.command ] && rm \$outidr/parafile.split.command;`;
-		`echo -e "&split_chr($file1,$outdir)" >>\$outidr/parafile.split.command`;
-		`echo -e "&split_chr($file2,$outdir)" >>\$outidr/parafile.split.command`;
-		`ParaFly -c \$outidr/parafile.split.command -CPU 2 -failed_cmds \$outidr/parafile.split.failed_commands`;
+		`[ -s $parameters->{outdir}/parafile.split.command ] && rm $parameters->{outdir}/parafile.split.command;`;
+		`echo -e "&split_chr($file1,$parameters->{outdir})" >> $parameters->{outdir}/parafile.split.command`;
+		`echo -e "&split_chr($file2,$parameters->{outdir})" >> $parameters->{outdir}/parafile.split.command`;
+		`ParaFly -c $parameters->{outdir}/parafile.split.command -CPU 2 -failed_cmds $parameters->{outdir}/parafile.split.failed_commands`;
    		
 	}
 }
