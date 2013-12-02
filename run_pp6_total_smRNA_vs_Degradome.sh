@@ -29,6 +29,6 @@ do
 	gzip ${smmapper2%.gz}.23-29
 	echo -e "`date` "+$ISO_8601"\tSize select the smallRNA transposon mapper2 and gzip it..." >> $LOG
 	#total Ping-Pong
-	[ ! -s ${OUT0}/${g}.total.pp6.out ] && submitsge 8 $g ${OUT} "$script ${smmapper2%.gz}.23-29.gz ${demapper2} 2 ${OUTDIR} >${OUT0}/${g}.total.pp6.out" 
+	[ ! -s ${OUT0}/${g}.total.pp6.out ] && submitsge 8 $g ${OUT0} "$script ${smmapper2%.gz}.23-29.gz ${demapper2} 2 ${OUTDIR} >${OUT0}/${g}.total.pp6.out" 
 	#echo -e "`date` "+$ISO_8601"\ttotal Ping-Pong analysis done..." >> $LOG
 done
