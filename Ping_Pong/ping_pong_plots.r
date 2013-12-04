@@ -31,7 +31,7 @@ plot_ua_va <- function (input,gt,outdir) {
 		#f1=subset(ff,group==1)
 		#f2=subset(ff,group==0)
 		#############################################
-		#b<-barplot(f1$NofPairs,names.arg=f1$pair,main=m,axes=F,ylim=c(0,1.2*max(f1$NofPairs)), col=rep("darkblue",4),border="white",cex.names=1,ylab="Paired Number of pairs")
+		#b<-barplot(f1$NofPairs,names.arg=f1$pair,main=m,axes=F,ylim=c(0,1.2*max(f1$NofPairs)), col=rep("black",4),border="white",cex.names=1,ylab="Paired Number of pairs")
 		#text(x=b,y=f1$NofPairs+2.5,label=f1$raw,cex=1)
 		#grid(nx=NA,ny=NULL,lty=1,lwd=1,col="gray")
 		#axis(2,ylim=c(0,1.2*max(f1$NofPairs)))
@@ -56,7 +56,7 @@ plot_ua_va <- function (input,gt,outdir) {
 	# making window for the scale of data a
 		plot.window (xlim=c(0,1.2*max(a)), ylim=c(0, 1.2*max(f1$NofPairs)))
 	# draw "bar", which is actually rectangle
-		rect (xleft = a-bar_width/2, xright=a+bar_width/2, ybottom=0, ytop=f1$NofPairs, ylim=c(0, 1.2*max(f1$NofPairs)), col="darkblue", border=F)
+		rect (xleft = a-bar_width/2, xright=a+bar_width/2, ybottom=0, ytop=f1$NofPairs, ylim=c(0, 1.2*max(f1$NofPairs)), col="black", border=F)
 	# draw X axis
 		axis (1,tick=0.01,las=1)
 	# draw left Y axis
@@ -111,9 +111,9 @@ plot_ua_va_color <- function (input,gt,outdir) {
 
 	#############################################
 	par(mar=c(12, 4, 5, 2))
-	b<-barplot(f1$NofPairs,space=0.5,xlim=c(0,8),width=0.55,names.arg=f1$pair,main=m,axes=F, col=rep("darkblue",4),border=NA,cex.names=1)
-	mtext("Paired Number of Pairs",side=2,col="darkblue",line=2) 
-	axis(2,tck=0.01,ylim=c(0,1.2*max(f1$NofPairs)),col.axis="darkblue",col="darkblue")
+	b<-barplot(f1$NofPairs,space=0.5,xlim=c(0,8),width=0.55,names.arg=f1$pair,main=m,axes=F, col=rep("black",4),border=NA,cex.names=1)
+	mtext("Paired Number of Pairs",side=2,col="black",line=2) 
+	axis(2,tck=0.01,ylim=c(0,1.2*max(f1$NofPairs)),col.axis="black",col="black")
 	
 	par(mar=c(12, 4, 5, 2),new=TRUE)
 	
@@ -170,9 +170,9 @@ plot_ua_va_from_ppscore_color <- function (input,gt,outdir) {
 			
 			#############################################
 			par(mar=c(12, 4, 5, 2))
-			b<-barplot(f1$NofPairs,space=0.5,xlim=c(0,8),width=0.55,names.arg=f1$pair,main=m,axes=F, col=rep("darkblue",4),border=NA,cex.names=1)
-			mtext("Paired Number of Pairs",side=2,col="darkblue",line=2) 
-			axis(2,tck=0.01,ylim=c(0,1.2*max(f1$NofPairs)),col.axis="darkblue",col="darkblue")
+			b<-barplot(f1$NofPairs,space=0.5,xlim=c(0,8),width=0.55,names.arg=f1$pair,main=m,axes=F, col=rep("black",4),border=NA,cex.names=1)
+			mtext("Paired Number of Pairs",side=2,col="black",line=2) 
+			axis(2,tck=0.01,ylim=c(0,1.2*max(f1$NofPairs)),col.axis="black",col="black")
 			
 			par(mar=c(12, 4, 5, 2),new=TRUE)
 			
@@ -220,9 +220,9 @@ plot_ua_va_from_ppscore_color <- function (input,gt,outdir) {
 			
 			#############################################
 			par(mar=c(12, 4, 5, 2))
-			b<-barplot(f1$NofReads,space=0.5,xlim=c(0,8),width=0.55,names.arg=f1$pair,main=m,axes=F, col=rep("darkblue",4),border=NA,cex.names=1)
-			mtext("Paired Number of Reads",side=2,col="darkblue",line=2) 
-			axis(2,tck=0.01,ylim=c(0,1.2*max(f1$NofReads)),col.axis="darkblue",col="darkblue")
+			b<-barplot(f1$NofReads,space=0.5,xlim=c(0,8),width=0.55,names.arg=f1$pair,main=m,axes=F, col=rep("black",4),border=NA,cex.names=1)
+			mtext("Paired Number of Reads",side=2,col="black",line=2) 
+			axis(2,tck=0.01,ylim=c(0,1.2*max(f1$NofReads)),col.axis="black",col="black")
 			
 			par(mar=c(12, 4, 5, 2),new=TRUE)
 			
