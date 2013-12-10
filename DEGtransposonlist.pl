@@ -28,7 +28,7 @@ $transposon_A{$1}+=$_[1]/$_[6]/$_[7] if ($_[3] eq 'antisense');
 }
 #close IN;
 $gz->gzclose();
-print "transposon\ttotal\ttotal_sense\ttotal_antisense\ttotal_sense_fraction\n";
+print "transposon\tpiRNA\tpiRNA_sense\tpiRNA_antisense\tpiRNA_sense_fraction\n";
 foreach (keys %transposon)
 {
 
