@@ -37,14 +37,14 @@ for ($i=0; $i<$ARGV[2]; $i++) {
    {
     $gz = gzopen($ARGV[$i], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
 	     while($gz->gzreadline($_) > 0)
-	     {chomp; split(/\t/); $totalReads1+=$_[1]/$_[6]; }
+	     {chomp; split(/\t/); $totalReads1+=$_[1]/$_[6]/$_[7]; }
 	 $gz->gzclose();  
    }
    else
    {
    	 open IN, $ARGV[$i] or die "Cannot open $ARGV[$i]: $!\n";
 	     while(<IN>) 
-	     { chomp; split(/\t/);$totalReads1+=$_[1]/$_[6]; }
+	     { chomp; split(/\t/);$totalReads1+=$_[1]/$_[6]/$_[7]; }
 	     close(IN);
    	
    }
@@ -53,14 +53,14 @@ for ($i=0; $i<$ARGV[2]; $i++) {
    {
     $gz = gzopen($ARGV[$j], "rb") or die "Cannot open $ARGV[$j]: $gzerrno\n" ;
 	     while($gz->gzreadline($_) > 0)
-	     {chomp; split(/\t/); $totalReads2+=$_[1]/$_[6]; }
+	     {chomp; split(/\t/); $totalReads2+=$_[1]/$_[6]/$_[7]; }
 	 $gz->gzclose();  
    }
    else
    {
    	 open IN, $ARGV[$j] or die "Cannot open $ARGV[$j]: $!\n";
 	     while(<IN>) 
-	     { chomp; split(/\t/);$totalReads2 +=$_[1]/$_[6]; }
+	     { chomp; split(/\t/);$totalReads2 +=$_[1]/$_[6]/$_[7]; }
 	     close(IN);
    	
    }
