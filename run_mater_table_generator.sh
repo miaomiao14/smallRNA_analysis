@@ -87,3 +87,38 @@ echo -e "`date` "+$ISO_8601"\tcreate master table for all genotypes abundance,se
 # transpose the table
 #ruby -lane 'BEGIN{$arr=[]}; $arr.concat([$F]); END{$arr.transpose.each{ |a| puts a.join ("\t") } }' -F"\t" $OUT > ${OUT}.t  && \
 #mv ${OUT}.t ${OUT} 
+
+
+
+
+#master table for DEG htseq-count(including multiple mappers)
+
+export RUN_PIPELINE_ADD=/home/wangw1/git/PE_RNA_Pipeline
+Genome="dm3"
+declare -a TARGETS=("FLY_PIRNA_CLUSTER" \
+	"FLY_TRANSPOSON_ALL" \
+	"FLY_GENE_TRANSPOSON_ALL" \
+	"FLY_TRANSPOSON_OUTCLUSTER" \
+	"FLY_TRANSPOSON_INCLUSTER" \ 
+	"FLY_TRANSPOSON_GROUP1" \
+	"FLY_TRANSPOSON_GROUP2" \
+	"FLY_TRANSPOSON_GROUP3" \
+	"FLY_TRANSPOSON_GROUP0" \
+     "FLY_flyBase_GENE" \
+     "FLY_flyBase_EXON" \
+     "FLY_flyBase_INTRON" \
+     "FLY_flyBase_5UTR" \
+     "FLY_flyBase_3UTR" )
+    
+    
+declare -a GROUPGT=("GROUPGT_R1")
+
+declare -a GROUPGT_R1=("ago3cdmut_r1" "ago3wtmut_r1" "ago3cdwt_r1" "aubcdmut_r1" "aubwtmut_r1" "aubcdwt_r1")
+declare -a ago3cdmut_r1=("aubvasAgo3CDrescue" "ago3MutsWW")
+declare -a ago3wtmut_r1=("aubvasAgo3WTrescue" "ago3MutsWW")
+declare -a ago3cdwt_r1=("aubvasAgo3CDrescue" "aubvasAgo3WTrescue")
+declare -a aubcdmut_r1=("AubCDrescue" "aubMutsWW")
+declare -a aubwtmut_r1=("AubWTrescue" "aubMutsWW")
+declare -a aubcdwt_r1=("AubCDrescue" "AubWTrescue")
+
+
