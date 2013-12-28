@@ -15,7 +15,7 @@ INDIR=$1 #this is the folder store all pipeline results outmost folders
 #"Phil.SRA.QinAgo3Muts.ox.ovary.inserts" "Phil.SRA.QinAgo3Muts.unox.ovary.inserts")
 
 #t="Phil.Ago3IPuniq.aubMutant.unox.ovary.inserts"
-declare -a TARGETS=("Phil.SRA.ago3MutsBH.ox.ovary.inserts" "Phil.SRA.ago3MutsBH.unox.ovary.inserts")
+declare -a TARGETS=("Phil.SRA.Ago3IPsds.aubMuts.unox.ovary.inserts" "Phil.SRA.Ago3IPsds.ago3Muts.unox.ovary.inserts")
 [ ! -d ${INDIR}/pp6_FB ] && mkdir -p ${INDIR}/pp6_FB
 for t in ${TARGETS[@]}
 do

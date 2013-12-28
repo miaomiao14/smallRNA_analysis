@@ -22,18 +22,33 @@ OUT=${INDIR}/transposon_piRNA
 LOG=${OUT}/log
 
 STEP=1
+#run Ago3IPsds in ago3Muts and aubMuts pp6 total separately
+OUTDIR=${OUT}/pp6_TOTAL
+if [ ! -f ${OUT}/.status.${STEP}.pp6.Ago3IPsds.ago3Muts.aubMuts.SRA_vs_SRA ] 
+then
+	A=${INDIR}/Phil.SRA.Ago3IPsds.ago3Muts.unox.ovary.inserts/Phil.SRA.Ago3IPsds.ago3Muts.unox.ovary.inserts.xkxh.transposon.mapper2.gz
+	jobname=ago3Muts_unox_Ago3IPsds_Ago3IPsds.pp6
+	jOUT=${OUTDIR}/ago3Muts_unox_Ago3IPsds_Ago3IPsds
+	[ ! -d ${jOUT} ] && mkdir -p ${jOUT} 
+	/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "${script} ${A} ${A} 1 ${jOUT} >${jOUT}/ago3Muts_unox_Ago3IPsds_Ago3IPsds.total.pp6.out"
+	
+	
+	A=${INDIR}/Phil.SRA.Ago3IPsds.aubMuts.unox.ovary.inserts/Phil.SRA.Ago3IPsds.aubMuts.unox.ovary.inserts.xkxh.transposon.mapper2.gz
+	jobname=aubMuts_unox_Ago3IPsds_Ago3IPsds.pp6
+	jOUT=${OUTDIR}/aubMuts_unox_Ago3IPsds_Ago3IPsds
+	[ ! -d ${jOUT} ] && mkdir -p ${jOUT} 
+	/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "${script} ${A} ${A} 1 ${jOUT} >${jOUT}/aubMuts_unox_Ago3IPsds_Ago3IPsds.total.pp6.out"
 
-declare -a GROUPGT=("AubIP_ago3cdwt_ox" "AubIP_ago3cdwt_unox" \
-"AubIP_ago3cdw1_ox" "AubIP_ago3cdw1_unox" \
-)
+fi
+[ $? == 0 ] && \
+touch ${OUT}/.status.${STEP}.pp6.Ago3IPsds.ago3Muts.aubMuts.SRA_vs_SRA
+STEP=$((STEP+1))
 
-echo -e "`date` "+$ISO_8601"\trun pp8 UA and VA..." >> $LOG
-declare -a GT=("w1" "AubCDrescue" "AubWTrescue" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "ago3Hets" "aubHets" "qinHets" "nosAgo3CDrescue" "nosAgo3WTrescue")
-declare -a OX=("ox" "unox")
+
+
+declare -a GT=("w1" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue")
+declare -a OX=("unox")
 declare -a UNIQ=("uniq" "shared")
-
-
-
 
 #uniq
 #shared
@@ -49,7 +64,7 @@ do
 	do
 		for s in ${UNIQ[@]}
 		do
-			A=${INDIR}/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
+			A=${INDIR}/Phil.SRA.Ago3IPsds${s}.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IPsds${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
 			B=${INDIR}/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
 			[ -f ${A} ] && [ -f ${B} ] && \
 			jobname=${t}${s}_${o}_Ago3_Aub.pp6 && \
@@ -65,7 +80,7 @@ do
 	for o in ${OX[@]}
 	do
 
-			A=${INDIR}/Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
+			A=${INDIR}/Phil.SRA.Ago3IPsds.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IPsds.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
 			B=${INDIR}/Phil.SRA.AubIP.${t}.${o}.ovary.inserts/Phil.SRA.AubIP.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
 			[ -f ${A} ] && [ -f ${B} ] && \
 			jobname=${t}_${o}_Ago3_AubA.pp6 && \
@@ -120,7 +135,7 @@ then
 				for fb in ${TRN[@]}
 				do	
 				
-				A=${INDIR}/transposon_piRNA/FB/Ago3IP${s}.${t}.${o}/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
+				A=${INDIR}/transposon_piRNA/FB/Ago3IPsds${s}.${t}.${o}/Phil.SRA.Ago3IPsds${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
 				B=${INDIR}/transposon_piRNA/FB/AubIP${s}.${t}.${o}/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
 				[ -f ${A} ] && [ -f ${B} ] && \
 				jobname=${t}${s}_${o}_Ago3_Aub.pp6 && \
@@ -145,7 +160,7 @@ do
 				for fb in ${TRN[@]}
 				do	
 				
-				A=${INDIR}/transposon_piRNA/FB/Ago3IP.${t}.${o}/Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
+				A=${INDIR}/transposon_piRNA/FB/Ago3IPsds.${t}.${o}/Phil.SRA.Ago3IPsds.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
 				B=${INDIR}/transposon_piRNA/FB/AubIP.${t}.${o}/Phil.SRA.AubIP.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
 				[ -f ${A} ] && [ -f ${B} ] && \
 				jobname=${t}_${o}_Ago3_Aub.pp6 && \
@@ -172,7 +187,7 @@ declare -a OX=("ox" "unox")
 declare -a UNIQ=("enriched")
 OUTDIR=${OUT}/pp6_TOTAL_enriched
 [ ! -f ${OUTDIR} ] && mkdir -p ${OUTDIR}
-#touch ${OUT}/.status.${STEP}.pp6.SRA_vs_SRA
+touch ${OUT}/.status.${STEP}.pp6.SRA_vs_SRA
 if [ ! -f ${OUT}/.status.${STEP}.pp6.enriched.SRA_vs_SRA ] 
 then
 for t in ${GT[@]}
@@ -181,7 +196,7 @@ do
 	do
 		for s in ${UNIQ[@]}
 		do
-			A=/home/wangw1/isilon_temp/ipsmRNA/chi-square_enriched/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29
+			A=/home/wangw1/isilon_temp/ipsmRNA/chi-square_enriched/Phil.SRA.Ago3IPsds${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29
 			B=/home/wangw1/isilon_temp/ipsmRNA/chi-square_enriched/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29
 			[ -f ${A} ] && [ -f ${B} ] && \
 			jobname=${t}${s}_${o}_Ago3_Aub.pp6 && \
