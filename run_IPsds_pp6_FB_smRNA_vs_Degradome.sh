@@ -18,7 +18,7 @@ script=${PIPELINE_DIRECTORY}/pp6_T_ww_len.pl
 
 INDIR=$1 #this is the folder store all pipeline results outmost folders 
 #/home/wangw1/isilon_temp/ipsmRNA/jia_pipeline_results
-OUT=${INDIR}/transposon_piRNA
+OUT=/home/wangw1/isilon_temp/ipsmRNA/transposon_piRNA
 LOG=${OUT}/log
 
 STEP=1
@@ -65,12 +65,12 @@ do
 		for s in ${UNIQ[@]}
 		do
 			A=${INDIR}/Phil.SRA.Ago3IPsds${s}.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IPsds${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
-			B=${INDIR}/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
+			B=${INDIR}/Phil.SRA.AubIPsds${s}.${t}.${o}.ovary.inserts/Phil.SRA.AubIPsds${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
 			[ -f ${A} ] && [ -f ${B} ] && \
-			jobname=${t}${s}_${o}_Ago3_Aub.pp6 && \
-			jOUT=${OUTDIR}/${t}${s}_${o}_Ago3_Aub && \
+			jobname=${t}${s}_${o}_Ago3sds_Aubsds.pp6 && \
+			jOUT=${OUTDIR}/${t}${s}_${o}_Ago3sds_Aubsds && \
 			[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
-			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "${script} ${A} ${B} 2 ${jOUT} >${jOUT}/${t}${s}_${o}_Ago3_Aub.total.pp6.out"
+			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "${script} ${A} ${B} 2 ${jOUT} >${jOUT}/${t}${s}_${o}_Ago3sds_Aubsds.total.pp6.out"
 		done
 	done
 done
@@ -81,12 +81,12 @@ do
 	do
 
 			A=${INDIR}/Phil.SRA.Ago3IPsds.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IPsds.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
-			B=${INDIR}/Phil.SRA.AubIP.${t}.${o}.ovary.inserts/Phil.SRA.AubIP.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
+			B=${INDIR}/Phil.SRA.AubIPsds.${t}.${o}.ovary.inserts/Phil.SRA.AubIPsds.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
 			[ -f ${A} ] && [ -f ${B} ] && \
-			jobname=${t}_${o}_Ago3_AubA.pp6 && \
-			jOUT=${OUTDIR}/${t}_${o}_Ago3_Aub && \
+			jobname=${t}_${o}_Ago3sds_Aubsds.pp6 && \
+			jOUT=${OUTDIR}/${t}_${o}_Ago3sds_Aubsds && \
 			[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
-			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "${script} ${A} ${B} 2 ${jOUT} >${jOUT}/${t}_${o}_Ago3_Aub.total.pp6.out"
+			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "${script} ${A} ${B} 2 ${jOUT} >${jOUT}/${t}_${o}_Ago3sds_Aubsds.total.pp6.out"
 	done
 done
 
@@ -129,23 +129,23 @@ then
 		do
 			for s in ${UNIQ[@]}				
 			do
-				jOUT=${OUTDIR}/${t}${s}_${o}_Ago3_Aub && \
+				jOUT=${OUTDIR}/${t}${s}_${o}_Ago3sds_Aubsds && \
 				[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
-				paraFile=${jOUT}/${t}${s}_${o}_Ago3_Aub.parafile
+				paraFile=${jOUT}/${t}${s}_${o}_Ago3sds_Aubsds.parafile
 				for fb in ${TRN[@]}
 				do	
 				
 				A=${INDIR}/transposon_piRNA/FB/Ago3IPsds${s}.${t}.${o}/Phil.SRA.Ago3IPsds${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
-				B=${INDIR}/transposon_piRNA/FB/AubIP${s}.${t}.${o}/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
+				B=${INDIR}/transposon_piRNA/FB/AubIPsds${s}.${t}.${o}/Phil.SRA.AubIPsds${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
 				[ -f ${A} ] && [ -f ${B} ] && \
-				jobname=${t}${s}_${o}_Ago3_Aub.pp6 && \
+				jobname=${t}${s}_${o}_Ago3sds_Aubsds.pp6 && \
 				
-				echo -ne "${script} ${A} ${B} 2 ${jOUT} ${fb} >>${jOUT}/${t}${s}_${o}_Ago3_Aub.FB.${fb}.pp6.out && ">>${paraFile} ####
-				echo -e "${script} ${A} ${B} 2 ${jOUT} ${fb} >>${jOUT}/${t}${s}_${o}_Ago3_Aub.FB.pp6.out.temp">>${paraFile}
+				echo -ne "${script} ${A} ${B} 2 ${jOUT} ${fb} >>${jOUT}/${t}${s}_${o}_Ago3sds_Aubsds.FB.${fb}.pp6.out && ">>${paraFile} ####
+				echo -e "${script} ${A} ${B} 2 ${jOUT} ${fb} >>${jOUT}/${t}${s}_${o}_Ago3sds_Aubsds.FB.pp6.out.temp">>${paraFile}
 				
 			done
 			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "ParaFly -c ${paraFile} -CPU 8 -failed_cmds ${paraFile}.failed_commands && \
-			awk '{OFS=\"\\\t\"}{print \$1,\$2,\$3,\$4,\$5,\$6,\$7,\$8,\$9,\$10}' ${jOUT}/${t}${s}_${o}_Ago3_Aub.FB.pp6.out.temp >${jOUT}/${t}${s}_${o}_Ago3_Aub.FB.pp6.out"
+			awk '{OFS=\"\\\t\"}{print \$1,\$2,\$3,\$4,\$5,\$6,\$7,\$8,\$9,\$10}' ${jOUT}/${t}${s}_${o}_Ago3sds_Aubsds.FB.pp6.out.temp >${jOUT}/${t}${s}_${o}_Ago3sds_Aubsds.FB.pp6.out"
 		done
 	done
 done
@@ -154,22 +154,22 @@ for t in ${GT[@]}
 do
 	for o in ${OX[@]}
 	do
-				jOUT=${OUTDIR}/${t}_${o}_Ago3_Aub && \
+				jOUT=${OUTDIR}/${t}_${o}_Ago3sds_Aubsds && \
 				[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
-				paraFile=${jOUT}/${t}_${o}_Ago3_Aub.parafile
+				paraFile=${jOUT}/${t}_${o}_Ago3sds_Aubsds.parafile
 				for fb in ${TRN[@]}
 				do	
 				
 				A=${INDIR}/transposon_piRNA/FB/Ago3IPsds.${t}.${o}/Phil.SRA.Ago3IPsds.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
-				B=${INDIR}/transposon_piRNA/FB/AubIP.${t}.${o}/Phil.SRA.AubIP.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
+				B=${INDIR}/transposon_piRNA/FB/AubIPsds.${t}.${o}/Phil.SRA.AubIPsds.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
 				[ -f ${A} ] && [ -f ${B} ] && \
-				jobname=${t}_${o}_Ago3_Aub.pp6 && \
+				jobname=${t}_${o}_Ago3sds_Aubsds.pp6 && \
 				
-				echo -ne "${script} ${A} ${B} 2 ${jOUT} ${fb} >>${jOUT}/${t}_${o}_Ago3_Aub.FB.${fb}.pp6.out && ">>${paraFile}
-				echo -e "${script} ${A} ${B} 2 ${jOUT} ${fb} >>${jOUT}/${t}_${o}_Ago3_Aub.FB.pp6.out.temp">>${paraFile}
+				echo -ne "${script} ${A} ${B} 2 ${jOUT} ${fb} >>${jOUT}/${t}_${o}_Ago3sds_Aubsds.FB.${fb}.pp6.out && ">>${paraFile}
+				echo -e "${script} ${A} ${B} 2 ${jOUT} ${fb} >>${jOUT}/${t}_${o}_Ago3sds_Aubsds.FB.pp6.out.temp">>${paraFile}
 				done
 				/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "ParaFly -c ${paraFile} -CPU 8 -failed_cmds ${paraFile}.failed_commands && \
-				awk '{OFS=\"\\\t\"}{print \$1,\$2,\$3,\$4,\$5,\$6,\$7,\$8,\$9,\$10}' ${jOUT}/${t}_${o}_Ago3_Aub.FB.pp6.out.temp > ${jOUT}/${t}_${o}_Ago3_Aub.FB.pp6.out"
+				awk '{OFS=\"\\\t\"}{print \$1,\$2,\$3,\$4,\$5,\$6,\$7,\$8,\$9,\$10}' ${jOUT}/${t}_${o}_Ago3sds_Aubsds.FB.pp6.out.temp > ${jOUT}/${t}_${o}_Ago3sds_Aubsds.FB.pp6.out"
 				
 
 	done
@@ -187,7 +187,7 @@ declare -a OX=("ox" "unox")
 declare -a UNIQ=("enriched")
 OUTDIR=${OUT}/pp6_TOTAL_enriched
 [ ! -f ${OUTDIR} ] && mkdir -p ${OUTDIR}
-touch ${OUT}/.status.${STEP}.pp6.SRA_vs_SRA
+touch ${OUT}/.status.${STEP}.pp6.enriched.SRA_vs_SRA
 if [ ! -f ${OUT}/.status.${STEP}.pp6.enriched.SRA_vs_SRA ] 
 then
 for t in ${GT[@]}
