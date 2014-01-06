@@ -141,8 +141,8 @@ then
 				[ -f ${A} ] && [ -f ${B} ] && \
 				jobname=${t}${s}_${o}_Ago3sds_Aubsds.pp6 && \
 				
-				echo -ne "${script} ${A} ${B} 2 ${jOUT} ${fb} \>\>${jOUT}/${t}${s}_${o}_Ago3sds_Aubsds.FB.${fb}.pp6.out && ">>${paraFile} 
-				echo -e "${script} ${A} ${B} 2 ${jOUT} ${fb} \>\>${jOUT}/${t}${s}_${o}_Ago3sds_Aubsds.FB.pp6.out.temp">>${paraFile}
+				echo -ne "${script} ${A} ${B} 2 ${jOUT} ${fb} >>${jOUT}/${t}${s}_${o}_Ago3sds_Aubsds.FB.${fb}.pp6.out && ">>${paraFile} 
+				echo -e "${script} ${A} ${B} 2 ${jOUT} ${fb} >>${jOUT}/${t}${s}_${o}_Ago3sds_Aubsds.FB.pp6.out.temp">>${paraFile}
 				
 			done
 			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "ParaFly -c ${paraFile} -CPU 8 -failed_cmds ${paraFile}.failed_commands && \
@@ -167,8 +167,8 @@ do
 				[ -f ${A} ] && [ -f ${B} ] && \
 				jobname=${t}_${o}_Ago3sds_Aubsds.pp6 && \
 				
-				echo -ne "${script} ${A} ${B} 2 ${jOUT} ${fb} \>\>${jOUT}/${t}_${o}_Ago3sds_Aubsds.FB.${fb}.pp6.out && " >> ${paraFile}
-				echo -e "${script} ${A} ${B} 2 ${jOUT} ${fb} \>\>${jOUT}/${t}_${o}_Ago3sds_Aubsds.FB.pp6.out.temp" >> ${paraFile}
+				echo -ne "${script} ${A} ${B} 2 ${jOUT} ${fb} >>${jOUT}/${t}_${o}_Ago3sds_Aubsds.FB.${fb}.pp6.out && " >> ${paraFile}
+				echo -e "${script} ${A} ${B} 2 ${jOUT} ${fb} >>${jOUT}/${t}_${o}_Ago3sds_Aubsds.FB.pp6.out.temp" >> ${paraFile}
 				done
 				/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "ParaFly -c ${paraFile} -CPU 8 -failed_cmds ${paraFile}.failed_commands && \
 				awk '{OFS=\"\\\t\"}{print \$1,\$2,\$3,\$4,\$5,\$6,\$7,\$8,\$9,\$10}' ${jOUT}/${t}_${o}_Ago3sds_Aubsds.FB.pp6.out.temp > ${jOUT}/${t}_${o}_Ago3sds_Aubsds.FB.pp6.out"
