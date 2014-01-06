@@ -72,7 +72,7 @@ then
 	do
 		for j in "${TRNLISTCOLNAMES[@]}"
 		do
-			${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source grouping ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.txt ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.withgroup.txt && rm ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.raw.txt
+			${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source grouping ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.txt ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.withgroup.txt 
 		done
 	done
 fi
@@ -120,9 +120,15 @@ then
 			COUNT=$(($COUNT+1))
 		done
 	done
+	
 	for j in "${TRNLISTCOLNAMES[@]}"
 	do
-		${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source grouping ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.txt ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.withgroup.txt 
+			${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.raw.txt ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.txt 
+	done
+	
+	for j in "${TRNLISTCOLNAMES[@]}"
+	do
+		${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source grouping ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.txt ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.withgroup.txt && ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.raw.txt
 	done
 	
 fi
