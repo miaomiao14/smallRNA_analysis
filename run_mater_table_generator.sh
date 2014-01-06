@@ -81,7 +81,7 @@ fi
 
 [ $? == 0 ] && \
 	#ParaFly -c $paraFile -CPU 24 -failed_cmds $paraFile.failed_commands && \
-	touch ${OUT}/.status.${STEP}.transposon_piRNA.paired.abundance_senseFraction
+	touch ${OUT}/.status.${STEP}.transposon_piRNA.abundance_senseFraction
 STEP=$((STEP+1))
 echo -e "`date` "+$ISO_8601"\tcreate master table for all genotypes abundance,sense_fraction of transposon piRNAs done" >> $LOG
 # transpose the table
