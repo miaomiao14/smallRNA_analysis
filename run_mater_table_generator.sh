@@ -128,7 +128,7 @@ then
 	
 	for j in "${TRNLISTCOLNAMES[@]}"
 	do
-		${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source grouping ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.txt ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.withgroup.txt && ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.raw.txt
+		${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source grouping ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.txt ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.withgroup.txt && rm ${OUTDIR}/${j}.${NF}.normalized.SRA.TRN.mastertable.raw.txt
 	done
 	
 fi
