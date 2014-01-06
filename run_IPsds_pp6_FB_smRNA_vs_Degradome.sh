@@ -81,12 +81,12 @@ do
 	do
 
 			A=${INDIR}/Phil.SRA.Ago3IPsds.${t}.${o}.ovary.inserts/Phil.SRA.Ago3IPsds.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
-			B=${INDIR}/Phil.SRA.AubIPsds.${t}.${o}.ovary.inserts/Phil.SRA.AubIPsds.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
+			B=${INDIR}/Phil.SRA.AubIP.${t}.${o}.ovary.inserts/Phil.SRA.AubIP.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
 			[ -f ${A} ] && [ -f ${B} ] && \
-			jobname=${t}_${o}_Ago3sds_Aubsds.pp6 && \
-			jOUT=${OUTDIR}/${t}_${o}_Ago3sds_Aubsds && \
+			jobname=${t}_${o}_Ago3sds_Aub.pp6 && \
+			jOUT=${OUTDIR}/${t}_${o}_Ago3sds_Aub && \
 			[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
-			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "${script} ${A} ${B} 2 ${jOUT} >${jOUT}/${t}_${o}_Ago3sds_Aubsds.total.pp6.out"
+			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "${script} ${A} ${B} 2 ${jOUT} >${jOUT}/${t}_${o}_Ago3sds_Aub.total.pp6.out"
 	done
 done
 
