@@ -97,7 +97,7 @@ STEP=$((STEP+1))
 
 OUTDIR=${OUT}/FB
 [ ! -f ${OUTDIR} ] && mkdir -p ${OUTDIR}
-if [ ! -f ${OUT}/.status.${STEP}.sds.FB ] 
+if [ ! -f ${OUT}/.status.${STEP}.FB ] 
 then
 	for i in `ls ${INDIR}/*.inserts/*.inserts.xkxh.transposon.mapper2.gz`
 	do
@@ -114,7 +114,7 @@ then
 	done
 fi
 [ $? == 0 ] && \
-touch ${OUT}/.status.${STEP}.sds.FB
+touch ${OUT}/.status.${STEP}.FB
 STEP=$((STEP+1))
 
 OUTDIR=${OUT}/pp6_FB
