@@ -80,7 +80,7 @@ do
 	for o in ${OX[@]}
 	do
 
-			A=${INDIR}/Phil.SRA.Ago3IPsds.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IPsds.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
+			A=${INDIR}/Phil.SRA.Ago3IPsds.${t}.${o}.ovary.inserts/Phil.SRA.Ago3IPsds.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
 			B=${INDIR}/Phil.SRA.AubIPsds.${t}.${o}.ovary.inserts/Phil.SRA.AubIPsds.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.gz
 			[ -f ${A} ] && [ -f ${B} ] && \
 			jobname=${t}_${o}_Ago3sds_Aubsds.pp6 && \
@@ -135,8 +135,8 @@ then
 				for fb in ${TRN[@]}
 				do	
 				
-				A=${INDIR}/transposon_piRNA/FB/Ago3IPsds${s}.${t}.${o}/Phil.SRA.Ago3IPsds${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
-				B=${INDIR}/transposon_piRNA/FB/AubIPsds${s}.${t}.${o}/Phil.SRA.AubIPsds${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
+				A=${OUT}/FB/Ago3IPsds${s}.${t}.${o}/Phil.SRA.Ago3IPsds${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
+				B=${OUT}/FB/AubIPsds${s}.${t}.${o}/Phil.SRA.AubIPsds${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
 				[ -f ${A} ] && [ -f ${B} ] && \
 				jobname=${t}${s}_${o}_Ago3sds_Aubsds.pp6 && \
 				
@@ -160,8 +160,8 @@ do
 				for fb in ${TRN[@]}
 				do	
 				
-				A=${INDIR}/transposon_piRNA/FB/Ago3IPsds.${t}.${o}/Phil.SRA.Ago3IPsds.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
-				B=${INDIR}/transposon_piRNA/FB/AubIPsds.${t}.${o}/Phil.SRA.AubIPsds.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
+				A=${OUT}/FB/Ago3IPsds.${t}.${o}/Phil.SRA.Ago3IPsds.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
+				B=${OUT}/FB/AubIPsds.${t}.${o}/Phil.SRA.AubIPsds.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
 				[ -f ${A} ] && [ -f ${B} ] && \
 				jobname=${t}_${o}_Ago3sds_Aubsds.pp6 && \
 				
