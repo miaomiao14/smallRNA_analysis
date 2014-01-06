@@ -132,6 +132,7 @@ then
 				jOUT=${OUTDIR}/${t}${s}_${o}_Ago3sds_Aubsds && \
 				[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
 				paraFile=${jOUT}/${t}${s}_${o}_Ago3sds_Aubsds.parafile
+				jobname=${t}${s}_${o}_Ago3sds_Aubsds.pp6 
 				#[ -f $paraFile ] && rm $paraFile
 				for fb in ${TRN[@]}
 				do	
@@ -139,7 +140,7 @@ then
 				A=${OUT}/FB/Ago3IPsds${s}.${t}.${o}/Phil.SRA.Ago3IPsds${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
 				B=${OUT}/FB/AubIPsds${s}.${t}.${o}/Phil.SRA.AubIPsds${s}.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
 				[ -f ${A} ] && [ -f ${B} ] && \
-				jobname=${t}${s}_${o}_Ago3sds_Aubsds.pp6 && \
+				
 				
 				echo -ne "${script} ${A} ${B} 2 ${jOUT} ${fb} >>${jOUT}/${t}${s}_${o}_Ago3sds_Aubsds.FB.${fb}.pp6.out && ">>${paraFile} 
 				echo -e "${script} ${A} ${B} 2 ${jOUT} ${fb} >>${jOUT}/${t}${s}_${o}_Ago3sds_Aubsds.FB.pp6.out.temp">>${paraFile}
@@ -158,6 +159,7 @@ do
 				jOUT=${OUTDIR}/${t}_${o}_Ago3sds_Aubsds && \
 				[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
 				paraFile=${jOUT}/${t}_${o}_Ago3sds_Aubsds.parafile
+				jobname=${t}_${o}_Ago3sds_Aubsds.pp6
 				#[ -f $paraFile ] && rm $paraFile
 				for fb in ${TRN[@]}
 				do	
@@ -165,7 +167,7 @@ do
 				A=${OUT}/FB/Ago3IPsds.${t}.${o}/Phil.SRA.Ago3IPsds.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
 				B=${OUT}/FB/AubIPsds.${t}.${o}/Phil.SRA.AubIPsds.${t}.${o}.ovary.inserts.xkxh.transposon.mapper2.23-29.${fb}
 				[ -f ${A} ] && [ -f ${B} ] && \
-				jobname=${t}_${o}_Ago3sds_Aubsds.pp6 && \
+				
 				
 				echo -ne "${script} ${A} ${B} 2 ${jOUT} ${fb} >>${jOUT}/${t}_${o}_Ago3sds_Aubsds.FB.${fb}.pp6.out && " >> ${paraFile}
 				echo -e "${script} ${A} ${B} 2 ${jOUT} ${fb} >>${jOUT}/${t}_${o}_Ago3sds_Aubsds.FB.pp6.out.temp" >> ${paraFile}
