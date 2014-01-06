@@ -90,9 +90,9 @@ echo -e "`date` "+$ISO_8601"\tcreate master table for all genotypes abundance,se
 
 
 #get normalized(to siRNAs map to structure loci and cisNats) total transposon mappers, transposon piRNAs, transposon sense piRNAs and transposon antisense piRNAs,sense fraction
-GT=("w1.ox" "ago3Muts.ox" "ago3Mutsrep2.ox" "aubvasAgo3WTrescue.ox" "aubvasAgo3WTrescuerep2.ox" "aubvasAgo3CDrescue.ox" "aubvasAgo3CDrescuerep2.ox" "AubMutsWW.ox" "aubMutsrep2.ox" "AubWTrescue.ox" "AubWTrescuerep2.ox" "AubCDrescue.ox" "AubCDrescuerep2.ox" "AubCDinHets.ox" "ago3MutsAubMuts.ox" "QinHets.ox" "QinMuts.ox" "QinAgo3Hets.ox" "QinAgo3Muts.ox")
+GT=("w1CJ.ox" "ago3MutsBH.ox" "ago3Mutsrep2.ox" "aubvasAgo3WTrescue.ox" "aubvasAgo3WTrescuerep2.ox" "aubvasAgo3CDrescue.ox" "aubvasAgo3CDrescuerep2.ox" "aubMutsWW.ox" "aubMutsrep2.ox" "AubWTrescue.ox" "AubWTrescuerep2.ox" "AubCDrescue.ox" "AubCDrescuerep2.ox" "aubCDinHets.ox" "ago3MutsAubMuts.ox" "QinAgo3Hets.ox" "QinAgo3Muts.ox")
 OUTDIR=${OUT}/nf_siRNA_transposon_piRNAs_abundance_senseFraction
-[ ! -d ${OUTDIR} ] && mkdir $OUTDIR
+
 NFFILE=/home/wangw1/pipeline_dm3/common/nf_siRNA.txt
 NF="siRNA"
 [ ! -d $OUTDIR ] && mkdir -p ${OUTDIR}
