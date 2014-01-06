@@ -157,6 +157,7 @@ do
 				jOUT=${OUTDIR}/${t}_${o}_Ago3sds_Aubsds && \
 				[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
 				paraFile=${jOUT}/${t}_${o}_Ago3sds_Aubsds.parafile
+				[ -f $paraFile ] && rm $paraFile
 				for fb in ${TRN[@]}
 				do	
 				
