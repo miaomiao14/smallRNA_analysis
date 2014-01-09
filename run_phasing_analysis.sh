@@ -14,7 +14,7 @@ export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 export PATH=${PIPELINE_DIRECTORY}/:$PATH
 
 
-INDIR=/home/wangw1/isilon_temp/smRNA/jia_pipeline_results #this is the folder store all pipeline results outmost folders
+INDIR=/home/wangw1/isilon_temp/smRNA/jia_pipeline_results/temp #this is the folder store all pipeline results outmost folders
 OUT=/home/wangw1/isilon_temp/smRNA/transposon_piRNA
 LOG=${OUT}/log
 
