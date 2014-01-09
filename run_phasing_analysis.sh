@@ -48,7 +48,7 @@ then
 	for i in `ls ${OUTDIR1}/*.ovary.inserts.xkxh.norm.bed.gz.5-5.distance.distribution.summary`
 	do
 		inputfile=${i##*/}
-		insertsname=`basename $FILE .ovary.inserts.xkxh.norm.bed.gz.5-5.distance.distribution.summary`
+		insertsname=`basename $inputfile .ovary.inserts.xkxh.norm.bed.gz.5-5.distance.distribution.summary`
 		samplename=${insertsname#*.SRA.*}
 		
 	awk -v gt=${samplename} '{OFS="\t"}{print gt,$1,$2}' ${i} >>${OUTDIR2}/allpiRNAs.allgt.5-5.distance.min.distribution.summary.raw.txt
