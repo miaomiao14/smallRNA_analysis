@@ -41,7 +41,7 @@ plot_distribution_summary <- function (input) {
 		file=input
 		filename=basename(input)
 		pp=read.table(file,F)
-		pdfname= paste(file, 'piRNA_distance_distribution.pdf', sep='')
+		pdfname= paste(file, '_piRNA_distance_distribution.pdf', sep='')
 		pdf(pdfname,width=9,height=5)
 		colnames(pp)=c("distance","reads")
 		pp=pp[order(pp$distance),]
