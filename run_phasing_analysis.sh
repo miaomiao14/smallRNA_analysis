@@ -45,6 +45,7 @@ OUTDIR2=${OUT}/phasingMaster
 [ ! -d $OUTDIR2 ] && mkdir -p ${OUTDIR2}
 if [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.phasing.mastertable ] 
 then
+	[ -s ${OUTDIR2}/allpiRNAs.allgt.5-5.distance.min.distribution.summary.raw.txt ] && rm ${OUTDIR2}/allpiRNAs.allgt.5-5.distance.min.distribution.summary.raw.txt
 	for i in `ls ${OUTDIR1}/*.ovary.inserts.xkxh.norm.bed.gz.5-5.distance.distribution.summary`
 	do
 		inputfile=${i##*/}
