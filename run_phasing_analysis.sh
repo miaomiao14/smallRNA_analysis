@@ -21,7 +21,7 @@ LOG=${OUT}/log
 STEP=1
 
 echo -e "`date` "+$ISO_8601"\tDraw phasing analysis..." >> $LOG
-OUTDIR1=${INDIR}/transposon_piRNA/phasing
+OUTDIR1=${OUT}/phasing
 [ ! -d $OUTDIR1 ] && mkdir -p ${OUTDIR1}
 if [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.phasing ] 
 then
