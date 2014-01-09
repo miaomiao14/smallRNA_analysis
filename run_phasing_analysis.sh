@@ -23,7 +23,7 @@ STEP=1
 echo -e "`date` "+$ISO_8601"\tDraw phasing analysis..." >> $LOG
 OUTDIR1=${INDIR}/transposon_piRNA/phasing
 [ ! -d $OUTDIR1 ] && mkdir -p ${OUTDIR1}
-if [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.phasing ] && \
+if [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.phasing ] 
 #paraFile=${OUTDIR1}/${RANDOM}.piRNAphasing.para
 
 for i in `ls ${INDIR}/*.inserts/*.norm.bed.gz`
@@ -44,7 +44,7 @@ echo -e "`date` "+$ISO_8601"\tgenerate phasing master table..." >> $LOG
 
 OUTDIR2=${OUT}/phasingMaster
 [ ! -d $OUTDIR2 ] && mkdir -p ${OUTDIR2}
-if [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.phasing.mastertable ] && \
+if [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.phasing.mastertable ] 
 for i in `ls ${OUTDIR1}/*.ovary.inserts.xkxh.norm.bed.gz.5-5.distance.distribution.summary`
 do
 	inputfile=${i##*/}
