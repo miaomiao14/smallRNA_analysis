@@ -39,7 +39,7 @@ do
 #echo "spliting transposon family..."
 	echo "#!/bin/sh
 
-#$ -pe single 24
+#$ -pe single 8
 #$ -V
 #$ -o \$HOME/sge_jobs_output/sge_job.\$JOB_ID.out -j y
 #$ -S /bin/bash
