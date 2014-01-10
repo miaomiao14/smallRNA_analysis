@@ -51,3 +51,28 @@ plot_distribution_summary <- function (input) {
 		
 		dev.off()
 	}
+
+	
+fineplot_distribution_summary <- function (input) {
+		file=input
+		filename=basename(input)
+		pp=read.table(file,T)
+		
+		colnames(pp)[1]<-c("distance")
+		pp=pp[order(pp$distance),]
+		pp=pp[,-1]
+		pp=as.matrix(pp)
+		ppProb=prop.table(pp, margin=2)*100
+		
+		ppProb=transform(ppProb,distance=rownames(ppProb))
+		ppProb$distance=as.numeric(as.character(ppProb$distance))
+		write.table(ppProb,"allpiRNAs.allgt.5-5.distance.min.distribution.summary.fraction.mastertable.txt",row.names = FALSE,sep = "\t",)
+		
+#		pdfname= paste(file, '_piRNA_distance_distribution.pdf', sep='')
+#		pdf(pdfname,width=9,height=5)
+#		p<-ggplot(pp,aes(distance,reads))+labs(title=filename)
+#		p1<-p+geom_line(size=1,colour="red")+xlab("5'-5'end distance on the same strand")+scale_x_continuous(limits = c(0, 100),breaks=seq(0,100,4),labels=seq(0,100,4))+geom_vline(xintercept = c(27,54),col="black",linetype=2)
+#		print(p1)
+#		
+#		dev.off()
+	}

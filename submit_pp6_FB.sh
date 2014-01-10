@@ -15,7 +15,7 @@ INDIR=$1 #this is the folder store all pipeline results outmost folders
 #"Phil.SRA.QinAgo3Muts.ox.ovary.inserts" "Phil.SRA.QinAgo3Muts.unox.ovary.inserts")
 
 #t="Phil.Ago3IPuniq.aubMutant.unox.ovary.inserts"
-declare -a TARGETS=("Phil.SRA.Ago3IPsds.aubMuts.unox.ovary.inserts" "Phil.SRA.Ago3IPsds.ago3Muts.unox.ovary.inserts")
+declare -a TARGETS=("Phil.SRA.aubMutsrep2.unox.ovary.inserts" "Phil.SRA.ago3Mutsrep2.unox.ovary.inserts" "Phil.SRA.AubWTrescuerep2.unox.ovary.inserts" "Phil.SRA.aubvasAgo3WTrescuerep2.ox.ovary.inserts" "Phil.SRA.AubCDrescuerep2.unox.ovary.inserts" "Phil.SRA.aubvasAgo3CDrescuerep2.ox.ovary.inserts" "Phil.SRA.ago3Mutsrep2.ox.ovary.inserts" "Phil.SRA.aubvasAgo3WTrescuerep2.unox.ovary.inserts" "Phil.SRA.w1CJ.ox.ovary.inserts" "Phil.SRA.AubWTrescuerep2.ox.ovary.inserts" "Phil.SRA.aubMutsrep2.ox.ovary.inserts" "Phil.SRA.aubvasAgo3CDrescuerep2.unox.ovary.inserts" "Phil.SRA.AubCDrescuerep2.ox.ovary.inserts" "Phil.SRA.ago3MutsAubMuts.ox.ovary.inserts" "Phil.SRA.ago3MutsAubMuts.unox.ovary.inserts")
 [ ! -d ${INDIR}/pp6_FB ] && mkdir -p ${INDIR}/pp6_FB
 for t in ${TARGETS[@]}
 do
