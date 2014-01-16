@@ -87,7 +87,7 @@ while ( my $line = <$fileIN> ) {
     my $stringrc=&RevComp($string);
     my $newstart=$newend-23;
     $newstart=$newstart+1;#to accomondate to norm.bed format
-	print OUT "$chr\t$newstart\t$newend\t\-\t$stringrc\t1\t1\n";
+	print OUT "$chr\t$newstart\t$newend\t\-\t$string\t1\t1\n";
     $offset = $tindex + 1;
     $tindex = index($seq, $char, $offset);
     }
