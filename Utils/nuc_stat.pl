@@ -59,7 +59,7 @@ while ( my $line = <$fileIN> ) {
     my $string=substr($seq,$tindex,23);
     my $newend=$newstart+23;
     $newstart=$newstart+1;#to accomondate to norm.bed format
-	print OUT "$chr\t$newstart\t$newend\t"+"$string\t1\t1\n";
+	print OUT "$chr\t$newstart\t$newend\t\+\t$string\t1\t1\n";
     $offset = $tindex + 1;
     $tindex = index($seq, $char, $offset);
     }
@@ -85,7 +85,7 @@ while ( my $line = <$fileIN> ) {
     my $string=substr($seq,$tindex,23);
     my $newstart=$newend-23;
     $newstart=$newstart+1;#to accomondate to norm.bed format
-	print OUT "$chr\t$newstart\t$newend\t"-"$string\t1\t1\n";
+	print OUT "$chr\t$newstart\t$newend\t\-\t$string\t1\t1\n";
     $offset = $tindex + 1;
     $tindex = index($seq, $char, $offset);
     }
