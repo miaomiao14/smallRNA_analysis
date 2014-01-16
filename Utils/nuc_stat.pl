@@ -35,7 +35,7 @@ open OUT, ">$ARGV[2]" or die "can't open file basecount.out for writing";
 
 while ( my $line = <$fileIN> ) {
 
-  next if $line =~ /^>/;
+  next if $line =~ /^#/;
   chomp $line;
 
   my($chr,$start,$end,$name,$temp,$strand,$ATperc,$GCperc,$A1,$C1,$G1,$T1,$N,$O,$Len,$seq0)=split(/\t/,$line);
