@@ -26,6 +26,12 @@ while ( my $seq = <$fileIN> ) {
 
   next if $seq =~ /^>/;
   $seq =~ s/\n//g;
+  
+  my $char = 'T';
+
+  my $result = index($seq, $char);
+  print "Result: $result\n";
+  
   say $seq;
 
   my @dna = split //, $seq;
@@ -37,10 +43,7 @@ while ( my $seq = <$fileIN> ) {
     $C++ if $element =~ m/C/;
   }
   
-  my $char = 'T';
 
-  my $result = index($seq, $char);
-  print "Result: $result\n";
   
 }
 
