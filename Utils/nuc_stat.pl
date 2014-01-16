@@ -38,7 +38,7 @@ while ( my $line = <$fileIN> ) {
   next if $line =~ /^>/;
   chomp $line;
 
-  my($chr,$start,$end,$name,$temp,$strand,$ATperc,$GCperc,$A,$C,$G,$T,$N,$O,$Len,$seq)=split(/\t/,$line);
+  my($chr,$start,$end,$name,$temp,$strand,$ATperc,$GCperc,$A1,$C1,$G1,$T1,$N,$O,$Len,$seq)=split(/\t/,$line);
 
   my $rbound=$end-23; #assume the length of piRNAs are at least 23 nt long
   my $char = 'T';
