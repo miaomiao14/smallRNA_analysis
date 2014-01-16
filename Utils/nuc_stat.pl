@@ -1,6 +1,12 @@
+#!/usr/bin/perl
+
 use strict;
 use warnings;
+use File::Basename;
+use Compress::Zlib;
 use feature 'say';
+
+
 my $A;
 my $T;
 my $G;
