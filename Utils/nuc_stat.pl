@@ -19,8 +19,8 @@ my $C_fre;
 my $fileIN;
 my $fileOUT;
 
-open $fileIN,  '<',"$ARGV[0]" or die "can't open file basecount.nfasta for reading";
-open $fileOUT, '>','$ARGV[1]' or die "can't open file basecount.out for writing";
+open $fileIN,  "$ARGV[0]" or die "can't open file basecount.nfasta for reading";
+open $fileOUT, ">$ARGV[1]" or die "can't open file basecount.out for writing";
 
 while ( my $seq = <$fileIN> ) {
 
