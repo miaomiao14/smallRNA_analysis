@@ -36,17 +36,11 @@ while ( my $seq = <$fileIN> ) {
     $G++ if $element =~ m/G/;
     $C++ if $element =~ m/C/;
   }
-	
+  
+  my $char = 'T';
 
-  
-  $total=$A+$T+$C+$G;
-  $A_fre=$A/$total;
-  $C_fre=$C/$total;
-  $G_fre=$G/$total;
-  $T_fre=$T/$total;
-  
-
-  
+  my $result = index($seq, $char);
+  print "Result: $result\n";
   
 }
 
@@ -54,6 +48,13 @@ while ( my $seq = <$fileIN> ) {
   say $fileOUT "T=$T";
   say $fileOUT "G=$G";
   say $fileOUT "C=$C";
+  
+  $total=$A+$T+$C+$G;
+  $A_fre=$A/$total;
+  $C_fre=$C/$total;
+  $G_fre=$G/$total;
+  $T_fre=$T/$total;
+  
   
   say $fileOUT "A_fre=$A_fre";
   say $fileOUT "T_fre=$T_fre";
