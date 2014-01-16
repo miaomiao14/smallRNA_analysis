@@ -5,11 +5,16 @@ my $A;
 my $T;
 my $G;
 my $C;
+my $total;
+my $A_fre;
+my $T_fre;
+my $G_fre;
+my $C_fre;
 my $fileIN;
 my $fileOUT;
 
-open $fileIN,  '<',"basecount.nfasta" or die "can't open file basecount.nfasta for reading";
-open $fileOUT, '>','basecount.out' or die "can't open file basecount.out for writing";
+open $fileIN,  '<',"$ARGV[0]" or die "can't open file basecount.nfasta for reading";
+open $fileOUT, '>','$ARGV[1]' or die "can't open file basecount.out for writing";
 
 while ( my $seq = <$fileIN> ) {
 
@@ -31,7 +36,18 @@ while ( my $seq = <$fileIN> ) {
   say $fileOUT "G=$G";
   say $fileOUT "C=$C";
   
-  $total
+  $total=$A+$T+$C+$G;
+  $A_fre=$A/$total;
+  $C_fre=$C/$total;
+  $G_fre=$G/$total;
+  $T_fre=$T/$total;
+  
+  say $fileOUT "A_fre=$A_fre";
+  say $fileOUT "T_fre=$T_fre";
+  say $fileOUT "G_fre=$G_fre";
+  say $fileOUT "C_fre=$C_fre";
+  
+  
 }
 
 close $fileIN;
