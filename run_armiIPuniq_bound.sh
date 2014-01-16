@@ -3,8 +3,8 @@
 
 export PIPELINEDIR=/home/lees2/pipeline:/home/xuj1/pipeline
 
-INPUTDIR=/home/wangw1/isilon_temp/ipsmRNA/trimmed
-OUTPUTDIR=/home/wangw1/isilon_temp/ipsmRNA/trimmed_uniqBoundsds
+INPUTDIR=$1
+OUTPUTDIR=$2
 [ ! -d $OUTPUTDIR ] && mkdir $OUTPUTDIR
 
 STEP=1
