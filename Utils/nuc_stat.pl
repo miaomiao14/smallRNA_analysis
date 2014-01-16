@@ -28,9 +28,18 @@ while ( my $seq = <$fileIN> ) {
   $seq =~ s/\n//g;
   
   my $char = 'T';
+  my $offset = 0;
+  
+  my $result = index($seq, $char, $offset);
 
-  my $result = index($seq, $char);
-  print "Result: $result\n";
+  while ($result != -1) {
+
+    print "Found $char at $result\n";
+
+    $offset = $result + 1;
+    $result = index($seq, $char, $offset);
+
+  }
   
   say $seq;
 
