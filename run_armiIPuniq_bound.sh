@@ -15,7 +15,7 @@ declare -a GT2=("nosGal4Cyo" "nosGal4UASPArmiK729A")
 declare -a LEN=("30" "78B")
 declare -a OX=("unox")
 declare -a PRO=("FLAGIPnon" "FLAGIP")
-echo -e "genotype\tox\tsharedSpecies\tsharedReadsFLAGIPnon\tsharedReadsFLAGIP\tuniqSpeciesFLAGIPnon\tuniqSpeciesFLAGIP\tuniqReadsFLAGIPnon\tuniqReadsFLAGIP\n" >> ${OUTPUTDIR}/stat.log
+echo -e "genotype\tlen\tox\tsharedSpecies\tsharedReadsFLAGIPnon\tsharedReadsFLAGIP\tuniqSpeciesFLAGIPnon\tuniqSpeciesFLAGIP\tuniqReadsFLAGIPnon\tuniqReadsFLAGIP\n" >> ${OUTPUTDIR}/stat.log
 parafile=${OUTPUTDIR}/para.uniq.bound
 [ -s ${parafile} ] && rm ${parafile}
 [ ! -f ${OUTPUTDIR}/.status.${STEP}.IPuniqBound ] && \
@@ -31,6 +31,8 @@ do
 			echo -ne " B=Phil.SRA.${PRO[1]}.${SUBGROUP[1]}${l}.${o}.ovary.trimmed && " >>${parafile}
 			echo -ne " ANEW=Phil.SRA.${PRO[0]}uniq.${SUBGROUP[0]}${l}.${SUBGROUP[1]}${l}.${o}.ovary.trimmed && " >>${parafile}
 			echo -ne " BNEW=Phil.SRA.${PRO[1]}uniq.${SUBGROUP[1]}${l}.${SUBGROUP[0]}${l}.${o}.ovary.trimmed && " >>${parafile}
+			echo -ne " AS=Phil.SRA.${PRO[0]}shared.${SUBGROUP[0]}${l}.${SUBGROUP[1]}${l}.${o}.ovary.trimmed && " >>${parafile}
+			echo -ne " BS=Phil.SRA.${PRO[1]}shared.${SUBGROUP[1]}${l}.${SUBGROUP[0]}${l}.${o}.ovary.trimmed && " >>${parafile}
 			echo -ne " ln -s ${INPUTDIR}/\${A} ${OUTPUTDIR} && " >>${parafile}
 			echo -ne " ln -s ${INPUTDIR}/\${B} ${OUTPUTDIR} && " >>${parafile}
 		 
@@ -45,9 +47,9 @@ do
 			echo -ne " uniqSpeciesFLAGIPnon=\`wc -l \${A}.uniqA|cut -d\" \" -f1\` && " >>${parafile}
 			echo -ne " uniqSpeciesFLAGIP=\`wc -l \${B}.uniqB|cut -d\" \" -f1\` && " >>${parafile}
 			echo -ne " uniqReadsFLAGIPnon=\`sumcol \${A}.uniqA 2\` && " >>${parafile} 
-			echo -ne " uniqReadsFLAGIP=\`sumcol \${B}.uniqB 2\` && rm \${A} && rm \${B} && mv \${A}.uniqA \${ANEW} && mv \${B}.uniqB \${BNEW} &&  " >>${parafile}
+			echo -ne " uniqReadsFLAGIP=\`sumcol \${B}.uniqB 2\` && rm \${A} && rm \${B} && mv \${A}.uniqA \${ANEW} && mv \${B}.uniqB \${BNEW} && mv \${A}.sharedA \${AS} && mv \${B}.sharedB \${BS} && " >>${parafile}
 		
-			echo -e " echo -e \"${g}\\\t${o}\\\t\${sharedSpecies}\\\t\${sharedReadsFLAGIPnon}\\\t\${sharedReadsFLAGIP}\\\t\${uniqSpeciesFLAGIPnon}\\\t\${uniqSpeciesFLAGIP}\\\t\${uniqReadsFLAGIPnon}\\\t\${uniqReadsFLAGIP}\" >> ${OUTPUTDIR}/stat.log " >>${parafile}
+			echo -e " echo -e \"${SUBGROUP[0]}.${SUBGROUP[1]}\\\t${l}\\\t${o}\\\t\${sharedSpecies}\\\t\${sharedReadsFLAGIPnon}\\\t\${sharedReadsFLAGIP}\\\t\${uniqSpeciesFLAGIPnon}\\\t\${uniqSpeciesFLAGIP}\\\t\${uniqReadsFLAGIPnon}\\\t\${uniqReadsFLAGIP}\" >> ${OUTPUTDIR}/stat.log " >>${parafile}
 		done
 	done
 done
