@@ -79,6 +79,9 @@ while ( my $line = <$fileIN> ) {
     my $newend=$start+$tindex;
     if($newend<$lbound)
     {
+    	
+    	$offset = $tindex + 1;
+    	$tindex = index($seq, $char, $offset);
     	next;
     }
     else
