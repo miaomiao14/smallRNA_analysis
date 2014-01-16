@@ -28,6 +28,7 @@ my $G_fre;
 my $C_fre;
 my $fileIN;
 my $fileOUT;
+my %RevCompBasePairs=qw/A T T A G C C G a t t a g c c g U A u a R Y r y Y R y r M K m k K M k m S S s s W W w w H D D H h d d h B V V B b v v b N N n n/;
 
 open $fileIN,  "$ARGV[0]" or die "can't open file basecount.nfasta for reading";
 open $fileOUT, ">$ARGV[1]" or die "can't open file basecount.out for writing";
@@ -129,7 +130,6 @@ close $fileIN;
 close $fileOUT;
 close(OUT);
 
-my %RevCompBasePairs=qw/A T T A G C C G a t t a g c c g U A u a R Y r y Y R y r M K m k K M k m S S s s W W w w H D D H h d d h B V V B b v v b N N n n/;
 
 sub RevComp {
   my $s=shift @_;
