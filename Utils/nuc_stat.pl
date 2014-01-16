@@ -38,8 +38,8 @@ while ( my $line = <$fileIN> ) {
   next if $line =~ /^>/;
   chomp $line;
 
-  my($chr,$start,$end,$name,$temp,$strand,$ATperc,$GCperc,$A1,$C1,$G1,$T1,$N,$O,$Len,$seq)=split(/\t/,$line);
-
+  my($chr,$start,$end,$name,$temp,$strand,$ATperc,$GCperc,$A1,$C1,$G1,$T1,$N,$O,$Len,$seq0)=split(/\t/,$line);
+  my $seq = uc $seq0;
   my $rbound=$end-23; #assume the length of piRNAs are at least 23 nt long
   my $char = 'T';
   my $offset = 0;
@@ -48,7 +48,7 @@ while ( my $line = <$fileIN> ) {
   while ($tindex != -1) {
 
 	
-    print "Found $char at $tindex\n";
+
     my $newstart=$start+$tindex;
     if($newstart>$rbound)
     {
@@ -74,7 +74,7 @@ while ( my $line = <$fileIN> ) {
   while ($tindex != -1) {
 
 	
-    #print "Found $char at $tindex\n";
+
     my $newend=$start+$tindex;
     if($newend<$lbound)
     {
@@ -83,9 +83,10 @@ while ( my $line = <$fileIN> ) {
     else
     {
     my $string=substr($seq,$tindex,23);
+    my $stringrc=&RevComp($string);
     my $newstart=$newend-23;
     $newstart=$newstart+1;#to accomondate to norm.bed format
-	print OUT "$chr\t$newstart\t$newend\t\-\t$string\t1\t1\n";
+	print OUT "$chr\t$newstart\t$newend\t\-\t$stringrc\t1\t1\n";
     $offset = $tindex + 1;
     $tindex = index($seq, $char, $offset);
     }
@@ -127,3 +128,15 @@ while ( my $line = <$fileIN> ) {
 close $fileIN;
 close $fileOUT;
 close(OUT);
+
+my %RevCompBasePairs=qw/A T T A G C C G a t t a g c c g U A u a R Y r y Y R y r M K m k K M k m S S s s W W w w H D D H h d d h B V V B b v v b N N n n/;
+
+sub RevComp {
+  my $s=shift @_;
+  my $new_s='';
+  for my $b (split//,$s) {
+   if(!exists $RevCompBasePairs{$b}) { $new_s.="?"; }
+   else { $new_s=$RevCompBasePairs{$b}.$new_s; }
+  }
+  return $new_s;
+}
