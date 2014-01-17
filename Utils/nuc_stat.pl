@@ -41,15 +41,15 @@ while ( my $line = <$fileIN> ) {
 
   my($chr,$start,$end,$name,$temp,$strand,$ATperc,$GCperc,$A1,$C1,$G1,$T1,$N,$O,$Len,$seq0)=split(/\t/,$line);
   my $seq = uc $seq0; #convert all lower case to upper case
+  
+  
+  
   my $rbound=$end-23; #assume the length of piRNAs are at least 23 nt long
   my $char = 'T';
   my $offset = 0;
   my $tindex = index($seq, $char, $offset);
 
   while ($tindex != -1) {
-
-	
-
     my $newstart=$start+$tindex;
     if($newstart>$rbound)
     {
@@ -73,9 +73,6 @@ while ( my $line = <$fileIN> ) {
   $tindex = index($seq, $char, $offset);
 
   while ($tindex != -1) {
-
-	
-
     my $newend=$start+$tindex;
     if($newend<$lbound)
     {
@@ -86,9 +83,10 @@ while ( my $line = <$fileIN> ) {
     }
     else
     {
-    my $string=substr($seq,$tindex,23);
-    my $stringrc=&RevComp($string);
     my $newstart=$newend-23;
+    my $string=substr($seq,$newstart,23);
+    my $stringrc=&RevComp($string);
+    
     $newstart=$newstart+1;#to accomondate to norm.bed format
 	print OUT "$chr\t$newstart\t$newend\t\-\t$stringrc\t1\t1\n";
     $offset = $tindex + 1;
