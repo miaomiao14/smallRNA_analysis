@@ -84,7 +84,8 @@ while ( my $line = <$fileIN> ) {
     else
     {
     my $newstart=$newend-23;
-    my $string=substr($seq,$newstart,23);
+    my $newindex=$tindex-23;
+    my $string=substr($seq,$newindex,23);
     my $stringrc=&RevComp($string);
     
     $newstart=$newstart+1;#to accomondate to norm.bed format
