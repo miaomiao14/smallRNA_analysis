@@ -15,43 +15,57 @@ while(<IN>) { if (/>(.+) type/) { $chr="chr$1";} else { chomp; $genome{$chr}=$_;
 %hash2=();
 @hash3=();
 # make bowtie index
-for ($i=0; $i<$ARGV[2]; $i++) {
-my $file=fileparse($ARGV[$i]);
-    @namefield=split(/\./,$file);
-    $name=$namefield[2]."_".$namefield[1];
-    push @argos, $name;
-    $file=$name;
-open IN, $ARGV[$i];
-while(<IN>) { chomp; split(/\t/);  
-#next if (length($_[4])>29 || length($_[4])<23); #can not use it for DEG
-next if (/data/);
-$total{$file}+=$_[5]/$_[6];
-$hash2{$file}{substr($_[4],0,16)}+=$_[5]/$_[6];
-for ($n=1;$n<=20;$n++) {
-if ($_[3] eq '+') { $start=$_[1]+$n-17; $str=substr($genome{$_[0]},$start,16); $str=&revfa($str);
-                   $hash1{$file}{$n}{$str}+=$_[5]/$_[6];
-                   push @{$hash3{$file}{$n}{$str}},$_[4];
+for ($i=0; $i<$ARGV[2]; $i++)
+{
+	my $file=fileparse($ARGV[$i]);
+	@namefield=split(/\./,$file);
+	$name=$namefield[2]."_".$namefield[1];
+	push @argos, $name;
+	$file=$name;
+	open IN, $ARGV[$i];
+	while(<IN>) 
+	{
+		chomp; 
+		split(/\t/);  
+		#next if (length($_[4])>29 || length($_[4])<23); #can not use it for DEG
+		next if (/data/);
+		$total{$file}+=$_[5]/$_[6];
+		$hash2{$file}{substr($_[4],0,16)}+=$_[5]/$_[6];
+		for ($n=1;$n<=20;$n++)
+		{
+			if ($_[3] eq '+')
+			{
+				$start=$_[1]+$n-17;
+				$str=substr($genome{$_[0]},$start,16);
+				$str=&revfa($str);
+                $hash1{$file}{$n}{$str}+=$_[5]/$_[6];
+                push @{$hash3{$file}{$n}{$str}},$_[4];
                 
-                   }
-else {  $start=$_[2]-$n; $str=substr($genome{$_[0]},$start,16);
-      $hash1{$file}{$n}{$str}+=$_[5]/$_[6];
-      push @{$hash3{$file}{$n}{$str}},$_[4];
+			}
+			else 
+			{
+				$start=$_[2]-$n;
+				$str=substr($genome{$_[0]},$start,16);
+      			$hash1{$file}{$n}{$str}+=$_[5]/$_[6];
+     			push @{$hash3{$file}{$n}{$str}},$_[4];
 
-      }
-}
-}
-if ($total{$file}>10) {
-open OUT, ">$file.seq";
-foreach (keys %{$hash2{$file}}) { print OUT "$_\t$hash2{$file}{$_}\n" if (length($_)==16);}
-close(OUT);
-for ($n=1;$n<=20;$n++) {
-open OUT, ">$file.ref.$n.fa";
-foreach (keys %{$hash1{$file}{$n}}) { print OUT ">$_\t$hash1{$file}{$n}{$_}\n$_\n" if (length($_)==16);$k++;}
-`bowtie-build $file.ref.$n.fa $file.$n`;
-#`rm $file.ref.$n.fa`;
- }
-close (OUT);
-}
+      		}
+		}
+	}
+	if ($total{$file}>10) 
+	{
+		open OUT, ">$file.seq";
+		foreach (keys %{$hash2{$file}}) { print OUT "$_\t$hash2{$file}{$_}\n" if (length($_)==16);}
+		close(OUT);
+		for ($n=1;$n<=20;$n++) 
+		{
+		open OUT, ">$file.ref.$n.fa";
+		foreach (keys %{$hash1{$file}{$n}}) { print OUT ">$_\t$hash1{$file}{$n}{$_}\n$_\n" if (length($_)==16);$k++;}
+		`bowtie-build $file.ref.$n.fa $file.$n`;
+		#`rm $file.ref.$n.fa`;
+	 	}
+		close (OUT);
+	}
 }
 
 

@@ -30,6 +30,7 @@ do
 	gzip ${smmapper2%.gz}.23-29
 	
 	#convert mapper2 to norm.bed for pp8
+	${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${smmapper2%.gz}.23-29
 	
 	echo -e "`date` "+$ISO_8601"\tSize select the smallRNA transposon mapper2 and gzip it..." >> $LOG
 	#total Ping-Pong
