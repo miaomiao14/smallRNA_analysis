@@ -34,6 +34,8 @@ open $fileIN,  "$ARGV[0]" or die "can't open file basecount.nfasta for reading";
 open $fileOUT, ">$ARGV[1]" or die "can't open file basecount.out for writing";
 open OUT, ">$ARGV[2]" or die "can't open file basecount.out for writing";
 
+
+my %bedrecord; #output bed format record
 while ( my $line = <$fileIN> ) {
 
   next if $line =~ /^#/;
@@ -43,59 +45,34 @@ while ( my $line = <$fileIN> ) {
   my $seq = uc $seq0; #convert all lower case to upper case
   
   
-  
-  my $rbound=$end-23; #assume the length of piRNAs are at least 23 nt long
-  my $char = 'T';
-  my $offset = 0;
-  my $tindex = index($seq, $char, $offset);
-
-  while ($tindex != -1) {
-    my $newstart=$start+$tindex;
-    if($newstart>$rbound)
-    {
-    	last;
-    }
-    else
-    {
-    my $string=substr($seq,$tindex,23);
-    my $newend=$newstart+23;
-    $newstart=$newstart+1;#to accomondate to norm.bed format
-	print OUT "$chr\t$newstart\t$newend\t\+\t$string\t1\t1\n";
-    $offset = $tindex + 1;
-    $tindex = index($seq, $char, $offset);
-    }
-
+  if($strand eq "+") #for clusters
+  {
+	  
+	  my $char = 'T';
+	  my $str="+";
+	  &ltor($chr,$start,$end,$str,$char,$seq,\%bedrecord);
+ 
+ 	  $str="-";
+	  $char = 'A';
+	  &rtol($chr,$start,$end,$str,$char,$seq,\%bedrecord);
+   }
+   
+   #if strand is -, the sequence is always from 5'-3', but it is reverse complementary sequences of the genomic DNA already
+  if($strand eq "-") #for transposons
+  {
+	 
+	  my $char = 'T';
+	  my $str="-";
+	  &rtol($chr,$start,$end,$str,$char,$seq,\%bedrecord);
+	 
+	  $str="+";
+	  $char = 'A';
+	  &ltor($chr,$start,$end,$str,$char,$seq,\%bedrecord);
+	
   }
-  
-  my $lbound=$start+22;
-  $char = 'A';
-  $offset = 0;
-  $tindex = index($seq, $char, $offset);
-
-  while ($tindex != -1) {
-    my $newend=$start+$tindex;
-    if($newend<$lbound)
-    {
-    	
-    	$offset = $tindex + 1;
-    	$tindex = index($seq, $char, $offset);
-    	next;
-    }
-    else
-    {
-    my $newstart=$newend-23;
-    my $newindex=$tindex-23;
-    my $string=substr($seq,$newindex,23);
-    my $stringrc=&RevComp($string);
-    
-    $newstart=$newstart+1;#to accomondate to norm.bed format
-	print OUT "$chr\t$newstart\t$newend\t\-\t$stringrc\t1\t1\n";
-    $offset = $tindex + 1;
-    $tindex = index($seq, $char, $offset);
-    }
-
-  }
-  
+   
+   
+   
   #say $seq;
 
   my @dna = split //, $seq;
@@ -131,6 +108,70 @@ while ( my $line = <$fileIN> ) {
 close $fileIN;
 close $fileOUT;
 close(OUT);
+
+
+
+sub ltor {
+	my ($chr,$start,$end,$strand,$char, $seq,$brref)= @_;
+	my $rbound=$end-23; #assume the length of piRNAs are at least 23 nt long
+	my $offset = 0;
+	my $tindex = index($seq, $char, $offset);
+	
+	  while ($tindex != -1) 
+	  {
+	    my $newstart=$start+$tindex;
+	    if($newstart>$rbound)
+	    {
+	    	last;
+	    }
+	    else
+	    {
+	    my $string=substr($seq,$tindex,23);
+	    my $newend=$newstart+23;
+	    $newstart=$newstart+1;#to accomondate to norm.bed format
+		print OUT "$chr\t$newstart\t$newend\t\+\t$string\t1\t1\n";
+		$brref{"$chr\t$newstart\t$newend\t\+\t$string\t1\t1"}=1; #to be fixed
+	    $offset = $tindex + 1;
+	    $tindex = index($seq, $char, $offset);
+	    }
+	
+	  }
+	
+}
+
+
+sub rtol {
+	my ($chr,$start,$end,$strand, $char, $seq,$br)= @_;
+	my $lbound=$start+22;
+	my $offset = 0;
+	my $tindex = index($seq, $char, $offset);
+	
+	  while ($tindex != -1) {
+	    my $newend=$start+$tindex;
+	    if($newend<$lbound)
+	    {
+	    	
+	    	$offset = $tindex + 1;
+	    	$tindex = index($seq, $char, $offset);
+	    	next;
+	    }
+	    else
+	    {
+	    my $newstart=$newend-23;
+	    my $newindex=$tindex-23;
+	    my $string=substr($seq,$newindex,23);
+	    my $stringrc=&RevComp($string);
+	    
+	    $newstart=$newstart+1;#to accomondate to norm.bed format
+		print OUT "$chr\t$newstart\t$newend\t\-\t$stringrc\t1\t1\n"; #to be fixed
+	    $offset = $tindex + 1;
+	    $tindex = index($seq, $char, $offset);
+	    }
+	
+	  }	
+}
+
+
 
 
 sub RevComp {
