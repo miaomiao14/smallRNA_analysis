@@ -19,7 +19,7 @@ do
 	
 	LOG=${OUTDIR}/${g}.log
 	smmapper2=${smRNAINDIR}/Phil.SRA.${g}.ox.ovary.inserts/Phil.SRA.${g}.ox.ovary.inserts.xkxh.transposon.mapper2.gz
-	demapper2=${OUTDIR}/Phil.DEG.${g}.ovary.PE.${FEATURE}.xkxh.nta.mapper2.gz
+	demapper2=${OUTDIR}/Phil.DEG.${g}.unox.ovary.PE.xkxh.${FEATURE}.mapper2.gz
 	[ ! -f $demapper2 ] && \
 		ln -s ${degraINDIR}/Phil.DEG.${g}.ovary.PE/bedIntersectWW/Phil.DEG.${g}.ovary.PE.x_rRNA.dm3.sorted.f0x40.noS.5p.all.bed.ntm.collapse.${FEATURE}.nta.mapper2.gz $demapper2
 	echo -e "`date` "+$ISO_8601"\tChanged the name of degradome transposon mapper2..." >> $LOG
@@ -30,10 +30,13 @@ do
 	gzip ${smmapper2%.gz}.23-29
 	
 	#convert mapper2 to norm.bed for pp8
-	${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${smmapper2%.gz}.23-29
+	[ ! -s ${smmapper2%.gz}.23-29.norm.bed ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${smmapper2%.gz}.23-29.gz ${smRNAINDIR}/Phil.SRA.${g}.ox.ovary.inserts
+	[ ! -s ${demapper2%.gz}.norm.bed ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${demapper2} ${OUTDIR}
+	
+	echo -e "`date` "+$ISO_8601"\t convert the mapper2 format to norm.bed format done..." >> $LOG
 	
 	echo -e "`date` "+$ISO_8601"\tSize select the smallRNA transposon mapper2 and gzip it..." >> $LOG
 	#total Ping-Pong
-	[ ! -s ${OUT0}/${g}.total.pp6.out ] && submitsge 8 $g ${OUT0} "$script ${smmapper2%.gz}.23-29.gz ${demapper2} 2 ${OUTDIR} >${OUT0}/${g}.total.pp6.out" 
-	#echo -e "`date` "+$ISO_8601"\ttotal Ping-Pong analysis done..." >> $LOG
+	[ ! -s ${OUT0}/${g}.total.pp8.out ] && submitsge 8 $g ${OUT0} "$script ${smmapper2%.gz}.23-29.norm.bed ${demapper2%.gz}.norm.bed 2 ${OUTDIR} >${OUT0}/${g}.total.pp8.out" 
+	echo -e "`date` "+$ISO_8601"\ttotal Ping-Pong 8 analysis done..." >> $LOG
 done
