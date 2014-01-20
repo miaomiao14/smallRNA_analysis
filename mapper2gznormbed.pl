@@ -17,7 +17,7 @@ $hash{$key}=0;
 $gz->gzclose();
 
 $file=fileparse($ARGV[0]);
-$file=~/(.*).mapper2*gz/;
+$file=~/(.*).mapper2.*gz/;
 $filename=$1;
 $OUTDIR=$ARGV[1];
 open OUT,"> $OUTDIR/$filename.norm.bed";
