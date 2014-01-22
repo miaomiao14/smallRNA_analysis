@@ -34,14 +34,14 @@ do
 	#gzip ${smmapper2%.gz}.23-29
 		
 	#convert mapper2 to norm.bed for pp8
-		[ ! -s ${smmapper2%.gz}.23-29.norm.bed ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${smmapper2} ${OUTDIR} && gzip ${smmapper2%.gz}.23-29.norm.bed
+		[ ! -s ${smmapper2%.gz}.23-29.norm.bed ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${smmapper2} ${OUTDIR} && gzip ${smmapper2%.gz}.norm.bed
 		[ ! -s ${demapper2%.gz}.norm.bed ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${demapper2} ${OUTDIR} && gzip ${demapper2%.gz}.norm.bed
 		
 		echo -e "`date` "+$ISO_8601"\t convert the mapper2 format to norm.bed format done..." >> $LOG
 		
 		echo -e "`date` "+$ISO_8601"\tSize select the smallRNA transposon mapper2 and gzip it..." >> $LOG
 	#total Ping-Pong
-		[ ! -s ${OUT0}/${g}_${f}.total.pp8.out ] && submitsge 8 $g_${f} ${OUT0} "$script ${smmapper2%.gz}.23-29.norm.bed.gz ${demapper2%.gz}.norm.bed.gz 2 ${OUTDIR} >${OUT0}/${g}_${f}.total.pp8.out" 
+		[ ! -s ${OUT0}/${g}_${f}.total.pp8.out ] && submitsge 8 $g_${f} ${OUT0} "$script ${smmapper2%.gz}.norm.bed.gz ${demapper2%.gz}.norm.bed.gz 2 ${OUTDIR} >${OUT0}/${g}_${f}.total.pp8.out" 
 		echo -e "`date` "+$ISO_8601"\ttotal Ping-Pong 8 analysis done..." >> $LOG
 	done
 done
