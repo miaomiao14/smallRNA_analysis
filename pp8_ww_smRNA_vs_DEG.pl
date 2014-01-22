@@ -21,8 +21,8 @@ for ($i=0; $i<$ARGV[2]; $i++)
 {
 	my $file=fileparse($ARGV[$i]);
 	@namefield=split(/\./,$file);
-	$name=$namefield[2]."_".$namefield[1];
-	push @argos, $name;
+	$name=$namefield[2]."_".$namefield[1]."_".$namefield[7];
+
 	$file=$name;
 	open IN, $ARGV[$i];
 	while(<IN>) 
@@ -104,11 +104,11 @@ for ($i=0; $i<$ARGV[2]; $i++)
       
 	$file1=fileparse($ARGV[$i]); 
 	@namefield=split(/\./,$file1);
-	$name1=$namefield[2]."_".$namefield[1];
+	$name1=$namefield[2]."_".$namefield[1]."_".$namefield[7];
 	$file1=$name1;
 	$file2=fileparse($ARGV[$j]);
 	@namefield=split(/\./,$file2);
-	$name2=$namefield[2]."_".$namefield[1];
+	$name2=$namefield[2]."_".$namefield[1]."_".$namefield[7];
 	$file2=$name2;
 
 	if ($total{$file1}<10 || $total{$file2}<10) { print "$file2-$file1\t-10\t"; print PPZ "$file2-$file1\t-10\t";} 
@@ -184,6 +184,6 @@ for ($i=0; $i<$ARGV[2]; $i++)
 close(PPZ);
 
 
-#`rm $OUTDIR/*.ebwt`;
-#`rm $OUTDIR/*.bowtie.out`;
-#`rm $OUTDIR/*.seq`;
+`rm $OUTDIR/*.ebwt`;
+`rm $OUTDIR/*.bowtie.out`;
+`rm $OUTDIR/*.seq`;
