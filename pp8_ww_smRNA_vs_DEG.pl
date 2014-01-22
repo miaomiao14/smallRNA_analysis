@@ -34,6 +34,19 @@ for ($i=0; $i<$ARGV[2]; $i++)
 		$total{$file}+=$_[5]/$_[6];
 		#$hash2{$file}{substr($_[4],0,16)}+=$_[5]/$_[6]; #here is the problem for DEG
 		
+		if($_[3] eq '+')
+		{
+			$seqstart=$_[1]-1; #norm.bed is 1-based
+            $hash2{$file}{substr($genome{$_[0]},$seqstart,16)}+=$_[5]/$_[6]; #hash2 is the guide
+		}
+		else
+		{
+			$seqstart=$_[2]-16;
+     		$seqtemp=substr($genome{$_[0]},$seqstart,16);
+     		$seqtemp=&revfa($seqtemp);
+     		$hash2{$file}{$seqtemp}+=$_[5]/$_[6]; #hash2 is the guide
+		}
+		
 		
 		for ($n=1;$n<=20;$n++)
 		{
@@ -45,8 +58,7 @@ for ($i=0; $i<$ARGV[2]; $i++)
                 $hash1{$file}{$n}{$str}+=$_[5]/$_[6];     #str is the target; hash1
                 push @{$hash3{$file}{$n}{$str}},$_[4] if($n==10); #hash3, key is the target, value is the guide
                 
-                $seqstart=$_[1]-1; #norm.bed is 1-based
-                $hash2{$file}{substr($genome{$_[0]},$seqstart,16)}+=$_[5]/$_[6]; #hash2 is the guide
+                
                 
 			}
 			else 
@@ -56,10 +68,7 @@ for ($i=0; $i<$ARGV[2]; $i++)
       			$hash1{$file}{$n}{$str}+=$_[5]/$_[6]; #str is the target; hash1
      			push @{$hash3{$file}{$n}{$str}},$_[4] if($n==10); #hash3, key is the target, value is the guide
      			
-     			$seqstart=$_[2]-16;
-     			$seqtemp=substr($genome{$_[0]},$seqstart,16);
-     			$seqtemp=&revfa($seqtemp);
-     			$hash2{$file}{$seqtemp}+=$_[5]/$_[6]; #hash2 is the guide
+     			
 
       		}
 		}
