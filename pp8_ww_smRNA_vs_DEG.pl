@@ -42,24 +42,24 @@ for ($i=0; $i<$ARGV[2]; $i++)
 				$start=$_[1]+$n-17;
 				$str=substr($genome{$_[0]},$start,16);
 				$str=&revfa($str);
-                $hash1{$file}{$n}{$str}+=$_[5]/$_[6];     
-                push @{$hash3{$file}{$n}{$str}},$_[4];
+                $hash1{$file}{$n}{$str}+=$_[5]/$_[6];     #str is the target; hash1
+                push @{$hash3{$file}{$n}{$str}},$_[4] if($n==10); #hash3, key is the target, value is the guide
                 
                 $seqstart=$_[1]-1; #norm.bed is 1-based
-                $hash2{$file}{substr($genome{$_[0]},$seqstart,16)}+=$_[5]/$_[6];
+                $hash2{$file}{substr($genome{$_[0]},$seqstart,16)}+=$_[5]/$_[6]; #hash2 is the guide
                 
 			}
 			else 
 			{
 				$start=$_[2]-$n;
 				$str=substr($genome{$_[0]},$start,16);
-      			$hash1{$file}{$n}{$str}+=$_[5]/$_[6];
-     			push @{$hash3{$file}{$n}{$str}},$_[4];
+      			$hash1{$file}{$n}{$str}+=$_[5]/$_[6]; #str is the target; hash1
+     			push @{$hash3{$file}{$n}{$str}},$_[4] if($n==10); #hash3, key is the target, value is the guide
      			
      			$seqstart=$_[2]-16;
      			$seqtemp=substr($genome{$_[0]},$seqstart,16);
      			$seqtemp=&revfa($seqtemp);
-     			$hash2{$file}{$seqtemp}+=$_[5]/$_[6];
+     			$hash2{$file}{$seqtemp}+=$_[5]/$_[6]; #hash2 is the guide
 
       		}
 		}
@@ -68,14 +68,14 @@ for ($i=0; $i<$ARGV[2]; $i++)
 	{
 		$seqFile="$OUTDIR/$file.seq";
 		open OUT, ">$seqFile";
-		foreach (keys %{$hash2{$file}}) { print OUT "$_\t$hash2{$file}{$_}\n" if (length($_)==16);}
+		foreach (keys %{$hash2{$file}}) { print OUT "$_\t$hash2{$file}{$_}\n" if (length($_)==16)}#guide as query
 		close(OUT);
 		for ($n=1;$n<=20;$n++) 
 		{
 		$fa="$OUTDIR/$file.ref.$n.fa";
 	    $indexb="$OUTDIR/$file.$n";
 		open OUT, ">$fa";
-		foreach (keys %{$hash1{$file}{$n}}) { print OUT ">$_\t$hash1{$file}{$n}{$_}\n$_\n" if (length($_)==16);}
+		foreach (keys %{$hash1{$file}{$n}}) { print OUT ">$_\t$hash1{$file}{$n}{$_}\n$_\n" if (length($_)==16)} #target as index
 		`bowtie-build $fa $indexb && rm $fa`;
 
 	 	}
@@ -111,7 +111,7 @@ for ($i=0; $i<$ARGV[2]; $i++)
 			open PPSEQ, ">$OUTDIR/$file2.$file1.ppseq";
 			foreach ($n=1;$n<=20;$n++) 
 			{
-				# file1 as ref
+				# file1 as ref; target as ref;
 		 		`bowtie $OUTDIR/$file1.$n -r -a -v 1 -p 8 $OUTDIR/$file2.seq --suppress 1,4,6,7 | grep + > $OUTDIR/$file2.$file1.$n.bowtie.out`;
 		  		%NTM=();
 		  		open IN, "$OUTDIR/$file2.$file1.$n.bowtie.out";
@@ -120,7 +120,7 @@ for ($i=0; $i<$ARGV[2]; $i++)
 				{
 					chomp; split(/\t/);  
 					if ($_[3]=~/(\d+):/) { next if ($1<=9 && $1>=1);}  # no seed mismatches 0 based
-					$NTM{$_[2]}++;
+					$NTM{$_[2]}++; #a guide can map to multiple targets
 		  		}
 		  		close(IN);
 		  		open IN, "$OUTDIR/$file2.$file1.$n.bowtie.out";
@@ -131,9 +131,9 @@ for ($i=0; $i<$ARGV[2]; $i++)
 					$score{$n}+=$hash1{$file1}{$n}{$_[1]}*$hash2{$file2}{$_[2]}/$NTM{$_[2]};
 					if ($n==10)
 		     		{
-		      			print PPSEQ "$_[2]\t$hash2{$file2}{$_[2]}\t$hash1{$file1}{$n}{$_[1]}\t" ;
+		      			print PPSEQ "$_[2]\t$hash2{$file2}{$_[2]}\t$hash1{$file1}{$n}{$_[1]}\t" ; #hash2 is the guide; 
 		      			local $"=',';
-		      			print PPSEQ "@{$hash3{$file1}{$n}{$_[1]}}";
+		      			print PPSEQ "@{$hash3{$file1}{$n}{$_[1]}}";#hash3, key is the target seq, value is the guide seq
 		      			print PPSEQ "\n";
 		     		}
 		  		}
@@ -175,6 +175,6 @@ for ($i=0; $i<$ARGV[2]; $i++)
 close(PPZ);
 
 
-`rm $OUTDIR/*.ebwt`;
-`rm $OUTDIR/*.bowtie.out`;
-`rm $OUTDIR/*.seq`;
+#`rm $OUTDIR/*.ebwt`;
+#`rm $OUTDIR/*.bowtie.out`;
+#`rm $OUTDIR/*.seq`;
