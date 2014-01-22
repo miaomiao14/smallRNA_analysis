@@ -17,26 +17,28 @@ do
 	OUTDIR=${OUT0}/${g}
 	[ ! -d ${OUTDIR} ] && mkdir -p ${OUTDIR}
 	
-	LOG=${OUTDIR}/${g}.log
-	smmapper2=${smRNAINDIR}/Phil.SRA.${g}.ox.ovary.inserts/Phil.SRA.${g}.ox.ovary.inserts.xkxh.transposon.mapper2.gz
+	LOG=${OUTDIR}/${g}.log	
+	smmapper2=${OUTDIR}/Phil.SRA.${g}.ox.ovary.inserts.xkxh.transposon.mapper2.23-29.gz
 	demapper2=${OUTDIR}/Phil.DEG.${g}.unox.ovary.PE.xkxh.${FEATURE}.mapper2.gz
 	[ ! -f $demapper2 ] && \
 		ln -s ${degraINDIR}/Phil.DEG.${g}.ovary.PE/bedIntersectWW/Phil.DEG.${g}.ovary.PE.x_rRNA.dm3.sorted.f0x40.noS.5p.all.bed.ntm.collapse.${FEATURE}.nta.mapper2.gz $demapper2
+	[ ! -f $smmapper2 ] && \
+		ln -s ${smRNAINDIR}/Phil.SRA.${g}.ox.ovary.inserts/Phil.SRA.${g}.ox.ovary.inserts.xkxh.transposon.mapper2.23-29.gz ${smmapper2}	
 	echo -e "`date` "+$ISO_8601"\tChanged the name of degradome transposon mapper2..." >> $LOG
 		
 	#length range: 23-29
-	[ ! -f ${smmapper2%.gz}.23-29.gz ] && \
-	${PIPELINE_DIRECTORY}/gzlenrangeselector.pl ${smmapper2} 23 29 >${smmapper2%.gz}.23-29 && \
-	gzip ${smmapper2%.gz}.23-29
+	#[ ! -f ${smmapper2%.gz}.23-29.gz ] && \
+	#${PIPELINE_DIRECTORY}/gzlenrangeselector.pl ${smmapper2} 23 29 >${smmapper2%.gz}.23-29 && \
+	#gzip ${smmapper2%.gz}.23-29
 	
 	#convert mapper2 to norm.bed for pp8
-	[ ! -s ${smmapper2%.gz}.23-29.norm.bed ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${smmapper2%.gz}.23-29.gz ${smRNAINDIR}/Phil.SRA.${g}.ox.ovary.inserts
-	[ ! -s ${demapper2%.gz}.norm.bed ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${demapper2} ${OUTDIR}
+	[ ! -s ${smmapper2%.gz}.23-29.norm.bed ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${smmapper2} ${OUTDIR} && gzip ${smmapper2%.gz}.23-29.norm.bed
+	[ ! -s ${demapper2%.gz}.norm.bed ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${demapper2} ${OUTDIR} && gzip ${demapper2%.gz}.norm.bed
 	
 	echo -e "`date` "+$ISO_8601"\t convert the mapper2 format to norm.bed format done..." >> $LOG
 	
 	echo -e "`date` "+$ISO_8601"\tSize select the smallRNA transposon mapper2 and gzip it..." >> $LOG
 	#total Ping-Pong
-	[ ! -s ${OUT0}/${g}.total.pp8.out ] && submitsge 8 $g ${OUT0} "$script ${smmapper2%.gz}.23-29.norm.bed ${demapper2%.gz}.norm.bed 2 ${OUTDIR} >${OUT0}/${g}.total.pp8.out" 
+	[ ! -s ${OUT0}/${g}.total.pp8.out ] && submitsge 8 $g ${OUT0} "$script ${smmapper2%.gz}.23-29.norm.bed.gz ${demapper2%.gz}.norm.bed.gz 2 ${OUTDIR} >${OUT0}/${g}.total.pp8.out" 
 	echo -e "`date` "+$ISO_8601"\ttotal Ping-Pong 8 analysis done..." >> $LOG
 done

@@ -8,6 +8,13 @@ use Compress::Zlib;
 # simplifized version with prefix 16nt
 # input as norm.bed ( no header)
 
+#adjust the script for PP8 between smRNAs and Degradome
+#input are norm.bed file 
+
+#pay spcial attention to hash2 because the sequences are not stored in degradome files
+
+#01/22/2014
+#wei.wang2@umassmed.edu
 
 open IN, "/home/xuj1/pipeline/common/fasta/dmel-all-chromosome-r5.5_TAS.fasta";
 while(<IN>) { if (/>(.+) type/) { $chr="chr$1";} else { chomp; $genome{$chr}=$_;}}
@@ -24,8 +31,10 @@ for ($i=0; $i<$ARGV[2]; $i++)
 	$name=$namefield[2]."_".$namefield[1]."_".$namefield[7];
 
 	$file=$name;
-	open IN, $ARGV[$i];
-	while(<IN>) 
+	$gz = gzopen($ARGV[$i], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
+	while($gz->gzreadline($_) > 0)
+	#open IN, $ARGV[$i];
+	#while(<IN>) 
 	{
 		chomp; 
 		split(/\t/);  
