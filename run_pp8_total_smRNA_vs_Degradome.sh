@@ -1,10 +1,10 @@
 #! /bin/bash
 export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 script=${PIPELINE_DIRECTORY}/pp8_ww_smRNA_vs_DEG.pl
-smRNAINDIR=$1
-degraINDIR=$2
-OUT0=$3
-declare -a FEATURE=("FLY_TRN_ALL_IN_CLUSTER")
+smRNAINDIR=/home/wangw1/isilon_temp/smRNA/jia_pipeline_results
+degraINDIR=/home/wangw1/isilon_temp/degradome/pipeline_output_12262013
+OUT0=/home/wangw1/isilon_temp/smRNA/pp8_smRNAtrn_vs_degradometrnoutcluster_total_01202014
+declare -a FEATURE=("FLY_TRN_ALL" "FLY_TRN_ALL_IN_CLUSTER" "FLY_TRN_ALL_OUT_CLUSTER")
 #g=$5
 #c=$6 #cpu
 declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubMutsWW" "AubCDrescue" "AubWTrescue")
@@ -12,6 +12,9 @@ declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubM
 [ ! -d ${OUT0} ] && mkdir -p ${OUT0}
 #step 1
 #OUT=${OUT0}
+touch ${OUT0}/.status.${STEP}.SRA_DEG.pp8
+if [ ! -f ${OUT0}/.status.${STEP}.SRA_DEG.pp8 ] 
+then
 for g in "${GROUPGT[@]}"
 do
 	for f in "${FEATURE[@]}"
@@ -45,3 +48,53 @@ do
 		echo -e "`date` "+$ISO_8601"\ttotal Ping-Pong 8 analysis done..." >> $LOG
 	done
 done
+[ $? == 0 ] && \
+touch ${OUT0}/.status.${STEP}.SRA_DEG.pp8
+STEP=$((STEP+1))
+
+
+#generate master table for ppscore
+masterOUT=${OUT0}/masterpp8score
+[ ! -d ${masterOUT} ] && mkdir -p ${masterOUT}
+if [ ! -f ${OUT0}/.status.${STEP}.SRA_DEG.pp8.master ] 
+then
+for f in "${FEATURE[@]}"
+do
+	[ -f ${masterOUT}/${g}.SRA_trransposon.SRA_trransposon.nonnormalized.pp8score.txt ] && rm ${masterOUT}/${g}.SRA_trransposon.SRA_trransposon.nonnormalized.pp8score.txt
+	[ -f ${masterOUT}/${g}.SRA_trransposon.DEG_${f}.nonnormalized.pp8score.txt ] && rm ${masterOUT}/${g}.SRA_trransposon.DEG_${f}.nonnormalized.pp8score.txt
+	[ -f ${masterOUT}/${g}.DEG_${f}.SRA_trransposon.nonnormalized.pp8score.txt ] && rm ${masterOUT}/${g}.DEG_${f}.SRA_trransposon.nonnormalized.pp8score.txt
+	[ -f ${masterOUT}/${g}.DEG_${f}.DEG_${f}.nonnormalized.pp8score.txt ] && rm ${masterOUT}/${g}.DEG_${f}.DEG_${f}.nonnormalized.pp8score.txt
+	
+	[ -f ${masterOUT}/${g}.SRA_trransposon.SRA_trransposon.normalized.pp8score.txt ] && rm ${masterOUT}/${g}.SRA_trransposon.SRA_trransposon.normalized.pp8score.txt
+	[ -f ${masterOUT}/${g}.SRA_trransposon.DEG_${f}.normalized.pp8score.txt ] && rm ${masterOUT}/${g}.SRA_trransposon.DEG_${f}.normalized.pp8score.txt
+	[ -f ${masterOUT}/${g}.DEG_${f}.SRA_trransposon.normalized.pp8score.txt ] && rm ${masterOUT}/${g}.DEG_${f}.SRA_trransposon.normalized.pp8score.txt
+	[ -f ${masterOUT}/${g}.DEG_${f}.DEG_${f}.normalized.pp8score.txt ] && rm ${masterOUT}/${g}.DEG_${f}.DEG_${f}.normalized.pp8score.txt
+	for g in "${GROUPGT[@]}"
+	do
+		OUTDIR=${OUT0}/${g}_${f}
+		cut -f1,2 ${OUTDIR}/${g}_SRA_trransposon.${g}_SRA_trransposon.pp|awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}' >> ${masterOUT}/${g}.SRA_trransposon.SRA_trransposon.nonnormalized.pp8score.txt
+		cut -f1,2 ${OUTDIR}/${g}_SRA_trransposon.${g}_DEG_${f}.pp |awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}'>> ${masterOUT}/${g}.SRA_trransposon.DEG_${f}.nonnormalized.pp8score.txt
+		cut -f1,2 ${OUTDIR}/${g}_DEG_${f}.${g}_SRA_trransposon.pp |awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}'>> ${masterOUT}/${g}.DEG_${f}.SRA_trransposon.nonnormalized.pp8score.txt
+		cut -f1,2 ${OUTDIR}/${g}_DEG_${f}.${g}_DEG_${f}.pp |awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}'>> ${masterOUT}/${g}.DEG_${f}.DEG_${f}.nonnormalized.pp8score.txt
+
+		cut -f1,3 ${OUTDIR}/${g}_SRA_trransposon.${g}_SRA_trransposon.pp|awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}' >> ${masterOUT}/${g}.SRA_trransposon.SRA_trransposon.normalized.pp8score.txt
+		cut -f1,3 ${OUTDIR}/${g}_SRA_trransposon.${g}_DEG_${f}.pp |awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}'>> ${masterOUT}/${g}.SRA_trransposon.DEG_${f}.normalized.pp8score.txt
+		cut -f1,3 ${OUTDIR}/${g}_DEG_${f}.${g}_SRA_trransposon.pp |awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}'>> ${masterOUT}/${g}.DEG_${f}.SRA_trransposon.normalized.pp8score.txt
+		cut -f1,3 ${OUTDIR}/${g}_DEG_${f}.${g}_DEG_${f}.pp |awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}'>> ${masterOUT}/${g}.DEG_${f}.DEG_${f}.normalized.pp8score.txt
+
+	done
+	
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/${g}.SRA_trransposon.SRA_trransposon.nonnormalized.pp8score.txt ${masterOUT}/${g}.SRA_trransposon.SRA_trransposon.nonnormalized.pp8score.mastertable.txt
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/${g}.SRA_trransposon.DEG_${f}.nonnormalized.pp8score.txt ${masterOUT}/${g}.SRA_trransposon.DEG_${f}.nonnormalized.pp8score.mastertable.txt
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/${g}.DEG_${f}.SRA_trransposon.nonnormalized.pp8score.txt ${masterOUT}/${g}.DEG_${f}.SRA_trransposon.nonnormalized.pp8score.mastertable.txt
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/${g}.DEG_${f}.DEG_${f}.nonnormalized.pp8score.txt ${masterOUT}/${g}.DEG_${f}.DEG_${f}.nonnormalized.pp8score.mastertable.txt
+	
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/${g}.SRA_trransposon.SRA_trransposon.normalized.pp8score.txt ${masterOUT}/${g}.SRA_trransposon.SRA_trransposon.normalized.pp8score.mastertable.txt
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/${g}.SRA_trransposon.DEG_${f}.normalized.pp8score.txt ${masterOUT}/${g}.SRA_trransposon.DEG_${f}.normalized.pp8score.mastertable.txt
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/${g}.DEG_${f}.SRA_trransposon.normalized.pp8score.txt ${masterOUT}/${g}.DEG_${f}.SRA_trransposon.normalized.pp8score.mastertable.txt
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/${g}.DEG_${f}.DEG_${f}.normalized.pp8score.txt ${masterOUT}/${g}.DEG_${f}.DEG_${f}.normalized.pp8score.mastertable.txt
+done
+fi
+[ $? == 0 ] && \
+touch ${OUT0}/.status.${STEP}.SRA_DEG.pp8.master
+STEP=$((STEP+1))
