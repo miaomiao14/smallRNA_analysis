@@ -77,6 +77,12 @@ then
 fi
 [ ! -z $OUTDIR ] || OUTDIR=$PWD
 FILE=${INPUT##*/}
-${PIPELINE_DIRECTORY}/piRNA_distance_distribution_${RNA}.pl $INPUT $TYPE $OUTDIR
+if [ $RNA = "DEG" ]
+then
+${PIPELINE_DIRECTORY}/piRNA_distance_distribution_DEG.pl $INPUT $TYPE $OUTDIR
+else
+${PIPELINE_DIRECTORY}/piRNA_distance_distribution_SRA.pl $INPUT $TYPE $OUTDIR
+fi
+
 ${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/piRNA_distance_plot.r plot_distribution_summary ${OUTDIR}/${FILE}.5-5.distance.distribution.summary
 ${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/piRNA_distance_plot.r plot_distribution ${OUTDIR}/${FILE}.5-5.distance.distribution
