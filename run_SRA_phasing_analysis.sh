@@ -31,7 +31,7 @@ then
 		samplenamepart=${inputfile#Phil.SRA.*}
 		samplename=${samplenamepart%*.xkxh.norm.bed.gz}
 		sample=${samplename/ovary.inserts./}
-		/home/wangw1/bin/submitsge 8 ${sample} $OUTDIR1 "${PIPELINE_DIRECTORY}/run_distance_analysis.sh -i ${i} -o $OUTDIR1 -t normbed" 
+		/home/wangw1/bin/submitsge 8 ${sample} $OUTDIR1 "${PIPELINE_DIRECTORY}/run_distance_analysis.sh -i ${i} -o $OUTDIR1 -t normbed -r SRA" 
 	done
 fi
 [ $? == 0 ] && \

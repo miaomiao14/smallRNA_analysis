@@ -34,6 +34,7 @@ OPTIONS:
 	-o      Output directory, default: current directory
 	-t      input file format:bed or normbed
 	-c      Number of CPUs to use, default: 8
+	-r		SRA or DEG
 	-f      Configure file to provide/overwrite variables	
 
 EOF
@@ -58,6 +59,9 @@ do
 		t)
 			TYPE=$OPTARG
 		;;
+		r)
+			RNA=$OPTARG
+		;;
 		f)
 			CONFIG_FILE=$OPTARG
 		;;
@@ -73,6 +77,6 @@ then
 fi
 [ ! -z $OUTDIR ] || OUTDIR=$PWD
 FILE=${INPUT##*/}
-${PIPELINE_DIRECTORY}/piRNA_distance_distribution.pl $INPUT $TYPE $OUTDIR
+${PIPELINE_DIRECTORY}/piRNA_distance_distribution_${RNA}.pl $INPUT $TYPE $OUTDIR
 ${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/piRNA_distance_plot.r plot_distribution_summary ${OUTDIR}/${FILE}.5-5.distance.distribution.summary
 ${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/piRNA_distance_plot.r plot_distribution ${OUTDIR}/${FILE}.5-5.distance.distribution

@@ -32,7 +32,7 @@ then
 		samplenamepart=${inputfile#Phil.DEG.*}
 		samplename=${samplenamepart%*.mapper2.norm.bed.gz}
 		sample=${samplename/ovary.PE.xkxh./}
-		/home/wangw1/bin/submitsge 8 ${sample} $OUTDIR1 "${PIPELINE_DIRECTORY}/run_distance_analysis.sh -i ${i} -o $OUTDIR1 -t normbed" 
+		/home/wangw1/bin/submitsge 8 ${sample} $OUTDIR1 "${PIPELINE_DIRECTORY}/run_distance_analysis.sh -i ${i} -o $OUTDIR1 -t normbed -r DEG" 
 	done
 fi
 [ $? == 0 ] && \
