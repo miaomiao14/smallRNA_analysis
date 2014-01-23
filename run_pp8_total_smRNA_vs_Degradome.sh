@@ -97,7 +97,7 @@ do
 	#${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/${g}.DEG_${f}.DEG_${f}.normalized.pp8score.txt ${masterOUT}/${g}.DEG_${f}.DEG_${f}.normalized.pp8score.mastertable.txt
 done
 fi
-[ $? == 0 ] && \
-touch ${OUT0}/.status.${STEP}.SRA_DEG.pp8.master
-STEP=$((STEP+1))
 
+[ $? == 0 ] && \
+	touch ${OUT0}/.status.${STEP}.SRA_DEG.pp8.master
+STEP=$((STEP+1))
