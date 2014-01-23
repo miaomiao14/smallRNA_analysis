@@ -23,7 +23,7 @@ STEP=1
 echo -e "`date` "+$ISO_8601"\tDraw phasing analysis..." >> $LOG
 OUTDIR1=${OUT}/degphasing
 [ ! -d $OUTDIR1 ] && mkdir -p ${OUTDIR1}
-if [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.phasing ] 
+if [ ! -f ${OUT}/.status.${STEP}.transposon_DEG.phasing ] 
 then
 	#for i in `ls ${INDIR}/*.inserts/*DEG*.norm.bed.gz`
 	for i in `find /home/wangw1/isilon_temp/smRNA/pp8_smRNAtrn_vs_degradometrnoutcluster_total_01202014/ -name "*.PE.*norm.bed.gz" |grep -v IN_CLUSTER`
