@@ -25,12 +25,13 @@ OUTDIR1=${OUT}/degphasing
 [ ! -d $OUTDIR1 ] && mkdir -p ${OUTDIR1}
 if [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.phasing ] 
 then
-	for i in `ls ${INDIR}/*.inserts/*DEG*.norm.bed.gz`
+	#for i in `ls ${INDIR}/*.inserts/*DEG*.norm.bed.gz`
+	for i in `find . -name "/home/wangw1/isilon_temp/smRNA/pp8_smRNAtrn_vs_degradometrnoutcluster_total_01202014/*.PE.*norm.bed.gz" |grep -v IN_CLUSTER`
 	do
 		inputfile=${i##*/}
-		samplenamepart=${inputfile#Phil.SRA.*}
-		samplename=${samplenamepart%*.xkxh.norm.bed.gz}
-		sample=${samplename/ovary.inserts./}
+		samplenamepart=${inputfile#Phil.DEG.*}
+		samplename=${samplenamepart%*.mapper2.norm.bed.gz}
+		sample=${samplename/ovary.PE.xkxh./}
 		/home/wangw1/bin/submitsge 8 ${sample} $OUTDIR1 "${PIPELINE_DIRECTORY}/run_distance_analysis.sh -i ${i} -o $OUTDIR1 -t normbed" 
 	done
 fi
@@ -43,6 +44,7 @@ echo -e "`date` "+$ISO_8601"\tgenerate phasing master table..." >> $LOG
 
 OUTDIR2=${OUT}/degphasingMaster
 [ ! -d $OUTDIR2 ] && mkdir -p ${OUTDIR2}
+touch ${OUT}/.status.${STEP}.transposon_DEG.phasing.mastertable
 if [ ! -f ${OUT}/.status.${STEP}.transposon_DEG.phasing.mastertable ] 
 then
 	[ -s ${OUTDIR2}/allpiRNAs.allgt.5-5.distance.min.distribution.summary.raw.txt ] && rm ${OUTDIR2}/allpiRNAs.allgt.5-5.distance.min.distribution.summary.raw.txt
