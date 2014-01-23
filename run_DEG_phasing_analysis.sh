@@ -26,7 +26,7 @@ OUTDIR1=${OUT}/degphasing
 if [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.phasing ] 
 then
 	#for i in `ls ${INDIR}/*.inserts/*DEG*.norm.bed.gz`
-	for i in `find . -name "/home/wangw1/isilon_temp/smRNA/pp8_smRNAtrn_vs_degradometrnoutcluster_total_01202014/*.PE.*norm.bed.gz" |grep -v IN_CLUSTER`
+	for i in `find /home/wangw1/isilon_temp/smRNA/pp8_smRNAtrn_vs_degradometrnoutcluster_total_01202014/ -name "*.PE.*norm.bed.gz" |grep -v IN_CLUSTER`
 	do
 		inputfile=${i##*/}
 		samplenamepart=${inputfile#Phil.DEG.*}
