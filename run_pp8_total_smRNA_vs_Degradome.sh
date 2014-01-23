@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash -x
 export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 script=${PIPELINE_DIRECTORY}/pp8_ww_smRNA_vs_DEG.pl
 smRNAINDIR=/home/wangw1/isilon_temp/smRNA/jia_pipeline_results
@@ -98,3 +98,4 @@ fi
 [ $? == 0 ] && \
 touch ${OUT0}/.status.${STEP}.SRA_DEG.pp8.master
 STEP=$((STEP+1))
+
