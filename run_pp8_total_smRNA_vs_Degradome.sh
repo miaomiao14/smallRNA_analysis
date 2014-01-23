@@ -20,7 +20,7 @@ do
 		[ ! -d ${OUTDIR} ] && mkdir -p ${OUTDIR}
 		
 		LOG=${OUTDIR}/${g}.log	
-		smmapper2=${OUTDIR}/Phil.SRA.${g}.ox.ovary.inserts.xkxh.transposon.mapper2.23-29.gz
+		smmapper2=${OUT0}/Phil.SRA.${g}.ox.ovary.inserts.xkxh.transposon.mapper2.23-29.gz #share the SRA norm.bed files
 		demapper2=${OUTDIR}/Phil.DEG.${g}.unox.ovary.PE.xkxh.${f}.mapper2.gz
 		[ ! -f $demapper2 ] && \
 			ln -s ${degraINDIR}/Phil.DEG.${g}.ovary.PE/bedIntersectWW/Phil.DEG.${g}.ovary.PE.x_rRNA.dm3.sorted.f0x40.noS.5p.all.bed.ntm.collapse.${f}.nta.mapper2.gz $demapper2
@@ -34,8 +34,8 @@ do
 	#gzip ${smmapper2%.gz}.23-29
 		
 	#convert mapper2 to norm.bed for pp8
-		[ ! -s ${smmapper2%.gz}.23-29.norm.bed ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${smmapper2} ${OUTDIR} && gzip ${smmapper2%.gz}.norm.bed
-		[ ! -s ${demapper2%.gz}.norm.bed ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${demapper2} ${OUTDIR} && gzip ${demapper2%.gz}.norm.bed
+		[ ! -s ${smmapper2%.gz}.23-29.norm.bed.gz ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${smmapper2} ${OUT0} && gzip ${smmapper2%.gz}.norm.bed
+		[ ! -s ${demapper2%.gz}.norm.bed.gz ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${demapper2} ${OUTDIR} && gzip ${demapper2%.gz}.norm.bed
 		
 		echo -e "`date` "+$ISO_8601"\t convert the mapper2 format to norm.bed format done..." >> $LOG
 		
