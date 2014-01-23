@@ -9,6 +9,8 @@ declare -a FEATURE=("FLY_TRN_ALL" "FLY_TRN_ALL_IN_CLUSTER" "FLY_TRN_ALL_OUT_CLUS
 #c=$6 #cpu
 declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubMutsWW" "AubCDrescue" "AubWTrescue")
 
+STEP=1
+
 [ ! -d ${OUT0} ] && mkdir -p ${OUT0}
 #step 1
 #OUT=${OUT0}
