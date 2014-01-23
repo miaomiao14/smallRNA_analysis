@@ -63,15 +63,15 @@ if [ ! -f ${OUT0}/.status.${STEP}.SRA_DEG.pp8.master ]
 then
 	for f in "${FEATURE[@]}"
 	do
-		[ -f ${masterOUT}/SRA_trransposon.SRA_trransposon.nonnormalized.pp8score.txt ] && rm ${masterOUT}/SRA_trransposon.SRA_trransposon.nonnormalized.pp8score.txt
-		[ -f ${masterOUT}/SRA_trransposon.DEG_${f}.nonnormalized.pp8score.txt ] && rm ${masterOUT}/SRA_trransposon.DEG_${f}.nonnormalized.pp8score.txt
-		[ -f ${masterOUT}/DEG_${f}.SRA_trransposon.nonnormalized.pp8score.txt ] && rm ${masterOUT}/DEG_${f}.SRA_trransposon.nonnormalized.pp8score.txt
-		[ -f ${masterOUT}/DEG_${f}.DEG_${f}.nonnormalized.pp8score.txt ] && rm ${masterOUT}/DEG_${f}.DEG_${f}.nonnormalized.pp8score.txt
+		#[ -f ${masterOUT}/SRA_trransposon.SRA_trransposon.nonnormalized.pp8score.txt ] && rm ${masterOUT}/SRA_trransposon.SRA_trransposon.nonnormalized.pp8score.txt
+		#[ -f ${masterOUT}/SRA_trransposon.DEG_${f}.nonnormalized.pp8score.txt ] && rm ${masterOUT}/SRA_trransposon.DEG_${f}.nonnormalized.pp8score.txt
+		#[ -f ${masterOUT}/DEG_${f}.SRA_trransposon.nonnormalized.pp8score.txt ] && rm ${masterOUT}/DEG_${f}.SRA_trransposon.nonnormalized.pp8score.txt
+		#[ -f ${masterOUT}/DEG_${f}.DEG_${f}.nonnormalized.pp8score.txt ] && rm ${masterOUT}/DEG_${f}.DEG_${f}.nonnormalized.pp8score.txt
 		
-		[ -f ${masterOUT}/SRA_trransposon.SRA_trransposon.normalized.pp8score.txt ] && rm ${masterOUT}/SRA_trransposon.SRA_trransposon.normalized.pp8score.txt
-		[ -f ${masterOUT}/SRA_trransposon.DEG_${f}.normalized.pp8score.txt ] && rm ${masterOUT}/SRA_trransposon.DEG_${f}.normalized.pp8score.txt
-		[ -f ${masterOUT}/DEG_${f}.SRA_trransposon.normalized.pp8score.txt ] && rm ${masterOUT}/DEG_${f}.SRA_trransposon.normalized.pp8score.txt
-		[ -f ${masterOUT}/DEG_${f}.DEG_${f}.normalized.pp8score.txt ] && rm ${masterOUT}/DEG_${f}.DEG_${f}.normalized.pp8score.txt
+		#[ -f ${masterOUT}/SRA_trransposon.SRA_trransposon.normalized.pp8score.txt ] && rm ${masterOUT}/SRA_trransposon.SRA_trransposon.normalized.pp8score.txt
+		#[ -f ${masterOUT}/SRA_trransposon.DEG_${f}.normalized.pp8score.txt ] && rm ${masterOUT}/SRA_trransposon.DEG_${f}.normalized.pp8score.txt
+		#[ -f ${masterOUT}/DEG_${f}.SRA_trransposon.normalized.pp8score.txt ] && rm ${masterOUT}/DEG_${f}.SRA_trransposon.normalized.pp8score.txt
+		#[ -f ${masterOUT}/DEG_${f}.DEG_${f}.normalized.pp8score.txt ] && rm ${masterOUT}/DEG_${f}.DEG_${f}.normalized.pp8score.txt
 		for g in "${GROUPGT[@]}"
 		do
 			OUTDIR=${OUT0}/${g}_${f}
