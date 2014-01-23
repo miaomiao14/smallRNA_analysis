@@ -41,7 +41,7 @@ EOF
 echo -en "\e[0m"
 }
 # taking options
-while getopts "hi:c:o:t:f:" OPTION
+while getopts "hi:c:o:t:f:r:" OPTION
 do
 	case $OPTION in
 		h)
