@@ -7,7 +7,7 @@ if(scalar(@ARGV)<3)
         usage();
 }
 
-
+$CLONE=$ARGV[3];
 BEGIN { unshift @INC,"/home/xuj1/bin/";}
 require "Statstics.pm";
 require "Jia.pm";
@@ -37,7 +37,10 @@ use Compress::Zlib;
         
         	if($format eq "normbed")
         	{
+				if($CLONE eq "SRA")
+        		{
 				next if (length($_[4])>29 || length($_[4])<23);
+        		}
 				if ($_[3] eq '+')
 				{
 	            	$plus{$_[0]}{$_[1]}+=$_[5]/$_[6];
@@ -75,7 +78,10 @@ use Compress::Zlib;
         
         	if($format eq "normbed")
         	{
+        		if($CLONE eq "SRA")
+        		{
 				next if (length($_[4])>29 || length($_[4])<23);
+        		}
 				if ($_[3] eq '+')
 				{
 	            	$plus{$_[0]}{$_[1]}+=$_[5]/$_[6];
@@ -185,7 +191,7 @@ sub usage
 {
         print "\nUsage:$0\n\n\t";
         print "REQUIRED\n\t";
-        print "inputfile type(bed|normbed) outdir\n";
+        print "inputfile type(bed|normbed) outdir clone\n";
         print "This perl script is count the frequency of 5'-5'end distances of smallRNAs(23-29) from the same strand\n";
 
         exit(1);
