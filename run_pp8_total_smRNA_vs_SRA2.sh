@@ -53,7 +53,7 @@ fi
 touch ${OUT0}/.status.${STEP}.SRA_DEG.pp8
 STEP=$((STEP+1))
 
-declare -a GROUPGT=c("zucMut" "w1" "AubWTrescuerep2" "aubvasAgo3WTrescuerep2" "aubvasAgo3CDrescuerep2" "ago3Mutsrep2" "aubMutsrep2" "AubCDrescuerep2" "ago3MutsAubMuts")
+declare -a GROUPGT=("zucMut" "w1" "AubWTrescuerep2" "aubvasAgo3WTrescuerep2" "aubvasAgo3CDrescuerep2" "ago3Mutsrep2" "aubMutsrep2" "AubCDrescuerep2" "ago3MutsAubMuts")
 #generate master table for ppscore
 masterOUT=${OUT0}/masterpp8score
 [ ! -d ${masterOUT} ] && mkdir -p ${masterOUT}
