@@ -72,7 +72,7 @@ then
 			filename=${gt##*/}
 			gf=${filename%.trimmed*}
 			gn=${gf#*SRA.}
-			g=${gn%.[ox|unox]*}
+			g=${gn%%.[ox|unox]*}
 			
 			OUTDIR=${OUT0}/${gn}_${f}
 			cut -f1,2 ${OUTDIR}/${g}_SRA_all.${g}_SRA_all.pp|awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}' >> ${masterOUT}/SRA_all.SRA_all.nonnormalized.pp8score.txt	
