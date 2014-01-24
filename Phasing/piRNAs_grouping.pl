@@ -21,12 +21,12 @@ my $base=$ARGV[3];
 #$., which is Perl's internal variable that keeps track of your current record number.
 # $/ and $\ which are the input and output record separators 
 #local $, = ','; print @arr;
-
+$infilename=fileparse($inputfile);
 $filename=fileparse($inputfile);
-$outfie=~s/.gz//;
-open OUT, ">$outdir/$outfie.$base" or die "cannot open $outdir/$outfie.$base to write.$!";
-open NOOUT, ">$outdir/$outfie.non.$base" or die "cannot open $outdir/$outfie.non.$base to write.$!";
-	if($filename=~/gz/)
+$filename=~s/.gz//;
+open OUT, ">$outdir/$filename.$base" or die "cannot open $outdir/$filename.$base to write.$!";
+open NOOUT, ">$outdir/$filename.non.$base" or die "cannot open $outdir/$filename.non.$base to write.$!";
+	if($infilename=~/gz/)
 	{
 		my $gz="";
 		$gz = gzopen($inputfile, "rb") or die "Cannot open $inputfile: $gzerrno\n" ;
