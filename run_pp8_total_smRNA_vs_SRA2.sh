@@ -42,7 +42,7 @@ do
 		LOG=${OUTDIR}/${g}.log	
 		smmapper2=${OUT0}/${gf}.inserts.xkxh.all.norm.bed.23-29 #share the SRA norm.bed files
 		[ ! -f $smmapper2 ] && \
-		awk 'BEGIN{OFS="\t"}{if($3-$2<30) print $1,$2,$3,$6,$7,$4,$5}' $gt >${smmapper2} && gzip ${smmapper2}.gz	
+	awk 'BEGIN{OFS="\t"}{if($3-$2<30) {start=$2-1;print $1,start,$3,$6,$7,$4,$5}}' $gt >${smmapper2} && gzip ${smmapper2}.gz	
 	#total Ping-Pong
 		[ ! -s ${OUT0}/${g}.total.pp8.out ] && submitsge 8 ${g} ${OUT0} "$script ${smmapper2}.gz ${smmapper2}.gz 1 ${OUTDIR} >${OUT0}/${g}.total.pp8.out" 
 	done
@@ -75,8 +75,8 @@ then
 			g=${gn%%.[ox|unox]*}
 			
 			OUTDIR=${OUT0}/${gn}_${f}
-			cut -f1,2 ${OUTDIR}/${g}_SRA_all.${g}_SRA_all.pp|awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}' >> ${masterOUT}/SRA_all.SRA_all.nonnormalized.pp8score.txt	
-			cut -f1,3 ${OUTDIR}/${g}_SRA_all.${g}_SRA_all.pp|awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}' >> ${masterOUT}/SRA_all.SRA_all.normalized.pp8score.txt
+			cut -f1,2 ${OUTDIR}/${g}_SRA_all.${g}_SRA_all.pp|awk -v gt=$gn 'BEGIN{OFS="\t"}{print gt,$1,$2}' >> ${masterOUT}/SRA_all.SRA_all.nonnormalized.pp8score.txt	
+			cut -f1,3 ${OUTDIR}/${g}_SRA_all.${g}_SRA_all.pp|awk -v gt=$gn 'BEGIN{OFS="\t"}{print gt,$1,$2}' >> ${masterOUT}/SRA_all.SRA_all.normalized.pp8score.txt
 	
 		done
 		
