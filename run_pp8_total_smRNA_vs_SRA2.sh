@@ -53,7 +53,7 @@ fi
 touch ${OUT0}/.status.${STEP}.SRA_DEG.pp8
 STEP=$((STEP+1))
 
-
+declare -a GROUPGT=c("zucMut" "w1" "AubWTrescuerep2" "aubvasAgo3WTrescuerep2" "aubvasAgo3CDrescuerep2" "ago3Mutsrep2" "aubMutsrep2" "AubCDrescuerep2" "ago3MutsAubMuts")
 #generate master table for ppscore
 masterOUT=${OUT0}/masterpp8score
 [ ! -d ${masterOUT} ] && mkdir -p ${masterOUT}
@@ -66,11 +66,11 @@ then
 		
 		[ -f ${masterOUT}/SRA_all.SRA_all.normalized.pp8score.txt ] && rm ${masterOUT}/SRA_all.SRA_all.normalized.pp8score.txt
 
-		for gt in "${GROUPGT[@]}"
+		for g in "${GROUPGT[@]}"
 		do
-			filename=${gt##*/}
-			gf=${filename%.trimmed*}
-			g=${gf#*SRA.}
+			#filename=${gt##*/}
+			#gf=${filename%.trimmed*}
+			#g=${gf#*SRA.}
 			OUTDIR=${OUT0}/${g}_${f}
 			cut -f1,2 ${OUTDIR}/${g}_SRA_all.${g}_SRA_all.pp|awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}' >> ${masterOUT}/SRA_all.SRA_all.nonnormalized.pp8score.txt	
 			cut -f1,3 ${OUTDIR}/${g}_SRA_all.${g}_SRA_all.pp|awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}' >> ${masterOUT}/SRA_all.SRA_all.normalized.pp8score.txt
