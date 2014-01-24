@@ -12,7 +12,7 @@ use Compress::Zlib;
 
 ## reprot Z-score for different window size
 ## 1/8/2013
-
+$OUTDIR=$ARGV[3];
 for ($i=0; $i<$ARGV[2]; $i++) {
    #print $ARGV[$i];
 
@@ -41,8 +41,8 @@ for ($i=0; $i<$ARGV[2]; $i++) {
    
     #print "$file1-$file2";
     #print "Z-score\tPercentage\tMean\tStd\tP(10)\tZ-score\tPercentage\tMean\tStd\tP(10)\n";
-    open PP, ">$file1_$file2.pp";
-    open ZOUT, ">$file1_$file2.zscore.out";
+    open PP, ">$OUTDIR/$file1_$file2.pp";
+    open ZOUT, ">$OUTDIR/$file1_$file2.zscore.out";
     #open PPSEQ, ">$file1_$file2.ppseq";
      $X=0; $Z=0; %score=();
       %pp_pos=();%pp_pos_score=();%pp_pos_weight=();$total_pp_reads=0;
