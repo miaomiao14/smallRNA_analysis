@@ -121,18 +121,7 @@ use Compress::Zlib;
     
             foreach ($j=$k+1;$j<$#plus_sort;$j++)
             {
-                $dis=$plus_sort[$j]-$plus_sort[$k]; ##why the $dis smaller than or equal to 0?
-#                if($dis>0 && $dis <=100)
-#                {
-#                    $hash_dis{'plus'}{$chr}{$dis}+=&min($plus{$chr}{$plus_sort[$j]},$plus{$chr}{$plus_sort[$k]});
-#                    $h_dis{$dis}+=&min($plus{$chr}{$plus_sort[$j]},$plus{$chr}{$plus_sort[$k]});
-#                }
-#                else
-#                {
-#                    $j=$#plus_sort+1; #to early terminate the j loop
-#                }
-                
-#01/24/2014; to be more efficient, once distance reach 100, jump out of the j loop                
+                $dis=$plus_sort[$j]-$plus_sort[$k]; ##why the $dis smaller than or equal to 0?              
                 if($dis>0)
                 {
                 	next if($dis >100);
@@ -146,13 +135,13 @@ use Compress::Zlib;
         
     }
     foreach $chr (keys %minus)
-        #%plus_lendis=&lendis_dist(%plus_sort);     ##calculate the distance distribution from the same strand, from the same chromosome
+    ##calculate the distance distribution from the same strand, from the same chromosome
     {                                                #the adjacent piRNAs should be within 50nt of the current one
         if($minus{$chr})
         {
             
             @minus_sort=&sort_hash_key(%{$minus{$chr}});
-            #%minus_lendis=&lendis_dist(%minus_sort);
+
             foreach  ($k=0;$k<$#minus_sort;$k++)
             {
             $dis=0;
