@@ -53,8 +53,9 @@ fi
 touch ${OUT0}/.status.${STEP}.SRA_DEG.pp8
 STEP=$((STEP+1))
 
-declare -a GROUPGT=("zucMut" "w1" "AubWTrescuerep2" "aubvasAgo3WTrescuerep2" "aubvasAgo3CDrescuerep2" "ago3Mutsrep2" "aubMutsrep2" "AubCDrescuerep2" "ago3MutsAubMuts")
+#declare -a GROUPGT=("zucMut" "w1" "AubWTrescuerep2" "aubvasAgo3WTrescuerep2" "aubvasAgo3CDrescuerep2" "ago3Mutsrep2" "aubMutsrep2" "AubCDrescuerep2" "ago3MutsAubMuts")
 #generate master table for ppscore
+
 masterOUT=${OUT0}/masterpp8score
 [ ! -d ${masterOUT} ] && mkdir -p ${masterOUT}
 if [ ! -f ${OUT0}/.status.${STEP}.SRA_DEG.pp8.master ] 
@@ -66,12 +67,14 @@ then
 		
 		[ -f ${masterOUT}/SRA_all.SRA_all.normalized.pp8score.txt ] && rm ${masterOUT}/SRA_all.SRA_all.normalized.pp8score.txt
 
-		for g in "${GROUPGT[@]}"
+		for gt in "${GROUPGT[@]}"
 		do
-			#filename=${gt##*/}
-			#gf=${filename%.trimmed*}
-			#g=${gf#*SRA.}
-			OUTDIR=${OUT0}/${g}_${f}
+			filename=${gt##*/}
+			gf=${filename%.trimmed*}
+			gn=${gf#*SRA.}
+			g=${gn%.[unox|ox]*}
+			
+			OUTDIR=${OUT0}/${gn}_${f}
 			cut -f1,2 ${OUTDIR}/${g}_SRA_all.${g}_SRA_all.pp|awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}' >> ${masterOUT}/SRA_all.SRA_all.nonnormalized.pp8score.txt	
 			cut -f1,3 ${OUTDIR}/${g}_SRA_all.${g}_SRA_all.pp|awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}' >> ${masterOUT}/SRA_all.SRA_all.normalized.pp8score.txt
 	
