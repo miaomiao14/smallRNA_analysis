@@ -66,7 +66,7 @@ then
 		
 		[ -f ${masterOUT}/SRA_all.SRA_all.normalized.pp8score.txt ] && rm ${masterOUT}/SRA_all.SRA_all.normalized.pp8score.txt
 
-		for g in "${GROUPGT[@]}"
+		for gt in "${GROUPGT[@]}"
 		do
 			filename=${gt##*/}
 			gf=${filename%.trimmed*}
