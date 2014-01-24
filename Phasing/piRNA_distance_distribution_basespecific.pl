@@ -11,7 +11,7 @@ $CLONE=$ARGV[3];
 BEGIN { unshift @INC,"/home/xuj1/bin/";}
 require "Statstics.pm";
 require "Jia.pm";
-BEGIN { unshift @INC,"/home/wangw1/bin/";}
+BEGIN { unshift @INC,"/git/smallRNA_analysis/Utils/";}
 require "sort_hash_key.pm";
 use File::Basename;
 use Compress::Zlib;
