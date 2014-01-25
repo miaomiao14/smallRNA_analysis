@@ -95,6 +95,7 @@ for ($i=0; $i<$ARGV[2]; $i++)
 		open OUT, ">$fa";
 		foreach (keys %{$hash1{$file}{$n}}) { print OUT ">$_\t$hash1{$file}{$n}{$_}\n$_\n" if (length($_)==16)} #target as index
 		`bowtie-build $fa $indexb && rm $fa`;
+		#`bowtie-build $fa $indexb `;
 
 	 	}
 		close (OUT);
@@ -194,5 +195,5 @@ close(PPZ);
 
 
 `rm $OUTDIR/*.ebwt`;
-`rm $OUTDIR/*.bowtie.out`;
-`rm $OUTDIR/*.seq`;
+#`rm $OUTDIR/*.bowtie.out`;
+#`rm $OUTDIR/*.seq`;

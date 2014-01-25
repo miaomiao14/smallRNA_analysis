@@ -33,8 +33,8 @@ my %RevCompBasePairs=qw/A T T A G C C G a t t a g c c g U A u a R Y r y Y R y r 
 open $fileIN,  "$ARGV[0]" or die "can't open file basecount.nfasta for reading";
 open $fileOUT, ">$ARGV[1]" or die "can't open file basecount.out for writing";
 open OUT, ">$ARGV[2]" or die "can't open file basecount.out for writing";
-
-
+AAAAAAAAAAAAACTC
+TTTTTTTTTTTTGATT
 my %bedrecord; #output bed format record
 while ( my $line = <$fileIN> ) {
 
