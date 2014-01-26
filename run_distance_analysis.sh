@@ -81,5 +81,5 @@ FILE=${INPUT##*/}
 ${PIPELINE_DIRECTORY}/phasing/piRNA_distance_distribution.pl $INPUT $TYPE $OUTDIR $RNA
 
 
-${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/phasing/piRNA_distance_plot.r plot_distribution_summary ${OUTDIR}/${FILE}.5-5.distance.distribution.summary
-${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/phasing/piRNA_distance_plot.r plot_distribution ${OUTDIR}/${FILE}.5-5.distance.distribution
+${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/Phasing/piRNA_distance_plot.r plot_distribution_summary ${OUTDIR}/${FILE}.5-5.distance.distribution.summary
+${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/Phasing/piRNA_distance_plot.r plot_distribution ${OUTDIR}/${FILE}.5-5.distance.distribution
