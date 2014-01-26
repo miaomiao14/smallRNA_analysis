@@ -30,8 +30,9 @@ open NOOUT, ">$outdir/$filename.non.$base" or die "cannot open $outdir/$filename
 	{
 		my $gz="";
 		$gz = gzopen($inputfile, "rb") or die "Cannot open $inputfile: $gzerrno\n" ;
-		while($gz->gzreadline(my $line) > 0)
+		while($gz->gzreadline($_) > 0)
 		{ 
+			my $line=$_;
 			next if ($line=~/data/);
 			chomp $line;
 			$line= s/\s+/\t/g;

@@ -19,6 +19,8 @@ use Compress::Zlib;
 open IN, "/home/xuj1/pipeline/common/fasta/dmel-all-chromosome-r5.5_TAS.fasta";
 while(<IN>) { if (/>(.+) type/) { $chr="chr$1";} else { chomp; $genome{$chr}=$_;}}
 
+#/home/hanb/nearline/small_RNA_Pipeline/common_files/dm3/genome.fa
+
 %hash1=();
 %hash2=();
 @hash3=();
