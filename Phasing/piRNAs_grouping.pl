@@ -35,7 +35,7 @@ open NOOUT, ">$outdir/$filename.non.$base" or die "cannot open $outdir/$filename
 			my $line=$_;
 			next if ($line=~/data/);
 			chomp $line;
-			$line= s/\s+/\t/g;
+			#$line= s/\s+/\t/g;
 			my($chr,$start,$end,$strand,$seq,$reads,$ntm)=split(/\t/,$line);
 			my $five="";
 
