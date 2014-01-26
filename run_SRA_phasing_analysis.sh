@@ -63,20 +63,40 @@ touch ${OUT}/.status.${STEP}.transposon_piRNA.phasing.mastertable
 STEP=$((STEP+1))
 
 
-STEP=$((STEP+1))
-
 echo -e "`date` "+$ISO_8601"\tgrouping piRNAs based on their 5'end identity ..." >> $LOG
-OUTDIR3=${OUT}/subphasing
+OUTDIR3=${OUT}/subphasing2
 [ ! -d $OUTDIR3 ] && mkdir -p ${OUTDIR3}
-if [ ! -f ${OUT}/.status.${STEP}.subpiRNA.phasing ] 
+if [ ! -f ${OUT}/.status.${STEP}.piRNA.grouping ] 
 then
-	for i in `ls ${OUTDIR3}/*.T.gz`
+	for i in `ls ${INDIR}/*.inserts/*.norm.bed.gz`
 	do
 		inputfile=${i##*/}
 		samplenamepart=${inputfile#Phil.SRA.*}
-		samplename=${samplenamepart%*.xkxh.norm.bed.*.T.gz}
+		samplename=${samplenamepart%*.xkxh.norm.bed.gz}
 		sample=${samplename/ovary.inserts./}
-	/home/wangw1/bin/submitsge 4 ${sample} $OUTDIR3 "${PIPELINE_DIRECTORY}/run_distance_analysis.sh -i ${i} -o $OUTDIR3 -t normbed -r SRA" 
+		/home/wangw1/bin/submitsge 8 ${sample} $OUTDIR3 "${PIPELINE_DIRECTORY}/piRNAs_grouping.pl ${i} normbed $OUTDIR3 T" 
+	done
+fi
+[ $? == 0 ] && \
+touch ${OUT}/.status.${STEP}.piRNA.grouping 
+STEP=$((STEP+1))
+
+
+
+
+echo -e "`date` "+$ISO_8601"\trun phasing of grouped piRNAs based on their 5'end identity ..." >> $LOG
+OUTDIR3=${OUT}/subphasing2
+[ ! -d $OUTDIR3 ] && mkdir -p ${OUTDIR3}
+if [ ! -f ${OUT}/.status.${STEP}.subpiRNA.phasing ] 
+then
+	for i in `ls ${OUTDIR3}/*.T`
+	do
+		gzip $i
+		inputfile=${i##*/}
+		samplenamepart=${inputfile#Phil.SRA.*}
+		samplename=${samplenamepart%*.xkxh.norm.bed.*.T}
+		sample=${samplename/ovary.inserts./}
+	/home/wangw1/bin/submitsge 4 ${sample} $OUTDIR3 "${PIPELINE_DIRECTORY}/run_distance_analysis.sh -i ${i}.gz -o $OUTDIR3 -t normbed -r SRA" 
 	done
 fi
 [ $? == 0 ] && \
