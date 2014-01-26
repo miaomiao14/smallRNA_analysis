@@ -74,7 +74,7 @@ then
 		samplenamepart=${inputfile#Phil.SRA.*}
 		samplename=${samplenamepart%*.xkxh.norm.bed.gz}
 		sample=${samplename/ovary.inserts./}
-		/home/wangw1/bin/submitsge 8 ${sample} $OUTDIR3 "${PIPELINE_DIRECTORY}/piRNAs_grouping.pl ${i} normbed $OUTDIR3 T" 
+		/home/wangw1/bin/submitsge 2 ${sample} $OUTDIR3 "${PIPELINE_DIRECTORY}/piRNAs_grouping.pl ${i} normbed $OUTDIR3 T" 
 	done
 fi
 [ $? == 0 ] && \
@@ -96,7 +96,7 @@ then
 		samplenamepart=${inputfile#Phil.SRA.*}
 		samplename=${samplenamepart%*.xkxh.norm.bed.*.T}
 		sample=${samplename/ovary.inserts./}
-	/home/wangw1/bin/submitsge 4 ${sample} $OUTDIR3 "${PIPELINE_DIRECTORY}/run_distance_analysis.sh -i ${i}.gz -o $OUTDIR3 -t normbed -r SRA" 
+	/home/wangw1/bin/submitsge 2 ${sample} $OUTDIR3 "${PIPELINE_DIRECTORY}/run_distance_analysis.sh -i ${i}.gz -o $OUTDIR3 -t normbed -r SRA" 
 	done
 fi
 [ $? == 0 ] && \
