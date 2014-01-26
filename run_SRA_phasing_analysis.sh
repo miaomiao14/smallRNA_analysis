@@ -65,7 +65,26 @@ STEP=$((STEP+1))
 
 STEP=$((STEP+1))
 
-#echo -e "`date` "+$ISO_8601"\tDraw seqlogo of +1U anchoring the 3end ..." >> $LOG
+echo -e "`date` "+$ISO_8601"\tgrouping piRNAs based on their 5'end identity ..." >> $LOG
+OUTDIR3=${OUT}/subphasing
+[ ! -d $OUTDIR3 ] && mkdir -p ${OUTDIR3}
+if [ ! -f ${OUT}/.status.${STEP}.subpiRNA.phasing ] 
+then
+	for i in `ls ${OUTDIR3}/*.T.gz`
+	do
+		inputfile=${i##*/}
+		samplenamepart=${inputfile#Phil.SRA.*}
+		samplename=${samplenamepart%*.xkxh.norm.bed.*.T.gz}
+		sample=${samplename/ovary.inserts./}
+	/home/wangw1/bin/submitsge 8 ${sample} $OUTDIR3 "${PIPELINE_DIRECTORY}/run_distance_analysis.sh -i ${i} -o $OUTDIR3 -t normbed -r SRA" 
+	done
+fi
+[ $? == 0 ] && \
+touch ${OUT}/.status.${STEP}.subpiRNA.phasing
+STEP=$((STEP+1))
+
+
+
 #/home/hanb/scratch/cd/smallRNA_pipeline_output/Phil.SRA.ago3MutsAubMuts.ox.ovary/intersect_piRNA_length/*.insert
 #/home/hanb/scratch/cd/smallRNA_pipeline_output/Phil.SRA.w1.ox.ovary/intersect_piRNA_length/*.insert
 #seqlogo_ww $i 
