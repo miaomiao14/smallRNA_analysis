@@ -74,7 +74,7 @@ then
 		samplenamepart=${inputfile#Phil.SRA.*}
 		samplename=${samplenamepart%*.xkxh.norm.bed.gz}
 		sample=${samplename/ovary.inserts./}
-		/home/wangw1/bin/submitsge 2 ${sample} $OUTDIR3 "${PIPELINE_DIRECTORY}/piRNAs_grouping.pl ${i} normbed $OUTDIR3 T" 
+		/home/wangw1/bin/submitsge 2 ${sample} $OUTDIR3 "${PIPELINE_DIRECTORY}/Phasing/piRNAs_grouping.pl ${i} normbed $OUTDIR3 T" 
 	done
 fi
 [ $? == 0 ] && \
