@@ -60,7 +60,7 @@ fineplot_distribution_summary <- function (input) {
 		pp=read.table(file,F)
 		colnames(pp)=c("distance","reads")
 		pp=pp[order(pp$distance),]
-		ppf=transform(pp,fr=reads/colSums(pp$reads))
+		ppf=transform(pp,fr=pp$reads/sum(pp$reads))
 		
 		pdfname= paste(file, '_piRNA_distance_distribution.fraction.pdf', sep='')
 		pdf(pdfname,width=9,height=5)
