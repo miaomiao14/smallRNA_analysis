@@ -49,11 +49,13 @@ while ( my $line = <$fileIN> ) {
 	  
 	  my $base = 'T';
 	  my $str="+";
-	  &ltor($chr,$start,$end,$str,$base,$seq,\%bedrecord);
- 
+	  #&ltor($chr,$start,$end,$str,$base,$seq,\%bedrecord);
+ 	  %bedrecord=&ltor($chr,$start,$end,$str,$base,$seq);
+ 		
  	  $str="-";
 	  $base = 'A';
-	  &rtol($chr,$start,$end,$str,$base,$seq,\%bedrecord);
+	  #&rtol($chr,$start,$end,$str,$base,$seq,\%bedrecord);
+	  %bedrecord=&rtol($chr,$start,$end,$str,$base,$seq);
    }
    
    #if strand is -, the sequence is always from 5'-3', but it is reverse complementary sequences of the genomic DNA already
@@ -61,11 +63,13 @@ while ( my $line = <$fileIN> ) {
   {	 
 	  my $base = 'T';
 	  my $str="-";
-	  &rtol($chr,$start,$end,$str,$base,$seq,\%bedrecord);
+	  #&rtol($chr,$start,$end,$str,$base,$seq,\%bedrecord);
+	  %bedrecord=&rtol($chr,$start,$end,$str,$base,$seq);
 	 
 	  $str="+";
 	  $base = 'A';
-	  &ltor($chr,$start,$end,$str,$base,$seq,\%bedrecord);	
+	  #&ltor($chr,$start,$end,$str,$base,$seq,\%bedrecord);
+	  %bedrecord=&ltor($chr,$start,$end,$str,$base,$seq);
   }
       
   #say $seq;
@@ -132,8 +136,10 @@ close(OUT);
 
 # or can use sub ltor(\%\@) to force a pass-by-reference
 sub ltor {
-	my ($chr,$start,$end,$strand,$base, $seq,$brref)= @_;
-	my %bed=%$brref;
+	#my ($chr,$start,$end,$strand,$base, $seq,$brref)= @_;
+	#my %bed=%$brref;
+	my ($chr,$start,$end,$strand,$base, $seq)= @_;
+	my %bed=();
 	my $rbound=$end-23; #assume the length of piRNAs are at least 23 nt long
 	my $offset = 0;
 	my $tindex = index($seq, $base, $offset);
@@ -158,14 +164,16 @@ sub ltor {
 	
 	  }
 	  
-	  #return %bed;
+	  return %bed;
 	
 }
 
 
 sub rtol {
-	my ($chr,$start,$end,$strand, $base, $seq,$brref)= @_;
-	my %bed=%$brref;
+	#my ($chr,$start,$end,$strand, $base, $seq,$brref)= @_;
+	#my %bed=%$brref;
+	my ($chr,$start,$end,$strand, $base, $seq)= @_;
+	my %bed=();
 	my $lbound=$start+22;
 	my $offset = 0;
 	my $tindex = index($seq, $base, $offset);
@@ -194,7 +202,7 @@ sub rtol {
 	    }
 	
 	  }
-	  #return %bed;	
+	  return %bed;	
 }
 
 
