@@ -3,7 +3,7 @@
 #01/16/2014
 #wei.wang2@umassmed.edu
 
-#count the frequencies of nucleotide from sequences from clusters and transposons
+#count the frequencies of single nucleotide from sequences from clusters and transposons
 
 #the input file is bed format
 #use the bedtools nuc extract the sequences and Profiles the nucleotide content of intervals in a fasta file
@@ -33,9 +33,9 @@ my %RevCompBasePairs=qw/A T T A G C C G a t t a g c c g U A u a R Y r y Y R y r 
 open $fileIN,  "$ARGV[0]" or die "can't open file basecount.nfasta for reading";
 open $fileOUT, ">$ARGV[1]" or die "can't open file basecount.out for writing";
 open OUT, ">$ARGV[2]" or die "can't open file basecount.out for writing";
-AAAAAAAAAAAAACTC
-TTTTTTTTTTTTGATT
+
 my %bedrecord; #output bed format record
+my %dinucFre;
 while ( my $line = <$fileIN> ) {
 
   next if $line =~ /^#/;
@@ -44,49 +44,55 @@ while ( my $line = <$fileIN> ) {
   my($chr,$start,$end,$name,$temp,$strand,$ATperc,$GCperc,$A1,$C1,$G1,$T1,$N,$O,$Len,$seq0)=split(/\t/,$line);
   my $seq = uc $seq0; #convert all lower case to upper case
   
-  
   if($strand eq "+") #for clusters
   {
 	  
-	  my $char = 'T';
+	  my $base = 'T';
 	  my $str="+";
-	  &ltor($chr,$start,$end,$str,$char,$seq,\%bedrecord);
+	  &ltor($chr,$start,$end,$str,$base,$seq,\%bedrecord);
  
  	  $str="-";
-	  $char = 'A';
-	  &rtol($chr,$start,$end,$str,$char,$seq,\%bedrecord);
+	  $base = 'A';
+	  &rtol($chr,$start,$end,$str,$base,$seq,\%bedrecord);
    }
    
    #if strand is -, the sequence is always from 5'-3', but it is reverse complementary sequences of the genomic DNA already
   if($strand eq "-") #for transposons
-  {
-	 
-	  my $char = 'T';
+  {	 
+	  my $base = 'T';
 	  my $str="-";
-	  &rtol($chr,$start,$end,$str,$char,$seq,\%bedrecord);
+	  &rtol($chr,$start,$end,$str,$base,$seq,\%bedrecord);
 	 
 	  $str="+";
-	  $char = 'A';
-	  &ltor($chr,$start,$end,$str,$char,$seq,\%bedrecord);
-	
+	  $base = 'A';
+	  &ltor($chr,$start,$end,$str,$base,$seq,\%bedrecord);	
   }
-   
-   
-   
+      
   #say $seq;
 
-  my @dna = split //, $seq;
+  my @dna = split //, $seq; #for single nucleotide frequency stat
 
-  foreach my $element ( @dna ) {
+  foreach my $element ( @dna )
+  {
     $A++ if $element =~ m/A/;
     $T++ if $element =~ m/T/;
     $G++ if $element =~ m/G/;
     $C++ if $element =~ m/C/;
   }
   
-
-  
+  for(my $i=0; $i<($#dna-1); $i++)
+  {
+  	my $di=substr($seq,$i,2);
+  	$dinucFre{$di}++;  	
+  }
+    
 }
+
+foreach my $b (keys %bedrecord)
+{
+	print OUT "$b\n";
+}
+
 
   say $fileOUT "A=$A";
   say $fileOUT "T=$T";
@@ -104,18 +110,33 @@ while ( my $line = <$fileIN> ) {
   say $fileOUT "T_fre=$T_fre";
   say $fileOUT "G_fre=$G_fre";
   say $fileOUT "C_fre=$C_fre";
+  
+  my $totaldi=0;
+  foreach my $d (keys %dinucFre)
+  {
+  	say $fileOUT "$d=$dinucFre{$d}";
+  	$totaldi+=$dinucFre{$d};
+  }
+  
+   foreach my $d (keys %dinucFre)
+  {
+  	my $difre=$dinucFre{$d}/$totaldi;
+  	say $fileOUT "frequency of $d=$difre";
+  }
+  
 
 close $fileIN;
 close $fileOUT;
 close(OUT);
 
 
-
+# or can use sub ltor(\%\@) to force a pass-by-reference
 sub ltor {
-	my ($chr,$start,$end,$strand,$char, $seq,$brref)= @_;
+	my ($chr,$start,$end,$strand,$base, $seq,$brref)= @_;
+	my %bed=%$brref;
 	my $rbound=$end-23; #assume the length of piRNAs are at least 23 nt long
 	my $offset = 0;
-	my $tindex = index($seq, $char, $offset);
+	my $tindex = index($seq, $base, $offset);
 	
 	  while ($tindex != -1) 
 	  {
@@ -129,22 +150,25 @@ sub ltor {
 	    my $string=substr($seq,$tindex,23);
 	    my $newend=$newstart+23;
 	    $newstart=$newstart+1;#to accomondate to norm.bed format
-		print OUT "$chr\t$newstart\t$newend\t\+\t$string\t1\t1\n";
-		$brref{"$chr\t$newstart\t$newend\t\+\t$string\t1\t1"}=1; #to be fixed
+		#print OUT "$chr\t$newstart\t$newend\t\+\t$string\t1\t1\n";
+		$bed{"$chr\t$newstart\t$newend\t\+\t$string\t1\t1"}=1; #to be fixed
 	    $offset = $tindex + 1;
-	    $tindex = index($seq, $char, $offset);
+	    $tindex = index($seq, $base, $offset);
 	    }
 	
 	  }
+	  
+	  #return %bed;
 	
 }
 
 
 sub rtol {
-	my ($chr,$start,$end,$strand, $char, $seq,$br)= @_;
+	my ($chr,$start,$end,$strand, $base, $seq,$brref)= @_;
+	my %bed=%$brref;
 	my $lbound=$start+22;
 	my $offset = 0;
-	my $tindex = index($seq, $char, $offset);
+	my $tindex = index($seq, $base, $offset);
 	
 	  while ($tindex != -1) {
 	    my $newend=$start+$tindex;
@@ -152,7 +176,7 @@ sub rtol {
 	    {
 	    	
 	    	$offset = $tindex + 1;
-	    	$tindex = index($seq, $char, $offset);
+	    	$tindex = index($seq, $base, $offset);
 	    	next;
 	    }
 	    else
@@ -163,12 +187,14 @@ sub rtol {
 	    my $stringrc=&RevComp($string);
 	    
 	    $newstart=$newstart+1;#to accomondate to norm.bed format
-		print OUT "$chr\t$newstart\t$newend\t\-\t$stringrc\t1\t1\n"; #to be fixed
+		#print OUT "$chr\t$newstart\t$newend\t\-\t$stringrc\t1\t1\n"; #to be fixed
+		$bed{"$chr\t$newstart\t$newend\t\-\t$stringrc\t1\t1"}=1;
 	    $offset = $tindex + 1;
-	    $tindex = index($seq, $char, $offset);
+	    $tindex = index($seq, $base, $offset);
 	    }
 	
-	  }	
+	  }
+	  #return %bed;	
 }
 
 
