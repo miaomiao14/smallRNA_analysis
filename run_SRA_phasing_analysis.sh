@@ -57,6 +57,8 @@ then
 		
 	done
 	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${OUTDIR2}/allpiRNAs.allgt.5-5.distance.min.distribution.summary.raw.txt ${OUTDIR2}/allpiRNAs.allgt.5-5.distance.min.distribution.summary.mastertable.txt 
+	#transform to fraction (1..100 nt)
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/Phasing/piRNA_distance_plot.r summary_masterTable ${OUTDIR2}/allpiRNAs.allgt.5-5.distance.min.distribution.summary.mastertable.txt ${OUTDIR2}
 fi
 [ $? == 0 ] && \
 touch ${OUT}/.status.${STEP}.transposon_piRNA.phasing.mastertable
