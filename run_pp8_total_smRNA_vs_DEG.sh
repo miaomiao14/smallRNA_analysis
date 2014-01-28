@@ -40,7 +40,7 @@ do
 	#gzip ${smmapper2%.gz}.23-29
 		
 	#convert mapper2 to norm.bed for pp8
-		[ ! -s ${smmapper2%.gz}.23-29.norm.bed.gz ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${smmapper2} ${OUT0} && gzip ${smmapper2%.gz}.norm.bed
+		[ ! -s ${smmapper2%.gz}.norm.bed.gz ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${smmapper2} ${OUT0} && gzip ${smmapper2%.gz}.norm.bed
 		[ ! -s ${demapper2%.gz}.norm.bed.gz ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${demapper2} ${OUTDIR} && gzip ${demapper2%.gz}.norm.bed
 		
 		echo -e "`date` "+$ISO_8601"\t convert the mapper2 format to norm.bed format done..." >> $LOG
