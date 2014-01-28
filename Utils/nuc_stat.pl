@@ -34,7 +34,7 @@ open $fileIN,  "$ARGV[0]" or die "can't open file basecount.nfasta for reading";
 open $fileOUT, ">$ARGV[1]" or die "can't open file basecount.out for writing";
 open OUT, ">$ARGV[2]" or die "can't open file basecount.out for writing";
 
-my %bedrecord; #output bed format record
+our %bedrecord; #global hash; output bed format record
 my %dinucFre;
 while ( my $line = <$fileIN> ) {
 
@@ -49,13 +49,13 @@ while ( my $line = <$fileIN> ) {
 	  
 	  my $base = 'T';
 	  my $str="+";
-	  #&ltor($chr,$start,$end,$str,$base,$seq,\%bedrecord);
- 	  %bedrecord=&ltor($chr,$start,$end,$str,$base,$seq);
+	  &ltor($chr,$start,$end,$str,$base,$seq,\%bedrecord);
+ 	  #%bedrecord=&ltor($chr,$start,$end,$str,$base,$seq);
  		
  	  $str="-";
 	  $base = 'A';
-	  #&rtol($chr,$start,$end,$str,$base,$seq,\%bedrecord);
-	  %bedrecord=&rtol($chr,$start,$end,$str,$base,$seq);
+	  &rtol($chr,$start,$end,$str,$base,$seq,\%bedrecord);
+	  #%bedrecord=&rtol($chr,$start,$end,$str,$base,$seq);
    }
    
    #if strand is -, the sequence is always from 5'-3', but it is reverse complementary sequences of the genomic DNA already
@@ -63,13 +63,13 @@ while ( my $line = <$fileIN> ) {
   {	 
 	  my $base = 'T';
 	  my $str="-";
-	  #&rtol($chr,$start,$end,$str,$base,$seq,\%bedrecord);
-	  %bedrecord=&rtol($chr,$start,$end,$str,$base,$seq);
+	  &rtol($chr,$start,$end,$str,$base,$seq,\%bedrecord);
+	  #%bedrecord=&rtol($chr,$start,$end,$str,$base,$seq);
 	 
 	  $str="+";
 	  $base = 'A';
-	  #&ltor($chr,$start,$end,$str,$base,$seq,\%bedrecord);
-	  %bedrecord=&ltor($chr,$start,$end,$str,$base,$seq);
+	  &ltor($chr,$start,$end,$str,$base,$seq,\%bedrecord);
+	  #%bedrecord=&ltor($chr,$start,$end,$str,$base,$seq);
   }
       
   #say $seq;
@@ -136,10 +136,10 @@ close(OUT);
 
 # or can use sub ltor(\%\@) to force a pass-by-reference
 sub ltor {
-	#my ($chr,$start,$end,$strand,$base, $seq,$brref)= @_;
-	#my %bed=%$brref;
-	my ($chr,$start,$end,$strand,$base, $seq)= @_;
-	my %bed=();
+	my ($chr,$start,$end,$strand,$base, $seq,$brref)= @_;
+	%bedrecord=%$brref;
+	#my ($chr,$start,$end,$strand,$base, $seq)= @_;
+	#my %bed=();
 	my $rbound=$end-23; #assume the length of piRNAs are at least 23 nt long
 	my $offset = 0;
 	my $tindex = index($seq, $base, $offset);
@@ -157,23 +157,23 @@ sub ltor {
 	    my $newend=$newstart+23;
 	    $newstart=$newstart+1;#to accomondate to norm.bed format
 		#print OUT "$chr\t$newstart\t$newend\t\+\t$string\t1\t1\n";
-		$bed{"$chr\t$newstart\t$newend\t\+\t$string\t1\t1"}=1; #to be fixed
+		$bedrecord{"$chr\t$newstart\t$newend\t\+\t$string\t1\t1"}=1; #to be fixed
 	    $offset = $tindex + 1;
 	    $tindex = index($seq, $base, $offset);
 	    }
 	
 	  }
 	  
-	  return %bed;
+	  #return %bed;
 	
 }
 
 
 sub rtol {
-	#my ($chr,$start,$end,$strand, $base, $seq,$brref)= @_;
-	#my %bed=%$brref;
-	my ($chr,$start,$end,$strand, $base, $seq)= @_;
-	my %bed=();
+	my ($chr,$start,$end,$strand, $base, $seq,$brref)= @_;
+	%bedrecord=%$brref;
+	#my ($chr,$start,$end,$strand, $base, $seq)= @_;
+	#my %bed=();
 	my $lbound=$start+22;
 	my $offset = 0;
 	my $tindex = index($seq, $base, $offset);
@@ -196,13 +196,13 @@ sub rtol {
 	    
 	    $newstart=$newstart+1;#to accomondate to norm.bed format
 		#print OUT "$chr\t$newstart\t$newend\t\-\t$stringrc\t1\t1\n"; #to be fixed
-		$bed{"$chr\t$newstart\t$newend\t\-\t$stringrc\t1\t1"}=1;
+		$bedrecord{"$chr\t$newstart\t$newend\t\-\t$stringrc\t1\t1"}=1;
 	    $offset = $tindex + 1;
 	    $tindex = index($seq, $base, $offset);
 	    }
 	
 	  }
-	  return %bed;	
+	  #return %bed;	
 }
 
 
