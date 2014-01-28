@@ -15,7 +15,7 @@ STEP=1
 [ ! -d ${OUT0} ] && mkdir -p ${OUT0}
 #step 1
 #OUT=${OUT0}
-touch ${OUT0}/.status.${STEP}.SRA_DEG.pp8
+#touch ${OUT0}/.status.${STEP}.SRA_DEG.pp8
 if [ ! -f ${OUT0}/.status.${STEP}.SRA_DEG.pp8 ] 
 then
 for g in "${GROUPGT[@]}"
