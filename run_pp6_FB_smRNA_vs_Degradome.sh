@@ -7,6 +7,8 @@ OUT0=$3
 c=$4 #cpu
 g=$5 
 declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubMutsWW" "AubCDrescue" "AubWTrescue")
+declare -a FEATURE=("FLY_TRN_ALL" "FLY_TRN_ALL_IN_CLUSTER" "FLY_TRN_ALL_OUT_CLUSTER")
+
 
 [ ! -d ${OUT0}/pp6_FB_smRNA_vs_degradome_FB_withppscore_11252013 ] && mkdir -p ${OUT0}/pp6_FB_smRNA_vs_degradome_FB_withppscore_11252013
 #step 1
