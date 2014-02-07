@@ -64,7 +64,27 @@ use Compress::Zlib;
 	        	{
 	            	$minus{$_[0]}{$_[2]}+=$reads/$ntm;
 	        	}
+        	}
+        	if($format eq "bed2")#bo's definition
+			{
+
+        		$reads=$_[3];
+        		$ntm=$_[4];
+        		if($CLONE eq "SRA")
+        		{
+				next if (length($_[6])>29 || length($_[6])<23);
+        		}
+        		if($_[3] eq "+") #strand information is not included in the data, but in the file name
+        		{
+	            	$plus{$_[0]}{$_[1]}+=$reads/$ntm;
+	            	$plus_end{$_[0]}{$_[1]}=$_[2];
+	        	}
+	        	else
+	        	{
+	            	$minus{$_[0]}{$_[2]}+=$reads/$ntm;
+	        	}
         	}		
+        			
 		}
 		$gz->gzclose();
 	}
@@ -106,6 +126,26 @@ use Compress::Zlib;
 	            	$minus{$_[0]}{$_[2]}+=$reads/$ntm;
 	        	}
         	}
+        	if($format eq "bed2")#bo's definition
+			{
+
+        		$reads=$_[3];
+        		$ntm=$_[4];
+        		if($CLONE eq "SRA")
+        		{
+				next if (length($_[6])>29 || length($_[6])<23);
+        		}
+        		if($_[3] eq "+") #strand information is not included in the data, but in the file name
+        		{
+	            	$plus{$_[0]}{$_[1]}+=$reads/$ntm;
+	            	$plus_end{$_[0]}{$_[1]}=$_[2];
+	        	}
+	        	else
+	        	{
+	            	$minus{$_[0]}{$_[2]}+=$reads/$ntm;
+	        	}
+        	}		
+        	
 		}
 		close(IN);
     }

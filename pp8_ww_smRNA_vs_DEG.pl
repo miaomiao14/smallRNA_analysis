@@ -177,6 +177,7 @@ for ($i=0; $i<$ARGV[2]; $i++)
 		print "$file2-$file1\t$Z\t";
 	 	
 	 	$N1=`match.pl $OUTDIR/$file2.$file1.ppseq $OUTDIR/$file2.seq | sumcol+ 2`; chomp($N1);
+	 	
 		if ($Z!=-10) 
 		{
 			print PPZ "$X\t$N1\t$total{$file2}\t",$N1/$total{$file2},"\t","$total{$file1}\t",$X*1000000000000/$total{$file1}/$total{$file2},"\n";
