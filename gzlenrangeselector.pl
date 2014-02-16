@@ -10,7 +10,7 @@ $gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[0]: $gzerrno\n" ;
 $infile=$ARGV[0];
 $infile=~s/.gz//;
 $outfile=$infile.".".$ARGV[1];
-$outfile=$outfile."-".$ARGV[2]."gz";
+$outfile=$outfile."-".$ARGV[2].".gz";
 $gzw=gzopen($outfile,"wb") or die "Cannot open $outfile: $gzerrno\n";
 while($gz->gzreadline($line) > 0)
 {
