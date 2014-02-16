@@ -144,6 +144,7 @@ if($indexFlag)
 	        	}#ifelse
 	      	}#for
 		} #while
+		$gz->gzclose(); 
 		if ($total{$file}>10)
 		{
 			$seqFile="$OUTDIR/$file.seq";
@@ -230,6 +231,7 @@ else
 	         	}#ifelse
 			}#for loop of the n
 		}#while
+		$gz->gzclose(); 
 	}#for loop of the file
 }#else indexFlag
 
