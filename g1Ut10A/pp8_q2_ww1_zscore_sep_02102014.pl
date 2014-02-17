@@ -515,7 +515,7 @@ sub PPprocessing
 				   print "$guideStrandFile\-$targetStrandFile\t$Z\t";
 				   
 				   #Z-score for all transpairs; by species irrespective of coordinates
-				   my %n_of_reads=();
+				   
 				   foreach my $p (@pairs)
 				   {
 				    $X0{$p}=scalar (keys %{$transPairSpecies{$p}{10}}); #by species irrespective of coordinates
@@ -526,6 +526,7 @@ sub PPprocessing
 				    $n_of_species=scalar (keys %{$transPair10Species{$p}}); #total number of species irrespective of coordinates
 				    my $n_of_species_cor=0;
 				    map {$n_of_species_cor+=$_} (values %{$transPair10Species{$p}});#total number of species respective of coordinates
+				    my $n_of_reads=0;
 				    map {$n_of_reads+=$_} (values %{$transPairReads{$p}{10}}); ###why it is not equal to $X2{$p}? pls calculate it before it's deleted!!
 				    
 				    delete $transPairSpecies{$p}{10}; ##???
