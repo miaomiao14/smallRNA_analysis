@@ -314,7 +314,7 @@ sub PPprocessing
 				my %count_N0=();
 				my %species=(); 
 				my %speciesn10=();
-				my %cisPairReads=(); my %cisPairReads=(); my %cisPairReads=(); my %cisPairReads=();my %transPair10Species=();
+				my %cisPairSpecies=(); my %cisPairReads=(); my %transPairSpecies=(); my %transPairReads=();my %cisPair10Species=();my %transPair10Species=();
 				
 				
 				open ZSCORE, ">$OUTDIR/$guideStrandFile.$targetStrandFile.zscore.out";
@@ -352,14 +352,17 @@ sub PPprocessing
 				   	{
 				      	chomp $line;
 				      	@l=split(/\t/,$line);
+				      	
+				      	$guidetotal=$guidepf{$guideStrandFile}{$l[2]};
+					    $targettotal=$targetpf{$targetStrandFile}{$n}{$l[1]};
+				      
 				      	if ($l[3] eq "")
 				      	{
 				      	
 				      	   $g_0_nt=substr($l[2],0,1); $t_9_nt=&revfa($g_0_nt);  ##here are different from pp8_q2_ww1.pl
 					       #targetpf index; guidepf seq
 					       
-					       $guidetotal=$guidepf{$guideStrandFile}{$l[2]};
-					       $targettotal=$targetpf{$targetStrandFile}{$n}{$l[1]};
+					       
 					       
 					       $allPairReads{$g_0_nt.$t_9_nt}{$n}+=$targettotal*$guidetotal/$NTM{$l[2]};
 					       
@@ -439,6 +442,7 @@ sub PPprocessing
 
 				      	elsif ($l[3]=~/(\d+):(\w)>(\w)/)
 				      	{
+
 					       next if ($1!=0);  # allow 1mm at the 10th position of target strand
 					       $t_9_nt=&revfa($2);
 					       $allPairReads{$3.$t_9_nt}{$n}+=$targetpf{$targetStrandFile}{$n}{$l[1]}*$guidepf{$guideStrandFile}{$l[2]}/$NTM{$l[2]};
