@@ -67,6 +67,7 @@ elsif($spe eq "bombyx")
 
 my @matchedpairs=("AT","TA","GC","CG");
 my @unmatchedpairs=("AA","AC","AG","CA","CC","CT","GA","GG","GT","TC","TG","TT");
+my @pairs=("AT","TA","GC","CG","AA","AC","AG","CA","CC","CT","GA","GG","GT","TC","TG","TT");
 
 my $OUTDIR=$ARGV[4];
 my $indexFlag=$ARGV[5];
@@ -343,6 +344,8 @@ sub PPprocessing
 					       
 					       $speciesn10{$g_0_nt.$t_9_nt}{$l[2]}=1 if ($n==10); ###
 					       $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}=1 ; #this was wrong, has to add {$n}, otherwise accumulative
+					       #the sum of $cisPairSpecies and $transPairSpecies irrespective of coordinates
+					       
 					       $score{$n}+=$targettotal*$guidetotal/$NTM{$l[2]};
 				      		
 					       #separate trans-targets from cis-targets for perfect g1t10 pair  	
@@ -351,7 +354,7 @@ sub PPprocessing
 					       #$targetpfsplit{$file}{$n}{$str}{$_[0],$fiveend,"+"}+=$_[5]/$_[6];#$fiveend is 0-based
 					       
 					       #how to sort guidepfsplit and targetpfsplit
-					       
+					       #no need to sort if use hash key
 					       
 					       
 					       foreach my $record (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}} )
@@ -387,7 +390,8 @@ sub PPprocessing
 					       			$cisPairReads{$g_0_nt.$t_9_nt}{$n}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$chr,$tfiveend,$tstrand}/$NTM{$l[2]};
 					       			$transPairReads{$g_0_nt.$t_9_nt}{$n}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*($targettotal - $targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$chr,$tfiveend,$tstrand})/$NTM{$l[2]};
 					       			
-					       			$cisPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}=1 ;
+					       			$cisPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}=1 ; #cis pair species must only have one by coordinate definition
+					       			
 					       			#with the same guide 16 nt prefix,there might be multiple trans-targets with 16nt complementarity, (originally it was viewed only one)
 					       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}})-1 ;
 					       			#trans PingPong pair in species
@@ -417,9 +421,9 @@ sub PPprocessing
 					       next if ($1!=0);  # allow 1mm at the 10th position of target strand
 					       $t_9_nt=&revfa($2);
 					       $allPairReads{$3.$t_9_nt}{$n}+=$targetpf{$targetStrandFile}{$n}{$l[1]}*$guidepf{$guideStrandFile}{$l[2]}/$NTM{$l[2]};
-					       $speciesn10{$3.$t_9_nt}{$l[2]}=1 if ($n==10); ###
+					       $speciesn10{$3.$t_9_nt}{$l[2]}=1 if ($n==10); ###species of seq pairs, not count different coordinates
 					       $species{$3.$t_9_nt}{$n}{$l[2]}=1 ;
-					       $score{$n}+=$targetpf{$targetStrandFile}{$n}{$l[1]}*$guidepf{$guideStrandFile}{$l[2]}/$NTM{$l[2]};
+					       $score{$n}+=$targetpf{$targetStrandFile}{$n}{$l[1]}*$guidepf{$guideStrandFile}{$l[2]}/$NTM{$l[2]}; ###species of pairs taking the varied coordinates
 					       print PPSEQ "$l[2]\n" if ($n==10);
 					       
 					       
@@ -439,36 +443,49 @@ sub PPprocessing
 				     print PPSCORE "$n\t$score{$n}\n";
 				     $count_N++ if ($score{$n}>0);
 				   
-				   #Ping-Pong according to different G1T10 pairs  
+				   #Ping-Pong score according to different G1T10 pairs
+				   #for matched pairs, cis and trans  
 				     foreach my $p (@matchedpairs)
 				     {
 					     $allPairReads{$p}{$n}=0 if (!exists $allPairReads{$p}{$n});
 					     $n_of_species=scalar (keys %{$species{$p}{$n}});
 					     
-					     $n_of_cisPairReads=0 if(exists $cisPairReads{$p}{$n});
-					     $n_of_cisPairSpecies=0 if(exists $cisPairSpecies{$p}{$n});
 					     
-					     $n_of_transPairReads=0 if(!exists $transPairReads{$p}{$n});
-					     $n_of_transPairSpecies=0 if(!exists $transPairSpecies{$p}{$n});
+					     my $n_of_cisPairReads=0;
+					     map {$n_of_cisPairReads+=$_} values %{$cisPairReads{$p}{$n}} ;
+					     my $n_of_cisPairSpecies=0;
+					     $n_of_cisPairSpecies=scalar (keys %{$cisPairSpecies{$p}{$n}});					    
+					     my $n_of_cisPairSpecies_cor=0;
+					     map {$n_of_cisPairSpecies_cor+=$_} values %{$cisPairSpecies{$p}{$n}} ;
 					     
-					     print PPSCOREUA "$n\tcis\t$p\t$n_of_cisPairSpecies\t$n_of_cisPairReads\t$n_of_species\t$allPairReads{$p}{$n}\n";
-					     print PPSCOREUA "$n\ttrans\t$p\t$n_of_transPairSpecies\t$n_of_transPairReads\t$n_of_species\t$allPairReads{$p}{$n}\n";
 					     
-					     $count_N0{$p}++ if ($allPairReads{$p}{$n}>0);
+					     my $n_of_transPairReads=0;
+					     map {$n_of_transPairReads+=$_} values %{$transPairReads{$p}{$n}} ;
+					     my $n_of_transPairSpecies=0;					     					   
+					     $n_of_transPairSpecies=scalar (keys %{$transPairSpecies{$p}{$n}});
+					     my $n_of_transPairSpecies_cor=0;
+					     map {$n_of_transPairSpecies_cor+=$_} values %{$transPairSpecies{$p}{$n}};
+					     
+					     print PPSCOREUA "$n\tcis\t$p\t$n_of_cisPairSpecies_cor\t$n_of_cisPairSpecies\t$n_of_cisPairReads\t$n_of_species\t$allPairReads{$p}{$n}\n";
+					     print PPSCOREUA "$n\ttrans\t$p\t$n_of_transPairSpecies_cor\t$n_of_transPairSpecies\t$n_of_transPairReads\t$n_of_species\t$allPairReads{$p}{$n}\n";
+					     
+					     $count_N0{$p}++ if ($transPairSpecies{$p}{$n}>0);
 				     }
-				     
+				     #for unmatched pairs, only trans
 				     foreach my $p (@unmatchedpairs)
 				     {
 					     $allPairReads{$p}{$n}=0 if (!exists $allPairReads{$p}{$n});
 					     $n_of_species=scalar (keys %{$species{$p}{$n}});
 					     
-					     $n_of_transPairReads=0 if(!exists $transPairReads{$p}{$n});
-					     $n_of_transPairSpecies=0 if(!exists $transPairSpecies{$p}{$n});
+					     my $n_of_transPairReads=0;
+					     map {$n_of_transPairReads+=$_} values %{$transPairReads{$p}{$n}} ;					     					   
+					     $n_of_transPairSpecies=scalar (keys %{$transPairSpecies{$p}{$n}});
+					     my $n_of_transPairSpecies_cor=0;
+					     map {$n_of_transPairSpecies_cor+=$_} values %{$transPairSpecies{$p}{$n}};
 					     
+					     print PPSCOREUA "$n\ttrans\t$p\t$n_of_transPairSpecies_cor\t$n_of_transPairSpecies\t$n_of_transPairReads\t$n_of_species\t$allPairReads{$p}{$n}\n";
 					     
-					     print PPSCOREUA "$n\ttrans\t$p\t$n_of_transPairSpecies\t$n_of_transPairReads\t$n_of_species\t$allPairReads{$p}{$n}\n";
-					     
-					     $count_N0{$p}++ if ($allPairReads{$p}{$n}>0);
+					     $count_N0{$p}++ if ($transPairSpecies{$p}{$n}>0);
 				     }
 				     
 				     
@@ -478,17 +495,21 @@ sub PPprocessing
 				   $X=$score{10}; delete $score{10};
 				   $std=&std(values %score); 
 				   if ($std>0 && $count_N>=5) { $Z=($X-&mean(values %score))/$std;} else {$Z=-10;}
-				   print ZSCORE "$guideStrandFile\-$targetStrandFile\t$Z";
-				   print "$guideStrandFile\-$targetStrandFile\t$Z";
+				   print ZSCORE "$guideStrandFile\-$targetStrandFile\t$Z\t";
+				   print "$guideStrandFile\-$targetStrandFile\t$Z\t";
 				   
-				   foreach $p (@pairs)
+				   #Z-score for all transpairs
+				   foreach my $p (@pairs)
 				   {
 				    #$std=0;
-				    $X0{$p}=$allPairReads{$p}{10}; delete $allPairReads{$p}{10};
-				    $std0=&std(values %{$allPairReads{$p}});
-				    if ($std0>0 && $count_N0{$p}>=5) { $Z0{$p}=($X0{$p}-&mean(values %{$allPairReads{$p}}))/$std0;} else {$Z0{$p}=-10;}
-				    $n_of_species=scalar (keys %{$speciesn10{$p}});
-				    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\t$p\t$n_of_species\t$X0{$p}\n"; ##file2 is the guide and file1 is the target
+				    $X0{$p}=$transPairSpecies{$p}{10}; delete $transPairSpecies{$p}{10};
+				    $std0=&std(values %{$transPairSpecies{$p}});
+				    if ($std0>0 && $count_N0{$p}>=5) { $Z0{$p}=($X0{$p}-&mean(values %{$transPairSpecies{$p}}))/$std0;} else {$Z0{$p}=-10;}
+				    $n_of_species=scalar (keys %{$transPair10Species{$p}}); #total number of species irrespective of coordinates
+				    my $n_of_species_cor=0;
+				    map {$n_of_species_cor+=$_} values %{$transPair10Species{$p}};#total number of species respective of coordinates
+				    #how to normalize $X0{$p}?
+				    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\t$p\t$Z0{$p}\t$X0{$p}\t$n_of_species\t$n_of_species_cor\n"; ##file2 is the guide and file1 is the target
 				   }
 				   
 				   $ppseq="$OUTDIR/$guideStrandFile.$targetStrandFile.ppseq";
@@ -501,9 +522,14 @@ sub PPprocessing
 				   }
 				   else
 				   {
-				   	print ZSCORE "NA\tNA\t\tNA\tNA";
+				   	print ZSCORE "NA\tNA\tNA\tNA\tNA\n";
 				   }
-	
+				   
+				close(PPSEQ);
+				close(PPSCOREUA);
+				close(PPSCORE);
+				close(ZSCOREUA);
+				close(ZSCORE);  	
 }
 
 #remove intermediate files
