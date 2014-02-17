@@ -530,14 +530,17 @@ sub PPprocessing
 				    
 				    for(my $i=1;$i<=20;$i++)
 				    {
-				    	if(exists $transPairSpecies{$p}{$i}) #$transPairSpecies{$p}{10} was deleted
+				    	my $n1=scalar (keys %{$transPairSpecies{$p}{$i}});
+				    	my $n2=scalar (keys %{$transPairReads{$p}{$i}});
+				    	
+				    	if($n1>0) #$transPairSpecies{$p}{10} was deleted
 				    	{
 				    		push @numOfSpecies, scalar (keys %{$transPairSpecies{$p}{$i}}) ;
 				    		
 				    		map { $XnSpecies+=$_ } (values %{$transPairSpecies{$p}{$i}});
 				    		push @numOfSpeciesCor, $XnSpecies ;
 				    	}
-						if(exists $transPairReads{$p}{$i}) #$transPairReads{$p}{10} was deleted
+						if($n2>0) #$transPairReads{$p}{10} was deleted
 						{
 							map { $XnReads+=$_ } (values %{$transPairReads{$p}{$i}}); 
 							push @numOfReads, $XnReads ;
@@ -549,6 +552,8 @@ sub PPprocessing
 				    $std2=&std(@numOfReads);
 				    
 				    my $temp1=$#numOfSpecies+1;
+				    my $temp2=$#numOfSpeciesCor+1;
+				    my $temp3=$#numOfReads+1;
 				    
 				    if ($std0>0 && $count_N0{$p}>=5) { $Z0{$p}=($X0{$p}-&mean(@numOfSpecies))/$std0;} else {$Z0{$p}=-10;}#by species irrespective of coordinates
 				    if ($std1>0 && $count_N0{$p}>=5) { $Z1{$p}=($X1{$p}-&mean(@numOfSpeciesCor))/$std1;} else {$Z1{$p}=-10;}#by species according to coordinates
@@ -561,7 +566,7 @@ sub PPprocessing
 				    my $n_of_reads=0;
 				    map {$n_of_reads+=$_} (values %{$transPairReads{$p}{10}});
 				    #how to normalize $X0{$p}?
-				    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\t$p\t$Z0{$p}\t$Z1{$p}\t$Z2{$p}\t$X0{$p}\t$X1{$p}\t$X2{$p}\t$n_of_species\t$n_of_species_cor\t$n_of_reads\t$temp1\n"; ##file2 is the guide and file1 is the target
+				    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\t$p\t$Z0{$p}\t$Z1{$p}\t$Z2{$p}\t$X0{$p}\t$X1{$p}\t$X2{$p}\t$n_of_species\t$n_of_species_cor\t$n_of_reads\t$temp1\t$temp2\t$temp3\n"; ##file2 is the guide and file1 is the target
 				   }
 				   
 				   $ppseq="$OUTDIR/$guideStrandFile.$targetStrandFile.ppseq";
