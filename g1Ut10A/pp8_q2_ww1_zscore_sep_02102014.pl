@@ -562,7 +562,7 @@ sub usage
         print "REQUIRED\n\t";
         print "inputfile1 inputfile2 n type(fly|bombyx) outdir indexflag\n\t";
         print "-i  <inputfile1>\n\t";
-		print "-j  <inputfile2 [optional]>\n\t";
+		print "-j  <inputfile2[can be as same as inputfile1]>\n\t";
 		print "-o  <outputdir>\n\t";
 		print "-n  <number of inputfiles>\n\t";
 		print "-s  <species name[fly|bombyx]>\n\t";
