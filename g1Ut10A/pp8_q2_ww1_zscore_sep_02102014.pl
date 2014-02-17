@@ -515,6 +515,7 @@ sub PPprocessing
 				   print "$guideStrandFile\-$targetStrandFile\t$Z\t";
 				   
 				   #Z-score for all transpairs; by species irrespective of coordinates
+				   my %n_of_reads=();
 				   foreach my $p (@pairs)
 				   {
 				    $X0{$p}=scalar (keys %{$transPairSpecies{$p}{10}}); #by species irrespective of coordinates
@@ -551,9 +552,10 @@ sub PPprocessing
 				    $std1=&std(@numOfSpeciesCor);
 				    $std2=&std(@numOfReads);
 				    
-				    my $temp1=$#numOfSpecies+1;
-				    my $temp2=$#numOfSpeciesCor+1;
-				    my $temp3=$#numOfReads+1;
+				    #to prove that $transPairReads{$p}{10} was deleted successfully
+				    #my $temp1=$#numOfSpecies+1;
+				    #my $temp2=$#numOfSpeciesCor+1;
+				    #my $temp3=$#numOfReads+1;
 				    
 				    if ($std0>0 && $count_N0{$p}>=5) { $Z0{$p}=($X0{$p}-&mean(@numOfSpecies))/$std0;} else {$Z0{$p}=-10;}#by species irrespective of coordinates
 				    if ($std1>0 && $count_N0{$p}>=5) { $Z1{$p}=($X1{$p}-&mean(@numOfSpeciesCor))/$std1;} else {$Z1{$p}=-10;}#by species according to coordinates
@@ -563,10 +565,11 @@ sub PPprocessing
 				    $n_of_species=scalar (keys %{$transPair10Species{$p}}); #total number of species irrespective of coordinates
 				    my $n_of_species_cor=0;
 				    map {$n_of_species_cor+=$_} (values %{$transPair10Species{$p}});#total number of species respective of coordinates
-				    my $n_of_reads=0;
-				    map {$n_of_reads+=$_} (values %{$transPairReads{$p}{10}});
+				    
+				    map {$n_of_reads{$p}+=$_} (values %{$transPairReads{$p}{10}}); ###why it is not equal to $X2{$p}?
+				    
 				    #how to normalize $X0{$p}?
-				    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\t$p\t$Z0{$p}\t$Z1{$p}\t$Z2{$p}\t$X0{$p}\t$X1{$p}\t$X2{$p}\t$n_of_species\t$n_of_species_cor\t$n_of_reads\t$temp1\t$temp2\t$temp3\n"; ##file2 is the guide and file1 is the target
+				    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\t$p\t$Z0{$p}\t$Z1{$p}\t$Z2{$p}\t$X0{$p}\t$X1{$p}\t$X2{$p}\t$n_of_species\t$n_of_species_cor\t$n_of_reads${p}\n"; ##file2 is the guide and file1 is the target
 				   }
 				   
 				   $ppseq="$OUTDIR/$guideStrandFile.$targetStrandFile.ppseq";
