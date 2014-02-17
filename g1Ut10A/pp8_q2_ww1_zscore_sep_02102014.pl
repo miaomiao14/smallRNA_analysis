@@ -521,8 +521,8 @@ sub PPprocessing
 				    map {$X1{$p}+=$_} (values %{$transPairSpecies{$p}{10}}); #by species according to coordinates
 				    map {$X2{$p}+=$_} (values %{$transPairReads{$p}{10}});  #Z-score for all transpairs; by reads
 				    
-				    delete $transPairSpecies{$p}{10};
-				    delete $transPairReads{$p}{10};
+				    delete $transPairSpecies{$p}{10}; ##???
+				    delete $transPairReads{$p}{10};###???
 				    
 				    my @numOfSpecies=();
 				    my @numOfSpeciesCor=();
@@ -548,6 +548,8 @@ sub PPprocessing
 				    $std1=&std(@numOfSpeciesCor);
 				    $std2=&std(@numOfReads);
 				    
+				    my $temp1=$#numOfSpecies+1;
+				    
 				    if ($std0>0 && $count_N0{$p}>=5) { $Z0{$p}=($X0{$p}-&mean(@numOfSpecies))/$std0;} else {$Z0{$p}=-10;}#by species irrespective of coordinates
 				    if ($std1>0 && $count_N0{$p}>=5) { $Z1{$p}=($X1{$p}-&mean(@numOfSpeciesCor))/$std1;} else {$Z1{$p}=-10;}#by species according to coordinates
 				    if ($std2>0 && $count_N0{$p}>=5) { $Z2{$p}=($X2{$p}-&mean(@numOfReads))/$std2;} else {$Z2{$p}=-10;}
@@ -559,7 +561,7 @@ sub PPprocessing
 				    my $n_of_reads=0;
 				    map {$n_of_reads+=$_} (values %{$transPairReads{$p}{10}});
 				    #how to normalize $X0{$p}?
-				    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\t$p\t$Z0{$p}\t$Z1{$p}\t$Z2{$p}\t$X0{$p}\t$X1{$p}\t$X2{$p}\t$n_of_species\t$n_of_species_cor\t$n_of_reads\n"; ##file2 is the guide and file1 is the target
+				    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\t$p\t$Z0{$p}\t$Z1{$p}\t$Z2{$p}\t$X0{$p}\t$X1{$p}\t$X2{$p}\t$n_of_species\t$n_of_species_cor\t$n_of_reads\t$temp1\n"; ##file2 is the guide and file1 is the target
 				   }
 				   
 				   $ppseq="$OUTDIR/$guideStrandFile.$targetStrandFile.ppseq";
