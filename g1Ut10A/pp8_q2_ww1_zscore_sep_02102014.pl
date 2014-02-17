@@ -282,7 +282,7 @@ for ($i=0; $i<$numOfInput; $i++)
 
 
    
-		if ($total{$file1}<10 || $total{$file2}<10) { print "$file2-$file1\t-10\n"; print PPZ "$file2-$file1\t-10\n";} #only when consider per cluster or per transposon family
+		if ($total{$file1}<10 || $total{$file2}<10) {print PPZ "$file2-$file1\t-10\n";} #only when consider per cluster or per transposon family
 		else
 		{
 			&PPprocessing($file2,$file1);
