@@ -106,7 +106,7 @@ if($indexFlag)
 	# make bowtie index
 	for ($i=0; $i<$numOfInput; $i++)
 	{
-		my $file=fileparse($ARGV[$i]);
+		my $file=fileparse($inputfiles[$i]);
 	    @namefield=split(/\./,$file);
 	    if($spe eq "fly")
 		{$name=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
@@ -114,7 +114,7 @@ if($indexFlag)
 	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
 	    push @argos, $name;
 	    $file=$name;
-	   	my $gz = gzopen($ARGV[$i], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
+	   	my $gz = gzopen($inputfiles[$i], "rb") or die "Cannot open $inputfiles[$i]: $gzerrno\n" ;
 	   	while($gz->gzreadline($_) > 0)
 	   	{
 			chomp;
@@ -197,7 +197,7 @@ else
 {
 	for ($i=0; $i<$numOfInput; $i++)
 	{
-   		my $file=fileparse($ARGV[$i]);
+   		my $file=fileparse($inputfiles[$i]);
     	@namefield=split(/\./,$file);
     	if($spe eq "fly")
 		{$name=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
@@ -205,7 +205,7 @@ else
 	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
     	push @argos, $name;
     	$file=$name;
-   		my $gz = gzopen($ARGV[$i], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
+   		my $gz = gzopen($inputfiles[$i], "rb") or die "Cannot open $inputfiles[$i]: $gzerrno\n" ;
    		while($gz->gzreadline($_) > 0)
    		{
 			chomp;
@@ -264,14 +264,14 @@ for ($i=0; $i<$numOfInput; $i++)
 	for ($j=0; $j<=$i; $j++)
 	{
       
-		$file1=fileparse($ARGV[$i]); 
+		$file1=fileparse($inputfiles[$i]); 
 		@namefield=split(/\./,$file1);
    	    if($spe eq "fly")
 		{$name1=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
 		if($spe eq "bombyx")
 	    {$name1=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
 		$file1=$name1;
-		$file2=fileparse($ARGV[$j]);
+		$file2=fileparse($inputfiles[$j]);
 		@namefield=split(/\./,$file2);
    	    if($spe eq "fly")
 		{$name2=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
