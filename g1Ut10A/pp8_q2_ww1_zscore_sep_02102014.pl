@@ -26,8 +26,30 @@ use Compress::Zlib;
 #Phil wants to separate the cis-1U10A from trans-1U10A
 
 #
+if(scalar(@ARGV)<6)
+{
+        usage();
+}
 
-$spe=$ARGV[3];
+my $parameters={};#initialize a reference of a hash
+
+&parse_command_line($parameters, @ARGV);
+
+my $inputfile1=fileparse($parameters->{in_file1});
+my @inputfiles=();
+push @inputfiles, $parameters->{in_file1};
+my $inputfile2="";
+if($parameters->{in_file2})
+{
+	$inputfile2=fileparse($parameters->{in_file2});
+	push @inputfiles, $parameters->{in_file2};	
+}
+my $numOfInput=$parameters->{num};
+my $spe=$parameters->{species};
+my $OUTDIR=$parameters->{outdir};
+my $indexFlag=$parameters->{indexflag};
+
+
 if($spe eq "fly")
 {
 	open IN, "/home/xuj1/pipeline/common/fasta/dmel-all-chromosome-r5.5_TAS.fasta";
@@ -69,8 +91,7 @@ my @matchedpairs=("AT","TA","GC","CG");
 my @unmatchedpairs=("AA","AC","AG","CA","CC","CT","GA","GG","GT","TC","TG","TT");
 my @pairs=("AT","TA","GC","CG","AA","AC","AG","CA","CC","CT","GA","GG","GT","TC","TG","TT");
 
-my $OUTDIR=$ARGV[4];
-my $indexFlag=$ARGV[5];
+
 
 my %targetpf=();
 my %guidepf=(); 
@@ -83,7 +104,7 @@ my %total=();
 if($indexFlag)
 {
 	# make bowtie index
-	for ($i=0; $i<$ARGV[2]; $i++)
+	for ($i=0; $i<$numOfInput; $i++)
 	{
 		my $file=fileparse($ARGV[$i]);
 	    @namefield=split(/\./,$file);
@@ -174,7 +195,7 @@ if($indexFlag)
 } #if
 else
 {
-	for ($i=0; $i<$ARGV[2]; $i++)
+	for ($i=0; $i<$numOfInput; $i++)
 	{
    		my $file=fileparse($ARGV[$i]);
     	@namefield=split(/\./,$file);
@@ -238,7 +259,7 @@ else
 
 open PPZ, ">$OUTDIR/zscore.toofewreads.out";
 # bowtie mapping and score calculating
-for ($i=0; $i<$ARGV[2]; $i++)
+for ($i=0; $i<$numOfInput; $i++)
 {
 	for ($j=0; $j<=$i; $j++)
 	{
@@ -531,7 +552,38 @@ sub PPprocessing
 				close(ZSCOREUA);
 				close(ZSCORE);  	
 }
-
 #remove intermediate files
 #`rm *.ebwt`;
 #`rm *.bowtie.out`;
+
+sub usage
+{
+        print "\nUsage:$0\n\n\t";
+        print "REQUIRED\n\t";
+        print "inputfile1 inputfile2 n type(fly|bombyx) outdir indexflag\n";
+        print "-i  <inputfile1>\n\t";
+		print "-j  <inputfile2 [optional]>\n\t";
+		print "-o  <outputdir>\n\t";
+		print "-n  <number of inputfiles>\n\t";
+		print "-s  <species name[fly|bombyx]>\n\t";
+		print "-d  <flag of index[0|1]>\n\t";
+        print "This perl script is count the frequency of 10A irrespective of 1U\n";
+		print "It's maintained by WEI WANG. If you have any questions, please contact wei.wang2\@umassmed.edu\n";
+        exit(1);
+}
+sub parse_command_line {
+        my($parameters, @ARGV) = @_;
+        my $next_arg;
+        while(scalar @ARGV > 0){
+                $next_arg = shift(@ARGV);
+                if($next_arg eq "-i"){ $parameters->{in_file1} = shift(@ARGV); }
+                elsif($next_arg eq "-j"){ $parameters->{in_file2} = shift(@ARGV); }
+                elsif($next_arg eq "-n"){ $parameters->{num} = shift(@ARGV); }
+                elsif($next_arg eq "-s"){ $parameters->{species} = shift(@ARGV); }
+                elsif($next_arg eq "-o"){ $parameters->{outdir} = shift(@ARGV); }
+                elsif($next_arg eq "-d"){ $parameters->{indexflag} = shift(@ARGV); }
+
+                else{ print "Invalid argument: $next_arg"; usage(); }
+        }
+}
+
