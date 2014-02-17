@@ -417,17 +417,18 @@ sub PPprocessing
 					       			$cisPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}=1 ; #cis pair species must only have one by coordinate definition
 					       			
 					       			#with the same guide 16 nt prefix,there might be multiple trans-targets with 16nt complementarity, (originally it was viewed only one)
-					       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}})-1 ;
 					       			#trans PingPong pair in species
+					       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}})-1 ;
 					       			$transPair10Species{$g_0_nt.$t_9_nt}{$l[2]}=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}})-1 if($n==10) ;
+					       			#trans PingPong pair in reads
 					       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*($targettotal - $targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$chr,$tfiveend,$tstrand})/$NTM{$l[2]};
 					       			
 					       		}
 					       		else
 					       		{
-					       			
-					       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}});
 					       			#trans PingPong pair in species
+					       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}});
+					       			#trans PingPong pair in reads
 					       			$transPair10Species{$g_0_nt.$t_9_nt}{$l[2]}=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}}) if($n==10) ;
 					       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targettotal/$NTM{$l[2]};
 					       		}
@@ -450,9 +451,11 @@ sub PPprocessing
 					       $speciesn10{$3.$t_9_nt}{$l[2]}=1 if ($n==10); ###species of seq pairs, not count different coordinates
 					       $species{$3.$t_9_nt}{$n}{$l[2]}=1 ;
 					       
+					       #trans PingPong pair in species
 					       $transPairSpecies{$3.$t_9_nt}{$n}{$l[2]}=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}});
 					       $transPair10Species{$3.$t_9_nt}{$l[2]}=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}}) if($n==10);
-					       $transPairReads{$3.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targettotal/$NTM{$l[2]};
+					       #trans PingPong pair in reads
+					       $transPairReads{$3.$t_9_nt}{$n}{$l[2]}+=$guidetotal*$targettotal/$NTM{$l[2]};
 					       
 					       print PPSEQ "$l[2]\n" if ($n==10);
 				      	}
@@ -466,7 +469,7 @@ sub PPprocessing
 				     $count_N++ if ($score{$n}>0);
 				   
 				   #Ping-Pong score according to different G1T10 pairs
-				   #for matched pairs, cis and trans  
+				   #for matched pairs, cis only  
 				     foreach my $p (@matchedpairs)
 				     {
 					     $allPairReads{$p}{$n}=0 if (!exists $allPairReads{$p}{$n});
@@ -479,6 +482,15 @@ sub PPprocessing
 					     my $n_of_cisPairReads=0;
 					     map {$n_of_cisPairReads+=$_} values %{$cisPairReads{$p}{$n}} ;
 
+					     print PPSCOREUA "$n\tcis\t$p\t$n_of_cisPairSpecies\t$n_of_cisPairSpecies_cor\t$n_of_cisPairReads\t$n_of_species\t$allPairReads{$p}{$n}\n";
+
+				     }
+				     #for all pairs, trans only 
+				     foreach my $p (@pairs)
+				     {
+					     $allPairReads{$p}{$n}=0 if (!exists $allPairReads{$p}{$n});
+					     $n_of_species=scalar (keys %{$species{$p}{$n}});
+					     
 					     
 					     my $n_of_transPairSpecies=0;					     					   
 					     $n_of_transPairSpecies=scalar (keys %{$transPairSpecies{$p}{$n}});
@@ -486,30 +498,10 @@ sub PPprocessing
 					     map {$n_of_transPairSpecies_cor+=$_} values %{$transPairSpecies{$p}{$n}};					     
 					     my $n_of_transPairReads=0;
 					     map {$n_of_transPairReads+=$_} values %{$transPairReads{$p}{$n}} ;
-
-					     
-					     print PPSCOREUA "$n\tcis\t$p\t$n_of_cisPairSpecies\t$n_of_cisPairSpecies_cor\t$n_of_cisPairReads\t$n_of_species\t$allPairReads{$p}{$n}\n";
-					     print PPSCOREUA "$n\ttrans\t$p\t$n_of_transPairSpecies\t$n_of_transPairSpecies_cor\t$n_of_transPairReads\t$n_of_species\t$allPairReads{$p}{$n}\n";
-					     
-					     $count_N0{$p}++ if ($transPairSpecies{$p}{$n}>0);
-				     }
-				     #for unmatched pairs, only trans
-				     foreach my $p (@unmatchedpairs)
-				     {
-					     $allPairReads{$p}{$n}=0 if (!exists $allPairReads{$p}{$n});
-					     $n_of_species=scalar (keys %{$species{$p}{$n}});
-					     
-					     
-					      my $n_of_transPairSpecies=0;					     					   
-					     $n_of_transPairSpecies=scalar (keys %{$transPairSpecies{$p}{$n}});
-					     my $n_of_transPairSpecies_cor=0;
-					     map {$n_of_transPairSpecies_cor+=$_} values %{$transPairSpecies{$p}{$n}};
-					     my $n_of_transPairReads=0;
-					     map {$n_of_transPairReads+=$_} values %{$transPairReads{$p}{$n}} ;
 					     
 					     print PPSCOREUA "$n\ttrans\t$p\t$n_of_transPairSpecies\t$n_of_transPairSpecies_cor\t$n_of_transPairReads\t$n_of_species\t$allPairReads{$p}{$n}\n";
 					     
-					     $count_N0{$p}++ if ($transPairSpecies{$p}{$n}>0);
+					     $count_N0{$p}++ if ($n_of_transPairSpecies>0);
 				     }
 				     
 				     
