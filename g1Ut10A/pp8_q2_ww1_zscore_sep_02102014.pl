@@ -534,13 +534,13 @@ sub PPprocessing
 				    	{
 				    		push @numOfSpecies, scalar (keys %{$transPairSpecies{$p}{$i}}) ;
 				    		
-				    		map { $Xn+=$_ } (values %{$transPairSpecies{$p}{$i}});
-				    		push @numOfSpeciesCor, $Xn ;
+				    		map { $XnSpecies+=$_ } (values %{$transPairSpecies{$p}{$i}});
+				    		push @numOfSpeciesCor, $XnSpecies ;
 				    	}
 						if(exists $transPairReads{$p}{$i}) #$transPairReads{$p}{10} was deleted
 						{
-							map { $Xn+=$_ } (values %{$transPairReads{$p}{$i}}); 
-							push @numOfReads, $Xn ;
+							map { $XnReads+=$_ } (values %{$transPairReads{$p}{$i}}); 
+							push @numOfReads, $XnReads ;
 						}				    	
 				    }
 				    
@@ -549,15 +549,15 @@ sub PPprocessing
 				    $std2=&std(@numOfReads);
 				    
 				    if ($std0>0 && $count_N0{$p}>=5) { $Z0{$p}=($X0{$p}-&mean(@numOfSpecies))/$std0;} else {$Z0{$p}=-10;}#by species irrespective of coordinates
-				    if ($std1>1 && $count_N0{$p}>=5) { $Z1{$p}=($X1{$p}-&mean(@numOfSpeciesCor))/$std1;} else {$Z1{$p}=-10;}#by species according to coordinates
-				    if ($std2>2 && $count_N0{$p}>=5) { $Z2{$p}=($X2{$p}-&mean(@numOfReads))/$std2;} else {$Z2{$p}=-10;}
+				    if ($std1>0 && $count_N0{$p}>=5) { $Z1{$p}=($X1{$p}-&mean(@numOfSpeciesCor))/$std1;} else {$Z1{$p}=-10;}#by species according to coordinates
+				    if ($std2>0 && $count_N0{$p}>=5) { $Z2{$p}=($X2{$p}-&mean(@numOfReads))/$std2;} else {$Z2{$p}=-10;}
 				    
 				    
 				    $n_of_species=scalar (keys %{$transPair10Species{$p}}); #total number of species irrespective of coordinates
 				    my $n_of_species_cor=0;
-				    map {$n_of_species_cor+=$_} values %{$transPair10Species{$p}};#total number of species respective of coordinates
+				    map {$n_of_species_cor+=$_} (values %{$transPair10Species{$p}});#total number of species respective of coordinates
 				    my $n_of_reads=0;
-				    map {$n_of_reads+=$_} values %{$transPairReads{$p}{10}};
+				    map {$n_of_reads+=$_} (values %{$transPairReads{$p}{10}});
 				    #how to normalize $X0{$p}?
 				    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\t$p\t$Z0{$p}\t$Z1{$p}\t$Z2{$p}\t$X0{$p}\t$X1{$p}\t$X2{$p}\t$n_of_species\t$n_of_species_cor\t$n_of_reads\n"; ##file2 is the guide and file1 is the target
 				   }
