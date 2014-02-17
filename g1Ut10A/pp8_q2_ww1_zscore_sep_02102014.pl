@@ -365,12 +365,13 @@ sub PPprocessing
 					       
 					       
 					       $allPairReads{$g_0_nt.$t_9_nt}{$n}+=$targettotal*$guidetotal/$NTM{$l[2]};
+					       $score{$n}+=$targettotal*$guidetotal/$NTM{$l[2]};
 					       
 					       $speciesn10{$g_0_nt.$t_9_nt}{$l[2]}=1 if ($n==10); ###
 					       $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}=1 ; #this was wrong, has to add {$n}, otherwise accumulative
 					       #the sum of $cisPairSpecies and $transPairSpecies irrespective of coordinates
 					       
-					       $score{$n}+=$targettotal*$guidetotal/$NTM{$l[2]};
+					       
 				      		
 					       #separate trans-targets from cis-targets for perfect g1t10 pair  	
 					       
@@ -412,7 +413,6 @@ sub PPprocessing
 					       		if($targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$chr,$tfiveend,$tstrand})
 					       		{
 					       			$cisPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$chr,$tfiveend,$tstrand}/$NTM{$l[2]};
-					       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*($targettotal - $targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$chr,$tfiveend,$tstrand})/$NTM{$l[2]};
 					       			
 					       			$cisPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}=1 ; #cis pair species must only have one by coordinate definition
 					       			
@@ -420,24 +420,22 @@ sub PPprocessing
 					       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}})-1 ;
 					       			#trans PingPong pair in species
 					       			$transPair10Species{$g_0_nt.$t_9_nt}{$l[2]}=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}})-1 if($n==10) ;
+					       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*($targettotal - $targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$chr,$tfiveend,$tstrand})/$NTM{$l[2]};
 					       			
 					       		}
 					       		else
 					       		{
-					       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targettotal/$NTM{$l[2]};
+					       			
 					       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}});
 					       			#trans PingPong pair in species
 					       			$transPair10Species{$g_0_nt.$t_9_nt}{$l[2]}=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}}) if($n==10) ;
+					       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targettotal/$NTM{$l[2]};
 					       		}
 		
 					       }
-					       
-					       
+					       					       
 					       #store target seq from query populations, as it's from bowtie output, by default, it has a partner
 					       print PPSEQ "$l[2]\n" if ($n==10);
-				       
-				       
-				       
 				      	}#perfect pair
 
 				      	elsif ($l[3]=~/(\d+):(\w)>(\w)/)
@@ -445,19 +443,18 @@ sub PPprocessing
 
 					       next if ($1!=0);  # allow 1mm at the 10th position of target strand
 					       $t_9_nt=&revfa($2);
-					       $allPairReads{$3.$t_9_nt}{$n}+=$targetpf{$targetStrandFile}{$n}{$l[1]}*$guidepf{$guideStrandFile}{$l[2]}/$NTM{$l[2]};
+					       
+					       $allPairReads{$3.$t_9_nt}{$n}+=$targettotal*$guidetotal/$NTM{$l[2]};
+					       $score{$n}+=$targettotal*$guidetotal/$NTM{$l[2]}; ###species of pairs taking the varied coordinates
+					       
 					       $speciesn10{$3.$t_9_nt}{$l[2]}=1 if ($n==10); ###species of seq pairs, not count different coordinates
 					       $species{$3.$t_9_nt}{$n}{$l[2]}=1 ;
-					       $score{$n}+=$targetpf{$targetStrandFile}{$n}{$l[1]}*$guidepf{$guideStrandFile}{$l[2]}/$NTM{$l[2]}; ###species of pairs taking the varied coordinates
-					       print PPSEQ "$l[2]\n" if ($n==10);
-					       
-					       
-					       
-					       $transPairReads{$3.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targettotal/$NTM{$l[2]};
 					       
 					       $transPairSpecies{$3.$t_9_nt}{$n}{$l[2]}=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}});
-					       
 					       $transPair10Species{$3.$t_9_nt}{$l[2]}=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}}) if($n==10);
+					       $transPairReads{$3.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targettotal/$NTM{$l[2]};
+					       
+					       print PPSEQ "$l[2]\n" if ($n==10);
 				      	}
 				   } #while
 				   close(IN);
@@ -502,11 +499,13 @@ sub PPprocessing
 					     $allPairReads{$p}{$n}=0 if (!exists $allPairReads{$p}{$n});
 					     $n_of_species=scalar (keys %{$species{$p}{$n}});
 					     
-					     my $n_of_transPairReads=0;
-					     map {$n_of_transPairReads+=$_} values %{$transPairReads{$p}{$n}} ;					     					   
+					     
+					      my $n_of_transPairSpecies=0;					     					   
 					     $n_of_transPairSpecies=scalar (keys %{$transPairSpecies{$p}{$n}});
 					     my $n_of_transPairSpecies_cor=0;
 					     map {$n_of_transPairSpecies_cor+=$_} values %{$transPairSpecies{$p}{$n}};
+					     my $n_of_transPairReads=0;
+					     map {$n_of_transPairReads+=$_} values %{$transPairReads{$p}{$n}} ;
 					     
 					     print PPSCOREUA "$n\ttrans\t$p\t$n_of_transPairSpecies\t$n_of_transPairSpecies_cor\t$n_of_transPairReads\t$n_of_species\t$allPairReads{$p}{$n}\n";
 					     
