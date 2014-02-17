@@ -573,7 +573,7 @@ sub PPprocessing
 				    map {$n_of_reads{$p}+=$_} (values %{$transPairReads{$p}{10}}); ###why it is not equal to $X2{$p}?
 				    
 				    #how to normalize $X0{$p}?
-				    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\t$p\t$Z0{$p}\t$Z1{$p}\t$Z2{$p}\t$X0{$p}\t$X1{$p}\t$X2{$p}\t$n_of_species\t$n_of_species_cor\t$n_of_reads${p}\t$m0\t$std0\t$m1\t$std1\t$m2\t$std2\n"; ##file2 is the guide and file1 is the target
+				    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\t$p\t$Z0{$p}\t$Z1{$p}\t$Z2{$p}\t$X0{$p}\t$X1{$p}\t$X2{$p}\t$n_of_species\t$n_of_species_cor\t$n_of_reads{$p}\t$m0\t$std0\t$m1\t$std1\t$m2\t$std2\n"; ##file2 is the guide and file1 is the target
 				   }
 				   
 				   $ppseq="$OUTDIR/$guideStrandFile.$targetStrandFile.ppseq";
