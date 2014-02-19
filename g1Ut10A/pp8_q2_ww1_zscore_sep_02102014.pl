@@ -26,7 +26,10 @@ use Compress::Zlib;
 #02/10/2014
 #Phil wants to separate the cis-1U10A from trans-1U10A
 
-#
+#02/18/2014
+#add bed format
+
+
 if(scalar(@ARGV)<6)
 {
         usage();
@@ -116,7 +119,7 @@ if($indexFlag)
 	    push @argos, $name;
 	    $file=$name;
 	    
-	    &InputFileProcessing($inputfiles[$i]);
+	    &InputFileProcessing($inputfiles[$i],$file);
 	     
 		if ($total{$file}>10)
 		{
@@ -156,7 +159,7 @@ else #if indexFlag
 	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
     	push @argos, $name;
     	$file=$name;
-   		&InputFileProcessing($inputfiles[$i]);
+   		&InputFileProcessing($inputfiles[$i],$file);
 	}#for loop of the file
 }#else indexFlag
 
@@ -202,7 +205,7 @@ close(PPZ);
 
 sub InputFileProcessing
 {
-	my $inputfile= shift;
+	my ($inputfile,$file)= @_;
 	my $gz = gzopen($inputfile, "rb") or die "Cannot open $inputfile: $gzerrno\n" ;
    	while($gz->gzreadline($line) > 0)
    	{
