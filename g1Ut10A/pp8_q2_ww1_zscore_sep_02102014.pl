@@ -49,7 +49,7 @@ my $numOfInput=$parameters->{num};
 my $spe=$parameters->{species};
 my $OUTDIR=$parameters->{outdir};
 my $indexFlag=$parameters->{indexflag};
-
+my $fileFormat=$parameters->{format};
 
 if($spe eq "fly")
 {
@@ -208,7 +208,23 @@ sub InputFileProcessing
    	{
 		chomp $line;
 		#split(/\t/);
-		my ($chr,$bedstart,$bedend,$strand,$seq,$reands,$ntm)= split(/\t/,$line);
+		my $chr;
+		my $bedstart;
+		my $bedend;
+		my $strand;
+		my $seq;
+		my $reads;
+		my $ntm;
+		if($fileFormat eq "normbed")
+		{ 
+			($chr,$bedstart,$bedend,$strand,$seq,$reads,$ntm)= split(/\t/,$line);
+		}
+		if($fileFormat eq "bed")
+		{
+			($chr,$bedstart,$bedend,$seq,$ntmreads,$strand)= split(/\t/,$line);
+			$reads=$ntmreads;
+			$ntm=1;
+		}
 		
 		next if (length($seq)>29 || length($seq)<23);
 		next if (/data/);
@@ -223,10 +239,20 @@ sub InputFileProcessing
 
 		#suppose my input is bed; 02/18/2014
 		
-		#store chr, 5'end and strand information separately for each query 16nt prefix, the populations to find the guide	      
+		#store chr, 5'end and strand information separately for each query 16nt prefix, the populations to find the guide
+		my $fiveend=0;	      
 		if($strand eq '+')
-		{ 
-			my $fiveend=$bedstart; #0-based,closed
+		{	
+			
+			if($fileFormat eq "bed")
+			{ 
+				$fiveend=$bedstart; #0-based,closed
+			}
+			if($fileFormat eq "normbed")
+			{
+				$fiveend=$bedstart;#1-based,closed
+			}
+			
 			$guidepfsplit{$file}{substr($seq,0,16)}{$chr,$fiveend,$strand}+=$reads/$ntm; #become 0-based from norm.bed format
 			
 			#if store the start of all query
@@ -234,33 +260,60 @@ sub InputFileProcessing
 	  	}
 	  	else
 	  	{
-	  		my $fiveend=$bedend; #open
+	  		if($fileFormat eq "bed")
+			{
+	  			$fiveend=$bedend; #open
+			}
+			if($fileFormat eq "normbed")
+			{
+				$fiveend=$bedend;#1-based,closed
+			}
 	  		$guidepfsplit{$file}{substr($seq,0,16)}{$chr,$fiveend,$strand}+=$reads/$ntm; #become 0-based from norm.bed format
 	  		#my $queryStart=$bedstart-1;
 	  	}
       
       	for (my $n=0;$n<20;$n++)
       	{
+      		my $start=0;
+      		my $fiveend=0;
         	if ($strand eq '+') #target strand information
          	{
-	            my $start=$bedstart+$n+1-16; # $bedstart is 0 based and $start is 0 based, the intermediate end $bedstart+$n+1 is open
+         		
+         		if($fileFormat eq "bed")
+         		{
+	            	$start=$bedstart+$n+1-16; # $bedstart is 0 based and $start is 0 based, the intermediate end $bedstart+$n+1 is open
+	            	$fiveend=$start+16; #open
+         		}
+         		if($fileFormat eq "normbed")
+         		{
+         			$start=$bedstart+$n-16;
+         			$fiveend=$start+16;#closed?
+         		}
 	            my $str=substr($genome{$chr},$start,16); #substr function is 0 based
 	            $str=&revfa($str);
 	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
 	            
 	            #store chr, 5'end and strand information separately for each guide 16nt prefix
-	            $fiveend=$start+16; #open 
+	             
 	            $targetpfsplit{$file}{$n}{$str}{$chr,$fiveend,"-"}+=$reads/$ntm; #store the strand information for guide strand
 	            #my $indexStart=$start;
         	}
          	else
          	{
-	            my $start=$bedend-$n-1; #closed
+         		if($fileFormat eq "bed")
+         		{
+		            $start=$bedend-$n-1; #closed
+		            $fiveend=$start; #0-based
+         		}
+         		if($fileFormat eq "normbed")
+         		{
+         			$start=$bedend-$n-1; #closed
+         			$fiveend=$start;	
+         		}
 	            my $str=substr($genome{$chr},$start,16);
 	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
 	            
 	            #store chr, 5'end and strand information separately for each guide 16nt prefix	
-	            $fiveend=$start; #0-based
 	            $targetpfsplit{$file}{$n}{$str}{$chr,$fiveend,"+"}+=$reads/$ntm;
         	}#ifelse
       	}#for
@@ -585,6 +638,7 @@ sub usage
 		print "-n  <number of inputfiles>\n\t";
 		print "-s  <species name[fly|bombyx]>\n\t";
 		print "-d  <flag of index[0|1]>\n\t";
+		print "-f  <flag of index[bed|normbed]>\n\t";
         print "This perl script is count the frequency of 10A irrespective of 1U\n";
 		print "It's maintained by WEI WANG. If you have any questions, please contact wei.wang2\@umassmed.edu\n";
         exit(1);
@@ -600,6 +654,7 @@ sub parse_command_line {
                 elsif($next_arg eq "-s"){ $parameters->{species} = shift(@ARGV); }
                 elsif($next_arg eq "-o"){ $parameters->{outdir} = shift(@ARGV); }
                 elsif($next_arg eq "-d"){ $parameters->{indexflag} = shift(@ARGV); }
+                elsif($next_arg eq "-f"){ $parameters->{format} = shift(@ARGV); }
 
                 else{ print "Invalid argument: $next_arg"; usage(); }
         }
