@@ -202,7 +202,7 @@ close(PPZ);
 
 sub InputFileProcessing
 {
-	my $inputfile=@_;
+	my $inputfile= shift;
 	my $gz = gzopen($inputfile, "rb") or die "Cannot open $inputfile: $gzerrno\n" ;
    	while($gz->gzreadline($line) > 0)
    	{
