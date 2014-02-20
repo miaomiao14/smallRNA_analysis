@@ -367,7 +367,6 @@ sub PingPongProcessing
 		   	if ($l[3]=~/(\d+):/)
 		   	{ next if ($1!=0);}  # no seed mismatches 0 based
 		   	$NTM{$l[2]}++;
-		   	#$count_N++;
 	   	}
 	   	close(IN);
 	   	open IN, "$OUTDIR/$guideStrandFile.$targetStrandFile.$n.bowtie.out";
@@ -379,17 +378,17 @@ sub PingPongProcessing
 	      	my $guidetotal=$guidepf{$guideStrandFile}{$l[2]};
 		    my $targettotal=$targetpf{$targetStrandFile}{$n}{$l[1]};
 	      	
-	      	$score{$n}+=$targettotal*$guidetotal/$NTM{$l[2]}; #total pp8 ppscore
+	      	
 	      	
 	      	my $nGcor=scalar (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}});
-		    my $nTcor=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}});
+		    my $nTcor=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}});
 	      	
 	      	if ($l[3] eq "")
 	      	{
 	      	
 	      	   $g_0_nt=substr($l[2],0,1); $t_9_nt=&revfa($g_0_nt);  ##here are different from pp8_q2_ww1.pl
 		       #targetpf index; guidepf seq
-
+			   $score{$n}+=$targettotal*$guidetotal/$NTM{$l[2]}; #total pp8 ppscore
 		       
 			   $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}=1 ; #this was wrong, has to add {$n}, otherwise accumulative
 		       #the sum of $cisPairSpecies and $transPairSpecies irrespective of coordinates
@@ -440,6 +439,8 @@ sub PingPongProcessing
 	      	{
 
 		       next if ($1!=0);  # allow 1mm at the 10th position of target strand
+		       $score{$n}+=$targettotal*$guidetotal/$NTM{$l[2]}; #total pp8 ppscore
+		       
 		       $t_9_nt=&revfa($2);
 		       		      		       
 		       $species{$3.$t_9_nt}{$n}{$l[2]}=1 ;###species of seq pairs, not count different coordinates
