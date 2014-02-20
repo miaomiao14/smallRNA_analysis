@@ -384,55 +384,24 @@ sub PingPongProcessing
 	      	
 	      	   $g_0_nt=substr($l[2],0,1); $t_9_nt=&revfa($g_0_nt);  ##here are different from pp8_q2_ww1.pl
 		       #targetpf index; guidepf seq
-		       
-		       
-		       
+
 		       $allPairReads{$g_0_nt.$t_9_nt}{$n}+=$targettotal*$guidetotal/$NTM{$l[2]};
 		       $score{$n}+=$targettotal*$guidetotal/$NTM{$l[2]};
 		       
 		       $speciesn10{$g_0_nt.$t_9_nt}{$l[2]}=1 if ($n==9); ###
 		       $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}=1 ; #this was wrong, has to add {$n}, otherwise accumulative
 		       #the sum of $cisPairSpecies and $transPairSpecies irrespective of coordinates
-		       
-		       
-	      		
-		       #separate trans-targets from cis-targets for perfect g1t10 pair  	
-		       
-		       #$guidepfsplit{$file}{substr($seq,0,16)}{$chr,$fiveend,$strand}+=$reads/$ntm; #become 0-based from 1-based norm.bed format
-		       #$targetpfsplit{$file}{$n}{$str}{$chr,$fiveend,"+"}+=$reads/$ntm;#$fiveend is 0-based
-		       
-		       #how to sort guidepfsplit and targetpfsplit
-		       #no need to sort if use hash key
-		       
-		       
+		       		     		       
 		       foreach my $record (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}} )
 		       {
 		       		my ($chr,$gfiveend,$gstrand)=split(/,/,$record);
-		       		
-		       		
-		       		#instead of scanning each key of target strand, get the 9 nt distant target directly
-		       		#if($gstrand eq "+")
-		       		#{
-		       		#	my $tfiveend=$gfiveend+9; #10 bp overlap but 9 nt distance
-		       		#	my $tstrand="-";
-		       		#}
-		       		#else
-		       		#{
-		       		#	my $tfiveend=$gfiveend-9; #10 bp overlap but 9 nt distance
-		       		#	my $tstrand="+";					       			
-		       		#}
-		       		###query sequence 16 nt prefix population including both guides and targets
-		       		###As I stored the potential target information above, if the potential target exist,
-		       		###then it should find the excat match(chr,fiveend,strand) in the query seq population
-		       		
+
 		       		###note: how to define cistargets more accurately?
 		       		###in addition to excat match, what if just several nucleotides away?
 		       		
 		       		my $tfiveend=$gfiveend;
 		       		my $tstrand=$gstrand;
-		       		
-		       		
-		       		
+
 		       		if($targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"})
 		       		{
 		       			$cisPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"}/$NTM{$l[2]};
@@ -536,7 +505,7 @@ sub PingPongProcessing
 	   $std=&std(values %score); 
 	   if ($std>0 && $count_N>=5) { $Z=($X-&mean(values %score))/$std;} else {$Z=-10;}
 	   print ZSCORE "$guideStrandFile\-$targetStrandFile\t$Z\t";
-	   print "$guideStrandFile\-$targetStrandFile\t$Z\t";
+	   #print "$guideStrandFile\-$targetStrandFile\t$Z\t";
 	   
 	   #Z-score for all cispairs; 
 	   foreach my $p (@matchedpairs)
