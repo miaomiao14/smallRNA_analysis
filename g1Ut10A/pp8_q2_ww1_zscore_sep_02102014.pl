@@ -253,7 +253,7 @@ sub InputFileProcessing
 			}
 			if($fileFormat eq "normbed")
 			{
-				$fiveend=$bedstart;#1-based,closed
+				$fiveend=$bedstart-1;#convert to 0-based,closed
 			}
 			
 			$guidepfsplit{$file}{substr($seq,0,16)}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
@@ -269,7 +269,7 @@ sub InputFileProcessing
 			}
 			if($fileFormat eq "normbed")
 			{
-				$fiveend=$bedend;#1-based,closed
+				$fiveend=$bedend;#convert to bedformat,open
 			}
 	  		$guidepfsplit{$file}{substr($seq,0,16)}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
 	  		#my $queryStart=$bedstart-1;
@@ -290,7 +290,7 @@ sub InputFileProcessing
          		if($fileFormat eq "normbed")
          		{
          			$start=$bedstart+$n-16;
-         			$fiveend=$start+16;#closed?
+         			$fiveend=$start+16;#convert to bed, open
          		}
 	            my $str=substr($genome{$chr},$start,16); #substr function is 0 based
 	            $str=&revfa($str);
