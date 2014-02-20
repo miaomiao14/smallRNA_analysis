@@ -297,8 +297,8 @@ sub InputFileProcessing
 	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
 	            
 	            #store chr, 5'end and strand information separately for each guide 16nt prefix
-	             
-	            $targetpfsplit{$file}{$n}{$str}{"$chr,$fiveend,"-""}+=$reads/$ntm; #store the strand information for guide strand
+	            $strand="-";
+	            $targetpfsplit{$file}{$n}{$str}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #store the strand information for guide strand
 	            #my $indexStart=$start;
         	}
          	else
@@ -315,9 +315,9 @@ sub InputFileProcessing
          		}
 	            my $str=substr($genome{$chr},$start,16);
 	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
-	            
+	            $strand="+";
 	            #store chr, 5'end and strand information separately for each guide 16nt prefix	
-	            $targetpfsplit{$file}{$n}{$str}{"$chr,$fiveend,"+""}+=$reads/$ntm;
+	            $targetpfsplit{$file}{$n}{$str}{"$chr,$fiveend,$strand"}+=$reads/$ntm;
         	}#ifelse
       	}#for
 	} #while
