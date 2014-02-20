@@ -333,10 +333,7 @@ sub PingPongProcessing
 	my $Z=0; 
 	my %score=();
 	my $count_N=0;
-	my %X0=(); 
-	my %Z0=(); 
 	my %allPairReads=(); 
-	my %suv=(); 
 	my %count_N0=();
 	my %species=(); 
 	my %speciesn10=();
@@ -582,19 +579,20 @@ sub PingPongProcessing
 sub ZscoreCal
 {
 		my ($transPairSpeciesRef,$transPair10SpeciesRef,$transPairReadsRef,$count)=@_;
-		$X0=scalar (keys %{$transPairSpeciesRef{9}}); #by species irrespective of coordinates
-	    map {$X1+=$_} (values %{$transPairSpeciesRef{9}}); #by species according to coordinates
-	    map {$X2+=$_} (values %{$transPairReads{9}});  #Z-score for all transpairs; by reads
+		my ($Z0,$Z1,$Z2,$X0,$X1,$X2,$m0,$m1,$m2,$std0,$std1,$std2)=(0,0,0,0,0,0,0,0,0,0,0,0);
+		$X0=scalar (keys %{$transPairSpeciesRef->{9}}); #by species irrespective of coordinates
+	    map {$X1+=$_} (values %{$transPairSpeciesRef->{9}}); #by species according to coordinates
+	    map {$X2+=$_} (values %{$transPairReadsRef->{9}});  #Z-score for all transpairs; by reads
 	    
 	    #for validation only
 	    #$n_of_species=scalar (keys %{$transPair10Species}); #total number of species irrespective of coordinates
 	    #my $n_of_species_cor=0;
 	    #map {$n_of_species_cor+=$_} (values %{$transPair10Species});#total number of species respective of coordinates
 	    #my $n_of_reads=0;
-	    #map {$n_of_reads+=$_} (values %{$transPairReadsRef{9}}); ###why it is not equal to $X2? pls calculate it before it's deleted!!
+	    #map {$n_of_reads+=$_} (values %{$transPairReadsRef->{9}}); ###why it is not equal to $X2? pls calculate it before it's deleted!!
 	    
-	    delete $transPairSpeciesRef{9}; ##???
-	    delete $transPairReadsRef{9};###???
+	    delete $transPairSpeciesRef->{9}; ##???
+	    delete $transPairReadsRef->{9};###???
 	    
 	    my @numOfSpecies=();
 	    my @numOfSpeciesCor=();
@@ -602,20 +600,20 @@ sub ZscoreCal
 	    
 	    for(my $i=1;$i<=20;$i++)
 	    {
-	    	my $n1=scalar (keys %{$transPairSpeciesRef{$i}});
-	    	my $n2=scalar (keys %{$transPairReadsRef{$i}});
+	    	my $n1=scalar (keys %{$transPairSpeciesRef->{$i}});
+	    	my $n2=scalar (keys %{$transPairReadsRef->{$i}});
 	    	
-	    	if($n1>0) #$transPairSpeciesRef{9} was deleted
+	    	if($n1>0) #$transPairSpeciesRef->{9} was deleted
 	    	{
-	    		push @numOfSpecies, scalar (keys %{$transPairSpeciesRef{$i}}) ;
+	    		push @numOfSpecies, scalar (keys %{$transPairSpeciesRef->{$i}}) ;
 	    		my $XnSpecies=0;
-	    		map { $XnSpecies+=$_ } (values %{$transPairSpeciesRef{$i}});
+	    		map { $XnSpecies+=$_ } (values %{$transPairSpeciesRef->{$i}});
 	    		push @numOfSpeciesCor, $XnSpecies ;
 	    	}
-			if($n2>0) #$transPairReadsRef{9} was deleted
+			if($n2>0) #$transPairReadsRef->{9} was deleted
 			{
 				my $XnReads=0;
-				map { $XnReads+=$_ } (values %{$transPairReadsRef{$i}}); 
+				map { $XnReads+=$_ } (values %{$transPairReadsRef->{$i}}); 
 				push @numOfReads, $XnReads ;
 			}				    	
 	    }
@@ -624,7 +622,7 @@ sub ZscoreCal
 	    $std1=&std(@numOfSpeciesCor);
 	    $std2=&std(@numOfReads);
 	    
-	    #to prove that $transPairReadsRef{9} was deleted successfully
+	    #to prove that $transPairReadsRef->{9} was deleted successfully
 	    #my $temp1=$#numOfSpecies+1;
 	    #my $temp2=$#numOfSpeciesCor+1;
 	    #my $temp3=$#numOfReads+1;
