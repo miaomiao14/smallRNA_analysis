@@ -349,7 +349,7 @@ sub PingPongProcessing
 	open PPSCORE, ">$OUTDIR/$guideStrandFile.$targetStrandFile.pp";
 	open PPSCOREUA, ">$OUTDIR/$guideStrandFile.$targetStrandFile.UA_VA.pp";
 	
-	$ppseq1="$OUTDIR/$guideStrandFile.$targetStrandFile.ppseq";
+
 	open PPSEQ, ">$OUTDIR/$guideStrandFile.$targetStrandFile.ppseq";
 	
 	foreach ($n=0;$n<20;$n++)
