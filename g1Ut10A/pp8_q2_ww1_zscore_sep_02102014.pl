@@ -441,10 +441,10 @@ sub PingPongProcessing
 		       			$cisPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"}/$NTM{$l[2]};
 		       			
 		       			$cisPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}=1 ; #cis pair species must only have one by coordinate definition
-		       			
+		       			$cisPair10Species{$g_0_nt.$t_9_nt}{$l[2]}=1 if($n==9) ;
 		       			#with the same guide 16 nt prefix,there might be multiple trans-targets with 16nt complementarity, (originally it was viewed only one)
 		       			#trans PingPong pair in species
-		       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}})-1 ;
+		       			$transPairReadsRef{$g_0_nt.$t_9_nt}{$n}{$l[2]}=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}})-1 ;
 		       			$transPair10Species{$g_0_nt.$t_9_nt}{$l[2]}=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}})-1 if($n==9) ;
 		       			#trans PingPong pair in reads
 		       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*($targettotal - $targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"})/$NTM{$l[2]};
@@ -541,70 +541,21 @@ sub PingPongProcessing
 	   print ZSCORE "$guideStrandFile\-$targetStrandFile\t$Z\t";
 	   print "$guideStrandFile\-$targetStrandFile\t$Z\t";
 	   
+	   #Z-score for all cispairs; 
+	   foreach my $p (@matchedpairs)
+	   {
+	  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$P10ofSpecies,$P10ofSpeciesCor,$P10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%{$cisPairSpecies{$p}},\%{$cisPair10Species{$p}},\%{$cisPairReads{$p}},$count_N0{$p});
+	    #how to normalize $X0{$p}?
+	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\tcis\t$p\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$P10ofSpecies\t$P10ofSpeciesCor\t$P10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n"; ##file2 is the guide and file1 is the target
+	   }
+	   
 	   #Z-score for all transpairs; by species irrespective of coordinates
 	   
 	   foreach my $p (@pairs)
 	   {
-	    $X0{$p}=scalar (keys %{$transPairSpecies{$p}{9}}); #by species irrespective of coordinates
-	    map {$X1{$p}+=$_} (values %{$transPairSpecies{$p}{9}}); #by species according to coordinates
-	    map {$X2{$p}+=$_} (values %{$transPairReads{$p}{9}});  #Z-score for all transpairs; by reads
-	    
-	    
-	    $n_of_species=scalar (keys %{$transPair10Species{$p}}); #total number of species irrespective of coordinates
-	    my $n_of_species_cor=0;
-	    map {$n_of_species_cor+=$_} (values %{$transPair10Species{$p}});#total number of species respective of coordinates
-	    my $n_of_reads=0;
-	    map {$n_of_reads+=$_} (values %{$transPairReads{$p}{9}}); ###why it is not equal to $X2{$p}? pls calculate it before it's deleted!!
-	    
-	    delete $transPairSpecies{$p}{9}; ##???
-	    delete $transPairReads{$p}{9};###???
-	    
-	    my @numOfSpecies=();
-	    my @numOfSpeciesCor=();
-	    my @numOfReads=();
-	    
-	    for(my $i=1;$i<=20;$i++)
-	    {
-	    	my $n1=scalar (keys %{$transPairSpecies{$p}{$i}});
-	    	my $n2=scalar (keys %{$transPairReads{$p}{$i}});
-	    	
-	    	if($n1>0) #$transPairSpecies{$p}{9} was deleted
-	    	{
-	    		push @numOfSpecies, scalar (keys %{$transPairSpecies{$p}{$i}}) ;
-	    		my $XnSpecies=0;
-	    		map { $XnSpecies+=$_ } (values %{$transPairSpecies{$p}{$i}});
-	    		push @numOfSpeciesCor, $XnSpecies ;
-	    	}
-			if($n2>0) #$transPairReads{$p}{9} was deleted
-			{
-				my $XnReads=0;
-				map { $XnReads+=$_ } (values %{$transPairReads{$p}{$i}}); 
-				push @numOfReads, $XnReads ;
-			}				    	
-	    }
-	    
-	    $std0=&std(@numOfSpecies);
-	    $std1=&std(@numOfSpeciesCor);
-	    $std2=&std(@numOfReads);
-	    
-	    #to prove that $transPairReads{$p}{9} was deleted successfully
-	    #my $temp1=$#numOfSpecies+1;
-	    #my $temp2=$#numOfSpeciesCor+1;
-	    #my $temp3=$#numOfReads+1;
-	    
-	    $m0=&mean(@numOfSpecies);
-	    $m1=&mean(@numOfSpeciesCor);
-	    $m2=&mean(@numOfReads);
-	    
-	    if ($std0>0 && $count_N0{$p}>=5) { $Z0{$p}=($X0{$p}-$m0)/$std0;} else {$Z0{$p}=-10;}#by species irrespective of coordinates
-	    if ($std1>0 && $count_N0{$p}>=5) { $Z1{$p}=($X1{$p}-$m1)/$std1;} else {$Z1{$p}=-10;}#by species according to coordinates
-	    if ($std2>0 && $count_N0{$p}>=5) { $Z2{$p}=($X2{$p}-$m2)/$std2;} else {$Z2{$p}=-10;}
-	    
-	    
-	   
-	    
+	  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$P10ofSpecies,$P10ofSpeciesCor,$P10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%{$transPairSpecies{$p}},\%{$transPair10Species{$p}},\%{$transPairReads{$p}},$count_N0{$p});
 	    #how to normalize $X0{$p}?
-	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\t$p\t$Z0{$p}\t$Z1{$p}\t$Z2{$p}\t$X0{$p}\t$X1{$p}\t$X2{$p}\t$n_of_species\t$n_of_species_cor\t$n_of_reads\t$m0\t$std0\t$m1\t$std1\t$m2\t$std2\n"; ##file2 is the guide and file1 is the target
+	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\ttrans\t$p\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$P10ofSpecies\t$P10ofSpeciesCor\t$P10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n"; ##file2 is the guide and file1 is the target
 	   }
 	   
 	   $ppseq="$OUTDIR/$guideStrandFile.$targetStrandFile.ppseq";
@@ -626,9 +577,74 @@ sub PingPongProcessing
 	close(ZSCOREUA);
 	close(ZSCORE);  	
 }
+
+
+sub ZscoreCal
+{
+		my ($transPairSpeciesRef,$transPair10SpeciesRef,$transPairReadsRef,$count)=@_;
+		$X0=scalar (keys %{$transPairSpeciesRef{9}}); #by species irrespective of coordinates
+	    map {$X1+=$_} (values %{$transPairSpeciesRef{9}}); #by species according to coordinates
+	    map {$X2+=$_} (values %{$transPairReads{9}});  #Z-score for all transpairs; by reads
+	    
+	    #for validation only
+	    #$n_of_species=scalar (keys %{$transPair10Species}); #total number of species irrespective of coordinates
+	    #my $n_of_species_cor=0;
+	    #map {$n_of_species_cor+=$_} (values %{$transPair10Species});#total number of species respective of coordinates
+	    #my $n_of_reads=0;
+	    #map {$n_of_reads+=$_} (values %{$transPairReadsRef{9}}); ###why it is not equal to $X2? pls calculate it before it's deleted!!
+	    
+	    delete $transPairSpeciesRef{9}; ##???
+	    delete $transPairReadsRef{9};###???
+	    
+	    my @numOfSpecies=();
+	    my @numOfSpeciesCor=();
+	    my @numOfReads=();
+	    
+	    for(my $i=1;$i<=20;$i++)
+	    {
+	    	my $n1=scalar (keys %{$transPairSpeciesRef{$i}});
+	    	my $n2=scalar (keys %{$transPairReadsRef{$i}});
+	    	
+	    	if($n1>0) #$transPairSpeciesRef{9} was deleted
+	    	{
+	    		push @numOfSpecies, scalar (keys %{$transPairSpeciesRef{$i}}) ;
+	    		my $XnSpecies=0;
+	    		map { $XnSpecies+=$_ } (values %{$transPairSpeciesRef{$i}});
+	    		push @numOfSpeciesCor, $XnSpecies ;
+	    	}
+			if($n2>0) #$transPairReadsRef{9} was deleted
+			{
+				my $XnReads=0;
+				map { $XnReads+=$_ } (values %{$transPairReadsRef{$i}}); 
+				push @numOfReads, $XnReads ;
+			}				    	
+	    }
+	    
+	    $std0=&std(@numOfSpecies);
+	    $std1=&std(@numOfSpeciesCor);
+	    $std2=&std(@numOfReads);
+	    
+	    #to prove that $transPairReadsRef{9} was deleted successfully
+	    #my $temp1=$#numOfSpecies+1;
+	    #my $temp2=$#numOfSpeciesCor+1;
+	    #my $temp3=$#numOfReads+1;
+	    
+	    $m0=&mean(@numOfSpecies);
+	    $m1=&mean(@numOfSpeciesCor);
+	    $m2=&mean(@numOfReads);
+	    
+	    if ($std0>0 && $count>=5) { $Z0=($X0-$m0)/$std0;} else {$Z0=-10;}#by species irrespective of coordinates
+	    if ($std1>0 && $count>=5) { $Z1=($X1-$m1)/$std1;} else {$Z1=-10;}#by species according to coordinates
+	    if ($std2>0 && $count>=5) { $Z2=($X2-$m2)/$std2;} else {$Z2=-10;}
+	    
+	    return($Z0,$Z1,$Z2,$X0,$X1,$X2,$m0,$m1,$m2,$std0,$std1,$std2);
+}
+
 #remove intermediate files
 #`rm *.ebwt`;
 #`rm *.bowtie.out`;
+
+
 
 sub usage
 {
