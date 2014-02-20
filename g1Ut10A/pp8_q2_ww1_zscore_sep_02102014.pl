@@ -530,7 +530,7 @@ sub PingPongProcessing
 	   
 	   if ($Z!=-10) 
 	   {
-	   	print ZSCORE "$X\t$NofPPreads\t$total{$guideStrandFile}",$NofPPreads/$total{$guideStrandFile},"\t",$X*1000000000000/$total{$targetStrandFile}/$total{$guideStrandFile};
+	   	print ZSCORE "$X\t$NofPPreads\t$total{$guideStrandFile}",$NofPPreads/$total{$guideStrandFile},"\t",$X*1000000000000/$total{$targetStrandFile}/$total{$guideStrandFile},"\n";
 	   }
 	   else
 	   {
