@@ -256,7 +256,7 @@ sub InputFileProcessing
 				$fiveend=$bedstart;#1-based,closed
 			}
 			
-			$guidepfsplit{$file}{substr($seq,0,16)}{$chr,$fiveend,$strand}+=$reads/$ntm; #become 0-based from norm.bed format
+			$guidepfsplit{$file}{substr($seq,0,16)}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
 			
 			#if store the start of all query
 			#my $queryStart=$bedstart-1;
@@ -271,7 +271,7 @@ sub InputFileProcessing
 			{
 				$fiveend=$bedend;#1-based,closed
 			}
-	  		$guidepfsplit{$file}{substr($seq,0,16)}{$chr,$fiveend,$strand}+=$reads/$ntm; #become 0-based from norm.bed format
+	  		$guidepfsplit{$file}{substr($seq,0,16)}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
 	  		#my $queryStart=$bedstart-1;
 	  	}
       
@@ -298,7 +298,7 @@ sub InputFileProcessing
 	            
 	            #store chr, 5'end and strand information separately for each guide 16nt prefix
 	             
-	            $targetpfsplit{$file}{$n}{$str}{$chr,$fiveend,"-"}+=$reads/$ntm; #store the strand information for guide strand
+	            $targetpfsplit{$file}{$n}{$str}{"$chr,$fiveend,"-""}+=$reads/$ntm; #store the strand information for guide strand
 	            #my $indexStart=$start;
         	}
          	else
@@ -317,7 +317,7 @@ sub InputFileProcessing
 	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
 	            
 	            #store chr, 5'end and strand information separately for each guide 16nt prefix	
-	            $targetpfsplit{$file}{$n}{$str}{$chr,$fiveend,"+"}+=$reads/$ntm;
+	            $targetpfsplit{$file}{$n}{$str}{"$chr,$fiveend,"+""}+=$reads/$ntm;
         	}#ifelse
       	}#for
 	} #while
@@ -410,7 +410,7 @@ sub PingPongProcessing
 		       
 		       foreach my $record (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}} )
 		       {
-		       		my ($chr,$gfiveend,$gstrand)=split($record);
+		       		my ($chr,$gfiveend,$gstrand)=split(/,/,$record);
 		       		
 		       		
 		       		#instead of scanning each key of target strand, get the 9 nt distant target directly
@@ -436,9 +436,9 @@ sub PingPongProcessing
 		       		
 		       		
 		       		
-		       		if($targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$chr,$tfiveend,$tstrand})
+		       		if($targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"})
 		       		{
-		       			$cisPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$chr,$tfiveend,$tstrand}/$NTM{$l[2]};
+		       			$cisPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"}/$NTM{$l[2]};
 		       			
 		       			$cisPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}=1 ; #cis pair species must only have one by coordinate definition
 		       			
@@ -447,7 +447,7 @@ sub PingPongProcessing
 		       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}})-1 ;
 		       			$transPair10Species{$g_0_nt.$t_9_nt}{$l[2]}=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}})-1 if($n==9) ;
 		       			#trans PingPong pair in reads
-		       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*($targettotal - $targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$chr,$tfiveend,$tstrand})/$NTM{$l[2]};
+		       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*($targettotal - $targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"})/$NTM{$l[2]};
 		       			
 		       		}
 		       		else
