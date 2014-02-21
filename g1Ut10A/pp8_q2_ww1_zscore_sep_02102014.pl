@@ -416,8 +416,8 @@ sub PingPongProcessing
 		       			$cisPair10Species{$g_0_nt.$t_9_nt}{$l[2]}++ if($n==9) ;
 		       			
 		       			$pp6cisPairSpecies{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"}/$NTM{$l[2]};
-		       			$pp6cisPairSpecies{$n}{$l[2]}++;
-		       			$pp6cisPair10Species{$l[2]}++ if($n==9) ;
+		       			$pp6cisPair10Species{$n}{$l[2]}++;
+		       			$pp6cisPairReads{$l[2]}++ if($n==9) ;
 		       			
 		       			#with the same guide 16 nt prefix,there might be multiple trans-targets with 16nt complementarity, (originally it was viewed only one)
 		       			#trans PingPong pair in species
