@@ -415,7 +415,7 @@ sub PingPongProcessing
 		       			$cisPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}++ ; #cis pair species must only have one by coordinate definition; but for different record, it has different cis pair
 		       			$cisPair10Species{$g_0_nt.$t_9_nt}{$l[2]}++ if($n==9) ;
 		       			
-		       			$pp6cisPairReads{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"}/$NTM{$l[2]};
+		       			$pp6cisPairReads{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"};#for pp6 does not care mismatched pairs, no need /$NTM{$l[2]}
 		       			$pp6cisPairSpecies{$n}{$l[2]}++;
 		       			$pp6cisPair10Species{$l[2]}++ if($n==9) ;
 		       			
@@ -546,10 +546,12 @@ sub PingPongProcessing
 	   $ppseq="$OUTDIR/$guideStrandFile.$targetStrandFile.ppseq";
 	   $seqFile="$OUTDIR/$guideStrandFile.seq";
 	   $NofPPreads=`match.pl $ppseq $seqFile | sumcol+ 2`; chomp($NofPPreads);
+	   $NoofPPSpecies=`wc -l $ppseq|cut -f1`;
+	   $totalSpecies=`wc -l $seqFile |cut -f1`;
 	   
 	   if ($Z!=-10) 
 	   {
-	   	print ZSCORE "$X\t$NofPPreads\t$total{$guideStrandFile}",$NofPPreads/$total{$guideStrandFile},"\t",$X*1000000000000/$total{$targetStrandFile}/$total{$guideStrandFile},"\n";
+	   	print ZSCORE "$X\t$NofPPreads\t$total{$guideStrandFile}\t",$NofPPreads/$total{$guideStrandFile},"\t$NoofPPSpecies\t$totalSpecies\t",$NoofPPSpecies/$totalSpecies,"\t", $X*1000000000000/$total{$targetStrandFile}/$total{$guideStrandFile},"\n";
 	   }
 	   else
 	   {
