@@ -355,7 +355,7 @@ sub PingPongProcessing
 		$indexb="$OUTDIR/$targetStrandFile.$n";
 		$seqFile="$OUTDIR/$guideStrandFile.seq";
 		$bowtieOut="$OUTDIR/$guideStrandFile.$targetStrandFile.$n.bowtie.out";
-	 	`bowtie $indexb -r -a -v 1 -p 8 $seqFile --suppress 1,4,6,7 | grep + > $bowtieOut`;
+	 	`[ ! -f $bowtieOut ] && bowtie $indexb -r -a -v 1 -p 8 $seqFile --suppress 1,4,6,7 | grep + > $bowtieOut`;
 	   	%NTM=();
 	   	open IN, "$OUTDIR/$guideStrandFile.$targetStrandFile.$n.bowtie.out";
 	   	while($line=<IN>)
