@@ -338,7 +338,9 @@ sub PingPongProcessing
 	my %species=(); 
 	my %speciesn10=();
 	my %cisPairSpecies=(); my %cisPairReads=(); my %transPairSpecies=(); my %transPairReads=();my %cisPair10Species=();my %transPair10Species=();
-	
+	my %pp6cisPairSpecies=();
+	my %pp6cisPair10Species=();
+	my %pp6cisPairReads=();
 	
 	open ZSCORE, ">$OUTDIR/$guideStrandFile.$targetStrandFile.zscore.out";
 	open ZSCOREUA, ">$OUTDIR/$guideStrandFile.$targetStrandFile.UA_VA.zscore.out";
@@ -412,6 +414,11 @@ sub PingPongProcessing
 		       			
 		       			$cisPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}++ ; #cis pair species must only have one by coordinate definition; but for different record, it has different cis pair
 		       			$cisPair10Species{$g_0_nt.$t_9_nt}{$l[2]}++ if($n==9) ;
+		       			
+		       			$pp6cisPairSpecies{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"}/$NTM{$l[2]};
+		       			$pp6cisPairSpecies{$n}{$l[2]}++;
+		       			$pp6cisPair10Species{$l[2]}++ if($n==9) ;
+		       			
 		       			#with the same guide 16 nt prefix,there might be multiple trans-targets with 16nt complementarity, (originally it was viewed only one)
 		       			#trans PingPong pair in species
 		       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=($nTcor-1) ;
@@ -514,16 +521,6 @@ sub PingPongProcessing
 	   #print "$guideStrandFile\-$targetStrandFile\t$Z\t";
 	   
 	   #Z-score for pp6
-	   my %pp6cisPairSpecies=();
-	   my %pp6cisPair10Species=();
-	   my %pp6cisPairReads=();
-	   foreach my $p (@matchedpairs)
-	   {
-	   	
-	   	%pp6cisPairSpecies=(%pp6cisPairSpecies,%{$cisPairSpecies{$p}});
-	   	%pp6cisPair10Species=(%pp6cisPair10Species,%{$cisPair10Species{$p}});
-	   	%pp6cisPairReads=(%pp6cisPairReads,%{$cisPairReads{$p}});
-	   }
 	  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$P10ofSpecies,$P10ofSpeciesCor,$P10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%pp6cisPairSpecies,\%pp6cisPair10Species,\%pp6cisPairReads,$count_N);
 	    #how to normalize $X0{$p}?
 	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\tcis\tpp6\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$P10ofSpecies\t$P10ofSpeciesCor\t$P10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n"; ##file2 is the guide and file1 is the target
