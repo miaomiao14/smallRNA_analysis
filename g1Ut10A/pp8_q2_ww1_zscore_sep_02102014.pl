@@ -513,6 +513,22 @@ sub PingPongProcessing
 	   print ZSCORE "$guideStrandFile\-$targetStrandFile\t$Z\t";
 	   #print "$guideStrandFile\-$targetStrandFile\t$Z\t";
 	   
+	   #Z-score for pp6
+	   my %pp6cisPairSpecies=();
+	   my %pp6cisPair10Species=();
+	   my %pp6cisPairReads=();
+	   foreach my $p (@matchedpairs)
+	   {
+	   	
+	   	%pp6cisPairSpecies=(%pp6cisPairSpecies,%{$cisPairSpecies{$p}});
+	   	%pp6cisPair10Species=(%pp6cisPair10Species,%{$cisPair10Species{$p}});
+	   	%pp6cisPairReads=(%pp6cisPairReads,%{$cisPairReads{$p}});
+	   }
+	  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$P10ofSpecies,$P10ofSpeciesCor,$P10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%pp6cisPairSpecies,\%pp6cisPair10Species,\%pp6cisPairReads,$count_N);
+	    #how to normalize $X0{$p}?
+	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\tcis\tpp6\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$P10ofSpecies\t$P10ofSpeciesCor\t$P10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n"; ##file2 is the guide and file1 is the target
+	   
+	   
 	   #Z-score for all cispairs; 
 	   foreach my $p (@matchedpairs)
 	   {
