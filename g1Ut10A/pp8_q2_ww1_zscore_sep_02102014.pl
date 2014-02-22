@@ -551,14 +551,23 @@ sub PingPongProcessing
 	   $NoofPPSpecies=`wc -l $ppseq|cut -f1 -d" "`;chomp($NoofPPSpecies);
 	   $totalSpecies=`wc -l $seqFile |cut -f1 -d" "`;chomp($totalSpecies);
 	   
-	   $NofPPreads=&restrict_num_decimal_digits($NofPPreads,2);
-	   $NoofPPSpecies=&restrict_num_decimal_digits($NoofPPSpecies,2);
-	   $totalSpecies=&restrict_num_decimal_digits($totalSpecies,2);
-	   $total{$guideStrandFile}=&restrict_num_decimal_digits($total{$guideStrandFile},2);
+	   $NofPPreads=&restrict_num_decimal_digits($NofPPreads,3);
+	   $NoofPPSpecies=&restrict_num_decimal_digits($NoofPPSpecies,3);
+	   $totalSpecies=&restrict_num_decimal_digits($totalSpecies,3);
+	   $total{$guideStrandFile}=&restrict_num_decimal_digits($total{$guideStrandFile},3);
+	   
+	   my $ppReadsRatio=$NofPPreads/$total{$guideStrandFile};
+	   $ppReadsRatio=&restrict_num_decimal_digits($ppReadsRatio,3);
+	   my $ppSpeciesRatio=$NoofPPSpecies/$totalSpecies;
+	   $ppSpeciesRatio=&restrict_num_decimal_digits($ppSpeciesRatio,3);
+	   
+	   $X=&restrict_num_decimal_digits($X,3);
+	   my $X_norm=$X*1000000000000/$total{$targetStrandFile}/$total{$guideStrandFile};
+	   $X_norm=&restrict_num_decimal_digits($X_norm,3);
 	   
 	   if ($Z!=-10) 
 	   {
-	   	print ZSCORE "$NofPPreads\t$total{$guideStrandFile}\t",$NofPPreads/$total{$guideStrandFile},"\t$NoofPPSpecies\t$totalSpecies\t",$NoofPPSpecies/$totalSpecies,"\t$X\t", $X*1000000000000/$total{$targetStrandFile}/$total{$guideStrandFile},"\n";
+	   	print ZSCORE "$NofPPreads\t$total{$guideStrandFile}\t$ppReadsRatio\t$NoofPPSpecies\t$totalSpecies\t$ppSpeciesRatio\t$X\t$X_norm\n";
 	   }
 	   else
 	   {
@@ -631,6 +640,19 @@ sub ZscoreCal
 	    if ($std0>0 && $count>=5) { $Z0=($X0-$m0)/$std0;} else {$Z0=-10;}#by species irrespective of coordinates
 	    if ($std1>0 && $count>=5) { $Z1=($X1-$m1)/$std1;} else {$Z1=-10;}#by species according to coordinates
 	    if ($std2>0 && $count>=5) { $Z2=($X2-$m2)/$std2;} else {$Z2=-10;}
+	    
+	    $Z0=&restrict_num_decimal_digits($Z0,3);
+	    $Z1=&restrict_num_decimal_digits($Z1,3);
+	    $Z2=&restrict_num_decimal_digits($Z2,3);
+	    $X0=&restrict_num_decimal_digits($X0,3);
+	    $X1=&restrict_num_decimal_digits($X1,3);
+	    $X2=&restrict_num_decimal_digits($X2,3);
+	    $m0=&restrict_num_decimal_digits($m0,3);
+	    $m1=&restrict_num_decimal_digits($m1,3);
+	    $m2=&restrict_num_decimal_digits($m2,3);
+	    $std0=&restrict_num_decimal_digits($std0,3);
+	    $std1=&restrict_num_decimal_digits($std1,3);
+	    $std2=&restrict_num_decimal_digits($std2,3);
 	    
 	    return($Z0,$Z1,$Z2,$X0,$X1,$X2,$m0,$m1,$m2,$std0,$std1,$std2);
 }
