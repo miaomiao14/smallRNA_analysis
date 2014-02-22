@@ -306,7 +306,7 @@ for (my $i=0; $i<@inputfiles; $i++)
 		if ($score{10}) { $X=$score{10}; delete $score{10};} #mean and standard deviation exclude ppscore10
 		my $std=0;
 		$std=&standard_deviation(values %score);
-		if ((scalar %score)>9 && $std>0) { $Z=($X-&mean(values %score))/$std;} else {$Z=-10;}
+		if ( (scalar keys (%score))>9 && $std>0) { $Z=($X-&mean(values %score))/$std;} else {$Z=-10;}
 		printf PPZ '%.2f', $Z;
 		print PPZ "\t$X\n";
 	}

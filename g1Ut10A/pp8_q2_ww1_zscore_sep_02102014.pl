@@ -519,6 +519,7 @@ sub PingPongProcessing
 	   $X=$score{9}; delete $score{9};
 	   $std=&std(values %score); 
 	   if ($std>0 && $count_N>=5) { $Z=($X-&mean(values %score))/$std;} else {$Z=-10;}
+	   $Z=&restrict_num_decimal_digits($Z,3);
 	   print ZSCORE "$guideStrandFile\-$targetStrandFile\t$Z\t";
 	   #print "$guideStrandFile\-$targetStrandFile\t$Z\t";
 	   
