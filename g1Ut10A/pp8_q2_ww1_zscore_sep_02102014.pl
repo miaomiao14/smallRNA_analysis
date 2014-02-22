@@ -396,7 +396,7 @@ sub PingPongProcessing
 			   $score{$n}+=$targettotal*$guidetotal/$NTM{$l[2]}; #total pp8 ppscore
 			   
 			   #how many of species start with U?
-			   $firstBaseFraction{$g_0_nt}+=$guidetotal/$NTM{$l[2]} if($n==9);
+			   $firstBaseFraction{$g_0_nt}+=$guidetotal/$NTM{$l[2]} ;
 			   
 		       
 			   $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nGcor*$nTcor ; #this was wrong, has to add {$n}, otherwise accumulative
@@ -462,7 +462,7 @@ sub PingPongProcessing
 		       
 		       $score{$n}+=$targettotal*$guidetotal/$NTM{$l[2]}; #total pp8 ppscore
 		       
-		       $firstBaseFraction{$g_0_nt}+=$guidetotal/$NTM{$l[2]} if($n==9);
+		       $firstBaseFraction{$g_0_nt}+=$guidetotal/$NTM{$l[2]} ;
 		        		       
 		       $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}=1 ;###species of seq pairs, not count different coordinates
 		       $speciesn10{$g_0_nt.$t_9_nt}{$l[2]}=1 if ($n==9); ###species of seq pairs, not count different coordinates
@@ -522,7 +522,7 @@ sub PingPongProcessing
 			print PPSCOREUA "$m\tcis\t$p\t$n_of_cisPairSpecies\t$n_of_cisPairSpecies_cor\t$n_of_cisPairReads\t$n_of_species\t$n_of_species_cor\t$n_of_allPairReads";
 			foreach my $b (keys %firstBaseF)
 			{
-				print PPSCOREUA "\t$b:$firstBaseF{b}";
+				print PPSCOREUA "\t$b:$firstBaseF{$b}";
 			}
 			print PPSCOREUA "\n";
 
@@ -548,7 +548,7 @@ sub PingPongProcessing
 		     print PPSCOREUA "$m\ttrans\t$p\t$n_of_transPairSpecies\t$n_of_transPairSpecies_cor\t$n_of_transPairReads\t$n_of_species\t$n_of_species_cor\t$n_of_allPairReads";
 		     foreach my $b (keys %firstBaseF)
 			 {
-				print PPSCOREUA "\t$b:$firstBaseF{b}";
+				print PPSCOREUA "\t$b:$firstBaseF{$b}";
 			 }
 			 print PPSCOREUA "\n";
 		     
