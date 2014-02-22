@@ -546,8 +546,8 @@ sub PingPongProcessing
 	   $ppseq="$OUTDIR/$guideStrandFile.$targetStrandFile.ppseq";
 	   $seqFile="$OUTDIR/$guideStrandFile.seq";
 	   $NofPPreads=`match.pl $ppseq $seqFile | sumcol+ 2`; chomp($NofPPreads);
-	   $NoofPPSpecies=`wc -l $ppseq|cut -f1 -d" "`;
-	   $totalSpecies=`wc -l $seqFile |cut -f1 -d" "`;
+	   $NoofPPSpecies=`wc -l $ppseq|cut -f1 -d" "`;chomp($NoofPPSpecies);
+	   $totalSpecies=`wc -l $seqFile |cut -f1 -d" "`;chomp($totalSpecies);
 	   
 	   if ($Z!=-10) 
 	   {
