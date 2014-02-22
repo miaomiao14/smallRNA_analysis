@@ -546,12 +546,12 @@ sub PingPongProcessing
 	   $ppseq="$OUTDIR/$guideStrandFile.$targetStrandFile.ppseq";
 	   $seqFile="$OUTDIR/$guideStrandFile.seq";
 	   $NofPPreads=`match.pl $ppseq $seqFile | sumcol+ 2`; chomp($NofPPreads);
-	   $NoofPPSpecies=`wc -l $ppseq|cut -f1`;
-	   $totalSpecies=`wc -l $seqFile |cut -f1`;
+	   $NoofPPSpecies=`wc -l $ppseq|cut -f1 -d" "`;
+	   $totalSpecies=`wc -l $seqFile |cut -f1 -d" "`;
 	   
 	   if ($Z!=-10) 
 	   {
-	   	print ZSCORE "$X\t$NofPPreads\t$total{$guideStrandFile}\t",$NofPPreads/$total{$guideStrandFile},"\t$NoofPPSpecies\t$totalSpecies\t",$NoofPPSpecies/$totalSpecies,"\t", $X*1000000000000/$total{$targetStrandFile}/$total{$guideStrandFile},"\n";
+	   	print ZSCORE "$NofPPreads\t$total{$guideStrandFile}\t",$NofPPreads/$total{$guideStrandFile},"\t$NoofPPSpecies\t$totalSpecies\t",$NoofPPSpecies/$totalSpecies,"\t$X\t", $X*1000000000000/$total{$targetStrandFile}/$total{$guideStrandFile},"\n";
 	   }
 	   else
 	   {
