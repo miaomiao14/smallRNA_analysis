@@ -394,9 +394,9 @@ sub PingPongProcessing
 		       #targetpf index; guidepf seq
 			   $score{$n}+=$targettotal*$guidetotal/$NTM{$l[2]}; #total pp8 ppscore
 		       
-			   $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nTcor ; #this was wrong, has to add {$n}, otherwise accumulative
+			   $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nGcor*$nTcor ; #this was wrong, has to add {$n}, otherwise accumulative
 		       #the sum of $cisPairSpecies and $transPairSpecies irrespective of coordinates
-		       $speciesn10{$g_0_nt.$t_9_nt}{$l[2]}+=$nTcor if ($n==9); ###
+		       $speciesn10{$g_0_nt.$t_9_nt}{$l[2]}+=$nGcor*$nTcor if ($n==9); ###
 		       
 		       $allPairReads{$g_0_nt.$t_9_nt}{$n}+=$targettotal*$guidetotal/$NTM{$l[2]};
 		       		     		       
@@ -491,6 +491,7 @@ sub PingPongProcessing
 			map {$n_of_cisPairSpecies_cor+=$_} values %{$cisPairSpecies{$p}{$n}} ;					     
 			my $n_of_cisPairReads=0;
 			map {$n_of_cisPairReads+=$_} values %{$cisPairReads{$p}{$n}} ;
+			$n_of_cisPairReads=&restrict_num_decimal_digits($n_of_cisPairReads,3);
 
 			print PPSCOREUA "$m\tcis\t$p\t$n_of_cisPairSpecies\t$n_of_cisPairSpecies_cor\t$n_of_cisPairReads\t$n_of_species\t$n_of_species_cor\t$allPairReads{$p}{$n}\n";
 
@@ -509,6 +510,7 @@ sub PingPongProcessing
 		     map {$n_of_transPairSpecies_cor+=$_} values %{$transPairSpecies{$p}{$n}};					     
 		     my $n_of_transPairReads=0;
 		     map {$n_of_transPairReads+=$_} values %{$transPairReads{$p}{$n}} ;
+		     $n_of_transPairReads=&restrict_num_decimal_digits($n_of_transPairReads,3);
 		     
 		     print PPSCOREUA "$m\ttrans\t$p\t$n_of_transPairSpecies\t$n_of_transPairSpecies_cor\t$n_of_transPairReads\t$n_of_species\t$n_of_species_cor\t$allPairReads{$p}{$n}\n";
 		     
