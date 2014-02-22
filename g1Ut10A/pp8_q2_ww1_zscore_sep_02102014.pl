@@ -531,15 +531,15 @@ sub PingPongProcessing
 	   }
 	   foreach my $b (keys  %pairedFirstBaseReads)
 	   {			
-	   		$pairedfirstBaseReadsF{$b}=$pairedFirstBaseReads{$b}/$pairedFirstBaseReadsTotal;
-	   		$pairedfirstBaseReadsF{$b}=&restrict_num_decimal_digits($pairedfirstBaseReadsF{$b},3);
-	   		$pairedfirstBaseSpeciesF{$b}=$pairedFirstBaseSpecies{$b}/$pairedFirstBaseSpeciesTotal;
-	   		$pairedfirstBaseSpeciesF{$b}=&restrict_num_decimal_digits($pairedfirstBaseSpeciesF{$b},3);
+	   		$pairedFirstBaseReadsF{$b}=$pairedFirstBaseReads{$b}/$pairedFirstBaseReadsTotal;
+	   		$pairedFirstBaseReadsF{$b}=&restrict_num_decimal_digits($pairedFirstBaseReadsF{$b},3);
+	   		$pairedFirstBaseSpeciesF{$b}=$pairedFirstBaseSpecies{$b}/$pairedFirstBaseSpeciesTotal;
+	   		$pairedFirstBaseSpeciesF{$b}=&restrict_num_decimal_digits($pairedFirstBaseSpeciesF{$b},3);
 	   		
-	   		$totalfirstBaseReadsF{$b}=$totalFirstBaseReads{$b}/$totalFirstBaseReadsTotal;
-	   		$totalfirstBaseReadsF{$b}=&restrict_num_decimal_digits($totalfirstBaseReadsF{$b},3);
-	   		$totalfirstBaseSpeciesF{$b}=$totalFirstBaseSpecies{$b}/$totalFirstBaseSpeciesTotal;
-	   		$totalfirstBaseSpeciesF{$b}=&restrict_num_decimal_digits($totalfirstBaseSpeciesF{$b},3);
+	   		$totalFirstBaseReadsF{$b}=$totalFirstBaseReads{$b}/$totalFirstBaseReadsTotal;
+	   		$totalFirstBaseReadsF{$b}=&restrict_num_decimal_digits($totalFirstBaseReadsF{$b},3);
+	   		$totalFirstBaseSpeciesF{$b}=$totalFirstBaseSpecies{$b}/$totalFirstBaseSpeciesTotal;
+	   		$totalFirstBaseSpeciesF{$b}=&restrict_num_decimal_digits($totalFirstBaseSpeciesF{$b},3);
 	   }
 	   
 	   #Ping-Pong score according to different G1T10 pairs
@@ -564,9 +564,9 @@ sub PingPongProcessing
 			$n_of_cisPairReads=&restrict_num_decimal_digits($n_of_cisPairReads,3);
 
 			print PPSCOREUA "$m\tcis\t$p\t$n_of_cisPairSpecies\t$n_of_cisPairSpecies_cor\t$n_of_cisPairReads\t$n_of_species\t$n_of_species_cor\t$n_of_allPairReads";
-			foreach my $b (keys %pairedfirstBaseReadsF)
+			foreach my $b (keys %pairedFirstBaseReadsF)
 			{
-				print PPSCOREUA "\t$b:$pairedfirstBaseReadsF{$b}(reads),$pairedfirstBaseSpeciesF{$b}(species),$totalfirstBaseReadsF{$b}(reads),$totalfirstBaseSpeciesF{$b}(species)";
+				print PPSCOREUA "\t$b:$pairedFirstBaseReadsF{$b}(reads),$pairedFirstBaseSpeciesF{$b}(species),$totalFirstBaseReadsF{$b}(reads),$totalFirstBaseSpeciesF{$b}(species)";
 			}
 			print PPSCOREUA "\n";
 
@@ -590,9 +590,9 @@ sub PingPongProcessing
 		     $n_of_transPairReads=&restrict_num_decimal_digits($n_of_transPairReads,3);
 		     
 		     print PPSCOREUA "$m\ttrans\t$p\t$n_of_transPairSpecies\t$n_of_transPairSpecies_cor\t$n_of_transPairReads\t$n_of_species\t$n_of_species_cor\t$n_of_allPairReads";
-		     foreach my $b (keys %pairedfirstBaseReadsF)
+		     foreach my $b (keys %pairedFirstBaseReadsF)
 			{
-				print PPSCOREUA "\t$b:$pairedfirstBaseReadsF{$b}(reads),$pairedfirstBaseSpeciesF{$b}(species),$totalfirstBaseReadsF{$b}(reads),$totalfirstBaseSpeciesF{$b}(species)";
+				print PPSCOREUA "\t$b:$pairedFirstBaseReadsF{$b}(reads),$pairedFirstBaseSpeciesF{$b}(species),$totalFirstBaseReadsF{$b}(reads),$totalFirstBaseSpeciesF{$b}(species)";
 			}
 			 print PPSCOREUA "\n";
 		     
