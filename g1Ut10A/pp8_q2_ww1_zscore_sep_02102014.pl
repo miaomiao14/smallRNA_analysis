@@ -481,6 +481,10 @@ sub PingPongProcessing
 		foreach my $p (@matchedpairs)
 		{
 			$allPairReads{$p}{$n}=0 if (!exists $allPairReads{$p}{$n});
+			my $n_of_allPairReads=$allPairReads{$p}{$n};
+			$n_of_allPairReads=&restrict_num_decimal_digits($n_of_allPairReads,3);
+			
+			
 			$n_of_species=scalar (keys %{$species{$p}{$n}});
 			my $n_of_species_cor=0;
 			map {$n_of_species_cor+=$_} values %{$species{$p}{$n}} ;
@@ -493,13 +497,15 @@ sub PingPongProcessing
 			map {$n_of_cisPairReads+=$_} values %{$cisPairReads{$p}{$n}} ;
 			$n_of_cisPairReads=&restrict_num_decimal_digits($n_of_cisPairReads,3);
 
-			print PPSCOREUA "$m\tcis\t$p\t$n_of_cisPairSpecies\t$n_of_cisPairSpecies_cor\t$n_of_cisPairReads\t$n_of_species\t$n_of_species_cor\t$allPairReads{$p}{$n}\n";
+			print PPSCOREUA "$m\tcis\t$p\t$n_of_cisPairSpecies\t$n_of_cisPairSpecies_cor\t$n_of_cisPairReads\t$n_of_species\t$n_of_species_cor\t$n_of_allPairReads\n";
 
 	   }
 	     #for all pairs, trans only 
 		foreach my $p (@pairs)
 		{
 		     $allPairReads{$p}{$n}=0 if (!exists $allPairReads{$p}{$n});
+		     my $n_of_allPairReads=$allPairReads{$p}{$n};
+			 $n_of_allPairReads=&restrict_num_decimal_digits($n_of_allPairReads,3);
 		     $n_of_species=scalar (keys %{$species{$p}{$n}});
 		     my $n_of_species_cor=0;
 			 map {$n_of_species_cor+=$_} values %{$species{$p}{$n}} ;
@@ -512,7 +518,7 @@ sub PingPongProcessing
 		     map {$n_of_transPairReads+=$_} values %{$transPairReads{$p}{$n}} ;
 		     $n_of_transPairReads=&restrict_num_decimal_digits($n_of_transPairReads,3);
 		     
-		     print PPSCOREUA "$m\ttrans\t$p\t$n_of_transPairSpecies\t$n_of_transPairSpecies_cor\t$n_of_transPairReads\t$n_of_species\t$n_of_species_cor\t$allPairReads{$p}{$n}\n";
+		     print PPSCOREUA "$m\ttrans\t$p\t$n_of_transPairSpecies\t$n_of_transPairSpecies_cor\t$n_of_transPairReads\t$n_of_species\t$n_of_species_cor\t$n_of_allPairReads\n";
 		     
 		     $count_N0{$p}++ if ($n_of_transPairSpecies>0);
 	     }
