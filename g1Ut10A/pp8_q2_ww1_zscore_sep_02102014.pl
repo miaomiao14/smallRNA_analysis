@@ -343,6 +343,7 @@ sub PingPongProcessing
 	my %pp6cisPairSpecies=();
 	my %pp6cisPair10Species=();
 	my %pp6cisPairReads=();
+	my %firstBaseFraction=();
 	
 	open ZSCORE, ">$OUTDIR/$guideStrandFile.$targetStrandFile.zscore.out";
 	open ZSCOREUA, ">$OUTDIR/$guideStrandFile.$targetStrandFile.UA_VA.zscore.out";
@@ -393,6 +394,10 @@ sub PingPongProcessing
 	      	   $g_0_nt=substr($l[2],0,1); $t_9_nt=&revfa($g_0_nt);  ##here are different from pp8_q2_ww1.pl
 		       #targetpf index; guidepf seq
 			   $score{$n}+=$targettotal*$guidetotal/$NTM{$l[2]}; #total pp8 ppscore
+			   
+			   #how many of species start with U?
+			   $firstBaseFraction{$g_0_nt}+=$guidetotal/$NTM{$l[2]} if($n==9);
+			   
 		       
 			   $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nGcor*$nTcor ; #this was wrong, has to add {$n}, otherwise accumulative
 		       #the sum of $cisPairSpecies and $transPairSpecies irrespective of coordinates
@@ -428,6 +433,9 @@ sub PingPongProcessing
 		       			#trans PingPong pair in reads
 		       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*($targettotal - $targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"})/$NTM{$l[2]};
 		       			
+		       			
+		       			
+		       			
 		       		}
 		       		else
 		       		{
@@ -448,21 +456,25 @@ sub PingPongProcessing
 	      	{
 
 		       next if ($1!=0);  # allow 1mm at the 10th position of target strand
+		       
+		       $g_0_nt=$3;
+		       $t_9_nt=&revfa($2);
+		       
 		       $score{$n}+=$targettotal*$guidetotal/$NTM{$l[2]}; #total pp8 ppscore
 		       
-		       $t_9_nt=&revfa($2);
-		       		      		       
-		       $species{$3.$t_9_nt}{$n}{$l[2]}=1 ;###species of seq pairs, not count different coordinates
-		       $speciesn10{$3.$t_9_nt}{$l[2]}=1 if ($n==9); ###species of seq pairs, not count different coordinates
+		       $firstBaseFraction{$g_0_nt}+=$guidetotal/$NTM{$l[2]} if($n==9);
+		        		       
+		       $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}=1 ;###species of seq pairs, not count different coordinates
+		       $speciesn10{$g_0_nt.$t_9_nt}{$l[2]}=1 if ($n==9); ###species of seq pairs, not count different coordinates
 		       
-		       $allPairReads{$3.$t_9_nt}{$n}+=$targettotal*$guidetotal/$NTM{$l[2]};###reads of seq pairs, not count different coordinates
+		       $allPairReads{$g_0_nt.$t_9_nt}{$n}+=$targettotal*$guidetotal/$NTM{$l[2]};###reads of seq pairs, not count different coordinates
 
 		       #trans PingPong pair in species
 
-		       $transPairSpecies{$3.$t_9_nt}{$n}{$l[2]}=$nGcor*$nTcor;
-		       $transPair10Species{$3.$t_9_nt}{$l[2]}=$nGcor*$nTcor if($n==9);
+		       $transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}=$nGcor*$nTcor;
+		       $transPair10Species{$g_0_nt.$t_9_nt}{$l[2]}=$nGcor*$nTcor if($n==9);
 		       #trans PingPong pair in reads
-		       $transPairReads{$3.$t_9_nt}{$n}{$l[2]}+=$guidetotal*$targettotal/$NTM{$l[2]};
+		       $transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidetotal*$targettotal/$NTM{$l[2]};
 		       
 		       print PPSEQ "$l[2]\n" if ($n==9);
 			}
@@ -475,6 +487,16 @@ sub PingPongProcessing
 		my $m=$n+1;
 	    print PPSCORE "$m\t$score{$n}\n";
 	    $count_N++ if ($score{$n}>0);
+	   
+	   #$firstBaseFraction
+	   my $totalBase=0;
+	   map {$totalBase+=$_} values %firstBaseFraction;
+	   my %firstBaseF=();
+	   foreach my $b (keys %firstBaseFraction)
+	   {
+	   		$firstBaseF{$b}=$firstBaseFraction{$b}/$totalBase;
+	   		$firstBaseF{$b}=&restrict_num_decimal_digits($firstBaseF{$b},3);
+	   }
 	   
 	   #Ping-Pong score according to different G1T10 pairs
 	   #for matched pairs, cis only  
@@ -497,7 +519,12 @@ sub PingPongProcessing
 			map {$n_of_cisPairReads+=$_} values %{$cisPairReads{$p}{$n}} ;
 			$n_of_cisPairReads=&restrict_num_decimal_digits($n_of_cisPairReads,3);
 
-			print PPSCOREUA "$m\tcis\t$p\t$n_of_cisPairSpecies\t$n_of_cisPairSpecies_cor\t$n_of_cisPairReads\t$n_of_species\t$n_of_species_cor\t$n_of_allPairReads\n";
+			print PPSCOREUA "$m\tcis\t$p\t$n_of_cisPairSpecies\t$n_of_cisPairSpecies_cor\t$n_of_cisPairReads\t$n_of_species\t$n_of_species_cor\t$n_of_allPairReads";
+			foreach my $b (keys %firstBaseF)
+			{
+				print PPSCOREUA "\t$b:$firstBaseF{b}";
+			}
+			print PPSCOREUA "\n";
 
 	   }
 	     #for all pairs, trans only 
@@ -518,8 +545,14 @@ sub PingPongProcessing
 		     map {$n_of_transPairReads+=$_} values %{$transPairReads{$p}{$n}} ;
 		     $n_of_transPairReads=&restrict_num_decimal_digits($n_of_transPairReads,3);
 		     
-		     print PPSCOREUA "$m\ttrans\t$p\t$n_of_transPairSpecies\t$n_of_transPairSpecies_cor\t$n_of_transPairReads\t$n_of_species\t$n_of_species_cor\t$n_of_allPairReads\n";
+		     print PPSCOREUA "$m\ttrans\t$p\t$n_of_transPairSpecies\t$n_of_transPairSpecies_cor\t$n_of_transPairReads\t$n_of_species\t$n_of_species_cor\t$n_of_allPairReads";
+		     foreach my $b (keys %firstBaseF)
+			 {
+				print PPSCOREUA "\t$b:$firstBaseF{b}";
+			 }
+			 print PPSCOREUA "\n";
 		     
+
 		     $count_N0{$p}++ if ($n_of_transPairSpecies>0);
 	     }
 	     
