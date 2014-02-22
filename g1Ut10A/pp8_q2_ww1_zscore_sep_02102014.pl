@@ -106,6 +106,13 @@ my %targetpfsplit=();
 my %guidepfsplit=();
 
 my %total=();
+
+my %totalFirstBase=();
+my %totalTenthBase=();
+
+my %totalFirstBaseSpecies=();
+my %totalTenthBaseSpecies=();
+
 #main, preprocessing
 if($indexFlag)
 {
@@ -235,6 +242,9 @@ sub InputFileProcessing
 		next if (/data/);
 		
 		$total{$file}+=$reads/$ntm; #no nta in norm.bed format
+		
+		$totalFirstBase{$file}{substr($seq,0,1)}{substr($seq,0,16)}+=$reads/$ntm;
+		$totalTenthBase{$file}{substr($seq,9,1)}{substr($seq,0,16)}+=$reads/$ntm;
 		
 		#store the seq of guide 16nt prefix only; for faster extract the reads number later
 		$guidepf{$file}{substr($seq,0,16)}+=$reads/$ntm;
@@ -396,7 +406,7 @@ sub PingPongProcessing
 			   $score{$n}+=$targettotal*$guidetotal/$NTM{$l[2]}; #total pp8 ppscore
 			   
 			   #how many of species start with U?
-			   $firstBaseFraction{$g_0_nt}+=$guidetotal/$NTM{$l[2]} ;
+			   $firstBaseFraction{$guideStrandFile}{$g_0_nt}{$l[2]}+=$guidetotal/$NTM{$l[2]} ;
 			   
 		       
 			   $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nGcor*$nTcor ; #this was wrong, has to add {$n}, otherwise accumulative
@@ -462,7 +472,7 @@ sub PingPongProcessing
 		       
 		       $score{$n}+=$targettotal*$guidetotal/$NTM{$l[2]}; #total pp8 ppscore
 		       
-		       $firstBaseFraction{$g_0_nt}+=$guidetotal/$NTM{$l[2]} ;
+		       $firstBaseFraction{$guideStrandFile}{$g_0_nt}{$l[2]}+=$guidetotal/$NTM{$l[2]} ;
 		        		       
 		       $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}=1 ;###species of seq pairs, not count different coordinates
 		       $speciesn10{$g_0_nt.$t_9_nt}{$l[2]}=1 if ($n==9); ###species of seq pairs, not count different coordinates
@@ -489,13 +499,47 @@ sub PingPongProcessing
 	    $count_N++ if ($score{$n}>0);
 	   
 	   #$firstBaseFraction
-	   my $totalBase=0;
-	   map {$totalBase+=$_} values %firstBaseFraction;
-	   my %firstBaseF=();
-	   foreach my $b (keys %firstBaseFraction)
+
+	   
+	   my %pairedFirstBaseReads=();
+	   my $pairedFirstBaseReadsTotal=0;
+	   my %pairedFirstBaseReadsF=();
+	   my %pairedFirstBaseSpecies=();
+	   my $pairedFirstBaseSpeciesTotal=0;
+	   my %pairedFirstBaseSpeciesF=();
+	   
+	   my %totalFirstBaseReads=();
+	   my $totalFirstBaseReadsTotal=0;
+	   my %totalFirstBaseReadsF=();
+	   my %totalFirstBaseSpecies=();
+	   my $totalFirstBaseSpeciesTotal=0;
+	   my %totalFirstBaseSpeciesF=();
+	   
+	   foreach my $b (keys %{$firstBaseFraction{$guideStrandFile}})
 	   {
-	   		$firstBaseF{$b}=$firstBaseFraction{$b}/$totalBase;
-	   		$firstBaseF{$b}=&restrict_num_decimal_digits($firstBaseF{$b},3);
+	   		map {$pairedFirstBaseReads{$b}+=$_} values  %{$firstBaseFraction{$b}};
+	   		$pairedFirstBaseReadsTotal+=$pairedFirstBaseReads{$b};
+	   		$pairedFirstBaseSpecies{$b}=scalar (keys  %{$firstBaseFraction{$b}});
+	   		$pairedFirstBaseSpeciesTotal+=$pairedFirstBaseSpecies{$b};
+	   		
+	   		
+	   		#total
+	   		map {$totalFirstBaseReads{$b}+=$_} values %{$totalFirstBase{$guideStrandFile}{$b}};
+	   		$totalFirstBaseReadsTotal+= $totalFirstBaseReads{$b};
+	   		$totalFirstBaseSpecies{$b}=scalar (keys %{$totalFirstBase{$guideStrandFile}{$b}});
+	   		$totalFirstBaseSpeciesTotal+= $totalFirstBaseSpecies{$b};
+	   }
+	   foreach my $b (keys  %pairedFirstBaseReads)
+	   {			
+	   		$pairedfirstBaseReadsF{$b}=$pairedFirstBaseReads{$b}/$pairedFirstBaseReadsTotal;
+	   		$pairedfirstBaseReadsF{$b}=&restrict_num_decimal_digits($pairedfirstBaseReadsF{$b},3);
+	   		$pairedfirstBaseSpeciesF{$b}=$pairedFirstBaseSpecies{$b}/$pairedFirstBaseSpeciesTotal;
+	   		$pairedfirstBaseSpeciesF{$b}=&restrict_num_decimal_digits($pairedfirstBaseSpeciesF{$b},3);
+	   		
+	   		$totalfirstBaseReadsF{$b}=$totalFirstBaseReads{$b}/$totalFirstBaseReadsTotal;
+	   		$totalfirstBaseReadsF{$b}=&restrict_num_decimal_digits($totalfirstBaseReadsF{$b},3);
+	   		$totalfirstBaseSpeciesF{$b}=$totalFirstBaseSpecies{$b}/$totalFirstBaseSpeciesTotal;
+	   		$totalfirstBaseSpeciesF{$b}=&restrict_num_decimal_digits($totalfirstBaseSpeciesF{$b},3);
 	   }
 	   
 	   #Ping-Pong score according to different G1T10 pairs
@@ -520,9 +564,9 @@ sub PingPongProcessing
 			$n_of_cisPairReads=&restrict_num_decimal_digits($n_of_cisPairReads,3);
 
 			print PPSCOREUA "$m\tcis\t$p\t$n_of_cisPairSpecies\t$n_of_cisPairSpecies_cor\t$n_of_cisPairReads\t$n_of_species\t$n_of_species_cor\t$n_of_allPairReads";
-			foreach my $b (keys %firstBaseF)
+			foreach my $b (keys %pairedfirstBaseReadsF)
 			{
-				print PPSCOREUA "\t$b:$firstBaseF{$b}";
+				print PPSCOREUA "\t$b:$pairedfirstBaseReadsF{$b}(reads),$pairedfirstBaseSpeciesF{$b}(species),$totalfirstBaseReadsF{$b}(reads),$totalfirstBaseSpeciesF{$b}(species)";
 			}
 			print PPSCOREUA "\n";
 
@@ -546,10 +590,10 @@ sub PingPongProcessing
 		     $n_of_transPairReads=&restrict_num_decimal_digits($n_of_transPairReads,3);
 		     
 		     print PPSCOREUA "$m\ttrans\t$p\t$n_of_transPairSpecies\t$n_of_transPairSpecies_cor\t$n_of_transPairReads\t$n_of_species\t$n_of_species_cor\t$n_of_allPairReads";
-		     foreach my $b (keys %firstBaseF)
-			 {
-				print PPSCOREUA "\t$b:$firstBaseF{$b}";
-			 }
+		     foreach my $b (keys %pairedfirstBaseReadsF)
+			{
+				print PPSCOREUA "\t$b:$pairedfirstBaseReadsF{$b}(reads),$pairedfirstBaseSpeciesF{$b}(species),$totalfirstBaseReadsF{$b}(reads),$totalfirstBaseSpeciesF{$b}(species)";
+			}
 			 print PPSCOREUA "\n";
 		     
 
