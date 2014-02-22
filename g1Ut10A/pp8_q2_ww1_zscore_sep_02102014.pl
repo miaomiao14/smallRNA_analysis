@@ -2,6 +2,8 @@
 BEGIN { unshift @INC,"/home/xuj1/bin/";}
 require "Statstics.pm";
 require "Jia.pm";
+BEGIN { unshift @INC,"/home/wangw1/git/smallRNA_analysis/Utils/";}
+require "restrict_digits.pm";
 use File::Basename;
 use Compress::Zlib;
 # rule is p1 and p17-21 doesn't need to pair but p2-16 need
@@ -548,6 +550,11 @@ sub PingPongProcessing
 	   $NofPPreads=`match.pl $ppseq $seqFile | sumcol+ 2`; chomp($NofPPreads);
 	   $NoofPPSpecies=`wc -l $ppseq|cut -f1 -d" "`;chomp($NoofPPSpecies);
 	   $totalSpecies=`wc -l $seqFile |cut -f1 -d" "`;chomp($totalSpecies);
+	   
+	   $NofPPreads=&restrict_num_decimal_digits($NofPPreads,2);
+	   $NoofPPSpecies=&restrict_num_decimal_digits($NoofPPSpecies,2);
+	   $totalSpecies=&restrict_num_decimal_digits($totalSpecies,2);
+	   $total{$guideStrandFile}=&restrict_num_decimal_digits($total{$guideStrandFile},2);
 	   
 	   if ($Z!=-10) 
 	   {
