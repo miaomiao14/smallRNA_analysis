@@ -7,13 +7,13 @@ export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 INDIR=/home/wangw1/isilon_temp/BmN4
 LOG=${INDIR}/LOG
 indexFlag=$1
-
+script=${PIPELINE_DIRECTORY}/g1Ut10A/pp8_q2_ww1_zscore_sep_02102014.pl
 STEP=1
 
 #converting to mapper2 to norm.bed format,by mapper2normbed.pl
 # run pp8_q2_ww1_zscore_sep_11052013.pl for UA_VA
 declare -a GT=("Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell" "Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell")
-declare -a TARGETS=("KNOWNTE" "ReASTE")
+declare -a TARGETS=("KNOWNTE")
 OUTDIR=/home/wangw1/isilon_temp/BmN4/pp8_q2_repeat
 
 if [ ! -f .status.${STEP}.pp8_UA_VA_repeat ] 
@@ -26,14 +26,14 @@ do
 	jobname=${t}_Ago3AS_SiwiS.pp8.q2
 	OUT=${OUTDIR}/${t}_Ago3AS_SiwiS
 	[ ! -d ${OUT} ] && mkdir -p ${OUT}
-	/home/wangw1/bin/submitsge 24 ${jobname} $OUTDIR "/home/wangw1/git/smallRNA_analysis/Ping_Pong/pp8_q2_ww1_zscore_sep_11052013.pl ${A} ${B} 2 bombyx ${OUT} ${indexFlag} >${OUTDIR}/${t}_Ago3AS_SiwiS.pp8.q2.UA_VA.log"
+	/home/wangw1/bin/submitsge 24 ${jobname} $OUTDIR "${script} ${A} ${B} 2 bombyx ${OUT} ${indexFlag} >${OUTDIR}/${t}_Ago3AS_SiwiS.pp8.q2.UA_VA.log"
 
 	A=/home/wangw1/isilon_temp/BmN4/Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell.inserts/Yuki.SRA.FLAGBmAgo3IP.DMSO.ox.BmN4cell.bmv2v0.all.all.xrRNA.xtRNA.xh.${t}.S.norm.bed.gz
 	B=/home/wangw1/isilon_temp/BmN4/Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell.inserts/Yuki.SRA.FLAGSiwiIP.DMSO.ox.BmN4cell.bmv2v0.all.all.xrRNA.xtRNA.xh.${t}.AS.norm.bed.gz
 	jobname=${t}_Ago3S_SiwiAS.pp8.q2
 	OUT=${OUTDIR}/${t}_Ago3S_SiwiAS
 	[ ! -d ${OUT} ] && mkdir -p ${OUT}
-	/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "/home/wangw1/git/smallRNA_analysis/Ping_Pong/pp8_q2_ww1_zscore_sep_11052013.pl ${A} ${B} 2 bombyx ${OUT} ${indexFlag} >${OUTDIR}/${t}_Ago3S_SiwiAS.pp8.q2.UA_VA.log"	
+	/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "${script} ${A} ${B} 2 bombyx ${OUT} ${indexFlag} >${OUTDIR}/${t}_Ago3S_SiwiAS.pp8.q2.UA_VA.log"	
 done
 fi
 [ $? == 0 ] && \
@@ -41,7 +41,7 @@ touch .status.${STEP}.pp8_UA_VA_repeat
 STEP=$((STEP+1))
 
 declare -a PPPAIR=("Ago3AS_SiwiS" "Ago3S_SiwiAS")
-declare -a TARGETS=("KNOWNTE" "ReASTE")
+declare -a TARGETS=("KNOWNTE")
 OUTDIR=/home/wangw1/isilon_temp/BmN4/pp8_q2_repeat_summary
 [ ! -d ${OUTDIR} ] && mkdir $OUTDIR
 
