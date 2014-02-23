@@ -338,16 +338,16 @@ for (my $i=0; $i<@inputfiles; $i++)
 			
 			print PPSCORE "$n\t$score{$n}\t$n_of_ppseq_species\t$n_of_totalpp_species\t$n_of_posseq_species\t$n_of_totalposseq_species\t$n_of_ppseq_reads\t$n_of_totalpp_reads\t$n_of_posseq_reads\t$n_of_totalposseq_reads\n";
 			
-		}
+		}#n
 		if ($score{10}) { $X=$score{10}; delete $score{10};} #mean and standard deviation exclude ppscore10
 		my $std=0;
 		$std=&standard_deviation(values %score);
 		if ( (scalar keys (%score))>9 && $std>0) { $Z=($X-&mean(values %score))/$std;} else {$Z=-10;}
 		printf PPZ '%.2f', $Z;
 		print PPZ "\t$X\n";
-	}
+	}#i
 
-}
+} #j
 close(PPSCORE);
 close(PPSEQ);
 close(PPZ);

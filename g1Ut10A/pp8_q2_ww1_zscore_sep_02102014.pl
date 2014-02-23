@@ -858,7 +858,7 @@ sub ZscoreCal
 	    $Z2=&restrict_num_decimal_digits($Z2,3);
 	    $X0=&restrict_num_decimal_digits($X0,3);
 	    $X1=&restrict_num_decimal_digits($X1,3);
-	    $X2=&restrict_num_decimal_digits($X2,3);
+	    #$X2=&restrict_num_decimal_digits($X2,3);
 	    $m0=&restrict_num_decimal_digits($m0,3);
 	    $m1=&restrict_num_decimal_digits($m1,3);
 	    $m2=&restrict_num_decimal_digits($m2,3);
