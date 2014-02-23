@@ -861,10 +861,10 @@ sub ZscoreCal
 	    #$X2=&restrict_num_decimal_digits($X2,3);
 	    $m0=&restrict_num_decimal_digits($m0,3);
 	    $m1=&restrict_num_decimal_digits($m1,3);
-	    $m2=&restrict_num_decimal_digits($m2,3);
+	    #$m2=&restrict_num_decimal_digits($m2,3);
 	    $std0=&restrict_num_decimal_digits($std0,3);
 	    $std1=&restrict_num_decimal_digits($std1,3);
-	    $std2=&restrict_num_decimal_digits($std2,3);
+	    #$std2=&restrict_num_decimal_digits($std2,3);
 	    
 	    return($Z0,$Z1,$Z2,$X0,$X1,$X2,$m0,$m1,$m2,$std0,$std1,$std2);
 }
