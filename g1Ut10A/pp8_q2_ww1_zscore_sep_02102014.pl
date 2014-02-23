@@ -735,9 +735,9 @@ sub PingPongProcessing
 	   #print "$guideStrandFile\-$targetStrandFile\t$Z\t";
 	   
 	   #Z-score for pp6
-	  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$P10ofSpecies,$P10ofSpeciesCor,$P10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%pp6cisPairSpecies,\%pp6cisPair10Species,\%pp6cisPairReads,$count_N);
+	  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$P10ofSpecies,$P10ofSpeciesCor,$P10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads,$countN)=&ZscoreCal(\%pp6cisPairSpecies,\%pp6cisPair10Species,\%pp6cisPairReads,$count_N);
 	    #how to normalize $X0{$p}?
-	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\tcis\tpp6\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$P10ofSpecies\t$P10ofSpeciesCor\t$P10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n"; ##file2 is the guide and file1 is the target
+	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\tcis\tpp6\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$P10ofSpecies\t$P10ofSpeciesCor\t$P10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\t$countN\n"; ##file2 is the guide and file1 is the target
 	   
 	   
 	   #Z-score for all cispairs; 
@@ -836,14 +836,15 @@ sub ZscoreCal
 			}				    	
 	    }
 	    
-	    $std0=&std(@numOfSpecies);
-	    $std1=&std(@numOfSpeciesCor);
-	    $std2=&std(@numOfReads);
+	    $std0=&standard_deviation(@numOfSpecies);
+	    $std1=&standard_deviation(@numOfSpeciesCor);
+	    $std2=&standard_deviation(@numOfReads);
 	    
 	    #to prove that $transPairReadsRef->{9} was deleted successfully
 	    #my $temp1=$#numOfSpecies+1;
 	    #my $temp2=$#numOfSpeciesCor+1;
-	    #my $temp3=$#numOfReads+1;
+	    my $temp3=$#numOfReads+1;
+	    
 	    
 	    $m0=&mean(@numOfSpecies);
 	    $m1=&mean(@numOfSpeciesCor);
@@ -866,7 +867,7 @@ sub ZscoreCal
 	    $std1=&restrict_num_decimal_digits($std1,3);
 	    #$std2=&restrict_num_decimal_digits($std2,3);
 	    
-	    return($Z0,$Z1,$Z2,$X0,$X1,$X2,$m0,$m1,$m2,$std0,$std1,$std2);
+	    return($Z0,$Z1,$Z2,$X0,$X1,$X2,$m0,$m1,$m2,$std0,$std1,$std2,$temp3);
 }
 
 #remove intermediate files
