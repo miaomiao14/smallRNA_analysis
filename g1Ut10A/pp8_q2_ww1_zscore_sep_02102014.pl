@@ -474,8 +474,8 @@ sub PingPongProcessing
 		       
 		       $firstBaseFraction{$guideStrandFile}{$g_0_nt}{$l[2]}+=$guidetotal/$NTM{$l[2]} ;
 		        		       
-		       $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}=1 ;###species of seq pairs, not count different coordinates
-		       $speciesn10{$g_0_nt.$t_9_nt}{$l[2]}=1 if ($n==9); ###species of seq pairs, not count different coordinates
+		       $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nGcor*$nTcor  ;###species of seq pairs, not count different coordinates
+		       $speciesn10{$g_0_nt.$t_9_nt}{$l[2]}+=$nGcor*$nTcor  if ($n==9); ###species of seq pairs, not count different coordinates
 		       
 		       $allPairReads{$g_0_nt.$t_9_nt}{$n}+=$targettotal*$guidetotal/$NTM{$l[2]};###reads of seq pairs, not count different coordinates
 
@@ -532,14 +532,14 @@ sub PingPongProcessing
 	   foreach my $b (keys  %pairedFirstBaseReads)
 	   {			
 	   		$pairedFirstBaseReadsF{$b}=$pairedFirstBaseReads{$b}/$pairedFirstBaseReadsTotal;
-	   		$pairedFirstBaseReadsF{$b}=&restrict_num_decimal_digits($pairedFirstBaseReadsF{$b},3);
+	   		$pairedFirstBaseReadsF{$b}=&restrict_num_decimal_digits($pairedFirstBaseReadsF{$b},4);
 	   		$pairedFirstBaseSpeciesF{$b}=$pairedFirstBaseSpecies{$b}/$pairedFirstBaseSpeciesTotal;
-	   		$pairedFirstBaseSpeciesF{$b}=&restrict_num_decimal_digits($pairedFirstBaseSpeciesF{$b},3);
+	   		$pairedFirstBaseSpeciesF{$b}=&restrict_num_decimal_digits($pairedFirstBaseSpeciesF{$b},4);
 	   		
 	   		$totalFirstBaseReadsF{$b}=$totalFirstBaseReads{$b}/$totalFirstBaseReadsTotal;
-	   		$totalFirstBaseReadsF{$b}=&restrict_num_decimal_digits($totalFirstBaseReadsF{$b},3);
+	   		$totalFirstBaseReadsF{$b}=&restrict_num_decimal_digits($totalFirstBaseReadsF{$b},4);
 	   		$totalFirstBaseSpeciesF{$b}=$totalFirstBaseSpecies{$b}/$totalFirstBaseSpeciesTotal;
-	   		$totalFirstBaseSpeciesF{$b}=&restrict_num_decimal_digits($totalFirstBaseSpeciesF{$b},3);
+	   		$totalFirstBaseSpeciesF{$b}=&restrict_num_decimal_digits($totalFirstBaseSpeciesF{$b},4);
 	   }
 	   
 	   #Ping-Pong score according to different G1T10 pairs
