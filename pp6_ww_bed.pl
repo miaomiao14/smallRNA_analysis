@@ -76,10 +76,10 @@ for (my $i=0; $i<@inputfiles; $i++)
     	print PPSEQ "POSOFPARTNER\tPARTNERLEN\tPARTNERABUNDANCE\tpiRNALEN\tpiRNAABUDNACE\n";
     	print PPSCORE "OVERLAP\tPPSCORE\n";
 		my $X=0; my $Z=0; my %score=();
-	
+	    
 		foreach (my $n=1;$n<=20;$n++) #iterate with different 5'-5' distance of piRNAs from oposite strand
 		{
-			my %pp=(); my %pos=(); my %pp_seq=();my %pos_seq=();
+			my %pp=(); my %pos=(); my %pp_seq=();my %pos_seq=();my %ppseqReads=();my %posseqReads=();
 			#read zip input file
 			#the target strand
 			if($file1=~/gz/)
@@ -290,17 +290,52 @@ for (my $i=0; $i<@inputfiles; $i++)
 				{
 					$score{$n}+=$pos{$cor}*$pp{$cor} ; #product of reads count is the ppscore
 					print PPSEQ "$cor\t$pos_seq{$cor}\t$pos{$cor}\t$pp_seq{$cor}\t$pp{$cor}\n" if ($n==10);
+					
 					#PPSEQ columns
 					#chr:start(+/-) of the piRNA partner 
 					#the length of piRNA partners (only record one length)
 					#the abundance of piRNA partners
 					#the length of piRNAs (only record one length)
 					#the abundance of piRNA
+					
+					$ppseqReads{$cor}+=$pp{$cor};
+					$posseqReads{$cor}+=$pos{$cor};
 
 				}
 			}
 			$score{$n}=0 if (!exists $score{$n});
-			print PPSCORE "$n\t$score{$n}\n";
+			
+			my $n_of_ppseq_species=0;
+			$n_of_ppseq_species=scalar (keys %ppseqReads);
+			
+			my $n_of_totalpp_species=0;
+			$n_of_totalpp_species=scalar (keys %pp);
+
+			my $n_of_posseq_species=0;
+			$n_of_posseq_species=scalar (keys %posseqReads);
+			
+			my $n_of_totalposseq_species=0;
+			$n_of_totalposseq_species=scalar (keys %pos);
+			
+			
+			my $n_of_ppseq_reads=0;
+			map {$n_of_ppseq_reads+=$_} values  %ppseqReads;
+			$n_of_ppseq_reads=&restrict_num_decimal_digits($n_of_ppseq_reads,3);
+			
+			my $n_of_totalpp_reads=0;
+			map {$n_of_totalpp_reads+=$_} values  %pp;
+			$n_of_totalpp_reads=&restrict_num_decimal_digits($n_of_totalpp_reads,3);
+			
+			my $n_of_posseq_reads=0;
+			map {$n_of_posseq_reads+=$_} values  %posseqReads;
+			$n_of_posseq_reads=&restrict_num_decimal_digits($n_of_posseq_reads,3);
+			
+			my $n_of_totalposseq_reads=0;
+			map {$n_of_totalposseq_reads+=$_} values  %pos;
+			$n_of_totalposseq_reads=&restrict_num_decimal_digits($n_of_totalposseq_reads,3);
+			
+			
+			print PPSCORE "$n\t$score{$n}\t$n_of_ppseq_species\t$n_of_totalpp_species\t$n_of_posseq_species\t$n_of_totalposseq_species\t$n_of_ppseq_reads\t$n_of_totalpp_reads\t$n_of_posseq_reads\t$n_of_totalposseq_reads\n";
 			
 		}
 		if ($score{10}) { $X=$score{10}; delete $score{10};} #mean and standard deviation exclude ppscore10
