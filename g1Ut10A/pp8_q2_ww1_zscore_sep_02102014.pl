@@ -561,9 +561,9 @@ sub PingPongProcessing
 	   
 	   foreach my $b (keys %{$tenthBaseFraction{$targetStrandFile}})
 	   {
-	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$TenthBaseFraction{$targetStrandFile}{$b}};
+	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$tenthBaseFraction{$targetStrandFile}{$b}};
 	   		$pairedTenthBaseReadsTotal+=$pairedTenthBaseReads{$b};
-	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$TenthBaseFraction{$targetStrandFile}{$b}});
+	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$tenthBaseFraction{$targetStrandFile}{$b}});
 	   		$pairedTenthBaseSpeciesTotal+=$pairedTenthBaseSpecies{$b};
 	   		
 	   		#$totalTenthBase{$file}{substr($seq,0,1)}{substr($seq,0,16)}+=$reads/$ntm;
