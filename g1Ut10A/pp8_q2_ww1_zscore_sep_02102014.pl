@@ -608,42 +608,42 @@ sub PingPongProcessing
 			$n_of_cisPairReads=&restrict_num_decimal_digits($n_of_cisPairReads,3);
 
 			print PPSCOREUA "$m\tcis\t$p\t$n_of_cisPairSpecies\t$n_of_cisPairSpecies_cor\t$n_of_cisPairReads\t$n_of_species\t$n_of_species_cor\t$n_of_allPairReads";
-			print PPSCOREUA "\t";
+			print PPSCOREUA "\tGuide1_pairedSpecies;";
 			foreach my $b (keys %pairedFirstBaseSpeciesF)
 			{
 				print PPSCOREUA "$b:$pairedFirstBaseSpeciesF{$b},";
 			}
-			print PPSCOREUA "\t";
+			print PPSCOREUA "\tTarget10_pairedSpecies;";
 			foreach my $b (keys %pairedTenthBaseSpeciesF)
 			{
 				print PPSCOREUA "$b:$pairedTenthBaseSpeciesF{$b},";
 			}
-			print PPSCOREUA "\t";
+			print PPSCOREUA "\tGuide1_pairedReads;";
 			foreach my $b (keys %pairedFirstBaseReadsF) 
 			{
 				print PPSCOREUA "$b:$pairedFirstBaseReadsF{$b},";
 			}
-			print PPSCOREUA "\t";
+			print PPSCOREUA "\tTarget10_pairedReads;";
 			foreach my $b (keys %pairedTenthBaseReadsF) 
 			{
 				print PPSCOREUA "$b:$pairedTenthBaseReadsF{$b},";
 			}
-			print PPSCOREUA "\t";
+			print PPSCOREUA "\tGuide1_totalSpecies;";
 			foreach my $b (keys %totalFirstBaseSpeciesF)
 			{
 				print PPSCOREUA "$b:$totalFirstBaseSpeciesF{$b},";
 			}
-			print PPSCOREUA "\t";
+			print PPSCOREUA "\tTarget10_totalSpecies;";
 			foreach my $b (keys %totalTenthBaseSpeciesF)
 			{
 				print PPSCOREUA "$b:$totalTenthBaseSpeciesF{$b},";
 			}
-			print PPSCOREUA "\t";
+			print PPSCOREUA "\tGuide1_totalReads;";
 			foreach my $b (keys %totalFirstBaseReadsF) 
 			{
 				print PPSCOREUA "$b:$totalFirstBaseReadsF{$b},";
 			}
-			print PPSCOREUA "\t";
+			print PPSCOREUA "\tTarget10_totalReads;";
 			foreach my $b (keys %totalTenthBaseReadsF) 
 			{
 				print PPSCOREUA "$b:$totalTenthBaseReadsF{$b},";
