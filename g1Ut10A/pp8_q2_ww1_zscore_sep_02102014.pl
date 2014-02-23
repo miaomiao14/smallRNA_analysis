@@ -354,6 +354,7 @@ sub PingPongProcessing
 	my %pp6cisPair10Species=();
 	my %pp6cisPairReads=();
 	my %firstBaseFraction=();
+	my %tenthBaseFraction=();
 	
 	open ZSCORE, ">$OUTDIR/$guideStrandFile.$targetStrandFile.zscore.out";
 	open ZSCOREUA, ">$OUTDIR/$guideStrandFile.$targetStrandFile.UA_VA.zscore.out";
@@ -407,6 +408,7 @@ sub PingPongProcessing
 			   
 			   #how many of species start with U?
 			   $firstBaseFraction{$guideStrandFile}{$g_0_nt}{$l[2]}+=$guidetotal/$NTM{$l[2]} ;
+			   $tenthBaseFraction{$targetStrandFile}{$t_9_nt}{$l[1]}+=$targettotal;
 			   
 		       
 			   $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nGcor*$nTcor ; #this was wrong, has to add {$n}, otherwise accumulative
@@ -473,6 +475,7 @@ sub PingPongProcessing
 		       $score{$n}+=$targettotal*$guidetotal/$NTM{$l[2]}; #total pp8 ppscore
 		       
 		       $firstBaseFraction{$guideStrandFile}{$g_0_nt}{$l[2]}+=$guidetotal/$NTM{$l[2]} ;
+		       $tenthBaseFraction{$targetStrandFile}{$t_9_nt}{$l[1]}+=$targettotal;
 		        		       
 		       $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nGcor*$nTcor  ;###species of seq pairs, not count different coordinates
 		       $speciesn10{$g_0_nt.$t_9_nt}{$l[2]}+=$nGcor*$nTcor  if ($n==9); ###species of seq pairs, not count different coordinates
@@ -500,7 +503,6 @@ sub PingPongProcessing
 	   
 	   #$firstBaseFraction
 
-	   
 	   my %pairedFirstBaseReads=();
 	   my $pairedFirstBaseReadsTotal=0;
 	   my %pairedFirstBaseReadsF=();
@@ -542,6 +544,48 @@ sub PingPongProcessing
 	   		$totalFirstBaseSpeciesF{$b}=&restrict_num_decimal_digits($totalFirstBaseSpeciesF{$b},4);
 	   }
 	   
+	   #tenthBaseFraction
+	   my %pairedTenthBaseReads=();
+	   my $pairedTenthBaseReadsTotal=0;
+	   my %pairedTenthBaseReadsF=();
+	   my %pairedTenthBaseSpecies=();
+	   my $pairedTenthBaseSpeciesTotal=0;
+	   my %pairedTenthBaseSpeciesF=();
+	   
+	   my %totalTenthBaseReads=();
+	   my $totalTenthBaseReadsTotal=0;
+	   my %totalTenthBaseReadsF=();
+	   my %totalTenthBaseSpecies=();
+	   my $totalTenthBaseSpeciesTotal=0;
+	   my %totalTenthBaseSpeciesF=();
+	   
+	   foreach my $b (keys %{$tenthBaseFraction{$targetStrandFile}})
+	   {
+	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$TenthBaseFraction{$targetStrandFile}{$b}};
+	   		$pairedTenthBaseReadsTotal+=$pairedTenthBaseReads{$b};
+	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$TenthBaseFraction{$targetStrandFile}{$b}});
+	   		$pairedTenthBaseSpeciesTotal+=$pairedTenthBaseSpecies{$b};
+	   		
+	   		#$totalTenthBase{$file}{substr($seq,0,1)}{substr($seq,0,16)}+=$reads/$ntm;
+	   		#total
+	   		map {$totalTenthBaseReads{$b}+=$_} values %{$totalTenthBase{$targetStrandFile}{$b}};
+	   		$totalTenthBaseReadsTotal+= $totalTenthBaseReads{$b};
+	   		$totalTenthBaseSpecies{$b}=scalar (keys %{$totalTenthBase{$targetStrandFile}{$b}});
+	   		$totalTenthBaseSpeciesTotal+= $totalTenthBaseSpecies{$b};
+	   }
+	   foreach my $b (keys  %pairedTenthBaseReads)
+	   {			
+	   		$pairedTenthBaseReadsF{$b}=$pairedTenthBaseReads{$b}/$pairedTenthBaseReadsTotal;
+	   		$pairedTenthBaseReadsF{$b}=&restrict_num_decimal_digits($pairedTenthBaseReadsF{$b},4);
+	   		$pairedTenthBaseSpeciesF{$b}=$pairedTenthBaseSpecies{$b}/$pairedTenthBaseSpeciesTotal;
+	   		$pairedTenthBaseSpeciesF{$b}=&restrict_num_decimal_digits($pairedTenthBaseSpeciesF{$b},4);
+	   		
+	   		$totalTenthBaseReadsF{$b}=$totalTenthBaseReads{$b}/$totalTenthBaseReadsTotal;
+	   		$totalTenthBaseReadsF{$b}=&restrict_num_decimal_digits($totalTenthBaseReadsF{$b},4);
+	   		$totalTenthBaseSpeciesF{$b}=$totalTenthBaseSpecies{$b}/$totalTenthBaseSpeciesTotal;
+	   		$totalTenthBaseSpeciesF{$b}=&restrict_num_decimal_digits($totalTenthBaseSpeciesF{$b},4);
+	   }
+	   
 	   #Ping-Pong score according to different G1T10 pairs
 	   #for matched pairs, cis only  
 		foreach my $p (@matchedpairs)
@@ -570,9 +614,19 @@ sub PingPongProcessing
 				print PPSCOREUA "$b:$pairedFirstBaseSpeciesF{$b},";
 			}
 			print PPSCOREUA "\t";
+			foreach my $b (keys %pairedTenthBaseSpeciesF)
+			{
+				print PPSCOREUA "$b:$pairedTenthBaseSpeciesF{$b},";
+			}
+			print PPSCOREUA "\t";
 			foreach my $b (keys %pairedFirstBaseReadsF) 
 			{
 				print PPSCOREUA "$b:$pairedFirstBaseReadsF{$b},";
+			}
+			print PPSCOREUA "\t";
+			foreach my $b (keys %pairedTenthBaseReadsF) 
+			{
+				print PPSCOREUA "$b:$pairedTenthBaseReadsF{$b},";
 			}
 			print PPSCOREUA "\t";
 			foreach my $b (keys %totalFirstBaseSpeciesF)
@@ -580,9 +634,19 @@ sub PingPongProcessing
 				print PPSCOREUA "$b:$totalFirstBaseSpeciesF{$b},";
 			}
 			print PPSCOREUA "\t";
+			foreach my $b (keys %totalTenthBaseSpeciesF)
+			{
+				print PPSCOREUA "$b:$totalTenthBaseSpeciesF{$b},";
+			}
+			print PPSCOREUA "\t";
 			foreach my $b (keys %totalFirstBaseReadsF) 
 			{
 				print PPSCOREUA "$b:$totalFirstBaseReadsF{$b},";
+			}
+			print PPSCOREUA "\t";
+			foreach my $b (keys %totalTenthBaseReadsF) 
+			{
+				print PPSCOREUA "$b:$totalTenthBaseReadsF{$b},";
 			}
 			
 			print PPSCOREUA "\n";
@@ -613,9 +677,19 @@ sub PingPongProcessing
 				print PPSCOREUA "$b:$pairedFirstBaseSpeciesF{$b},";
 			}
 			print PPSCOREUA "\t";
+			foreach my $b (keys %pairedTenthBaseSpeciesF)
+			{
+				print PPSCOREUA "$b:$pairedTenthBaseSpeciesF{$b},";
+			}
+			print PPSCOREUA "\t";
 			foreach my $b (keys %pairedFirstBaseReadsF) 
 			{
 				print PPSCOREUA "$b:$pairedFirstBaseReadsF{$b},";
+			}
+			print PPSCOREUA "\t";
+			foreach my $b (keys %pairedTenthBaseReadsF) 
+			{
+				print PPSCOREUA "$b:$pairedTenthBaseReadsF{$b},";
 			}
 			print PPSCOREUA "\t";
 			foreach my $b (keys %totalFirstBaseSpeciesF)
@@ -623,9 +697,19 @@ sub PingPongProcessing
 				print PPSCOREUA "$b:$totalFirstBaseSpeciesF{$b},";
 			}
 			print PPSCOREUA "\t";
+			foreach my $b (keys %totalTenthBaseSpeciesF)
+			{
+				print PPSCOREUA "$b:$totalTenthBaseSpeciesF{$b},";
+			}
+			print PPSCOREUA "\t";
 			foreach my $b (keys %totalFirstBaseReadsF) 
 			{
 				print PPSCOREUA "$b:$totalFirstBaseReadsF{$b},";
+			}
+			print PPSCOREUA "\t";
+			foreach my $b (keys %totalTenthBaseReadsF) 
+			{
+				print PPSCOREUA "$b:$totalTenthBaseReadsF{$b},";
 			}
 			
 			print PPSCOREUA "\n";
