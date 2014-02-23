@@ -362,7 +362,8 @@ sub PingPongProcessing
 	open PPSCORE, ">$OUTDIR/$guideStrandFile.$targetStrandFile.pp";
 	open PPSCOREUA, ">$OUTDIR/$guideStrandFile.$targetStrandFile.UA_VA.pp";
 	
-
+	open PPUAFRACTION, ">$OUTDIR/$guideStrandFile.$targetStrandFile.UA_VA.base.fraction.txt";
+	
 	open PPSEQ, ">$OUTDIR/$guideStrandFile.$targetStrandFile.ppseq";
 	
 	foreach ($n=0;$n<20;$n++)
@@ -608,48 +609,16 @@ sub PingPongProcessing
 			$n_of_cisPairReads=&restrict_num_decimal_digits($n_of_cisPairReads,3);
 
 			print PPSCOREUA "$m\tcis\t$p\t$n_of_cisPairSpecies\t$n_of_cisPairSpecies_cor\t$n_of_cisPairReads\t$n_of_species\t$n_of_species_cor\t$n_of_allPairReads";
-			print PPSCOREUA "\tGuide1_pairedSpecies;";
-			foreach my $b (keys %pairedFirstBaseSpeciesF)
-			{
-				print PPSCOREUA "$b:$pairedFirstBaseSpeciesF{$b},";
-			}
-			print PPSCOREUA "\tTarget10_pairedSpecies;";
-			foreach my $b (keys %pairedTenthBaseSpeciesF)
-			{
-				print PPSCOREUA "$b:$pairedTenthBaseSpeciesF{$b},";
-			}
-			print PPSCOREUA "\tGuide1_pairedReads;";
-			foreach my $b (keys %pairedFirstBaseReadsF) 
-			{
-				print PPSCOREUA "$b:$pairedFirstBaseReadsF{$b},";
-			}
-			print PPSCOREUA "\tTarget10_pairedReads;";
-			foreach my $b (keys %pairedTenthBaseReadsF) 
-			{
-				print PPSCOREUA "$b:$pairedTenthBaseReadsF{$b},";
-			}
-			print PPSCOREUA "\tGuide1_totalSpecies;";
-			foreach my $b (keys %totalFirstBaseSpeciesF)
-			{
-				print PPSCOREUA "$b:$totalFirstBaseSpeciesF{$b},";
-			}
-			print PPSCOREUA "\tTarget10_totalSpecies;";
-			foreach my $b (keys %totalTenthBaseSpeciesF)
-			{
-				print PPSCOREUA "$b:$totalTenthBaseSpeciesF{$b},";
-			}
-			print PPSCOREUA "\tGuide1_totalReads;";
-			foreach my $b (keys %totalFirstBaseReadsF) 
-			{
-				print PPSCOREUA "$b:$totalFirstBaseReadsF{$b},";
-			}
-			print PPSCOREUA "\tTarget10_totalReads;";
-			foreach my $b (keys %totalTenthBaseReadsF) 
-			{
-				print PPSCOREUA "$b:$totalTenthBaseReadsF{$b},";
-			}
 			
-			print PPSCOREUA "\n";
+			my @bases=("A","C","G","T");
+			print PPUAFRACTION "$m\ttotal\tg1\t$pairedFirstBaseSpeciesTotal\t$totalFirstBaseSpeciesTotal\t$pairedFirstBaseReadsTotal\t$totalFirstBaseReadsTotal\n";
+		    print PPUAFRACTION "$m\ttotal\tt10\t$pairedTenthBaseSpeciesTotal\t$totalTenthBaseSpeciesTotal\t$pairedTenthBaseReadsTotal\t$totalTenthBaseReadsTotal\n";
+			foreach my $b(@bases)
+			{
+				print PPUAFRACTION "$m\t$b\tg1\t$pairedFirstBaseSpeciesF{$b}\t$totalFirstBaseSpeciesF{$b}\t$pairedFirstBaseReadsF{$b}\t$totalFirstBaseReadsF{$b}\n";
+				print PPUAFRACTION "$m\t$b\tt10\t$pairedTenthBaseSpeciesF{$b}\t$totalTenthBaseSpeciesF{$b}\t$pairedTenthBaseReadsF{$b}\t$totalTenthBaseReadsF{$b}\n";
+			}
+
 
 	   }
 	     #for all pairs, trans only 
@@ -670,50 +639,50 @@ sub PingPongProcessing
 		     map {$n_of_transPairReads+=$_} values %{$transPairReads{$p}{$n}} ;
 		     $n_of_transPairReads=&restrict_num_decimal_digits($n_of_transPairReads,3);
 		     
-		     print PPSCOREUA "$m\ttrans\t$p\t$n_of_transPairSpecies\t$n_of_transPairSpecies_cor\t$n_of_transPairReads\t$n_of_species\t$n_of_species_cor\t$n_of_allPairReads";
-		    print PPSCOREUA "\tGuide1_pairedSpecies;";
-			foreach my $b (keys %pairedFirstBaseSpeciesF)
-			{
-				print PPSCOREUA "$b:$pairedFirstBaseSpeciesF{$b},";
-			}
-			print PPSCOREUA "\tTarget10_pairedSpecies;";
-			foreach my $b (keys %pairedTenthBaseSpeciesF)
-			{
-				print PPSCOREUA "$b:$pairedTenthBaseSpeciesF{$b},";
-			}
-			print PPSCOREUA "\tGuide1_pairedReads;";
-			foreach my $b (keys %pairedFirstBaseReadsF) 
-			{
-				print PPSCOREUA "$b:$pairedFirstBaseReadsF{$b},";
-			}
-			print PPSCOREUA "\tTarget10_pairedReads;";
-			foreach my $b (keys %pairedTenthBaseReadsF) 
-			{
-				print PPSCOREUA "$b:$pairedTenthBaseReadsF{$b},";
-			}
-			print PPSCOREUA "\tGuide1_totalSpecies;";
-			foreach my $b (keys %totalFirstBaseSpeciesF)
-			{
-				print PPSCOREUA "$b:$totalFirstBaseSpeciesF{$b},";
-			}
-			print PPSCOREUA "\tTarget10_totalSpecies;";
-			foreach my $b (keys %totalTenthBaseSpeciesF)
-			{
-				print PPSCOREUA "$b:$totalTenthBaseSpeciesF{$b},";
-			}
-			print PPSCOREUA "\tGuide1_totalReads;";
-			foreach my $b (keys %totalFirstBaseReadsF) 
-			{
-				print PPSCOREUA "$b:$totalFirstBaseReadsF{$b},";
-			}
-			print PPSCOREUA "\tTarget10_totalReads;";
-			foreach my $b (keys %totalTenthBaseReadsF) 
-			{
-				print PPSCOREUA "$b:$totalTenthBaseReadsF{$b},";
-			}
-			
-			
-			print PPSCOREUA "\n";
+		    print PPSCOREUA "$m\ttrans\t$p\t$n_of_transPairSpecies\t$n_of_transPairSpecies_cor\t$n_of_transPairReads\t$n_of_species\t$n_of_species_cor\t$n_of_allPairReads";
+#		    print PPSCOREUA "\tGuide1_pairedSpecies;";
+#			foreach my $b (keys %pairedFirstBaseSpeciesF)
+#			{
+#				print PPSCOREUA "$b:$pairedFirstBaseSpeciesF{$b},";
+#			}
+#			print PPSCOREUA "\tTarget10_pairedSpecies;";
+#			foreach my $b (keys %pairedTenthBaseSpeciesF)
+#			{
+#				print PPSCOREUA "$b:$pairedTenthBaseSpeciesF{$b},";
+#			}
+#			print PPSCOREUA "\tGuide1_pairedReads;";
+#			foreach my $b (keys %pairedFirstBaseReadsF) 
+#			{
+#				print PPSCOREUA "$b:$pairedFirstBaseReadsF{$b},";
+#			}
+#			print PPSCOREUA "\tTarget10_pairedReads;";
+#			foreach my $b (keys %pairedTenthBaseReadsF) 
+#			{
+#				print PPSCOREUA "$b:$pairedTenthBaseReadsF{$b},";
+#			}
+#			print PPSCOREUA "\tGuide1_totalSpecies;";
+#			foreach my $b (keys %totalFirstBaseSpeciesF)
+#			{
+#				print PPSCOREUA "$b:$totalFirstBaseSpeciesF{$b},";
+#			}
+#			print PPSCOREUA "\tTarget10_totalSpecies;";
+#			foreach my $b (keys %totalTenthBaseSpeciesF)
+#			{
+#				print PPSCOREUA "$b:$totalTenthBaseSpeciesF{$b},";
+#			}
+#			print PPSCOREUA "\tGuide1_totalReads;";
+#			foreach my $b (keys %totalFirstBaseReadsF) 
+#			{
+#				print PPSCOREUA "$b:$totalFirstBaseReadsF{$b},";
+#			}
+#			print PPSCOREUA "\tTarget10_totalReads;";
+#			foreach my $b (keys %totalTenthBaseReadsF) 
+#			{
+#				print PPSCOREUA "$b:$totalTenthBaseReadsF{$b},";
+#			}
+#			
+#			
+#			print PPSCOREUA "\n";
 		     
 
 		     $count_N0{$p}++ if ($n_of_transPairSpecies>0);
@@ -735,9 +704,9 @@ sub PingPongProcessing
 	   #print "$guideStrandFile\-$targetStrandFile\t$Z\t";
 	   
 	   #Z-score for pp6
-	  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$P10ofSpecies,$P10ofSpeciesCor,$P10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads,$countN)=&ZscoreCal(\%pp6cisPairSpecies,\%pp6cisPair10Species,\%pp6cisPairReads,$count_N);
+	  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$P10ofSpecies,$P10ofSpeciesCor,$P10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%pp6cisPairSpecies,\%pp6cisPair10Species,\%pp6cisPairReads,$count_N);
 	    #how to normalize $X0{$p}?
-	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\tcis\tpp6\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$P10ofSpecies\t$P10ofSpeciesCor\t$P10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\t$countN\n"; ##file2 is the guide and file1 is the target
+	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\tcis\tpp6\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$P10ofSpecies\t$P10ofSpeciesCor\t$P10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n"; ##file2 is the guide and file1 is the target
 	   
 	   
 	   #Z-score for all cispairs; 
@@ -787,6 +756,7 @@ sub PingPongProcessing
 	   }
 	   
 	close(PPSEQ);
+	close(PPUAFRACTION);
 	close(PPSCOREUA);
 	close(PPSCORE);
 	close(ZSCOREUA);
@@ -843,7 +813,7 @@ sub ZscoreCal
 	    #to prove that $transPairReadsRef->{9} was deleted successfully
 	    #my $temp1=$#numOfSpecies+1;
 	    #my $temp2=$#numOfSpeciesCor+1;
-	    my $temp3=scalar (@numOfReads);
+	    #my $temp3=scalar (@numOfReads);
 	    
 	    
 	    $m0=&mean(@numOfSpecies);
@@ -859,15 +829,15 @@ sub ZscoreCal
 	    $Z2=&restrict_num_decimal_digits($Z2,3);
 	    $X0=&restrict_num_decimal_digits($X0,3);
 	    $X1=&restrict_num_decimal_digits($X1,3);
-	    #$X2=&restrict_num_decimal_digits($X2,3);
+	    $X2=&restrict_num_decimal_digits($X2,3);
 	    $m0=&restrict_num_decimal_digits($m0,3);
 	    $m1=&restrict_num_decimal_digits($m1,3);
-	    #$m2=&restrict_num_decimal_digits($m2,3);
+	    $m2=&restrict_num_decimal_digits($m2,3);
 	    $std0=&restrict_num_decimal_digits($std0,3);
 	    $std1=&restrict_num_decimal_digits($std1,3);
-	    #$std2=&restrict_num_decimal_digits($std2,3);
+	    $std2=&restrict_num_decimal_digits($std2,3);
 	    
-	    return($Z0,$Z1,$Z2,$X0,$X1,$X2,$m0,$m1,$m2,$std0,$std1,$std2,$temp3);
+	    return($Z0,$Z1,$Z2,$X0,$X1,$X2,$m0,$m1,$m2,$std0,$std1,$std2);
 }
 
 #remove intermediate files
