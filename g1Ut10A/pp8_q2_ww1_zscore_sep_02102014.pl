@@ -812,7 +812,8 @@ sub ZscoreCal
 	    #map {$n_of_species_cor+=$_} (values %{$transPair10Species});#total number of species respective of coordinates
 	    #my $n_of_reads=0;
 	    #map {$n_of_reads+=$_} (values %{$transPairReadsRef->{9}}); ###why it is not equal to $X2? pls calculate it before it's deleted!!
-	    
+	    my %transPairSpecies9=%{$transPairSpeciesRef->{9}};
+	    my %transPairReads9=%{$transPairSpeciesRef->{9}};
 	    delete $transPairSpeciesRef->{9}; ##???
 	    delete $transPairReadsRef->{9};###???
 	    
@@ -870,6 +871,9 @@ sub ZscoreCal
 	    $std0=&restrict_num_decimal_digits($std0,3);
 	    $std1=&restrict_num_decimal_digits($std1,3);
 	    $std2=&restrict_num_decimal_digits($std2,3);
+	    
+	    %{$transPairSpeciesRef->{9}}=%transPairSpecies9;
+	    %{$transPairSpeciesRef->{9}}=%transPairReads9;
 	    
 	    return($Z0,$Z1,$Z2,$X0,$X1,$X2,$m0,$m1,$m2,$std0,$std1,$std2);
 }
