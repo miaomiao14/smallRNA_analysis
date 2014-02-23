@@ -726,11 +726,7 @@ sub PingPongProcessing
 	   #Z-score for pp6
 	  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$P10ofSpecies,$P10ofSpeciesCor,$P10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%pp6cisPairSpecies,\%pp6cisPair10Species,\%pp6cisPairReads,$count_N);
 	    #how to normalize $X0{$p}?
-	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\tcis\tpp6\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$P10ofSpecies\t$P10ofSpeciesCor\t$P10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n"; ##file2 is the guide and file1 is the target
-	   #Z-score for pp8
-	  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$P10ofSpecies,$P10ofSpeciesCor,$P10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%pp8allPairSpecies,\%pp8allPair10Species,\%pp8allPairReads,$count_N);
-	    #how to normalize $X0{$p}?
-	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\tcis\tpp6\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$P10ofSpecies\t$P10ofSpeciesCor\t$P10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n";	   
+	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\tcisAll\tpp6\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$P10ofSpecies\t$P10ofSpeciesCor\t$P10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n"; ##file2 is the guide and file1 is the target
 	   
 	   #Z-score for all cispairs; 
 	   foreach my $p (@matchedpairs)
@@ -741,14 +737,29 @@ sub PingPongProcessing
 	   }
 	   
 	   #Z-score for all transpairs; by species irrespective of coordinates
-	   
+	   my %transAllPairSpecies=();
 	   foreach my $p (@pairs)
 	   {
 	  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$P10ofSpecies,$P10ofSpeciesCor,$P10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%{$transPairSpecies{$p}},\%{$transPair10Species{$p}},\%{$transPairReads{$p}},$count_N0{$p});
 	    #how to normalize $X0{$p}?
+	    %transAllPairSpecies=(%transAllPairSpecies,%{$transPairSpecies{$p}});
+	    %transAllPair10Species=(%transAllPairSpecies,%{$transPair10Species{$p}});
+	    %transAllPairReads=(%transAllPairSpecies,%{$transPairReads{$p}});
 	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\ttrans\t$p\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$P10ofSpecies\t$P10ofSpeciesCor\t$P10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n"; ##file2 is the guide and file1 is the target
 	   }
-	   
+		
+		#Z-score for all trans pairs
+		my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$P10ofSpecies,$P10ofSpeciesCor,$P10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%transAllPairSpecies,\%transAllPair10Species,\%transAllPairReads,$count_N);
+	    #how to normalize $X0{$p}?
+	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\ttransAll\tpp8\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$P10ofSpecies\t$P10ofSpeciesCor\t$P10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n";	   
+		
+		
+		#Z-score for pp8
+	  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$P10ofSpecies,$P10ofSpeciesCor,$P10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%pp8allPairSpecies,\%pp8allPair10Species,\%pp8allPairReads,$count_N);
+	    #how to normalize $X0{$p}?
+	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\tall\tpp8\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$P10ofSpecies\t$P10ofSpeciesCor\t$P10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n";	   
+		
+
 	   $ppseq="$OUTDIR/$guideStrandFile.$targetStrandFile.ppseq";
 	   $seqFile="$OUTDIR/$guideStrandFile.seq";
 	   $NofPPreads=`match.pl $ppseq $seqFile | sumcol+ 2`; chomp($NofPPreads);
