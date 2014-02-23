@@ -344,9 +344,11 @@ for (my $i=0; $i<@inputfiles; $i++)
 		$std=&standard_deviation(values %score);
 		my $m=0;
 		$m=&mean(values %score);
+		my $N=0;
+		$N=scalar keys (%score);
 		if ( (scalar keys (%score))>9 && $std>0) { $Z=($X-$m)/$std;} else {$Z=-10;}
 		printf PPZ '%.2f', $Z;
-		print PPZ "\t$X\t$m\t$std\n";
+		print PPZ "\t$X\t$m\t$std\t$N\n";
 	}#i
 
 } #j

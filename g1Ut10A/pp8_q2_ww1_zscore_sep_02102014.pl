@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 BEGIN { unshift @INC,"/home/xuj1/bin/";}
-require "Statstics.pm";
+#require "Statstics.pm";
 require "Jia.pm";
 BEGIN { unshift @INC,"/home/wangw1/git/smallRNA_analysis/Utils/";}
 require "restrict_digts.pm";
@@ -872,7 +872,40 @@ sub ZscoreCal
 #remove intermediate files
 #`rm *.ebwt`;
 #`rm *.bowtie.out`;
+sub mean 
+{
+	my $count=0;
+	my(@numbers) =@_;
+	foreach (@_) { $count+=$_;}
+	return $count/(scalar @_);
+}
 
+sub standard_deviation 
+{
+	my(@numbers) = @_;
+	#Prevent division by 0 error in case you get junk data
+	return undef unless(scalar(@numbers));
+	
+	# Step 1, find the mean of the numbers
+	my $total1 = 0;
+	foreach my $num (@numbers) {
+	$total1 += $num;
+	}
+	my $mean1 = $total1 / (scalar @numbers);
+	
+	# Step 2, find the mean of the squares of the differences
+	# between each number and the mean
+	my $total2 = 0;
+	foreach my $num (@numbers) {
+	$total2 += ($mean1-$num)**2;
+	}
+	my $mean2 = $total2 / (scalar @numbers);
+	
+	# Step 3, standard deviation is the square root of the
+	# above mean
+	my $std_dev = sqrt($mean2);
+	return $std_dev;
+}
 
 
 sub usage
