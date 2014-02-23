@@ -517,12 +517,12 @@ sub PingPongProcessing
 	   
 	   foreach my $b (keys %{$firstBaseFraction{$guideStrandFile}})
 	   {
-	   		map {$pairedFirstBaseReads{$b}+=$_} values  %{$firstBaseFraction{$b}};
+	   		map {$pairedFirstBaseReads{$b}+=$_} values  %{$firstBaseFraction{$guideStrandFile}{$b}};
 	   		$pairedFirstBaseReadsTotal+=$pairedFirstBaseReads{$b};
-	   		$pairedFirstBaseSpecies{$b}=scalar (keys  %{$firstBaseFraction{$b}});
+	   		$pairedFirstBaseSpecies{$b}=scalar (keys  %{$firstBaseFraction{$guideStrandFile}{$b}});
 	   		$pairedFirstBaseSpeciesTotal+=$pairedFirstBaseSpecies{$b};
 	   		
-	   		
+	   		#$totalFirstBase{$file}{substr($seq,0,1)}{substr($seq,0,16)}+=$reads/$ntm;
 	   		#total
 	   		map {$totalFirstBaseReads{$b}+=$_} values %{$totalFirstBase{$guideStrandFile}{$b}};
 	   		$totalFirstBaseReadsTotal+= $totalFirstBaseReads{$b};
