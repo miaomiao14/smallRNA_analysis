@@ -7,7 +7,8 @@ use strict;
 use warnings;
 use File::Basename;
 use Compress::Zlib;
-
+BEGIN { unshift @INC,"/home/wangw1/git/smallRNA_analysis/Utils/";}
+require "restrict_digts.pm";
 my $parameters={};
 
 if(scalar(@ARGV)==0)
