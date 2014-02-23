@@ -724,7 +724,7 @@ sub PingPongProcessing
 	     
 	}#n=1..20
 	   $X=$score{9}; delete $score{9};
-	   $std=&std(values %score);
+	   $std=&standard_deviation(values %score);
 	   $m=&mean(values %score);
 	   if ($std>0 && $count_N>=5) { $Z=($X-$m)/$std;} else {$Z=-10;}
 	   $Z=&restrict_num_decimal_digits($Z,3);
