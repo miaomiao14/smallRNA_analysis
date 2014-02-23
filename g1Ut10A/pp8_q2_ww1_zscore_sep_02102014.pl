@@ -816,7 +816,7 @@ sub ZscoreCal
 	    my @numOfSpeciesCor=();
 	    my @numOfReads=();
 	    
-	    for(my $i=1;$i<=20;$i++)
+	    for(my $i=0;$i<20;$i++)
 	    {
 	    	my $n1=scalar (keys %{$transPairSpeciesRef->{$i}});
 	    	my $n2=scalar (keys %{$transPairReadsRef->{$i}});
@@ -843,7 +843,7 @@ sub ZscoreCal
 	    #to prove that $transPairReadsRef->{9} was deleted successfully
 	    #my $temp1=$#numOfSpecies+1;
 	    #my $temp2=$#numOfSpeciesCor+1;
-	    my $temp3=$#numOfReads+1;
+	    my $temp3=scalar (@numOfReads);
 	    
 	    
 	    $m0=&mean(@numOfSpecies);
