@@ -33,7 +33,7 @@ do
 	jobname=${t}_Ago3S_SiwiAS.pp8.q2
 	OUT=${OUTDIR}/${t}_Ago3S_SiwiAS
 	[ ! -d ${OUT} ] && mkdir -p ${OUT}
-	/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "${script} -i ${A} -j ${B} -n 2 -s bombyx -o ${OUT} -d ${indexFlag} -f normbed >${OUTDIR}/${t}_Ago3S_SiwiAS.pp8.q2.UA_VA.log"	
+	/home/wangw1/bin/submitsge 24 ${jobname} $OUTDIR "${script} -i ${A} -j ${B} -n 2 -s bombyx -o ${OUT} -d ${indexFlag} -f normbed >${OUTDIR}/${t}_Ago3S_SiwiAS.pp8.q2.UA_VA.log"	
 done
 fi
 [ $? == 0 ] && \
