@@ -738,13 +738,19 @@ sub PingPongProcessing
 	   
 	   #Z-score for all transpairs; by species irrespective of coordinates
 	   my %transAllPairSpecies=();
+	   my %transAllPair10Species=();
+	   my %transAllPairReads=();
+	   
 	   foreach my $p (@pairs)
 	   {
 	  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$P10ofSpecies,$P10ofSpeciesCor,$P10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%{$transPairSpecies{$p}},\%{$transPair10Species{$p}},\%{$transPairReads{$p}},$count_N0{$p});
 	    #how to normalize $X0{$p}?
-	    %transAllPairSpecies=(%transAllPairSpecies,%{$transPairSpecies{$p}});
-	    %transAllPair10Species=(%transAllPairSpecies,%{$transPair10Species{$p}});
-	    %transAllPairReads=(%transAllPairSpecies,%{$transPairReads{$p}});
+	    my $transPairSpeciesRef=\%{$transPairSpecies{$p}};
+	    my $transPair10SpeciesRef=\%{$transPair10Species{$p}};
+	    my $transPairReadsRef=\%{$transPairReads{$p}};
+	    %transAllPairSpecies=(%transAllPairSpecies,%{$transPairSpeciesRef});
+	    %transAllPair10Species=(%transAllPair10Species,%{$transPair10SpeciesRef});
+	    %transAllPairReads=(%transAllPairReads,%{$transPairReadsRef});
 	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\ttrans\t$p\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$P10ofSpecies\t$P10ofSpeciesCor\t$P10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n"; ##file2 is the guide and file1 is the target
 	   }
 		
@@ -873,7 +879,7 @@ sub ZscoreCal
 	    $std2=&restrict_num_decimal_digits($std2,3);
 	    
 	    %{$transPairSpeciesRef->{9}}=%transPairSpecies9;
-	    %{$transPairSpeciesRef->{9}}=%transPairReads9;
+	    %{$transPairReadsRef->{9}}=%transPairReads9;
 	    
 	    return($Z0,$Z1,$Z2,$X0,$X1,$X2,$m0,$m1,$m2,$std0,$std1,$std2);
 }
