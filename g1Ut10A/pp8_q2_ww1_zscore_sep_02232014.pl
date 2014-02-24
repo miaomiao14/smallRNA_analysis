@@ -31,6 +31,8 @@ use Compress::Zlib;
 #02/18/2014
 #add bed format
 
+#02/23/2014
+#normalize species, different from 02102014 version
 
 if(scalar(@ARGV)<6)
 {
@@ -423,13 +425,13 @@ sub PingPongProcessing
 			   
 		       
 			   $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]} ; #this was wrong, has to add {$n}, otherwise accumulative
-		       #the sum of $cisPairSpecies and $transPairSpecies irrespective of coordinates
+		       #the sum of $cisPairSpecies and $transPairSpecies taking coordinates
 		       $speciesn10{$g_0_nt.$t_9_nt}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]} if ($n==9); ###
 		       
 		       $allPairReads{$g_0_nt.$t_9_nt}{$n}+=$gttotal/$NTM{$l[2]};
 		       
-		       $pp8allPairReads{$n}{$l[2]}+=$gttotal/$NTM{$l[2]};
-		       $pp8allPairSpecies{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]};
+		       $pp8allPairReads{$n}{$l[2]}+=$gttotal/$NTM{$l[2]}; 
+		       $pp8allPairSpecies{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]};#no g1t10 as key compare to the species hash, that's why fewer species from this pp8allPairSpecies
 		       $pp8allPair10Species{$l[2]}+=$nnGcorTcor/$NTM{$l[2]} if($n==9) ;
 		       		     		       
 		       foreach my $record (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}} )
@@ -468,7 +470,6 @@ sub PingPongProcessing
 		       		}
 		       		else
 		       		{
-		       			#my $nTcor=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}});
 		       			#trans PingPong pair in species
 		       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nTcor/$NTM{$l[2]};
 		       			#trans PingPong pair in reads
