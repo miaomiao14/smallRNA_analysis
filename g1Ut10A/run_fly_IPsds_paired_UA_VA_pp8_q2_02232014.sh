@@ -254,7 +254,7 @@ then
 				jobname=${t}_${o}_Ago3_Aub.pp8.q2 && \
 				jOUT=${OUTDIR}/${t}_${o}_Ago3_Aub && \
 				[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
-				/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "$script ${A} ${B} 2 fly ${jOUT} ${indexFlag} >${jOUT}/${t}_${o}_Ago3_Aub.pp8.q2.UA_VA_cis_trans.log"
+				/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "$script -i ${A} -j ${B} -n 2 -s fly -o ${jOUT} -d ${indexFlag} -f normbed >${jOUT}/${t}_${o}_Ago3_Aub.pp8.q2.UA_VA_cis_trans.log"
 	
 		done
 	done
