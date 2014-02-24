@@ -33,7 +33,7 @@ LOG=${OUT}/log
 declare -a GT=("ago3Hets" "aubHets" "qinHets" "wt")
 declare -a OX=("unox")
 declare -a UNIQ=("uniq")
-OUTDIR=/home/wangw1/isilon_temp/ipsmRNA/jia_pipeline_results/transposon_piRNA/UA_VA_cistrans_allpiRNAs_exclude_Piwi
+OUTDIR=/home/wangw1/isilon_temp/ipsmRNA/transposon_piRNA/UA_VA_cistrans_allpiRNAs_exclude_Piwi
 [ ! -d ${OUTDIR} ] && mkdir $OUTDIR
 #touch ${OUT}/.status.${STEP}.all_piRNA_exclude_Piwi.UA_VA
 if [ ! -f ${OUT}/.status.${STEP}.all_piRNA_exclude_Piwi.UA_VA_cistrans ]
