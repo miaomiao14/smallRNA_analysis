@@ -421,7 +421,7 @@ sub PingPongProcessing
 			   
 			   #how many of species start with U?
 			   $firstBaseFraction{$guideStrandFile}{$g_0_nt}{$l[2]}+=$guidetotal/$NTM{$l[2]} ;
-			   $tenthBaseFraction{$targetStrandFile}{$t_9_nt}{$l[1]}+=$targettotal;
+			   $tenthBaseFraction{$targetStrandFile}{$t_9_nt}{$l[1]}=$targettotal;#should not be accumulative
 			   
 		       
 			   $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]} ; #this was wrong, has to add {$n}, otherwise accumulative
@@ -498,7 +498,7 @@ sub PingPongProcessing
 		       $score{$n}+=$gttotal/$NTM{$l[2]}; #total pp8 ppscore
 		       
 		       $firstBaseFraction{$guideStrandFile}{$g_0_nt}{$l[2]}+=$guidetotal/$NTM{$l[2]} ;
-		       $tenthBaseFraction{$targetStrandFile}{$t_9_nt}{$l[1]}+=$targettotal;
+		       $tenthBaseFraction{$targetStrandFile}{$t_9_nt}{$l[1]}=$targettotal; #shoud not be accumulative, as one index can appear many times
 		        		       
 		       $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]}  ;###species of seq pairs, not count different coordinates
 		       $speciesn10{$g_0_nt.$t_9_nt}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]}  if ($n==9); ###species of seq pairs, not count different coordinates
@@ -595,6 +595,7 @@ sub PingPongProcessing
 	   {
 	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$tenthBaseFraction{$targetStrandFile}{$b}};
 	   		$pairedTenthBaseReadsTotal+=$pairedTenthBaseReads{$b};
+	   		#species
 	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$tenthBaseFraction{$targetStrandFile}{$b}});
 	   		$pairedTenthBaseSpeciesTotal+=$pairedTenthBaseSpecies{$b};
 	   		
@@ -602,6 +603,7 @@ sub PingPongProcessing
 	   		#total
 	   		map {$totalTenthBaseReads{$b}+=$_} values %{$totalTenthBase{$targetStrandFile}{$b}};
 	   		$totalTenthBaseReadsTotal+= $totalTenthBaseReads{$b};
+	   		#species
 	   		$totalTenthBaseSpecies{$b}=scalar (keys %{$totalTenthBase{$targetStrandFile}{$b}});
 	   		$totalTenthBaseSpeciesTotal+= $totalTenthBaseSpecies{$b};
 	   }
