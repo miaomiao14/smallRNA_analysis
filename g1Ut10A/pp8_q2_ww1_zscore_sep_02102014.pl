@@ -356,6 +356,11 @@ sub PingPongProcessing
 	my %pp8allPairSpecies=();
 	my %pp8allPair10Species=();
 	my %pp8allPairReads=();
+	my %transallPairSpecies=();
+	my %transallPair10Species=();
+	my %transallPairReads=();
+	
+	
 	my %firstBaseFraction=();
 	my %tenthBaseFraction=();
 	
@@ -453,7 +458,9 @@ sub PingPongProcessing
 		       			#trans PingPong pair in reads
 		       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*($targettotal - $targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"})/$NTM{$l[2]};
 		       			
-		       			
+		       			$transallPairSpecies{$n}{$l[2]}=$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]};
+						$transallPair10Species{$n}{$l[2]}=$transPair10Species{$g_0_nt.$t_9_nt}{$l[2]};
+						$transallPairReads{$n}{$l[2]}=$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]};
 		       			
 		       			
 		       		}
@@ -464,6 +471,10 @@ sub PingPongProcessing
 		       			#trans PingPong pair in reads
 		       			$transPair10Species{$g_0_nt.$t_9_nt}{$l[2]}+=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}}) if($n==9) ;
 		       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targettotal/$NTM{$l[2]};
+		       			
+		       			$transallPairSpecies{$n}{$l[2]}=$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]};
+						$transallPair10Species{$n}{$l[2]}=$transPair10Species{$g_0_nt.$t_9_nt}{$l[2]};
+						$transallPairReads{$n}{$l[2]}=$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]};
 		       		}
 
 		       }
@@ -500,6 +511,11 @@ sub PingPongProcessing
 		       $transPair10Species{$g_0_nt.$t_9_nt}{$l[2]}=$nGcor*$nTcor if($n==9);
 		       #trans PingPong pair in reads
 		       $transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidetotal*$targettotal/$NTM{$l[2]};
+		       
+		       
+		       $transallPairSpecies{$n}{$l[2]}=$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]};
+			   $transallPair10Species{$n}{$l[2]}=$transPair10Species{$g_0_nt.$t_9_nt}{$l[2]};
+			   $transallPairReads{$n}{$l[2]}=$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]};
 		       
 		       print PPSEQ "$l[2]\n" if ($n==9);
 			}
@@ -745,20 +761,14 @@ sub PingPongProcessing
 	   {
 	  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$P10ofSpecies,$P10ofSpeciesCor,$P10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%{$transPairSpecies{$p}},\%{$transPair10Species{$p}},\%{$transPairReads{$p}},$count_N0{$p});
 	    #how to normalize $X0{$p}?
-	    my $transPairSpeciesRef=\%{$transPairSpecies{$p}};
-	    my $transPair10SpeciesRef=\%{$transPair10Species{$p}};
-	    my $transPairReadsRef=\%{$transPairReads{$p}};
-	    %transAllPairSpecies=(%transAllPairSpecies,%{$transPairSpeciesRef});
-	    %transAllPair10Species=(%transAllPair10Species,%{$transPair10SpeciesRef});
-	    %transAllPairReads=(%transAllPairReads,%{$transPairReadsRef});
 	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\ttrans\t$p\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$P10ofSpecies\t$P10ofSpeciesCor\t$P10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n"; ##file2 is the guide and file1 is the target
 	   }
 		
 		#Z-score for all trans pairs
-		my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$P10ofSpecies,$P10ofSpeciesCor,$P10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%transAllPairSpecies,\%transAllPair10Species,\%transAllPairReads,$count_N);
+		my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$P10ofSpecies,$P10ofSpeciesCor,$P10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%transallPairSpecies,\%transallPair10Species,\%transallPairReads,$count_N);
 	    #how to normalize $X0{$p}?
 	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\ttransAll\tpp8\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$P10ofSpecies\t$P10ofSpeciesCor\t$P10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n";	   
-		
+
 		
 		#Z-score for pp8
 	  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$P10ofSpecies,$P10ofSpeciesCor,$P10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%pp8allPairSpecies,\%pp8allPair10Species,\%pp8allPairReads,$count_N);
