@@ -100,7 +100,7 @@ declare -a UNIQ=("uniq")
 #shared
 indexFlag=1 #to indicate we need to build the index or not
 	
-#touch ${OUT}/.status.${STEP}.transposon_piRNA.UA_VA_cis_trans
+touch ${OUT}/.status.${STEP}.transposon_piRNA.UA_VA_cis_trans
 if [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.UA_VA_cis_trans ] 
 then
 for t in ${GT[@]}
