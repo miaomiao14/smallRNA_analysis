@@ -468,14 +468,15 @@ sub PingPongProcessing
 		       		}
 		       		else
 		       		{
+		       			#my $nTcor=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}});
 		       			#trans PingPong pair in species
-		       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}});
+		       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nTcor;
 		       			#trans PingPong pair in reads
-		       			$transPair10Species{$g_0_nt.$t_9_nt}{$l[2]}+=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}}) if($n==9) ;
+		       			$transPair10Species{$g_0_nt.$t_9_nt}{$l[2]}+=$nTcor if($n==9) ;
 		       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targettotal/$NTM{$l[2]};
 		       			
-		       			$transallPairSpecies{$n}{$l[2]}+=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}});
-						$transallPair10Species{$n}{$l[2]}+=scalar(keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}}) if($n==9);
+		       			$transallPairSpecies{$n}{$l[2]}+=$nTcor;
+						$transallPair10Species{$n}{$l[2]}+=$nTcor if($n==9);
 						$transallPairReads{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targettotal/$NTM{$l[2]};
 		       		}
 
@@ -517,7 +518,7 @@ sub PingPongProcessing
 		       
 		       $transallPairSpecies{$n}{$l[2]}+=$nnGcorTcor;
 			   $transallPair10Species{$n}{$l[2]}+=$nnGcorTcor if($n==9);
-			   $transallPairReads{$n}{$l[2]}=$gttotal/$NTM{$l[2]};
+			   $transallPairReads{$n}{$l[2]}+=$gttotal/$NTM{$l[2]};
 		       
 		       print PPSEQ "$l[2]\n" if ($n==9);
 			}
@@ -746,7 +747,7 @@ sub PingPongProcessing
 	    #how to normalize $X0{$p}?
 	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\tcisAll\tpp6\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$P10ofSpecies\t$P10ofSpeciesCor\t$P10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n"; ##file2 is the guide and file1 is the target
 	   
-	   #Z-score for all cispairs; 
+	   #Z-score for individual cispairs; 
 	   foreach my $p (@matchedpairs)
 	   {
 	  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$P10ofSpecies,$P10ofSpeciesCor,$P10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%{$cisPairSpecies{$p}},\%{$cisPair10Species{$p}},\%{$cisPairReads{$p}},$count_N0{$p});
@@ -754,11 +755,7 @@ sub PingPongProcessing
 	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\tcis\t$p\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$P10ofSpecies\t$P10ofSpeciesCor\t$P10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n"; ##file2 is the guide and file1 is the target
 	   }
 	   
-	   #Z-score for all transpairs; by species irrespective of coordinates
-	   my %transAllPairSpecies=();
-	   my %transAllPair10Species=();
-	   my %transAllPairReads=();
-	   
+	   #Z-score for individual transpairs; by species irrespective of coordinates	   
 	   foreach my $p (@pairs)
 	   {
 	  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$P10ofSpecies,$P10ofSpeciesCor,$P10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%{$transPairSpecies{$p}},\%{$transPair10Species{$p}},\%{$transPairReads{$p}},$count_N0{$p});
