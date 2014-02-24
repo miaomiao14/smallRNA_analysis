@@ -7,7 +7,7 @@ export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 INDIR=/home/wangw1/isilon_temp/BmN4
 LOG=${INDIR}/LOG
 indexFlag=$1
-script=${PIPELINE_DIRECTORY}/g1Ut10A/pp8_q2_ww1_zscore_sep_02102014.pl
+script=${PIPELINE_DIRECTORY}/g1Ut10A/pp8_q2_ww1_zscore_sep_02232014.pl
 STEP=1
 
 #converting to mapper2 to norm.bed format,by mapper2normbed.pl
