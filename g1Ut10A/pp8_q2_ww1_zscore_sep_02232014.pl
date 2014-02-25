@@ -1,9 +1,8 @@
 #!/usr/bin/perl
-BEGIN { unshift @INC,"/home/xuj1/bin/";}
-#require "Statstics.pm";
-require "Jia.pm";
+
 BEGIN { unshift @INC,"/home/wangw1/git/smallRNA_analysis/Utils/";}
 require "restrict_digts.pm";
+require "Jia.pm";
 use File::Basename;
 use Compress::Zlib;
 # rule is p1 and p17-21 doesn't need to pair but p2-16 need
