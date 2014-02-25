@@ -359,20 +359,30 @@ sub PingPongProcessing
 	my %count_N0=();
 	my %species=(); 
 	my %speciesn10=();
-	my %cisPairSpecies=(); my %cisPairReads=(); my %transPairSpecies=(); my %transPairReads=();my %cisPair10Species=();my %transPair10Species=();
+	
+	my %cisPairSpecies=();
+	my %cisPair10Species=();
+	my %cisPairReads=();
+	
+	my %transPairSpecies=();
+	my %transPair10Species=();
+	my %transPairReads=();
+	
+	
 	my %pp6cisPairSpecies=();
 	my %pp6cisPair10Species=();
 	my %pp6cisPairReads=();
+	
 	my %pp8allPairSpecies=();
 	my %pp8allPair10Species=();
 	my %pp8allPairReads=();
+	
 	my %transallPairSpecies=();
 	my %transallPair10Species=();
 	my %transallPairReads=();
 	
 	
-	my %firstBaseFraction=();
-	my %tenthBaseFraction=();
+
 	
 	open ZSCORE, ">$OUTDIR/$guideStrandFile.$targetStrandFile.zscore.out";
 	open ZSCOREUA, ">$OUTDIR/$guideStrandFile.$targetStrandFile.UA_VA.zscore.out";
@@ -386,6 +396,8 @@ sub PingPongProcessing
 	
 	foreach ($n=0;$n<20;$n++)
 	{
+		my %firstBaseFraction=();
+		my %tenthBaseFraction=();
 		# file1 as ref
 		$indexb="$OUTDIR/$targetStrandFile.$n";
 		$seqFile="$OUTDIR/$guideStrandFile.seq";
