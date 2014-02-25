@@ -428,7 +428,8 @@ sub PingPongProcessing
 			   $score{$n}+=$gttotal/$NTM{$l[2]}; #total pp8 ppscore
 			   
 			   #how many of species start with U?
-			   $firstBaseFraction{$guideStrandFile}{$g_0_nt}{$l[2]}+=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}/$NTM{$l[2]} ;
+			   #$firstBaseFraction{$guideStrandFile}{$g_0_nt}{$l[2]}+=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}/$NTM{$l[2]} ;
+		       $firstBaseFraction{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]};
 			   $tenthBaseFraction{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}=$totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]};#should not be accumulative
 			   
 			   #$totalTenthBase{$file}{$n}{substr($str,9,1)}{$str}
@@ -507,7 +508,8 @@ sub PingPongProcessing
 		       
 		       $score{$n}+=$gttotal/$NTM{$l[2]}; #total pp8 ppscore
 		       
-		       $firstBaseFraction{$guideStrandFile}{$g_0_nt}{$l[2]}+=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}/$NTM{$l[2]} ;
+		       #$firstBaseFraction{$guideStrandFile}{$g_0_nt}{$l[2]}+=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}/$NTM{$l[2]} ;
+		       $firstBaseFraction{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]};
 			   $tenthBaseFraction{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}=$totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]};#should not be accumulative
 		        		       
 		       $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]}  ;###species of seq pairs, not count different coordinates
