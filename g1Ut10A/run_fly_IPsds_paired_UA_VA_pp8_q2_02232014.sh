@@ -19,7 +19,7 @@ indexFlag=$1 #this is the folder store all pipeline results outmost folders
 
 STEP=1
 
-script=${PIPELINE_DIRECTORY}/g1Ut10A/pp8_q2_ww1_zscore_sep_02232014.pl
+script=${PIPELINE_DIRECTORY}/g1Ut10A/pp8_q2_ww1_zscore_sep_02252014.pl
 
 #run UA_VA analysis
 #separate sense and antisense from normbed
