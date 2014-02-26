@@ -147,7 +147,7 @@ if($indexFlag)
 				{
 					print OUT ">$prefix\t$targetpf{$file}{$n}{$prefix}\n$prefix\n" if (length($prefix)==16);
 				}
-				`bowtie-build $fa $indexb && rm $fa`;
+				`[ ! -s $indexb ] && bowtie-build $fa $indexb && rm $fa`;
 	
 			}#for loop of the n
 		}#if the total
@@ -168,7 +168,7 @@ else #if indexFlag
    		&InputFileProcessing($inputfiles[$i],$file);
 	}#for loop of the file
 }#else indexFlag
-
+`rm *.fa`;
 #main
 open PPZ, ">$OUTDIR/zscore.toofewreads.out";
 # bowtie mapping and score calculating
@@ -511,4 +511,5 @@ sub parse_command_line {
                 else{ print "Invalid argument: $next_arg"; usage(); }
         }
 }
+
 
