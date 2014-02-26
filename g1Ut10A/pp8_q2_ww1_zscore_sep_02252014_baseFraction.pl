@@ -452,7 +452,8 @@ sub PingPongProcessing
 		$totalFirstBaseReadsTotal=&restrict_num_decimal_digits($totalFirstBaseReadsTotal,4);
 		$totalTenthBaseSpeciesTotal=&restrict_num_decimal_digits($totalTenthBaseSpeciesTotal,4);
 		$totalTenthBaseReadsTotal=&restrict_num_decimal_digits($totalTenthBaseReadsTotal,4);
-				
+		
+		$m=$n+1;	
 		my @bases=("A","C","G","T");
 		print PPUAFRACTION "$m\ttotal\tg1\t$pairedFirstBaseSpeciesTotal\t$totalFirstBaseSpeciesTotal\t$pairedFirstBaseReadsTotal\t$totalFirstBaseReadsTotal\n";
 		
