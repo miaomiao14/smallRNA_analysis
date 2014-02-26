@@ -195,15 +195,13 @@ for ($i=0; $i<$numOfInput; $i++)
 
 
    
-		if ($total{$file1}<10 || $total{$file2}<10) {print PPZ "$file2-$file1\t-10\n";} #only when consider per cluster or per transposon family
-		else
-		{
+
 			&PingPongProcessing($file2,$file1);
 			if($file1 ne $file2 ) #added on 11/14/2013
 			{   				
 			   &PingPongProcessing($file1,$file2);    
 			}#when file1 and file2 are the same the second iteration is skipped
-		}#ifelse: total reads>10 
+
 
 	}#j
 }#i
