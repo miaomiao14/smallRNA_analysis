@@ -420,20 +420,20 @@ sub PingPongProcessing
 	   my $totalTenthBaseSpeciesTotal=0;
 	   my %totalTenthBaseSpeciesF=();
 	   
-	   foreach my $b (keys %{$pairedTenthBase{$targetStrandFile}{$n}})
+	   foreach my $b (keys %{$pairedTenthBase{$targetStrandFile}})
 	   {
-	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}};
+	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$pairedTenthBase{$targetStrandFile}{$b}};
 	   		$pairedTenthBaseReadsTotal+=$pairedTenthBaseReads{$b};
 	   		#species
-	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}});
+	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$pairedTenthBase{$targetStrandFile}{$b}});
 	   		$pairedTenthBaseSpeciesTotal+=$pairedTenthBaseSpecies{$b};
 	   		
 	   		#$totalTenthBase{$file}{substr($seq,0,1)}{substr($seq,0,16)}+=$reads/$ntm;
 	   		#total
-	   		map {$totalTenthBaseReads{$b}+=$_} values %{$totalTenthBase{$targetStrandFile}{$n}{$b}};
+	   		map {$totalTenthBaseReads{$b}+=$_} values %{$totalTenthBase{$targetStrandFile}{$b}};
 	   		$totalTenthBaseReadsTotal+= $totalTenthBaseReads{$b};
 	   		#species
-	   		$totalTenthBaseSpecies{$b}=scalar (keys %{$totalTenthBase{$targetStrandFile}{$n}{$b}});
+	   		$totalTenthBaseSpecies{$b}=scalar (keys %{$totalTenthBase{$targetStrandFile}{$b}});
 	   		$totalTenthBaseSpeciesTotal+= $totalTenthBaseSpecies{$b};
 	   }
 	   foreach my $b (keys  %pairedTenthBaseReads)
