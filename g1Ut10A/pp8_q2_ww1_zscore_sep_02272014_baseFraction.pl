@@ -343,7 +343,7 @@ sub PingPongProcessing
 			   	#how many of species start with U?
 			   	#$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}+=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}/$NTM{$l[2]} ;
 		       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]};
-			   	$pairedExpectedTenthBase{$guideStrandFile}{$n}{$g_0_nt}{$l[1]}=$totalExpectedTenthBase{$guideStrandFile}{$n}{$g_0_nt}{$l[1]} if($totalExpectedTenthBase{$guideStrandFile}{$n}{$g_0_nt}{$l[1]});#should not be accumulative
+			   	$pairedExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]});#should not be accumulative
 			   	# expect to give the same results as %pairedTenthBase
 				my $str=&revfa($l[1]);
 				$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str}=$totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str} if($totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str});#should not be accumulative			 
@@ -360,7 +360,7 @@ sub PingPongProcessing
 		       
 		       #$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}+=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}/$NTM{$l[2]} ;
 		       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]};
-			   	$pairedExpectedTenthBase{$guideStrandFile}{$n}{$g_0_nt}{$l[1]}=$totalExpectedTenthBase{$guideStrandFile}{$n}{$g_0_nt}{$l[1]} if($totalExpectedTenthBase{$guideStrandFile}{$n}{$g_0_nt}{$l[1]});#should not be accumulative
+			   	$pairedExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]});#should not be accumulative
 			   	# expect to give the same results as %pairedTenthBase
 				my $str=&revfa($l[1]);
 				$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str}=$totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str} if($totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str});#should not be accumulative			 
