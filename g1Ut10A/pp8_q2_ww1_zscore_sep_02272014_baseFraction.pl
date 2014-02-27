@@ -313,10 +313,10 @@ sub PingPongProcessing
 		# file1 as ref
 		$indexb="$OUTDIR/$targetStrandFile.$n";
 		$seqFile="$OUTDIR/$guideStrandFile.seq";
-		$bowtieOut="$OUTDIR/$guideStrandFile.$targetStrandFile.$n.bowtie.out";
+		$bowtieOut="$OUTDIR/$guideStrandFile.$targetStrandFile.$n.bowtie.20.out";
 	 	`[ ! -f $bowtieOut ] && bowtie $indexb -r -a -v 1 -p 8 $seqFile --suppress 1,4,6,7 | grep + > $bowtieOut`;
 	   	my %NTM=();
-	   	open IN, "$OUTDIR/$guideStrandFile.$targetStrandFile.$n.bowtie.out";
+	   	open IN, "$OUTDIR/$guideStrandFile.$targetStrandFile.$n.bowtie.20.out";
 	   	while(my $line=<IN>)
 	   	{
 		   	chomp $line;
@@ -328,7 +328,7 @@ sub PingPongProcessing
 		   	$NTM{$l[2]}++;
 	   	}
 	   	close(IN);
-	   	open IN, "$OUTDIR/$guideStrandFile.$targetStrandFile.$n.bowtie.out";
+	   	open IN, "$OUTDIR/$guideStrandFile.$targetStrandFile.$n.bowtie.20.out";
 	   	while(my $line=<IN>)
 	   	{
 	      	chomp $line;
