@@ -146,7 +146,7 @@ if($indexFlag)
 			for ($n=0;$n<20;$n++)
 			{
 				$fa="$OUTDIR/$file.ref.$n.fa";
-				$indexb="$OUTDIR/$file.$n";
+				$indexb="$OUTDIR/$file.20.$n";
 				open OUT, ">$fa";
 				foreach my $prefix (keys %{$targetpf{$file}{$n}})
 				{
@@ -311,7 +311,7 @@ sub PingPongProcessing
 		my %pairedTenthBase=();
 		my %pairedExpectedTenthBase=();
 		# file1 as ref
-		$indexb="$OUTDIR/$targetStrandFile.$n";
+		$indexb="$OUTDIR/$targetStrandFile.20.$n";
 		$seqFile="$OUTDIR/$guideStrandFile.seq";
 		$bowtieOut="$OUTDIR/$guideStrandFile.$targetStrandFile.$n.bowtie.20.out";
 	 	`[ ! -f $bowtieOut ] && bowtie $indexb -r -a -v 1 -p 8 $seqFile --suppress 1,4,6,7 | grep + > $bowtieOut`;
