@@ -169,7 +169,7 @@ else #if indexFlag
    		&InputFileProcessing($inputfiles[$i],$file);
 	}#for loop of the file
 }#else indexFlag
-`rm *.fa`;
+#`rm *.fa`;
 #main
 open PPZ, ">$OUTDIR/zscore.toofewreads.out";
 # bowtie mapping and score calculating
