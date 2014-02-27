@@ -257,7 +257,7 @@ sub InputFileProcessing
 		my $fiveend=0;	      
 		if($strand eq '+')
 		{	
-			$totalTenthBase{$file}{$n}{substr($seq,$n,1)}{substr($seq,0,20)}+=$reads/$ntm;
+			
 			if($fileFormat eq "bed")
 			{ 
 				$fiveend=$bedstart; #0-based,closed
@@ -284,6 +284,7 @@ sub InputFileProcessing
       
       	for (my $n=0;$n<20;$n++)
       	{
+      		$totalTenthBase{$file}{$n}{substr($seq,$n,1)}{substr($seq,0,20)}+=$reads/$ntm;
       		my $start=0;
       		my $fiveend=0;
         	if ($strand eq '+') #target strand information
@@ -379,7 +380,7 @@ sub PingPongProcessing
 			   
 			   	#how many of species start with U?
 			   	#$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}+=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}/$NTM{$l[2]} ;
-		       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]};
+		       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]} if($totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]});
 			   	$pairedExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]});#should not be accumulative
 			   	# expect to give the same results as %pairedTenthBase
 				my $str=&revfa($l[1]);
@@ -396,7 +397,7 @@ sub PingPongProcessing
 		      
 		       
 		       #$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}+=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}/$NTM{$l[2]} ;
-		       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]};
+		       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]} if($totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]});
 			   	$pairedExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]});#should not be accumulative
 			   	# expect to give the same results as %pairedTenthBase
 				my $str=&revfa($l[1]);
