@@ -106,6 +106,7 @@ my @pairs=("AT","TA","GC","CG","AA","AC","AG","CA","CC","CT","GA","GG","GT","TC"
 
 my %totalFirstBase=();
 my %totalTenthBase=();
+my %totalExpectedTenthBase=();
 
 my %totalFirstBaseSpecies=();
 my %totalTenthBaseSpecies=();
@@ -196,7 +197,7 @@ for ($i=0; $i<$numOfInput; $i++)
 
    
 
-			&PingPongProcessing($file2,$file1);
+			&PingPongProcessing($file2,$file1); #we started from targets and extent the seq to find its reverse complementary guide with certain n of overlap
 			if($file1 ne $file2 ) #added on 11/14/2013
 			{   				
 			   &PingPongProcessing($file1,$file2);    
@@ -238,7 +239,7 @@ sub InputFileProcessing
 
 		
 		$totalFirstBase{$file}{substr($seq,0,1)}{substr($seq,0,16)}+=$reads/$ntm;
-
+		$totalTenthBase{$file}{substr($seq,9,1)}{substr($seq,0,16)}+=$reads/$ntm;
 
       	for (my $n=0;$n<20;$n++)
       	{
@@ -261,7 +262,7 @@ sub InputFileProcessing
 	            $str=&revfa($str);
 
 	            
-	            $totalTenthBase{$file}{$n}{substr($str,9,1)}{$str}+=$reads/$ntm;
+	            $totalExpectedTenthBase{$file}{$n}{substr($str,9,1)}{$str}+=$reads/$ntm;
 	            
         	}
          	else
@@ -280,7 +281,7 @@ sub InputFileProcessing
 
 
 	            
-	            $totalTenthBase{$file}{$n}{substr($str,9,1)}{$str}+=$reads/$ntm;
+	            $totalExpectedTenthBase{$file}{$n}{substr($str,9,1)}{$str}+=$reads/$ntm;
 	            
         	}#ifelse
       	}#for
@@ -300,8 +301,9 @@ sub PingPongProcessing
 	
 	foreach ($n=0;$n<20;$n++)
 	{
-		my %firstBaseFraction=();
-		my %tenthBaseFraction=();
+		my %pairedFirstBase=();
+		my %pairedTenthBase=();
+		#my %pairedExpectedTenthBase=();
 		# file1 as ref
 		$indexb="$OUTDIR/$targetStrandFile.$n";
 		$seqFile="$OUTDIR/$guideStrandFile.seq";
@@ -329,14 +331,15 @@ sub PingPongProcessing
 	      	if ($l[3] eq "")
 	      	{
 	      	
-	      	   $g_0_nt=substr($l[2],0,1); $t_9_nt=&revfa($g_0_nt);  ##here are different from pp8_q2_ww1.pl
+	      	   	$g_0_nt=substr($l[2],0,1); $t_9_nt=&revfa($g_0_nt);  ##here are different from pp8_q2_ww1.pl
 
 			   
-			   #how many of species start with U?
-			   #$firstBaseFraction{$guideStrandFile}{$g_0_nt}{$l[2]}+=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}/$NTM{$l[2]} ;
-		       $firstBaseFraction{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]};
-			   $tenthBaseFraction{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}=$totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]};#should not be accumulative
-			 
+			   	#how many of species start with U?
+			   	#$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}+=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}/$NTM{$l[2]} ;
+		       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]};
+			   	#$pairedExpectedTenthBase{$guideStrandFile}{$n}{$t_9_nt}{$l[1]}=$totalExpectedTenthBase{$guideStrandFile}{$n}{$t_9_nt}{$l[1]} if($totalExpectedTenthBase{$guideStrandFile}{$n}{$t_9_nt}{$l[1]});#should not be accumulative
+				my $str=&revfa($l[1]);
+				$pairedTenthBase{$targetStrandFile}{$t_9_nt}{$str}=$totalTenthBase{$targetStrandFile}{$t_9_nt}{$str} if($totalTenthBase{$targetStrandFile}{$t_9_nt}{$str});#should not be accumulative			 
 	      	}#perfect pair
 
 	      	elsif ($l[3]=~/(\d+):(\w)>(\w)/)
@@ -348,9 +351,11 @@ sub PingPongProcessing
 		       $t_9_nt=&revfa($2);
 		      
 		       
-		       #$firstBaseFraction{$guideStrandFile}{$g_0_nt}{$l[2]}+=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}/$NTM{$l[2]} ;
-		       $firstBaseFraction{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]};
-			   $tenthBaseFraction{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}=$totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]};#should not be accumulative
+		       #$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}+=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}/$NTM{$l[2]} ;
+		       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]};
+			   	my $str=&revfa($l[1]);
+				$pairedTenthBase{$targetStrandFile}{$t_9_nt}{$str}=$totalTenthBase{$targetStrandFile}{$t_9_nt}{$str} if($totalTenthBase{$targetStrandFile}{$t_9_nt}{$str});#should not be accumulative			 
+
 		      
 			}
 		} #while
@@ -373,11 +378,11 @@ sub PingPongProcessing
 	   my $totalFirstBaseSpeciesTotal=0;
 	   my %totalFirstBaseSpeciesF=();
 	   
-	   foreach my $b (keys %{$firstBaseFraction{$guideStrandFile}})
+	   foreach my $b (keys %{$pairedFirstBase{$guideStrandFile}})
 	   {
-	   		map {$pairedFirstBaseReads{$b}+=$_} values  %{$firstBaseFraction{$guideStrandFile}{$b}};
+	   		map {$pairedFirstBaseReads{$b}+=$_} values  %{$pairedFirstBase{$guideStrandFile}{$b}};
 	   		$pairedFirstBaseReadsTotal+=$pairedFirstBaseReads{$b};
-	   		$pairedFirstBaseSpecies{$b}=scalar (keys  %{$firstBaseFraction{$guideStrandFile}{$b}});
+	   		$pairedFirstBaseSpecies{$b}=scalar (keys  %{$pairedFirstBase{$guideStrandFile}{$b}});
 	   		$pairedFirstBaseSpeciesTotal+=$pairedFirstBaseSpecies{$b};
 	   		
 	   		#$totalFirstBase{$file}{substr($seq,0,1)}{substr($seq,0,16)}+=$reads/$ntm;
@@ -415,12 +420,12 @@ sub PingPongProcessing
 	   my $totalTenthBaseSpeciesTotal=0;
 	   my %totalTenthBaseSpeciesF=();
 	   
-	   foreach my $b (keys %{$tenthBaseFraction{$targetStrandFile}{$n}})
+	   foreach my $b (keys %{$pairedTenthBase{$targetStrandFile}{$n}})
 	   {
-	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$tenthBaseFraction{$targetStrandFile}{$n}{$b}};
+	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}};
 	   		$pairedTenthBaseReadsTotal+=$pairedTenthBaseReads{$b};
 	   		#species
-	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$tenthBaseFraction{$targetStrandFile}{$n}{$b}});
+	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}});
 	   		$pairedTenthBaseSpeciesTotal+=$pairedTenthBaseSpecies{$b};
 	   		
 	   		#$totalTenthBase{$file}{substr($seq,0,1)}{substr($seq,0,16)}+=$reads/$ntm;
