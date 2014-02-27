@@ -434,20 +434,20 @@ sub PingPongProcessing
 	   my $totalTenthBaseSpeciesTotal=0;
 	   my %totalTenthBaseSpeciesF=();
 	   
-	   foreach my $b (keys %{$pairedTenthBase{$targetStrandFile}})
+	   foreach my $b (keys %{$pairedTenthBase{$targetStrandFile}{$n}})
 	   {
-	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$pairedTenthBase{$targetStrandFile}{$b}};
+	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}};
 	   		$pairedTenthBaseReadsTotal+=$pairedTenthBaseReads{$b};
 	   		#species
-	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$pairedTenthBase{$targetStrandFile}{$b}});
+	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}});
 	   		$pairedTenthBaseSpeciesTotal+=$pairedTenthBaseSpecies{$b};
 	   		
 	   		#$totalTenthBase{$file}{substr($seq,0,1)}{substr($seq,0,20)}+=$reads/$ntm;
 	   		#total
-	   		map {$totalTenthBaseReads{$b}+=$_} values %{$totalTenthBase{$targetStrandFile}{$b}};
+	   		map {$totalTenthBaseReads{$b}+=$_} values %{$totalTenthBase{$targetStrandFile}{$n}{$b}};
 	   		$totalTenthBaseReadsTotal+= $totalTenthBaseReads{$b};
 	   		#species
-	   		$totalTenthBaseSpecies{$b}=scalar (keys %{$totalTenthBase{$targetStrandFile}{$b}});
+	   		$totalTenthBaseSpecies{$b}=scalar (keys %{$totalTenthBase{$targetStrandFile}{$n}{$b}});
 	   		$totalTenthBaseSpeciesTotal+= $totalTenthBaseSpecies{$b};
 	   }
 	   foreach my $b (keys  %pairedTenthBaseReads)
@@ -486,20 +486,20 @@ sub PingPongProcessing
 	   my $totalExpectedTenthBaseSpeciesTotal=0;
 	   my %totalExpectedTenthBaseSpeciesF=();
 	   
-	   foreach my $b (keys %{$pairedExpectedTenthBase{$targetStrandFile}})
+	   foreach my $b (keys %{$pairedExpectedTenthBase{$targetStrandFile}{$n}})
 	   {
-	   		map {$pairedExpectedTenthBaseReads{$b}+=$_} values  %{$pairedExpectedTenthBase{$targetStrandFile}{$b}};
+	   		map {$pairedExpectedTenthBaseReads{$b}+=$_} values  %{$pairedExpectedTenthBase{$targetStrandFile}{$n}{$b}};
 	   		$pairedExpectedTenthBaseReadsTotal+=$pairedExpectedTenthBaseReads{$b};
 	   		#species
-	   		$pairedExpectedTenthBaseSpecies{$b}=scalar (keys  %{$pairedExpectedTenthBase{$targetStrandFile}{$b}});
+	   		$pairedExpectedTenthBaseSpecies{$b}=scalar (keys  %{$pairedExpectedTenthBase{$targetStrandFile}{$n}{$b}});
 	   		$pairedExpectedTenthBaseSpeciesTotal+=$pairedExpectedTenthBaseSpecies{$b};
 	   		
 	   		#$totalExpectedTenthBase{$file}{substr($seq,0,1)}{substr($seq,0,20)}+=$reads/$ntm;
 	   		#total
-	   		map {$totalExpectedTenthBaseReads{$b}+=$_} values %{$totalExpectedTenthBase{$targetStrandFile}{$b}};
+	   		map {$totalExpectedTenthBaseReads{$b}+=$_} values %{$totalExpectedTenthBase{$targetStrandFile}{$n}{$b}};
 	   		$totalExpectedTenthBaseReadsTotal+= $totalExpectedTenthBaseReads{$b};
 	   		#species
-	   		$totalExpectedTenthBaseSpecies{$b}=scalar (keys %{$totalExpectedTenthBase{$targetStrandFile}{$b}});
+	   		$totalExpectedTenthBaseSpecies{$b}=scalar (keys %{$totalExpectedTenthBase{$targetStrandFile}{$n}{$b}});
 	   		$totalExpectedTenthBaseSpeciesTotal+= $totalExpectedTenthBaseSpecies{$b};
 	   }
 	   foreach my $b (keys  %pairedExpectedTenthBaseReads)
