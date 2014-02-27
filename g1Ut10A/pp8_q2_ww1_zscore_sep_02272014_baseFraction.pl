@@ -239,32 +239,70 @@ sub InputFileProcessing
 		
 		next if (length($seq)>29 || length($seq)<23);
 		next if (/data/);
-
 		
+		$total{$file}+=$reads/$ntm; #no nta in norm.bed format
+		
+
 		$totalFirstBase{$file}{substr($seq,0,1)}{substr($seq,0,20)}+=$reads/$ntm;
 		
+		#store the seq of guide 20nt prefix only; for faster extract the reads number later
+		$guidepf{$file}{substr($seq,0,20)}+=$reads/$ntm;
 
+		#norm.bed [1,1] -> bed: $2-1,$3
+		#bed [0,1) ->norm.bed: $2+1,$3
+
+		#suppose my input is bed; 02/18/2014
+		
+		#store chr, 5'end and strand information separately for each query 20nt prefix, the populations to find the guide
+		my $fiveend=0;	      
+		if($strand eq '+')
+		{	
+			$totalTenthBase{$file}{$n}{substr($seq,$n,1)}{substr($seq,0,20)}+=$reads/$ntm;
+			if($fileFormat eq "bed")
+			{ 
+				$fiveend=$bedstart; #0-based,closed
+			}
+			if($fileFormat eq "normbed")
+			{
+				$fiveend=$bedstart-1;#convert to 0-based,closed
+			}
+			
+
+	  	}
+	  	else
+	  	{
+	  		if($fileFormat eq "bed")
+			{
+	  			$fiveend=$bedend; #open
+			}
+			if($fileFormat eq "normbed")
+			{
+				$fiveend=$bedend;#convert to bedformat,open
+			}
+
+	  	}
+      
       	for (my $n=0;$n<20;$n++)
       	{
-      		$totalTenthBase{$file}{$n}{substr($seq,$n,1)}{substr($seq,0,20)}+=$reads/$ntm;
-      		
       		my $start=0;
-
+      		my $fiveend=0;
         	if ($strand eq '+') #target strand information
          	{
          		
          		if($fileFormat eq "bed")
          		{
 	            	$start=$bedstart+$n+1-20; # $bedstart is 0 based and $start is 0 based, the intermediate end $bedstart+$n+1 is open
-
+	            	$fiveend=$start+20; #open
          		}
          		if($fileFormat eq "normbed")
          		{
          			$start=$bedstart+$n-20;
-
+         			$fiveend=$start+20;#convert to bed, open
          		}
 	            my $str=substr($genome{$chr},$start,20); #substr function is 0 based
 	            $str=&revfa($str);
+	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
+	            
 
 	            
 	            $totalExpectedTenthBase{$file}{$n}{substr($str,0,1)}{$str}+=$reads/$ntm;
@@ -275,15 +313,15 @@ sub InputFileProcessing
          		if($fileFormat eq "bed")
          		{
 		            $start=$bedend-$n-1; #closed
-
+		            $fiveend=$start; #0-based
          		}
          		if($fileFormat eq "normbed")
          		{
          			$start=$bedend-$n-1; #closed
-
+         			$fiveend=$start;	
          		}
 	            my $str=substr($genome{$chr},$start,20);
-
+	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
 
 	            
 	            $totalExpectedTenthBase{$file}{$n}{substr($str,0,1)}{$str}+=$reads/$ntm;
