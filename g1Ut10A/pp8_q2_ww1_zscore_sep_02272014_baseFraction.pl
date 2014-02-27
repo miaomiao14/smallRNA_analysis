@@ -132,8 +132,7 @@ if($indexFlag)
 	    
 	    &InputFileProcessing($inputfiles[$i],$file);
 	     
-		if ($total{$file}>10)
-		{
+
 			$seqFile="$OUTDIR/$file.seq";
 			if( ! -s $seqFile )
 			{
@@ -155,7 +154,7 @@ if($indexFlag)
 				`[ ! -s $indexb ] && bowtie-build $fa $indexb && rm $fa`;
 	
 			}#for loop of the n
-		}#if the total
+
 	} #for loop of the file
 } #if
 else #if indexFlag
