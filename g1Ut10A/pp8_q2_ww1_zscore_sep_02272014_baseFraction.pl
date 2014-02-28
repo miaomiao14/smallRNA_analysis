@@ -110,7 +110,7 @@ my @pairs=("AT","TA","GC","CG","AA","AC","AG","CA","CC","CT","GA","GG","GT","TC"
 
 my %totalFirstBase=();
 my %totalTenthBase=();
-my %totalExpectedTenthBase=();
+#my %totalExpectedTenthBase=();
 
 my %totalTenthBaseTrial=();
 my %totalFirstBaseSpecies=();
@@ -306,7 +306,7 @@ sub InputFileProcessing
 	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
 	            
 				$totalTenthBaseTrial{$file}{$n}{substr($seq,$n,1)}{$str}{substr($seq,0,20)}+=$reads/$ntm;
-				$totalExpectedTenthBase{$file}{$n}{substr($seq,$n,1)}{$str}+=$reads/$ntm;
+				#$totalExpectedTenthBase{$file}{$n}{substr($seq,$n,1)}{$str}+=$reads/$ntm;
 				#link each potential target with its guides,
 	            
 	           
@@ -328,7 +328,7 @@ sub InputFileProcessing
 	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
 
 	            $totalTenthBaseTrial{$file}{$n}{substr($seq,$n,1)}{$str}{substr($seq,0,20)}+=$reads/$ntm;
-	            $totalExpectedTenthBase{$file}{$n}{substr($seq,$n,1)}{$str}+=$reads/$ntm;
+	            #$totalExpectedTenthBase{$file}{$n}{substr($seq,$n,1)}{$str}+=$reads/$ntm;
 
 	            
         	}#ifelse
@@ -384,7 +384,7 @@ sub PingPongProcessing
 
 			   
 			   	#how many of species start with U?
-		       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]} if($totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]});
+		       	#$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]} if($totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]});
 			   	# expect to give the same results as %pairedTenthBase
 				
 				$pairedExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]});#should not be accumulative			 
@@ -416,7 +416,7 @@ sub PingPongProcessing
 		       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]} if($totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]});
 			   	# expect to give the same results as %pairedTenthBase
 				
-				$pairedExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]});#should not be accumulative			 
+				#$pairedExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]});#should not be accumulative			 
 				#compare to the results by ppseq files, the key(l[1],expected guides) reduce the number of targets from different locations (not every targets have the same expected guides) 
 				#however, compare to the %totalTenthBaseTrial, it has more reads, it has all targets link to the expected guides	
 				if($totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]})
@@ -498,67 +498,53 @@ sub PingPongProcessing
 	   my $totalTenthBaseSpeciesTotal=0;
 	   my %totalTenthBaseSpeciesF=();
 	   
-#	   foreach my $b (keys %{$pairedTenthBase{$targetStrandFile}{$n}})
-#	   {
-#	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}};
-#	   		$pairedTenthBaseReadsTotal+=$pairedTenthBaseReads{$b};
-#	   		#species
-#	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}});
-#	   		$pairedTenthBaseSpeciesTotal+=$pairedTenthBaseSpecies{$b};
-#	   		
-#	   		
-#	   }
-	   foreach my $b (keys %{$pairedExpectedTenthBase{$targetStrandFile}{$n}})
+	   foreach my $b (keys %{$pairedTenthBase{$targetStrandFile}{$n}})
 	   {
-	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$pairedExpectedTenthBase{$targetStrandFile}{$n}{$b}};
+	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}};
 	   		$pairedTenthBaseReadsTotal+=$pairedTenthBaseReads{$b};
 	   		#species
-	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$pairedExpectedTenthBase{$targetStrandFile}{$n}{$b}});
+	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}});
 	   		$pairedTenthBaseSpeciesTotal+=$pairedTenthBaseSpecies{$b};
 	   		
 	   		
 	   }
-	   
-	   
-	   
-#	   my %totalTenthBaseTemp=();
-#	   foreach my $b (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}})
+#	   foreach my $b (keys %{$pairedExpectedTenthBase{$targetStrandFile}{$n}})
 #	   {
+#	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$pairedExpectedTenthBase{$targetStrandFile}{$n}{$b}};
+#	   		$pairedTenthBaseReadsTotal+=$pairedTenthBaseReads{$b};
+#	   		#species
+#	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$pairedExpectedTenthBase{$targetStrandFile}{$n}{$b}});
+#	   		$pairedTenthBaseSpeciesTotal+=$pairedTenthBaseSpecies{$b};
 #	   		
-#	   		foreach my $expTargets (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$b}})
-#	   		{
-#		   			#$totalTenthBase{$file}{substr($seq,0,1)}{substr($seq,0,20)}+=$reads/$ntm;
-#		   		foreach my $realTargets (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$b}{$expTargets}})
-#		   		{
-#		   		$totalTenthBaseTemp{$targetStrandFile}{$n}{$b}{$realTargets}+=$totalTenthBaseTrial{$targetStrandFile}{$n}{$b}{$expTargets}{$realTargets};
-#		   		}
-#
-#		   		
-#	   		}
-#	   		#reads
-#		   	map {$totalTenthBaseReads{$b}+=$_} values %{$totalTenthBaseTemp{$targetStrandFile}{$n}{$b}};
-#		   	$totalTenthBaseReadsTotal+= $totalTenthBaseReads{$b};
-#		   	#species
-#		   	$totalTenthBaseSpecies{$b}+=scalar (keys %{$totalTenthBaseTemp{$targetStrandFile}{$n}{$b}});
 #	   		
-#	   		$totalTenthBaseSpeciesTotal+= $totalTenthBaseSpecies{$b};
 #	   }
+#	   
 	   
 	   
-	   #totalExpectedTenthBase
-	   foreach my $b (keys %{$totalExpectedTenthBase{$targetStrandFile}{$n}})
+	   my %totalTenthBaseTemp=();
+	   foreach my $b (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}})
 	   {
 	   		
+	   		foreach my $expTargets (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$b}})
+	   		{
+		   			#$totalTenthBase{$file}{substr($seq,0,1)}{substr($seq,0,20)}+=$reads/$ntm;
+		   		foreach my $realTargets (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$b}{$expTargets}})
+		   		{
+		   		$totalTenthBaseTemp{$targetStrandFile}{$n}{$b}{$realTargets}+=$totalTenthBaseTrial{$targetStrandFile}{$n}{$b}{$expTargets}{$realTargets};
+		   		}
 
+		   		
+	   		}
 	   		#reads
-		   	map {$totalTenthBaseReads{$b}+=$_} values %{$totalExpectedTenthBase{$targetStrandFile}{$n}{$b}};
+		   	map {$totalTenthBaseReads{$b}+=$_} values %{$totalTenthBaseTemp{$targetStrandFile}{$n}{$b}};
 		   	$totalTenthBaseReadsTotal+= $totalTenthBaseReads{$b};
 		   	#species
-		   	$totalTenthBaseSpecies{$b}+=scalar (keys %{$totalExpectedTenthBase{$targetStrandFile}{$n}{$b}});
+		   	$totalTenthBaseSpecies{$b}+=scalar (keys %{$totalTenthBaseTemp{$targetStrandFile}{$n}{$b}});
 	   		
 	   		$totalTenthBaseSpeciesTotal+= $totalTenthBaseSpecies{$b};
 	   }
 	   
+
 	   
 	   #$pairedExpectedTenthBase
 	   

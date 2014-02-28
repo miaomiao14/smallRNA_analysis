@@ -264,8 +264,8 @@ for ($i=0;$i<$ARGV[2];$i++)
 
 }
 
-`rm *.ebwt`;
-`rm *.bowtie.out`;
+#`rm *.ebwt`;
+#`rm *.bowtie.out`;
 
 sub total {
 my $count=0;

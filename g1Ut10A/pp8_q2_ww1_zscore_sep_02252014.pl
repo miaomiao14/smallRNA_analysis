@@ -65,8 +65,7 @@ my $spe=$parameters->{species};
 my $OUTDIR=$parameters->{outdir};
 my $indexFlag=$parameters->{indexflag};
 my $fileFormat=$parameters->{format};
-my $wsize=$parameters->{winsize};
-my $basep=$parameters->{complementarity};
+
 
 
 if($spe eq "fly")
@@ -957,8 +956,7 @@ sub parse_command_line {
                 elsif($next_arg eq "-o"){ $parameters->{outdir} = shift(@ARGV); }
                 elsif($next_arg eq "-d"){ $parameters->{indexflag} = shift(@ARGV); }
                 elsif($next_arg eq "-f"){ $parameters->{format} = shift(@ARGV); }
-                elsif($next_arg eq "-w"){ $parameters->{winsize}= shift(@ARGV); }
-				elsif($next_arg eq "-p"){ $parameters->{complementarity}= shift(@ARGV); }
+                
 
                 else{ print "Invalid argument: $next_arg"; usage(); }
         }
