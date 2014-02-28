@@ -240,7 +240,7 @@ sub InputFileProcessing
 		next if (length($seq)>29 || length($seq)<23);
 		next if (/data/);
 		
-		$total{$file}+=$reads/$ntm; #no nta in norm.bed format
+		
 		
 
 		$totalFirstBase{$file}{substr($seq,0,1)}{substr($seq,0,20)}+=$reads/$ntm;
@@ -305,6 +305,7 @@ sub InputFileProcessing
 	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
 	            
 				$totalTenthBaseTrial{$file}{$n}{substr($seq,$n,1)}{$str}{substr($seq,0,20)}+=$reads/$ntm;
+				#link each potential target with its guides,
 	            
 	           
 	            
@@ -389,6 +390,7 @@ sub PingPongProcessing
 					foreach my $seq (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}})
 					{
 						$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$seq}=$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}{$seq};
+						print PPTSEQ "$seq\n" if ($n==9);
 					}
 				}
 				;#should not be accumulative			 
@@ -396,7 +398,7 @@ sub PingPongProcessing
 				
 				#$totalTenthBaseTrial{$file}{$n}{substr($seq,$n,1)}{$str}{substr($seq,0,20)}+=$reads/$ntm;
 				print PPGSEQ "$l[2]\n" if ($n==9);
-				print PPTSEQ "$str\n" if ($n==9);
+				
 	      	}#perfect pair
 
 	      	elsif ($l[3]=~/(\d+):(\w)>(\w)/)
@@ -417,10 +419,11 @@ sub PingPongProcessing
 					foreach my $seq (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}})
 					{
 						$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$seq}=$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}{$seq};
+						print PPTSEQ "$seq\n" if ($n==9);
 					}
 				}
 				print PPGSEQ "$l[2]\n" if ($n==9);
-				print PPTSEQ "$str\n" if ($n==9);
+				
 		      
 			}
 		} #while
