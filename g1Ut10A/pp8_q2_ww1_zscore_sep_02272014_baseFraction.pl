@@ -601,7 +601,7 @@ sub PingPongProcessing
 			my @bases=("A","C","G","T");
 			#total
 			my %totalG1guideStat=();
-			%totalG1guideStatRef=&g1Frac($seqFile);
+			$totalG1guideStatRef=&g1Frac($seqFile);
 			%totalG1guideStat=%{$totalG1guideStatRef};
 			my $totalG1Species=0;
 			my $totalG1Reads=0;
@@ -753,7 +753,7 @@ sub PingPongProcessing
 
 sub g1Frac
 {
-	my $input=@_;
+	my $input= $_;
 	#input format
 	#seq reads
 	my %g1Stat=();
@@ -771,7 +771,7 @@ sub g1Frac
 
 sub t10Frac
 {
-	my $input=@_;
+	my $input= $_;
 	#input format
 	#seq reads
 	my %t10Stat=();
