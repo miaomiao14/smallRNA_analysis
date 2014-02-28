@@ -340,8 +340,8 @@ sub PingPongProcessing
 
 	
 	open PPUAFRACTION, ">$OUTDIR/$guideStrandFile.$targetStrandFile.UA_VA.base.fraction.txt";
-	open PPGSEQ, ">$OUTDIR/$guideStrandFile.ppseq";
-	open PPTSEQ, ">$OUTDIR/$targetStrandFile.ppseq";
+	open PPGSEQ, ">$OUTDIR/$guideStrandFile.G.ppseq";
+	open PPTSEQ, ">$OUTDIR/$targetStrandFile.T.ppseq";
 
 	
 	foreach ($n=0;$n<20;$n++)
@@ -597,9 +597,9 @@ sub PingPongProcessing
 		
 		if($m==10)
 		{
-			$ppgseq="$OUTDIR/$guideStrandFile.ppseq";
+			$ppgseq="$OUTDIR/$guideStrandFile.G.ppseq";
 			$seqFile="$OUTDIR/$guideStrandFile.seq";
-			$ppgseqm="$OUTDIR/$guideStrandFile.ppseq.reads";
+			$ppgseqm="$OUTDIR/$guideStrandFile.G.ppseq.reads";
 			`match.pl $ppgseq $seqFile >$ppgseqm`;
 		
 			my @bases=("A","C","G","T");
@@ -667,9 +667,9 @@ sub PingPongProcessing
 				print PPUAFRACTION "10\t$b\tg1Byfile\t$pairedG1SpeciesF{$b}\t$totalG1SpeciesF{$b}\t$pairedG1ReadsF{$b}\t$totalG1ReadsF{$b}\n";
 			}
 			
-			$pptseq="$OUTDIR/$targetStrandFile.ppseq";
+			$pptseq="$OUTDIR/$targetStrandFile.T.ppseq";
 			$seqFile="$OUTDIR/$targetStrandFile.seq";
-			$pptseqm="$OUTDIR/$targetStrandFile.ppseq.reads";
+			$pptseqm="$OUTDIR/$targetStrandFile.T.ppseq.reads";
 			`match.pl $pptseq $seqFile >$pptseqm`;
 			
 			my %totalT10guideStat=();
