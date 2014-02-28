@@ -110,6 +110,7 @@ my @pairs=("AT","TA","GC","CG","AA","AC","AG","CA","CC","CT","GA","GG","GT","TC"
 
 my %totalFirstBase=();
 my %totalTenthBase=();
+my %totalExpectedTenthBase=();
 
 my %totalTenthBaseTrial=();
 my %totalFirstBaseSpecies=();
@@ -305,6 +306,7 @@ sub InputFileProcessing
 	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
 	            
 				$totalTenthBaseTrial{$file}{$n}{substr($seq,$n,1)}{$str}{substr($seq,0,20)}+=$reads/$ntm;
+				$totalExpectedTenthBase{$file}{$n}{substr($seq,$n,1)}{$str}+=$reads/$ntm;
 				#link each potential target with its guides,
 	            
 	           
@@ -326,6 +328,7 @@ sub InputFileProcessing
 	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
 
 	            $totalTenthBaseTrial{$file}{$n}{substr($seq,$n,1)}{$str}{substr($seq,0,20)}+=$reads/$ntm;
+	            $totalExpectedTenthBase{$file}{$n}{substr($seq,$n,1)}{$str}+=$reads/$ntm;
 
 	            
         	}#ifelse
@@ -349,7 +352,7 @@ sub PingPongProcessing
 	{
 		my %pairedFirstBase=();
 		my %pairedTenthBase=();
-		my %pairedExpectedTenthBase=();
+
 		# file1 as ref
 		$indexb="$OUTDIR/$targetStrandFile.20.$n";
 		$seqFile="$OUTDIR/$guideStrandFile.seq";
@@ -384,7 +387,7 @@ sub PingPongProcessing
 		       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]} if($totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]});
 			   	# expect to give the same results as %pairedTenthBase
 				
-				#$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str}=$totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str} if($totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str});#should not be accumulative			 
+				$pairedExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]});#should not be accumulative			 
 				if($totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]})
 				{
 					foreach my $seq (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}})
@@ -413,7 +416,7 @@ sub PingPongProcessing
 		       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]} if($totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]});
 			   	# expect to give the same results as %pairedTenthBase
 				
-				#$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str}=$totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str} if($totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str});#should not be accumulative			 
+				$pairedExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]});#should not be accumulative			 
 				if($totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]})
 				{
 					foreach my $seq (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}})
@@ -493,12 +496,22 @@ sub PingPongProcessing
 	   my $totalTenthBaseSpeciesTotal=0;
 	   my %totalTenthBaseSpeciesF=();
 	   
-	   foreach my $b (keys %{$pairedTenthBase{$targetStrandFile}{$n}})
+#	   foreach my $b (keys %{$pairedTenthBase{$targetStrandFile}{$n}})
+#	   {
+#	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}};
+#	   		$pairedTenthBaseReadsTotal+=$pairedTenthBaseReads{$b};
+#	   		#species
+#	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}});
+#	   		$pairedTenthBaseSpeciesTotal+=$pairedTenthBaseSpecies{$b};
+#	   		
+#	   		
+#	   }
+	   foreach my $b (keys %{$pairedExpectedTenthBase{$targetStrandFile}{$n}})
 	   {
-	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}};
+	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$pairedExpectedTenthBase{$targetStrandFile}{$n}{$b}};
 	   		$pairedTenthBaseReadsTotal+=$pairedTenthBaseReads{$b};
 	   		#species
-	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}});
+	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$pairedExpectedTenthBase{$targetStrandFile}{$n}{$b}});
 	   		$pairedTenthBaseSpeciesTotal+=$pairedTenthBaseSpecies{$b};
 	   		
 	   		
@@ -526,7 +539,7 @@ sub PingPongProcessing
 	   		$totalTenthBaseSpeciesTotal+= $totalTenthBaseSpecies{$b};
 	   }
 	   
-	   
+	   #$pairedExpectedTenthBase
 	   
 	   foreach my $b (keys  %pairedTenthBaseReads)
 	   {			
