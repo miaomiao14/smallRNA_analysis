@@ -63,10 +63,10 @@ my $spe=$parameters->{species};
 my $OUTDIR=$parameters->{outdir};
 my $indexFlag=$parameters->{indexflag};
 my $fileFormat=$parameters->{format};
-
+my $fastafile=$parameters->{fa};
 if($spe eq "fly")
 {
-	open IN, "/home/xuj1/pipeline/common/fasta/dmel-all-chromosome-r5.5_TAS.fasta";
+	open IN, $fastafile;
 	while(<IN>)
 	{
 	   if (/>(.+) type/)
@@ -82,7 +82,7 @@ if($spe eq "fly")
 }
 elsif($spe eq "bombyx")
 {
-	$fastafile="/home/wangw1/pipeline_bm/common/silkgenome.formatted.fa";
+	
 	open IN, $fastafile or die "Fail to open $fastafile: $!";
 	while(<IN>)
 	{
@@ -801,6 +801,7 @@ sub usage
 		print "-s  <species name[fly|bombyx]>\n\t";
 		print "-d  <flag of index[0|1]>\n\t";
 		print "-f  <flag of index[bed|normbed]>\n\t";
+		print "-a  <fasta file of the genome>\n\t";
         print "This perl script is count the frequency of 10A irrespective of 1U\n";
 		print "It's maintained by WEI WANG. If you have any questions, please contact wei.wang2\@umassmed.edu\n";
         exit(1);
@@ -817,6 +818,7 @@ sub parse_command_line {
                 elsif($next_arg eq "-o"){ $parameters->{outdir} = shift(@ARGV); }
                 elsif($next_arg eq "-d"){ $parameters->{indexflag} = shift(@ARGV); }
                 elsif($next_arg eq "-f"){ $parameters->{format} = shift(@ARGV); }
+                elsif($next_arg eq "-a"){ $parameters->{fa} = shift(@ARGV); }
 
                 else{ print "Invalid argument: $next_arg"; usage(); }
         }
