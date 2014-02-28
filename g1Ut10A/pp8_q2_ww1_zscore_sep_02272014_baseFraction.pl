@@ -677,7 +677,7 @@ sub PingPongProcessing
 			
 			#paired
 			my %pairedT10guideStat=();
-			$pairedT10guideStatRef=&t10Frac($ppgseqm);
+			$pairedT10guideStatRef=&t10Frac($pptseqm);
 			%pairedT10guideStat=%{$pairedT10guideStatRef};
 			my $pairedT10Species=0;
 			my $pairedT10Reads=0;
