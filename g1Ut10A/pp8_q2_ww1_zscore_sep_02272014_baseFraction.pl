@@ -612,9 +612,9 @@ sub PingPongProcessing
 			foreach my $b (keys %totalG1guideStat)
 			{
 				$totalG1SpeciesC{$b}=scalar (keys %{$totalG1guideStat{$b}});
-				$totalG1Species+=$g1Species{$b};
+				$totalG1Species+=$totalG1SpeciesC{$b};
 				map {$totalG1ReadsC{$b}+=$_} values %{$totalG1guideStat{$b}};
-				$totalG1Reads+=$g1Reads{$b};
+				$totalG1Reads+=$totalG1ReadsC{$b};
 			}
 		
 			foreach my $b(keys %totalG1SpeciesC )
@@ -641,9 +641,9 @@ sub PingPongProcessing
 			foreach my $b (keys %pairedG1guideStat)
 			{
 				$pairedG1SpeciesC{$b}=scalar (keys %{$pairedG1guideStat{$b}});
-				$pairedG1Species+=$g1Species{$b};
+				$pairedG1Species+=$pairedG1SpeciesC{$b};
 				map {$pairedG1ReadsC{$b}+=$_} values %{$pairedG1guideStat{$b}};
-				$pairedG1Reads+=$g1Reads{$b};
+				$pairedG1Reads+=$pairedG1ReadsC{$b};
 			}
 		
 			foreach my $b(keys %pairedG1SpeciesC )
@@ -681,9 +681,9 @@ sub PingPongProcessing
 			foreach my $b (keys %totalT10guideStat)
 			{
 				$totalT10SpeciesC{$b}=scalar (keys %{$totalT10guideStat{$b}});
-				$totalT10Species+=$T10Species{$b};
+				$totalT10Species+=$totalT10SpeciesC{$b};
 				map {$totalT10ReadsC{$b}+=$_} values %{$totalT10guideStat{$b}};
-				$totalT10Reads+=$T10Reads{$b};
+				$totalT10Reads+=$totalT10ReadsC{$b};
 			}
 		
 			foreach my $b(keys %totalT10SpeciesC )
@@ -709,9 +709,9 @@ sub PingPongProcessing
 			foreach my $b (keys %pairedT10guideStat)
 			{
 				$pairedT10SpeciesC{$b}=scalar (keys %{$pairedT10guideStat{$b}});
-				$pairedT10Species+=$T10Species{$b};
+				$pairedT10Species+=$pairedT10SpeciesC{$b};
 				map {$pairedT10ReadsC{$b}+=$_} values %{$pairedT10guideStat{$b}};
-				$pairedT10Reads+=$T10Reads{$b};
+				$pairedT10Reads+=$pairedT10ReadsC{$b};
 			}
 		
 			foreach my $b(keys %pairedT10SpeciesC )
