@@ -389,7 +389,7 @@ sub PingPongProcessing
 				{
 					foreach my $seq (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}})
 					{
-						$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$seq}=$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}{$seq};
+						$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$seq}+=$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}{$seq};
 						print PPTSEQ "$seq\n" if ($n==9);
 					}
 				}
@@ -418,7 +418,7 @@ sub PingPongProcessing
 				{
 					foreach my $seq (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}})
 					{
-						$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$seq}=$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}{$seq};
+						$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$seq}+=$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}{$seq};
 						print PPTSEQ "$seq\n" if ($n==9);
 					}
 				}
@@ -517,11 +517,12 @@ sub PingPongProcessing
 
 		   		
 	   		}
-	   				   		#reads
+	   		#reads
 		   	map {$totalTenthBaseReads{$b}+=$_} values %{$totalTenthBaseTemp{$targetStrandFile}{$n}{$b}};
-		   		#species
+		   	$totalTenthBaseReadsTotal+= $totalTenthBaseReads{$b};
+		   	#species
 		   	$totalTenthBaseSpecies{$b}+=scalar (keys %{$totalTenthBaseTemp{$targetStrandFile}{$n}{$b}});
-	   		$totalTenthBaseReadsTotal+= $totalTenthBaseReads{$b};
+	   		
 	   		$totalTenthBaseSpeciesTotal+= $totalTenthBaseSpecies{$b};
 	   }
 	   
