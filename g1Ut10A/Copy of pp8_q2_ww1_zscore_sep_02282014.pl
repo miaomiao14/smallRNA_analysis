@@ -36,12 +36,6 @@ use Compress::Zlib;
 #02/25/2014
 #fix a bug for base fraction; target strand
 
-
-#02/28
-#add two parameters: 
-#1. windowsize for background calculation
-#2. flexibal length of complementarity
-
 if(scalar(@ARGV)<6)
 {
         usage();
@@ -65,9 +59,6 @@ my $spe=$parameters->{species};
 my $OUTDIR=$parameters->{outdir};
 my $indexFlag=$parameters->{indexflag};
 my $fileFormat=$parameters->{format};
-my $wsize=$parameters->{winsize};
-my $basep=$parameters->{complementarity};
-
 
 if($spe eq "fly")
 {
@@ -957,8 +948,6 @@ sub parse_command_line {
                 elsif($next_arg eq "-o"){ $parameters->{outdir} = shift(@ARGV); }
                 elsif($next_arg eq "-d"){ $parameters->{indexflag} = shift(@ARGV); }
                 elsif($next_arg eq "-f"){ $parameters->{format} = shift(@ARGV); }
-                elsif($next_arg eq "-w"){ $parameters->{winsize}= shift(@ARGV); }
-				elsif($next_arg eq "-p"){ $parameters->{complementarity}= shift(@ARGV); }
 
                 else{ print "Invalid argument: $next_arg"; usage(); }
         }
