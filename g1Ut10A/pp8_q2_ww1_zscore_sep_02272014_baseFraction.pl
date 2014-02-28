@@ -110,7 +110,7 @@ my @pairs=("AT","TA","GC","CG","AA","AC","AG","CA","CC","CT","GA","GG","GT","TC"
 
 my %totalFirstBase=();
 my %totalTenthBase=();
-my %totalExpectedTenthBase=();
+
 my %totalTenthBaseTrial=();
 my %totalFirstBaseSpecies=();
 my %totalTenthBaseSpecies=();
@@ -284,7 +284,7 @@ sub InputFileProcessing
       
       	for (my $n=0;$n<20;$n++)
       	{
-      		$totalTenthBase{$file}{$n}{substr($seq,$n,1)}{substr($seq,0,20)}+=$reads/$ntm;
+      		
       		my $start=0;
       		my $fiveend=0;
         	if ($strand eq '+') #target strand information
@@ -306,7 +306,7 @@ sub InputFileProcessing
 	            
 				$totalTenthBaseTrial{$file}{$n}{substr($seq,$n,1)}{$str}{substr($seq,0,20)}+=$reads/$ntm;
 	            
-	            $totalExpectedTenthBase{$file}{$n}{substr($str,0,1)}{substr($seq,0,20)}+=$reads/$ntm;
+	           
 	            
         	}
          	else
@@ -325,7 +325,7 @@ sub InputFileProcessing
 	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
 
 	            $totalTenthBaseTrial{$file}{$n}{substr($seq,$n,1)}{$str}{substr($seq,0,20)}+=$reads/$ntm;
-	            $totalExpectedTenthBase{$file}{$n}{substr($str,0,1)}{substr($seq,0,20)}+=$reads/$ntm;
+
 	            
         	}#ifelse
       	}#for
@@ -382,9 +382,6 @@ sub PingPongProcessing
 			   	#how many of species start with U?
 		       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]} if($totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]});
 			   	# expect to give the same results as %pairedTenthBase
-				my $str=&revfa($l[1]);
-				#$pairedExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]});#should not be accumulative
-				$pairedExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$str}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$str} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$str});#should not be accumulative
 				
 				#$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str}=$totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str} if($totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str});#should not be accumulative			 
 				if($totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]})
@@ -398,7 +395,6 @@ sub PingPongProcessing
 				
 				
 				#$totalTenthBaseTrial{$file}{$n}{substr($seq,$n,1)}{$str}{substr($seq,0,20)}+=$reads/$ntm;
-				#$totalTenthBase{$file}{$n}{substr($seq,$n,1)}{substr($seq,0,20)}+=$reads/$ntm;
 				print PPGSEQ "$l[2]\n" if ($n==9);
 				print PPTSEQ "$str\n" if ($n==9);
 	      	}#perfect pair
@@ -413,10 +409,7 @@ sub PingPongProcessing
 		      
 		       
 		       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]} if($totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]});
-			   	#$pairedExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]});#should not be accumulative
 			   	# expect to give the same results as %pairedTenthBase
-				my $str=&revfa($l[1]);
-				$pairedExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$str}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$str} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$str});#should not be accumulative
 				
 				#$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str}=$totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str} if($totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str});#should not be accumulative			 
 				if($totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]})
@@ -507,18 +500,24 @@ sub PingPongProcessing
 	   		
 	   		
 	   }
+	   my %totalTenthBaseTemp=();
 	   foreach my $b (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}})
 	   {
+	   		
 	   		foreach my $expTargets (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$b}})
 	   		{
 		   			#$totalTenthBase{$file}{substr($seq,0,1)}{substr($seq,0,20)}+=$reads/$ntm;
-		   		#total
-		   		map {$totalTenthBaseReads{$b}+=$_} values %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$b}{$expTargets}};
-		   		
-		   		#species
-		   		$totalTenthBaseSpecies{$b}+=scalar (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$b}{$expTargets}});
+		   		foreach my $realTargets (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$b}{$expTargets}})
+		   		{
+		   		$totalTenthBaseTemp{$targetStrandFile}{$n}{$b}{$realTargets}+=$totalTenthBaseTrial{$targetStrandFile}{$n}{$b}{$expTargets}{$realTargets};
+		   		}
+
 		   		
 	   		}
+	   				   		#reads
+		   	map {$totalTenthBaseReads{$b}+=$_} values %{$totalTenthBaseTemp{$targetStrandFile}{$n}{$b}};
+		   		#species
+		   	$totalTenthBaseSpecies{$b}+=scalar (keys %{$totalTenthBaseTemp{$targetStrandFile}{$n}{$b}});
 	   		$totalTenthBaseReadsTotal+= $totalTenthBaseReads{$b};
 	   		$totalTenthBaseSpeciesTotal+= $totalTenthBaseSpecies{$b};
 	   }
@@ -545,57 +544,7 @@ sub PingPongProcessing
 		$totalTenthBaseSpeciesTotal=&restrict_num_decimal_digits($totalTenthBaseSpeciesTotal,4);
 		$totalTenthBaseReadsTotal=&restrict_num_decimal_digits($totalTenthBaseReadsTotal,4);
 		
-			   #ExpectedTenthBaseFraction
-	   my %pairedExpectedTenthBaseReads=();
-	   my $pairedExpectedTenthBaseReadsTotal=0;
-	   my %pairedExpectedTenthBaseReadsF=();
-	   my %pairedExpectedTenthBaseSpecies=();
-	   my $pairedExpectedTenthBaseSpeciesTotal=0;
-	   my %pairedExpectedTenthBaseSpeciesF=();
-	   
-	   
-	   my %totalExpectedTenthBaseReads=();
-	   my $totalExpectedTenthBaseReadsTotal=0;
-	   my %totalExpectedTenthBaseReadsF=();
-	   my %totalExpectedTenthBaseSpecies=();
-	   my $totalExpectedTenthBaseSpeciesTotal=0;
-	   my %totalExpectedTenthBaseSpeciesF=();
-	   
-	   foreach my $b (keys %{$pairedExpectedTenthBase{$targetStrandFile}{$n}})
-	   {
-	   		map {$pairedExpectedTenthBaseReads{$b}+=$_} values  %{$pairedExpectedTenthBase{$targetStrandFile}{$n}{$b}};
-	   		$pairedExpectedTenthBaseReadsTotal+=$pairedExpectedTenthBaseReads{$b};
-	   		#species
-	   		$pairedExpectedTenthBaseSpecies{$b}=scalar (keys  %{$pairedExpectedTenthBase{$targetStrandFile}{$n}{$b}});
-	   		$pairedExpectedTenthBaseSpeciesTotal+=$pairedExpectedTenthBaseSpecies{$b};
-	   		
-	   		#$totalExpectedTenthBase{$file}{substr($seq,0,1)}{substr($seq,0,20)}+=$reads/$ntm;
-	   		#total
-	   		map {$totalExpectedTenthBaseReads{$b}+=$_} values %{$totalExpectedTenthBase{$targetStrandFile}{$n}{$b}};
-	   		$totalExpectedTenthBaseReadsTotal+= $totalExpectedTenthBaseReads{$b};
-	   		#species
-	   		$totalExpectedTenthBaseSpecies{$b}=scalar (keys %{$totalExpectedTenthBase{$targetStrandFile}{$n}{$b}});
-	   		$totalExpectedTenthBaseSpeciesTotal+= $totalExpectedTenthBaseSpecies{$b};
-	   }
-	   foreach my $b (keys  %pairedExpectedTenthBaseReads)
-	   {			
-	   		$pairedExpectedTenthBaseReadsF{$b}=$pairedExpectedTenthBaseReads{$b}/$pairedExpectedTenthBaseReadsTotal;
-	   		$pairedExpectedTenthBaseReadsF{$b}=&restrict_num_decimal_digits($pairedExpectedTenthBaseReadsF{$b},4);
-	   		$pairedExpectedTenthBaseSpeciesF{$b}=$pairedExpectedTenthBaseSpecies{$b}/$pairedExpectedTenthBaseSpeciesTotal;
-	   		$pairedExpectedTenthBaseSpeciesF{$b}=&restrict_num_decimal_digits($pairedExpectedTenthBaseSpeciesF{$b},4);
-	   		
-	   		$totalExpectedTenthBaseReadsF{$b}=$totalExpectedTenthBaseReads{$b}/$totalExpectedTenthBaseReadsTotal;
-	   		$totalExpectedTenthBaseReadsF{$b}=&restrict_num_decimal_digits($totalExpectedTenthBaseReadsF{$b},4);
-	   		$totalExpectedTenthBaseSpeciesF{$b}=$totalExpectedTenthBaseSpecies{$b}/$totalExpectedTenthBaseSpeciesTotal;
-	   		$totalExpectedTenthBaseSpeciesF{$b}=&restrict_num_decimal_digits($totalExpectedTenthBaseSpeciesF{$b},4);
-	   }
-
-		$pairedExpectedTenthBaseSpeciesTotal=&restrict_num_decimal_digits($pairedExpectedTenthBaseSpeciesTotal,4);
-		$pairedExpectedTenthBaseReadsTotal=&restrict_num_decimal_digits($pairedExpectedTenthBaseReadsTotal,4);
-		
-
-		$totalExpectedTenthBaseSpeciesTotal=&restrict_num_decimal_digits($totalExpectedTenthBaseSpeciesTotal,4);
-		$totalExpectedTenthBaseReadsTotal=&restrict_num_decimal_digits($totalExpectedTenthBaseReadsTotal,4);
+			  
 		
 		
 		
@@ -616,11 +565,7 @@ sub PingPongProcessing
 			print PPUAFRACTION "$m\t$b\tt10\t$pairedTenthBaseSpeciesF{$b}\t$totalTenthBaseSpeciesF{$b}\t$pairedTenthBaseReadsF{$b}\t$totalTenthBaseReadsF{$b}\n";
 		}
 
-	    print PPUAFRACTION "$m\ttotal\tt10\t$pairedExpectedTenthBaseSpeciesTotal\t$totalExpectedTenthBaseSpeciesTotal\t$pairedExpectedTenthBaseReadsTotal\t$totalExpectedTenthBaseReadsTotal\n";
-		foreach my $b(@bases)
-		{
-			print PPUAFRACTION "$m\t$b\tt10\t$pairedExpectedTenthBaseSpeciesF{$b}\t$totalExpectedTenthBaseSpeciesF{$b}\t$pairedExpectedTenthBaseReadsF{$b}\t$totalExpectedTenthBaseReadsF{$b}\n";
-		}
+
 		
 		if($m==10)
 		{
