@@ -753,7 +753,7 @@ sub PingPongProcessing
 
 sub g1Frac
 {
-	my $input= $_;
+	my $input= shift ;
 	#input format
 	#seq reads
 	my %g1Stat=();
@@ -771,7 +771,7 @@ sub g1Frac
 
 sub t10Frac
 {
-	my $input= $_;
+	my $input= shift ;
 	#input format
 	#seq reads
 	my %t10Stat=();
