@@ -601,7 +601,8 @@ sub PingPongProcessing
 			my @bases=("A","C","G","T");
 			#total
 			my %totalG1guideStat=();
-			%totalG1guideStat=&g1Frac($seqFile);
+			%totalG1guideStatRef=&g1Frac($seqFile);
+			%totalG1guideStat=%{$totalG1guideStatRef};
 			my $totalG1Species=0;
 			my $totalG1Reads=0;
 			my %totalG1SpeciesC=();
@@ -629,8 +630,8 @@ sub PingPongProcessing
 			
 			#paired
 			my %pairedG1guideStat=();
-			%pairedG1guideStat=&g1Frac($ppgseqm);
-			
+			$pairedG1guideStatRef=&g1Frac($ppgseqm);
+			%pairedG1guideStat=%{$pairedG1guideStatRef};
 			my $pairedG1Species=0;
 			my $pairedG1Reads=0;
 			my %pairedG1SpeciesC=();
@@ -668,7 +669,9 @@ sub PingPongProcessing
 			`match.pl $pptseq $seqFile >$pptseqm`;
 			
 			my %totalT10guideStat=();
-			%totalT10guideStat=&t10Frac($seqFile);
+			
+			$totalT10guideStatRef=&t10Frac($seqFile);
+			%totalT10guideStat=%{$totalT10guideStatRef};
 			my $totalT10Species=0;
 			my $totalT10Reads=0;
 			my %totalT10SpeciesC=();
@@ -693,10 +696,10 @@ sub PingPongProcessing
 			$totalT10Species=&restrict_num_decimal_digits( $totalT10Species,4);
 			$totalT10Reads=&restrict_num_decimal_digits($totalT10Reads,4);
 			
-				#paired
+			#paired
 			my %pairedT10guideStat=();
-			%pairedT10guideStat=&t10Frac($ppgseqm);
-			
+			$pairedT10guideStatRef=&t10Frac($ppgseqm);
+			%pairedT10guideStat=%{$pairedT10guideStatRef};
 			my $pairedT10Species=0;
 			my $pairedT10Reads=0;
 			my %pairedT10SpeciesC=();
@@ -727,7 +730,7 @@ sub PingPongProcessing
 			{
 				print PPUAFRACTION "10\t$b\tT10Byfile\t$pairedT10SpeciesF{$b}\t$totalT10SpeciesF{$b}\t$pairedT10ReadsF{$b}\t$totalT10ReadsF{$b}\n";
 			}
-				}
+		}
 		
 	     
 	     
@@ -750,7 +753,7 @@ sub PingPongProcessing
 
 sub g1Frac
 {
-	my $input=$_;
+	my $input=@_;
 	#input format
 	#seq reads
 	my %g1Stat=();
@@ -763,12 +766,12 @@ sub g1Frac
 
 	}
 	close(IN);
-	return %g1Stat;
+	return \%g1Stat;
 }
 
 sub t10Frac
 {
-	my $input=$_;
+	my $input=@_;
 	#input format
 	#seq reads
 	my %t10Stat=();
@@ -781,7 +784,7 @@ sub t10Frac
 
 	}
 	close(IN);
-	return %t10Stat;
+	return \%t10Stat;
 }
 
 
