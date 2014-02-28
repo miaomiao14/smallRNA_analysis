@@ -306,7 +306,7 @@ sub InputFileProcessing
 	            
 
 	            
-	            $totalExpectedTenthBase{$file}{$n}{substr($str,0,1)}{$str}+=$reads/$ntm;
+	            $totalExpectedTenthBase{$file}{$n}{substr($str,0,1)}{substr($seq,0,20)}+=$reads/$ntm;
 	            
         	}
          	else
@@ -325,7 +325,7 @@ sub InputFileProcessing
 	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
 
 	            
-	            $totalExpectedTenthBase{$file}{$n}{substr($str,0,1)}{$str}+=$reads/$ntm;
+	            $totalExpectedTenthBase{$file}{$n}{substr($str,0,1)}{substr($seq,0,20)}+=$reads/$ntm;
 	            
         	}#ifelse
       	}#for
@@ -382,9 +382,11 @@ sub PingPongProcessing
 			   	#how many of species start with U?
 			   	#$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}+=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}/$NTM{$l[2]} ;
 		       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]} if($totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]});
-			   	$pairedExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]});#should not be accumulative
 			   	# expect to give the same results as %pairedTenthBase
 				my $str=&revfa($l[1]);
+				#$pairedExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]});#should not be accumulative
+				$pairedExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$str}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$str} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$str});#should not be accumulative
+				
 				$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str}=$totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str} if($totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str});#should not be accumulative			 
 
 				#$totalTenthBase{$file}{$n}{substr($seq,$n,1)}{substr($seq,0,20)}+=$reads/$ntm;
@@ -403,9 +405,11 @@ sub PingPongProcessing
 		       
 		       #$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}+=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}/$NTM{$l[2]} ;
 		       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]} if($totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]});
-			   	$pairedExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]});#should not be accumulative
+			   	#$pairedExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$l[1]});#should not be accumulative
 			   	# expect to give the same results as %pairedTenthBase
 				my $str=&revfa($l[1]);
+				$pairedExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$str}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$str} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$g_0_nt}{$str});#should not be accumulative
+				
 				$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str}=$totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str} if($totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$str});#should not be accumulative			 
 				print PPGSEQ "$l[2]\n" if ($n==9);
 				print PPTSEQ "$str\n" if ($n==9);
