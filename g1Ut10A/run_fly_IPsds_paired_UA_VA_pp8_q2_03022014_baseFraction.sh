@@ -142,7 +142,7 @@ then
 				done
 		done
 	done
-
+fi
 [ $? == 0 ] && \
 touch ${OUT}/.status.${STEP}.all_piRNA.UA_VA_cis_trans_baseFraction_prefix20
 STEP=$((STEP+1))
