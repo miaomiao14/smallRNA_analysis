@@ -305,9 +305,11 @@ sub InputFileProcessing
 	            $str=&revfa($str);
 	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
 	            
+	            #link each potential target with its guides,
 				$totalTenthBaseTrial{$file}{$n}{substr($seq,$n,1)}{$str}{substr($seq,0,20)}+=$reads/$ntm;
+				#just record the potential targets and the reads number from the guides, but not guides seq prefix
 				#$totalExpectedTenthBase{$file}{$n}{substr($seq,$n,1)}{$str}+=$reads/$ntm;
-				#link each potential target with its guides,
+				
 	            
 	           
 	            
