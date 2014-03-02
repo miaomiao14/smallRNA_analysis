@@ -50,7 +50,7 @@ then
 				jobname=${t}${s}_${o}_Ago3_Aub.pp8.q2 && \
 				jOUT=${OUTDIR}/${t}${s}_${o}_Ago3_Aub && \
 				[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
-				/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "$script -i ${A} -j ${B} -n 2 -s fly -o ${jOUT} -d ${indexFlag} -f normbed -a ${fa} >${jOUT}/${t}${s}_${o}_Ago3_Aub.pp8.q2.UA_VA_baseFraction_prefix20.log"
+				/home/wangw1/bin/submitsge 24 ${jobname} $OUTDIR "$script -i ${A} -j ${B} -n 2 -s fly -o ${jOUT} -d ${indexFlag} -f normbed -a ${fa} >${jOUT}/${t}${s}_${o}_Ago3_Aub.pp8.q2.UA_VA_baseFraction_prefix20.log"
 #			
 				done
 		done
@@ -106,7 +106,7 @@ do
 			jobname=${t}${s}_${o}_Ago3AS_AubS.pp8.q2 && \
 			jOUT=${OUTDIR}/${t}${s}_${o}_Ago3AS_AubS && \
 			[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
-			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "$script -i ${A} -j ${B} -n 2 -s fly -o ${jOUT} -d ${indexFlag} -f normbed -a ${fa}>${jOUT}/${t}${s}_${o}_Ago3AS_AubS.pp8.q2.UA_VA_cis_trans_baseFraction_prefix20.log"			
+			/home/wangw1/bin/submitsge 24 ${jobname} $OUTDIR "$script -i ${A} -j ${B} -n 2 -s fly -o ${jOUT} -d ${indexFlag} -f normbed -a ${fa}>${jOUT}/${t}${s}_${o}_Ago3AS_AubS.pp8.q2.UA_VA_cis_trans_baseFraction_prefix20.log"			
 		done
 	done
 done
@@ -137,7 +137,7 @@ then
 				jobname=${t}${s}_${o}_Ago3_Aub.pp8.q2 && \
 				jOUT=${OUTDIR}/${t}${s}_${o}_Ago3_Aub && \
 				[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
-				/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "$script -i ${A} -j ${B} -n 2 -s fly -o ${jOUT} -d ${indexFlag} -f normbed -a ${fa}>${jOUT}/${t}${s}_${o}_Ago3_Aub.pp8.q2.UA_VA_cis_trans_baseFraction_prefix20.log"
+				/home/wangw1/bin/submitsge 24 ${jobname} $OUTDIR "$script -i ${A} -j ${B} -n 2 -s fly -o ${jOUT} -d ${indexFlag} -f normbed -a ${fa}>${jOUT}/${t}${s}_${o}_Ago3_Aub.pp8.q2.UA_VA_cis_trans_baseFraction_prefix20.log"
 #			
 				done
 		done
