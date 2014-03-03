@@ -5,6 +5,7 @@ require "restrict_digts.pm";
 require "Jia.pm";
 use File::Basename;
 use Compress::Zlib;
+use List::Util qw(sum);
 # rule is p1 and p17-21 doesn't need to pair but p2-16 need
 # simplifized version with prefix 16nt
 # input as norm.bed ( no header)
@@ -36,6 +37,9 @@ use Compress::Zlib;
 #02/25/2014
 #fix a bug for base fraction; target strand
 
+
+#03/02/2014
+#add winsize, prefix as parameters
 if(scalar(@ARGV)<6)
 {
         usage();
@@ -61,10 +65,11 @@ my $indexFlag=$parameters->{indexflag};
 my $fileFormat=$parameters->{format};
 my $wsize=$parameters->{winsize};
 my $basep=$parameters->{complementarity};
+my $fastafile=$parameters->{fa};
 
 if($spe eq "fly")
 {
-	open IN, "/home/xuj1/pipeline/common/fasta/dmel-all-chromosome-r5.5_TAS.fasta";
+	open IN, $fastafile;
 	while(<IN>)
 	{
 	   if (/>(.+) type/)
@@ -80,7 +85,7 @@ if($spe eq "fly")
 }
 elsif($spe eq "bombyx")
 {
-	$fastafile="/home/wangw1/pipeline_bm/common/silkgenome.formatted.fa";
+	
 	open IN, $fastafile or die "Fail to open $fastafile: $!";
 	while(<IN>)
 	{
@@ -144,17 +149,17 @@ if($indexFlag)
 				open OUT, ">$seqFile";
 				foreach my $prefix (keys %{$guidepf{$file}})
 				{
-					print OUT "$prefix\t$guidepf{$file}{$prefix}\n" if (length($prefix)==16);
+					print OUT "$prefix\t$guidepf{$file}{$prefix}\n" if (length($prefix)==$basep);
 				}
 			}
-			for ($n=0;$n<20;$n++)
+			for ($n=0;$n<$wsize;$n++)
 			{
 				$fa="$OUTDIR/$file.ref.$n.fa";
 				$indexb="$OUTDIR/$file.$n";
 				open OUT, ">$fa";
 				foreach my $prefix (keys %{$targetpf{$file}{$n}})
 				{
-					print OUT ">$prefix\t$targetpf{$file}{$n}{$prefix}\n$prefix\n" if (length($prefix)==16);
+					print OUT ">$prefix\t$targetpf{$file}{$n}{$prefix}\n$prefix\n" if (length($prefix)==$basep);
 				}
 				`bowtie-build $fa $indexb && rm $fa`;
 	
@@ -249,18 +254,18 @@ sub InputFileProcessing
 		
 		$total{$file}+=$reads/$ntm; #no nta in norm.bed format
 		
-		$totalFirstBase{$file}{substr($seq,0,1)}{substr($seq,0,16)}+=$reads/$ntm;
+		$totalFirstBase{$file}{substr($seq,0,1)}{substr($seq,0,$basep)}+=$reads/$ntm;
 		
 		
-		#store the seq of guide 16nt prefix only; for faster extract the reads number later
-		$guidepf{$file}{substr($seq,0,16)}+=$reads/$ntm;
+		#store the seq of guide $basepnt prefix only; for faster extract the reads number later
+		$guidepf{$file}{substr($seq,0,$basep)}+=$reads/$ntm;
 
 		#norm.bed [1,1] -> bed: $2-1,$3
 		#bed [0,1) ->norm.bed: $2+1,$3
 
 		#suppose my input is bed; 02/18/2014
 		
-		#store chr, 5'end and strand information separately for each query 16nt prefix, the populations to find the guide
+		#store chr, 5'end and strand information separately for each query $basepnt prefix, the populations to find the guide
 		my $fiveend=0;	      
 		if($strand eq '+')
 		{	
@@ -274,7 +279,7 @@ sub InputFileProcessing
 				$fiveend=$bedstart-1;#convert to 0-based,closed
 			}
 			
-			$guidepfsplit{$file}{substr($seq,0,16)}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
+			$guidepfsplit{$file}{substr($seq,0,$basep)}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
 			
 			#if store the start of all query
 			#my $queryStart=$bedstart-1;
@@ -289,11 +294,11 @@ sub InputFileProcessing
 			{
 				$fiveend=$bedend;#convert to bedformat,open
 			}
-	  		$guidepfsplit{$file}{substr($seq,0,16)}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
+	  		$guidepfsplit{$file}{substr($seq,0,$basep)}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
 	  		#my $queryStart=$bedstart-1;
 	  	}
       
-      	for (my $n=0;$n<20;$n++)
+      	for (my $n=0;$n<$wsize;$n++)
       	{
       		my $start=0;
       		my $fiveend=0;
@@ -302,15 +307,15 @@ sub InputFileProcessing
          		
          		if($fileFormat eq "bed")
          		{
-	            	$start=$bedstart+$n+1-16; # $bedstart is 0 based and $start is 0 based, the intermediate end $bedstart+$n+1 is open
-	            	$fiveend=$start+16; #open
+	            	$start=$bedstart+$n+1-$basep; # $bedstart is 0 based and $start is 0 based, the intermediate end $bedstart+$n+1 is open
+	            	$fiveend=$start+$basep; #open
          		}
          		if($fileFormat eq "normbed")
          		{
-         			$start=$bedstart+$n-16;
-         			$fiveend=$start+16;#convert to bed, open
+         			$start=$bedstart+$n-$basep;
+         			$fiveend=$start+$basep;#convert to bed, open
          		}
-	            my $str=substr($genome{$chr},$start,16); #substr function is 0 based
+	            my $str=substr($genome{$chr},$start,$basep); #substr function is 0 based
 	            $str=&revfa($str);
 	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
 	            
@@ -334,7 +339,7 @@ sub InputFileProcessing
          			$start=$bedend-$n-1; #closed
          			$fiveend=$start;	
          		}
-	            my $str=substr($genome{$chr},$start,16);
+	            my $str=substr($genome{$chr},$start,$basep);
 	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
 	            my $tstrand="+";
 	            #store chr, 5'end and strand information separately for each guide 16nt prefix	
@@ -447,7 +452,7 @@ sub PingPongProcessing
 			   $tenthBaseFraction{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}=$totalTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]};#should not be accumulative
 			   
 			   #$totalTenthBase{$file}{$n}{substr($str,9,1)}{$str}
-			   #$totalFirstBase{$file}{substr($seq,0,1)}{substr($seq,0,16)}+=$reads/$ntm;
+			   #$totalFirstBase{$file}{substr($seq,0,1)}{substr($seq,0,$basep)}+=$reads/$ntm;
 		        
 			   $species{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]} ; #this was wrong, has to add {$n}, otherwise accumulative
 		       #the sum of $cisPairSpecies and $transPairSpecies taking coordinates
@@ -559,115 +564,7 @@ sub PingPongProcessing
 	    print PPSCORE "$m\t$score{$n}\n";
 	    $count_N++ if ($score{$n}>0);
 	   
-	   #$firstBaseFraction
-
-	   my %pairedFirstBaseReads=();
-	   my $pairedFirstBaseReadsTotal=0;
-	   my %pairedFirstBaseReadsF=();
-	   my %pairedFirstBaseSpecies=();
-	   my $pairedFirstBaseSpeciesTotal=0;
-	   my %pairedFirstBaseSpeciesF=();
-	   
-	   my %totalFirstBaseReads=();
-	   my $totalFirstBaseReadsTotal=0;
-	   my %totalFirstBaseReadsF=();
-	   my %totalFirstBaseSpecies=();
-	   my $totalFirstBaseSpeciesTotal=0;
-	   my %totalFirstBaseSpeciesF=();
-	   
-	   foreach my $b (keys %{$firstBaseFraction{$guideStrandFile}})
-	   {
-	   		map {$pairedFirstBaseReads{$b}+=$_} values  %{$firstBaseFraction{$guideStrandFile}{$b}};
-	   		$pairedFirstBaseReadsTotal+=$pairedFirstBaseReads{$b};
-	   		$pairedFirstBaseSpecies{$b}=scalar (keys  %{$firstBaseFraction{$guideStrandFile}{$b}});
-	   		$pairedFirstBaseSpeciesTotal+=$pairedFirstBaseSpecies{$b};
-	   		
-	   		#$totalFirstBase{$file}{substr($seq,0,1)}{substr($seq,0,16)}+=$reads/$ntm;
-	   		#total
-	   		map {$totalFirstBaseReads{$b}+=$_} values %{$totalFirstBase{$guideStrandFile}{$b}};
-	   		$totalFirstBaseReadsTotal+= $totalFirstBaseReads{$b};
-	   		$totalFirstBaseSpecies{$b}=scalar (keys %{$totalFirstBase{$guideStrandFile}{$b}});
-	   		$totalFirstBaseSpeciesTotal+= $totalFirstBaseSpecies{$b};
-	   }
-	   foreach my $b (keys  %pairedFirstBaseReads)
-	   {			
-	   		$pairedFirstBaseReadsF{$b}=$pairedFirstBaseReads{$b}/$pairedFirstBaseReadsTotal;
-	   		$pairedFirstBaseReadsF{$b}=&restrict_num_decimal_digits($pairedFirstBaseReadsF{$b},4);
-	   		$pairedFirstBaseSpeciesF{$b}=$pairedFirstBaseSpecies{$b}/$pairedFirstBaseSpeciesTotal;
-	   		$pairedFirstBaseSpeciesF{$b}=&restrict_num_decimal_digits($pairedFirstBaseSpeciesF{$b},4);
-	   		
-	   		$totalFirstBaseReadsF{$b}=$totalFirstBaseReads{$b}/$totalFirstBaseReadsTotal;
-	   		$totalFirstBaseReadsF{$b}=&restrict_num_decimal_digits($totalFirstBaseReadsF{$b},4);
-	   		$totalFirstBaseSpeciesF{$b}=$totalFirstBaseSpecies{$b}/$totalFirstBaseSpeciesTotal;
-	   		$totalFirstBaseSpeciesF{$b}=&restrict_num_decimal_digits($totalFirstBaseSpeciesF{$b},4);
-	   }
-	   
-	   #tenthBaseFraction
-	   my %pairedTenthBaseReads=();
-	   my $pairedTenthBaseReadsTotal=0;
-	   my %pairedTenthBaseReadsF=();
-	   my %pairedTenthBaseSpecies=();
-	   my $pairedTenthBaseSpeciesTotal=0;
-	   my %pairedTenthBaseSpeciesF=();
-	   
-	   my %totalTenthBaseReads=();
-	   my $totalTenthBaseReadsTotal=0;
-	   my %totalTenthBaseReadsF=();
-	   my %totalTenthBaseSpecies=();
-	   my $totalTenthBaseSpeciesTotal=0;
-	   my %totalTenthBaseSpeciesF=();
-	   
-	   foreach my $b (keys %{$tenthBaseFraction{$targetStrandFile}{$n}})
-	   {
-	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$tenthBaseFraction{$targetStrandFile}{$n}{$b}};
-	   		$pairedTenthBaseReadsTotal+=$pairedTenthBaseReads{$b};
-	   		#species
-	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$tenthBaseFraction{$targetStrandFile}{$n}{$b}});
-	   		$pairedTenthBaseSpeciesTotal+=$pairedTenthBaseSpecies{$b};
-	   		
-	   		#$totalTenthBase{$file}{substr($seq,0,1)}{substr($seq,0,16)}+=$reads/$ntm;
-	   		#total
-	   		map {$totalTenthBaseReads{$b}+=$_} values %{$totalTenthBase{$targetStrandFile}{$n}{$b}};
-	   		$totalTenthBaseReadsTotal+= $totalTenthBaseReads{$b};
-	   		#species
-	   		$totalTenthBaseSpecies{$b}=scalar (keys %{$totalTenthBase{$targetStrandFile}{$n}{$b}});
-	   		$totalTenthBaseSpeciesTotal+= $totalTenthBaseSpecies{$b};
-	   }
-	   foreach my $b (keys  %pairedTenthBaseReads)
-	   {			
-	   		$pairedTenthBaseReadsF{$b}=$pairedTenthBaseReads{$b}/$pairedTenthBaseReadsTotal;
-	   		$pairedTenthBaseReadsF{$b}=&restrict_num_decimal_digits($pairedTenthBaseReadsF{$b},4);
-	   		$pairedTenthBaseSpeciesF{$b}=$pairedTenthBaseSpecies{$b}/$pairedTenthBaseSpeciesTotal;
-	   		$pairedTenthBaseSpeciesF{$b}=&restrict_num_decimal_digits($pairedTenthBaseSpeciesF{$b},4);
-	   		
-	   		$totalTenthBaseReadsF{$b}=$totalTenthBaseReads{$b}/$totalTenthBaseReadsTotal;
-	   		$totalTenthBaseReadsF{$b}=&restrict_num_decimal_digits($totalTenthBaseReadsF{$b},4);
-	   		$totalTenthBaseSpeciesF{$b}=$totalTenthBaseSpecies{$b}/$totalTenthBaseSpeciesTotal;
-	   		$totalTenthBaseSpeciesF{$b}=&restrict_num_decimal_digits($totalTenthBaseSpeciesF{$b},4);
-	   }
-	    $pairedFirstBaseSpeciesTotal=&restrict_num_decimal_digits($pairedFirstBaseSpeciesTotal,4);
-		$pairedFirstBaseReadsTotal=&restrict_num_decimal_digits($pairedFirstBaseReadsTotal,4);
-		$pairedTenthBaseSpeciesTotal=&restrict_num_decimal_digits($pairedTenthBaseSpeciesTotal,4);
-		$pairedTenthBaseReadsTotal=&restrict_num_decimal_digits($pairedTenthBaseReadsTotal,4);
-		
-		$totalFirstBaseSpeciesTotal=&restrict_num_decimal_digits($totalFirstBaseSpeciesTotal,4);
-		$totalFirstBaseReadsTotal=&restrict_num_decimal_digits($totalFirstBaseReadsTotal,4);
-		$totalTenthBaseSpeciesTotal=&restrict_num_decimal_digits($totalTenthBaseSpeciesTotal,4);
-		$totalTenthBaseReadsTotal=&restrict_num_decimal_digits($totalTenthBaseReadsTotal,4);
-				
-		my @bases=("A","C","G","T");
-		print PPUAFRACTION "$m\ttotal\tg1\t$pairedFirstBaseSpeciesTotal\t$totalFirstBaseSpeciesTotal\t$pairedFirstBaseReadsTotal\t$totalFirstBaseReadsTotal\n";
-		
-		foreach my $b(@bases)
-		{
-			print PPUAFRACTION "$m\t$b\tg1\t$pairedFirstBaseSpeciesF{$b}\t$totalFirstBaseSpeciesF{$b}\t$pairedFirstBaseReadsF{$b}\t$totalFirstBaseReadsF{$b}\n";
-			
-		}
-		print PPUAFRACTION "$m\ttotal\tt10\t$pairedTenthBaseSpeciesTotal\t$totalTenthBaseSpeciesTotal\t$pairedTenthBaseReadsTotal\t$totalTenthBaseReadsTotal\n";
-		foreach my $b(@bases)
-		{
-			print PPUAFRACTION "$m\t$b\tt10\t$pairedTenthBaseSpeciesF{$b}\t$totalTenthBaseSpeciesF{$b}\t$pairedTenthBaseReadsF{$b}\t$totalTenthBaseReadsF{$b}\n";
-		}
+	
 	   
 	   #Ping-Pong score according to different G1T10 pairs
 	   #for matched pairs, cis only  
@@ -806,10 +703,16 @@ sub PingPongProcessing
 sub ZscoreCal
 {
 		my ($transPairSpeciesRef,$transPair10SpeciesRef,$transPairReadsRef,$count)=@_;
-		my ($Z0,$Z1,$Z2,$X0,$X1,$X2,$m0,$m1,$m2,$std0,$std1,$std2)=(0,0,0,0,0,0,0,0,0,0,0,0);
+		my ($Z0,$Z1,$Z2,$P0,$P1,$P2,$X0,$X1,$X2,$S0,$S1,$S2,$m0,$m1,$m2,$std0,$std1,$std2)=(0,0,0,0,0,0,0,0,0,0,0,0);
+		
+		#X0
 		$X0=scalar (keys %{$transPairSpeciesRef->{9}}); #by species irrespective of coordinates
 	    map {$X1+=$_} (values %{$transPairSpeciesRef->{9}}); #by species according to coordinates
 	    map {$X2+=$_} (values %{$transPairReadsRef->{9}});  #Z-score for all transpairs; by reads
+	    
+	    
+	    
+	    
 	    
 	    #for validation only
 	    #$n_of_species=scalar (keys %{$transPair10Species}); #total number of species irrespective of coordinates
@@ -817,6 +720,7 @@ sub ZscoreCal
 	    #map {$n_of_species_cor+=$_} (values %{$transPair10Species});#total number of species respective of coordinates
 	    #my $n_of_reads=0;
 	    #map {$n_of_reads+=$_} (values %{$transPairReadsRef->{9}}); ###why it is not equal to $X2? pls calculate it before it's deleted!!
+	    
 	    my %transPairSpecies9=%{$transPairSpeciesRef->{9}};
 	    my %transPairReads9=%{$transPairSpeciesRef->{9}};
 	    delete $transPairSpeciesRef->{9}; ##???
@@ -826,7 +730,7 @@ sub ZscoreCal
 	    my @numOfSpeciesCor=();
 	    my @numOfReads=();
 	    
-	    for(my $i=0;$i<20;$i++)
+	    for(my $i=0;$i<$wsize;$i++)
 	    {
 	    	my $n1=scalar (keys %{$transPairSpeciesRef->{$i}});
 	    	my $n2=scalar (keys %{$transPairReadsRef->{$i}});
@@ -845,10 +749,19 @@ sub ZscoreCal
 				push @numOfReads, $XnReads ;
 			}				    	
 	    }
+	    $X0=$numOfSpecies[9];
+	    $X1=$numOfSpeciesCor[9];
+	    $X2=$numOfReads[9];
+	    
+	    splice(@numOfSpecies, 9, 1);
+	    splice(@numOfSpeciesCor, 9, 1);
+	    splice(@numOfReads, 9, 1);
 	    
 	    $std0=&standard_deviation(@numOfSpecies);
 	    $std1=&standard_deviation(@numOfSpeciesCor);
 	    $std2=&standard_deviation(@numOfReads);
+	    
+	    
 	    
 	    #to prove that $transPairReadsRef->{9} was deleted successfully
 	    #my $temp1=$#numOfSpecies+1;
@@ -886,6 +799,7 @@ sub ZscoreCal
 #remove intermediate files
 #`rm *.ebwt`;
 #`rm *.bowtie.out`;
+
 sub mean 
 {
 	my $count=0;
@@ -934,6 +848,9 @@ sub usage
 		print "-s  <species name[fly|bombyx]>\n\t";
 		print "-d  <flag of index[0|1]>\n\t";
 		print "-f  <flag of index[bed|normbed]>\n\t";
+		print "-w  <background windowsize>\n\t";
+		print "-p  <the length of prefix>\n\t";
+		print "-a  <fasta file of the genome>\n\t";
         print "This perl script is count the frequency of 10A irrespective of 1U\n";
 		print "It's maintained by WEI WANG. If you have any questions, please contact wei.wang2\@umassmed.edu\n";
         exit(1);
@@ -952,6 +869,7 @@ sub parse_command_line {
                 elsif($next_arg eq "-f"){ $parameters->{format} = shift(@ARGV); }
                 elsif($next_arg eq "-w"){ $parameters->{winsize}= shift(@ARGV); }
 				elsif($next_arg eq "-p"){ $parameters->{complementarity}= shift(@ARGV); }
+				elsif($next_arg eq "-a"){ $parameters->{fa} = shift(@ARGV); }
 
                 else{ print "Invalid argument: $next_arg"; usage(); }
         }

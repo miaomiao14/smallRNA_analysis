@@ -386,10 +386,10 @@ sub PingPongProcessing
 
 			   
 			   	#how many of species start with U?
-		       	#$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]} if($totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]});
+		       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]} if($totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]});
 			   	# expect to give the same results as %pairedTenthBase
 				
-				$pairedExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]});#should not be accumulative			 
+				#$pairedExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]});#should not be accumulative			 
 				if($totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]})
 				{
 					foreach my $seq (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}})
