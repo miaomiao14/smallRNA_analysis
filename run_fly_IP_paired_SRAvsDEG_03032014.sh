@@ -91,7 +91,7 @@ then
 				[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
 				/home/wangw1/bin/submitsge 24 ${jobname} $OUTDIR "$ppscript -i ${smnormbed} -j ${denormbed} -n 2 -s fly -o ${jOUT} -d ${indexFlag} -f normbed -a ${fa}"	
 
-				done
+
 			done
 		done
 	done
