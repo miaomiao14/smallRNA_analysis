@@ -238,7 +238,7 @@ sub InputFileProcessing
 			$ntm=1;
 		}
 		
-		next if (length($seq)>29 || length($seq)<23);
+		if($inputfile=~/SRA/){next if (length($seq)>29 || length($seq)<23);}
 		next if (/data/);
 		
 		
