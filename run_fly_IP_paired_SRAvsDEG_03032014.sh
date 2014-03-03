@@ -74,7 +74,7 @@ then
 
 				
 				#AubIP piRNAs shared 5'end with AubIP degradome
-				smnormbed=${INDIR}/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz
+				smnormbed=${SRAINDIR}/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz
 				[ -f ${smnormbed} ] && [ -f ${denormbed} ] && \
 				jobname=${t}_AubIPSRA${s}_${o}_AubIPDEG.5shared && \
 				jOUT=${OUTDIR}/${t}_AubIPSRA${s}_${o}_AubIPDEG_shared && \
