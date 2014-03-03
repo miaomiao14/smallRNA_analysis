@@ -45,13 +45,13 @@ then
 		do
 			for s in ${UNIQ[@]}
 			do
-				
+																				 
 				demapper2=${DEGINDIR}/Phil.DEG.AubIP.${t}.ovary.PE/bedIntersectWW/Phil.DEG.AubIP.${t}.ovary.PE.x_rRNA.dm3.sorted.f0x40.noS.5p.all.bed.ntm.collapse.FLY_TRN_ALL.nta.mapper2.gz
 				denormbed=${DEGINDIR}/Phil.DEG.AubIP.${t}.ovary.PE/bedIntersectWW/Phil.DEG.AubIP.${t}.FLY_TRN_ALL.ovary.norm.bed.gz
 								
 				#change to norm.bed format for degradome
-				[ ! -s ${demapper2%.gz}.norm.bed.gz ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${demapper2} ${OUTDIR} && gzip ${demapper2%.gz}.norm.bed
-				mv ${demapper2%.gz}.norm.bed.gz ${denormbed}
+				[ ! -s ${demapper2file%.gz}.norm.bed.gz ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${demapper2} ${DEGINDIR}/Phil.DEG.AubIP.${t}.ovary.PE/bedIntersectWW/ && gzip ${demapper2file%.gz}.norm.bed
+				mv ${demapper2file%.gz}.norm.bed.gz ${denormbed}
 							
 				#Ago3IP piRNAs shared 5'end with AubIP degradome
 				smnormbed=${SRAINDIR}/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz
