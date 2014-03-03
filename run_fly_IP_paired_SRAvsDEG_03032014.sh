@@ -51,28 +51,26 @@ then
 								
 				#change to norm.bed format for degradome
 				#[ ! -s ${demapper2%.gz}.norm.bed.gz ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${demapper2} ${DEGINDIR}/Phil.DEG.AubIP.${t}.ovary.PE/bedIntersectWW/ && gzip ${demapper2%.gz}.norm.bed
-				[ ! -s ${denormbed} ] && mv ${demapper2%.gz}.norm.bed.gz ${denormbed}
+				#[ ! -s ${denormbed} ] && mv ${demapper2%.gz}.norm.bed.gz ${denormbed}
 							
-				#Ago3IP piRNAs shared 5'end with AubIP degradome
-				smnormbed=${SRAINDIR}/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz
-					
-				#script to check the shared 5' end between 5 script
-				[ -f ${smnormbed} ] && [ -f ${denormbed} ] && \
-				jobname=${t}_Ago3IPSRA${s}_${o}_AubIPDEG.5shared && \
-				jOUT=${OUTDIR}/${t}_Ago3IPSRA${s}_${o}_AubIPDEG_shared && \
-				[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
-				/home/wangw1/bin/submitsge 24 ${jobname} $OUTDIR "$sharedscript -i $smnormbed -j $denormbed -o ${jOUT} -f normbed"		
-				
-
-				
-				###Ago3IP piRNAs complementary to AubIP degradome
-
-				#script to check the percent of piRNAs or degradome that are complementary to each other
-				[ -f ${smnormbed} ] && [ -f ${denormbed} ] && \
-				jobname=${t}_Ago3IPSRA${s}_${o}_AubIPDEG.PP && \
-				jOUT=${OUTDIR}/${t}_Ago3IPSRA${s}_${o}_AubIPDEG_PP && \
-				[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
-				/home/wangw1/bin/submitsge 24 ${jobname} $OUTDIR "$ppscript -i ${smnormbed} -j ${denormbed} -n 2 -s fly -o ${jOUT} -d ${indexFlag} -f normbed -a ${fa}"	
+				####Ago3IP piRNAs shared 5'end with AubIP degradome
+#				smnormbed=${SRAINDIR}/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz
+#					
+#				####script to check the shared 5' end between 5 script
+#				[ -f ${smnormbed} ] && [ -f ${denormbed} ] && \
+#				jobname=${t}_Ago3IPSRA${s}_${o}_AubIPDEG.5shared && \
+#				jOUT=${OUTDIR}/${t}_Ago3IPSRA${s}_${o}_AubIPDEG_shared && \
+#				[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
+#				/home/wangw1/bin/submitsge 24 ${jobname} $OUTDIR "$sharedscript -i $smnormbed -j $denormbed -o ${jOUT} -f normbed"		
+#				
+#				###Ago3IP piRNAs complementary to AubIP degradome
+#
+#				####script to check the percent of piRNAs or degradome that are complementary to each other
+#				[ -f ${smnormbed} ] && [ -f ${denormbed} ] && \
+#				jobname=${t}_Ago3IPSRA${s}_${o}_AubIPDEG.PP && \
+#				jOUT=${OUTDIR}/${t}_Ago3IPSRA${s}_${o}_AubIPDEG_PP && \
+#				[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
+#				/home/wangw1/bin/submitsge 24 ${jobname} $OUTDIR "$ppscript -i ${smnormbed} -j ${denormbed} -n 2 -s fly -o ${jOUT} -d ${indexFlag} -f normbed -a ${fa}"	
 
 				
 				#AubIP piRNAs shared 5'end with AubIP degradome
