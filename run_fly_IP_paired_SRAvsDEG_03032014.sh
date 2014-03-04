@@ -52,8 +52,8 @@ then
 				denormbed=${DEGINDIR}/Phil.DEG.AubIP.${t}.ovary.PE/bedIntersectWW/Phil.DEG.AubIP.${t}.${feature}.ovary.norm.bed.gz
 								
 				#change to norm.bed format for degradome
-				[ ! -s ${demapper2%.gz}.norm.bed.gz ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${demapper2} ${DEGINDIR}/Phil.DEG.AubIP.${t}.ovary.PE/bedIntersectWW/ && gzip ${demapper2%.gz}.norm.bed
-				[ ! -s ${denormbed} ] && mv ${demapper2%.gz}.norm.bed.gz ${denormbed}
+				#[ ! -s ${demapper2%.gz}.norm.bed.gz ] && ${PIPELINE_DIRECTORY}/mapper2gznormbed.pl ${demapper2} ${DEGINDIR}/Phil.DEG.AubIP.${t}.ovary.PE/bedIntersectWW/ && gzip ${demapper2%.gz}.norm.bed
+				#[ ! -s ${denormbed} ] && mv ${demapper2%.gz}.norm.bed.gz ${denormbed}
 							
 				#Ago3IP piRNAs shared 5'end with AubIP degradome
 				smnormbed=${SRAINDIR}/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz
