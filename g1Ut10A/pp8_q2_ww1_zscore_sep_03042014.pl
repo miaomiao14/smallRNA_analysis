@@ -282,6 +282,7 @@ sub InputFileProcessing
 				#store the seq of guide 20nt prefix only; for faster extract the reads number later
 				$guidepf{$file}{$seq}+=$reads/$ntm;
 			}
+			$guidepfsplit{$file}{substr($seq,0,$basep)}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
 			
 
 	  	}
@@ -304,6 +305,7 @@ sub InputFileProcessing
 				$guidepf{$file}{$seq}+=$reads/$ntm;
 				
 			}
+			$guidepfsplit{$file}{substr($seq,0,$basep)}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
 
 	  	}
       	for (my $n=0;$n<$wsize;$n++)
