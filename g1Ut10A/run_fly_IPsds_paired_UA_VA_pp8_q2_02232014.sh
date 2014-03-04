@@ -128,29 +128,29 @@ do
 	done
 done
 #total
-for t in ${GT[@]}
-do
-	for o in ${OX[@]}
-	do
-
-			A=${INDIR}/Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts.xkxh.norm.bed.transposons.sense.gz
-			B=${INDIR}/Phil.SRA.AubIP.${t}.${o}.ovary.inserts/Phil.SRA.AubIP.${t}.${o}.ovary.inserts.xkxh.norm.bed.transposons.antisense.gz
-			[ -f ${A} ] && [ -f ${B} ] && \
-			jobname=${t}_${o}_Ago3S_AubAS.pp8.q2 && \
-			jOUT=${OUTDIR}/${t}_${o}_Ago3S_AubAS && \
-			[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
-			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "$script -i ${A} -j ${B} -n 2 -s fly -o ${jOUT} -d ${indexFlag} -f normbed >${jOUT}/${t}_${o}_Ago3S_AubAS.pp8.q2.UA_VA_cis_trans.log"
-			
-			A=${INDIR}/Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts.xkxh.norm.bed.transposons.antisense.gz
-			B=${INDIR}/Phil.SRA.AubIP.${t}.${o}.ovary.inserts/Phil.SRA.AubIP.${t}.${o}.ovary.inserts.xkxh.norm.bed.transposons.sense.gz
-			[ -f ${A} ] && [ -f ${B} ] && \
-			jobname=${t}_${o}_Ago3AS_AubS.pp8.q2 && \
-			jOUT=${OUTDIR}/${t}_${o}_Ago3AS_AubS && \
-			[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
-			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "$script -i ${A} -j ${B} -n 2 -s fly -o ${jOUT} -d ${indexFlag} -f normbed >${jOUT}/${t}_${o}_Ago3AS_AubS.pp8.q2.UA_VA_cis_trans.log"			
-
-	done
-done
+#for t in ${GT[@]}
+#do
+#	for o in ${OX[@]}
+#	do
+#
+#			A=${INDIR}/Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts.xkxh.norm.bed.transposons.sense.gz
+#			B=${INDIR}/Phil.SRA.AubIP.${t}.${o}.ovary.inserts/Phil.SRA.AubIP.${t}.${o}.ovary.inserts.xkxh.norm.bed.transposons.antisense.gz
+#			[ -f ${A} ] && [ -f ${B} ] && \
+#			jobname=${t}_${o}_Ago3S_AubAS.pp8.q2 && \
+#			jOUT=${OUTDIR}/${t}_${o}_Ago3S_AubAS && \
+#			[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
+#			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "$script -i ${A} -j ${B} -n 2 -s fly -o ${jOUT} -d ${indexFlag} -f normbed >${jOUT}/${t}_${o}_Ago3S_AubAS.pp8.q2.UA_VA_cis_trans.log"
+#			
+#			A=${INDIR}/Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts//Phil.SRA.Ago3IP.${t}.${o}.ovary.inserts.xkxh.norm.bed.transposons.antisense.gz
+#			B=${INDIR}/Phil.SRA.AubIP.${t}.${o}.ovary.inserts/Phil.SRA.AubIP.${t}.${o}.ovary.inserts.xkxh.norm.bed.transposons.sense.gz
+#			[ -f ${A} ] && [ -f ${B} ] && \
+#			jobname=${t}_${o}_Ago3AS_AubS.pp8.q2 && \
+#			jOUT=${OUTDIR}/${t}_${o}_Ago3AS_AubS && \
+#			[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
+#			/home/wangw1/bin/submitsge 8 ${jobname} $OUTDIR "$script -i ${A} -j ${B} -n 2 -s fly -o ${jOUT} -d ${indexFlag} -f normbed >${jOUT}/${t}_${o}_Ago3AS_AubS.pp8.q2.UA_VA_cis_trans.log"			
+#
+#	done
+#done
 fi
 [ $? == 0 ] && \
 touch ${OUT}/.status.${STEP}.transposon_piRNA.UA_VA_cis_trans
