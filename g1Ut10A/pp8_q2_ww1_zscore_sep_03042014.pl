@@ -276,12 +276,13 @@ sub InputFileProcessing
 			if($fileFormat eq "normbed")
 			{
 				$fiveend=$bedstart-1;#convert to 0-based,closed
-				$seq=substr($genome{$chr},$fiveend,$basep);
-				$totalFirstBase{$file}{substr($seq,0,1)}{$seq}+=$reads/$ntm;
-		
-				#store the seq of guide 20nt prefix only; for faster extract the reads number later
-				$guidepf{$file}{$seq}+=$reads/$ntm;
+
 			}
+			$seq=substr($genome{$chr},$fiveend,$basep);
+			$totalFirstBase{$file}{substr($seq,0,1)}{$seq}+=$reads/$ntm;
+		
+			#store the seq of guide 20nt prefix only; for faster extract the reads number later
+			$guidepf{$file}{$seq}+=$reads/$ntm;
 			$guidepfsplit{$file}{substr($seq,0,$basep)}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
 			
 
@@ -295,16 +296,17 @@ sub InputFileProcessing
 			if($fileFormat eq "normbed")
 			{
 				$fiveend=$bedend;#convert to bedformat,open
-				my $seqstart=$bedend-$basep;
-     			my $seqtemp=substr($genome{$chr},$seqstart,$basep);
-     			$seq=&revfa($seqtemp);
 				
-				$totalFirstBase{$file}{substr($seq,0,1)}{$seq}+=$reads/$ntm;
-		
-				#store the seq of guide 20nt prefix only; for faster extract the reads number later
-				$guidepf{$file}{$seq}+=$reads/$ntm;
 				
 			}
+			my $seqstart=$fiveend-$basep;
+     		my $seqtemp=substr($genome{$chr},$seqstart,$basep);
+     		$seq=&revfa($seqtemp);
+				
+			$totalFirstBase{$file}{substr($seq,0,1)}{$seq}+=$reads/$ntm;
+		
+				#store the seq of guide 20nt prefix only; for faster extract the reads number later
+			$guidepf{$file}{$seq}+=$reads/$ntm;
 			$guidepfsplit{$file}{substr($seq,0,$basep)}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
 
 	  	}
