@@ -150,7 +150,7 @@ if($indexFlag)
 	     
 		if ($total{$file}>10)
 		{
-			$seqFile="$OUTDIR/$file.$basep.seq";
+			$seqFile="$OUTDIR/$file.seq";
 			if( ! -s $seqFile )#test the existence of file
 			{
 				open OUT, ">$seqFile";
@@ -416,7 +416,7 @@ sub PingPongProcessing
 		my %tenthBaseFraction=();
 		# file1 as ref
 		$indexb="$BOUTDIR/$targetStrandFile.$basep.$n";
-		$seqFile="$OUTDIR/$guideStrandFile.$basep.seq";
+		$seqFile="$OUTDIR/$guideStrandFile.seq";
 		$bowtieOut="$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.$n.bowtie.out";
 	 	`[ ! -f $bowtieOut ] && bowtie $indexb -r -a -v 1 -p 8 $seqFile --suppress 1,4,6,7 | grep + > $bowtieOut`;
 	   	my %NTM=();
@@ -747,7 +747,7 @@ sub PingPongProcessing
 #		if($m==10)
 #		{
 #			$ppgseq="$OUTDIR/$guideStrandFile.$basep.G.ppseq";
-#			$seqFile="$OUTDIR/$guideStrandFile.$basep.seq";
+#			$seqFile="$OUTDIR/$guideStrandFile.seq";
 #			$ppgseqm="$OUTDIR/$guideStrandFile.$basep.G.ppseq.reads";
 #			`match.pl $ppgseq $seqFile >$ppgseqm`;
 #		
@@ -817,7 +817,7 @@ sub PingPongProcessing
 #			}
 #			
 #			$pptseq="$OUTDIR/$targetStrandFile.$basep.T.ppseq";
-#			$seqFile="$OUTDIR/$targetStrandFile.$basep.seq";
+#			$seqFile="$OUTDIR/$targetStrandFile.seq";
 #			$pptseqm="$OUTDIR/$targetStrandFile.$basep.T.ppseq.reads";
 #			`match.pl $pptseq $seqFile >$pptseqm`;
 #			
