@@ -19,7 +19,7 @@ fa=/home/xuj1/pipeline/common/fasta/dmel-all-chromosome-r5.5_TAS.fasta
 
 STEP=1
 
-ppscript=${PIPELINE_DIRECTORY}/g1Ut10A/pp8_q2_ww1_zscore_sep_02272014_baseFraction.pl
+ppscript=${PIPELINE_DIRECTORY}/g1Ut10A/pp8_SRA_vs_DEG_q2_ww1_zscore_sep_02272014_baseFraction.pl
 sharedscript=${PIPELINE_DIRECTORY}/SRA_DEG_shared5end.pl
 #use xkxh.norm.bed instead of transposon mappers
 SRAINDIR=/home/wangw1/isilon_temp/ipsmRNA/jia_pipeline_results/
@@ -59,11 +59,11 @@ then
 				smnormbed=${SRAINDIR}/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts/Phil.SRA.Ago3IP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz
 #					
 #				####script to check the shared 5' end between 5 script
-				[ -f ${smnormbed} ] && [ -f ${denormbed} ] && \
-				jobname=${t}_Ago3IPSRA${s}_${o}_AubIPDEG.5shared && \
-				jOUT=${OUTDIR}/${t}_Ago3IPSRA${s}_${o}_AubIPDEG_shared && \
-				[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
-				/home/wangw1/bin/submitsge 24 ${jobname} $OUTDIR "$sharedscript -i $smnormbed -j $denormbed -o ${jOUT} -f normbed"		
+#				[ -f ${smnormbed} ] && [ -f ${denormbed} ] && \
+#				jobname=${t}_Ago3IPSRA${s}_${o}_AubIPDEG.5shared && \
+#				jOUT=${OUTDIR}/${t}_Ago3IPSRA${s}_${o}_AubIPDEG_shared && \
+#				[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
+#				/home/wangw1/bin/submitsge 24 ${jobname} $OUTDIR "$sharedscript -i $smnormbed -j $denormbed -o ${jOUT} -f normbed"		
 #				
 #				###Ago3IP piRNAs complementary to AubIP degradome
 #
@@ -77,11 +77,11 @@ then
 				
 				#AubIP piRNAs shared 5'end with AubIP degradome
 				smnormbed=${SRAINDIR}/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts/Phil.SRA.AubIP${s}.${t}.${o}.ovary.inserts.xkxh.norm.bed.gz
-				[ -f ${smnormbed} ] && [ -f ${denormbed} ] && \
-				jobname=${t}_AubIPSRA${s}_${o}_AubIPDEG.5shared && \
-				jOUT=${OUTDIR}/${t}_AubIPSRA${s}_${o}_AubIPDEG_shared && \
-				[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
-				/home/wangw1/bin/submitsge 24 ${jobname} $OUTDIR "$sharedscript -i $smnormbed -j $denormbed -o ${jOUT} -f normbed"	
+#				[ -f ${smnormbed} ] && [ -f ${denormbed} ] && \
+#				jobname=${t}_AubIPSRA${s}_${o}_AubIPDEG.5shared && \
+#				jOUT=${OUTDIR}/${t}_AubIPSRA${s}_${o}_AubIPDEG_shared && \
+#				[ ! -d ${jOUT} ] && mkdir -p ${jOUT} && \
+#				/home/wangw1/bin/submitsge 24 ${jobname} $OUTDIR "$sharedscript -i $smnormbed -j $denormbed -o ${jOUT} -f normbed"	
 				
 
 				#AubIP piRNAs complementary to AubIP degradome
