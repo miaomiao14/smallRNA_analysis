@@ -416,8 +416,8 @@ sub PingPongProcessing
 	
 	foreach ($n=0;$n<$wsize;$n++)
 	{
-		my %firstBaseFraction=();
-		my %tenthBaseFraction=();
+		my %pairedFirstBase=();
+		my %pairedTenthBase=();
 		# file1 as ref
 		$indexb="$BOUTDIR/$targetStrandFile.$basep.$n";
 		$seqFile="$OUTDIR/$guideStrandFile.seq";
@@ -1117,9 +1117,9 @@ sub ZscoreCal
 	    $std0=&restrict_num_decimal_digits($std0,3);
 	    $std1=&restrict_num_decimal_digits($std1,3);
 	    $std2=&restrict_num_decimal_digits($std2,3);
-	    $P0=&restrict_num_decimal_digits($P0,3);
-	    $P1=&restrict_num_decimal_digits($P1,3);
-	    $P2=&restrict_num_decimal_digits($P2,3);
+	    $P0=&restrict_num_decimal_digits($P0,4);
+	    $P1=&restrict_num_decimal_digits($P1,4);
+	    $P2=&restrict_num_decimal_digits($P2,4);
 	    
 	    
 	    
