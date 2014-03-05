@@ -265,7 +265,7 @@ sub InputFileProcessing
 		$total{$file}+=$reads/$ntm; #no nta in norm.bed format
 		#store chr, 5'end and strand information separately for each query 20nt prefix, the populations to find the guide
 		my $fiveend=0;
-		my $seq="";	      
+		my $dnaseq="";	      
 		if($strand eq '+')
 		{	
 			
@@ -278,12 +278,12 @@ sub InputFileProcessing
 				$fiveend=$bedstart-1;#convert to 0-based,closed
 
 			}
-			$seq=substr($genome{$chr},$fiveend,$basep);
-			$totalFirstBase{$file}{substr($seq,0,1)}{$seq}+=$reads/$ntm;
+			$dnaseq=substr($genome{$chr},$fiveend,$basep);
+			$totalFirstBase{$file}{substr($dnaseq,0,1)}{$dnaseq}+=$reads/$ntm;
 		
 			#store the seq of guide 20nt prefix only; for faster extract the reads number later
-			$guidepf{$file}{$seq}+=$reads/$ntm;
-			$guidepfsplit{$file}{substr($seq,0,$basep)}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
+			$guidepf{$file}{$dnaseq}+=$reads/$ntm;
+			$guidepfsplit{$file}{substr($dnaseq,0,$basep)}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
 			
 
 	  	}
@@ -301,13 +301,13 @@ sub InputFileProcessing
 			}
 			my $seqstart=$fiveend-$basep;
      		my $seqtemp=substr($genome{$chr},$seqstart,$basep);
-     		$seq=&revfa($seqtemp);
+     		$dnaseq=&revfa($seqtemp);
 				
-			$totalFirstBase{$file}{substr($seq,0,1)}{$seq}+=$reads/$ntm;
+			$totalFirstBase{$file}{substr($dnaseq,0,1)}{$dnaseq}+=$reads/$ntm;
 		
 				#store the seq of guide 20nt prefix only; for faster extract the reads number later
-			$guidepf{$file}{$seq}+=$reads/$ntm;
-			$guidepfsplit{$file}{substr($seq,0,$basep)}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
+			$guidepf{$file}{$dnaseq}+=$reads/$ntm;
+			$guidepfsplit{$file}{substr($dnaseq,0,$basep)}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
 
 	  	}
       	for (my $n=0;$n<$wsize;$n++)
@@ -336,7 +336,7 @@ sub InputFileProcessing
 	            $targetpfsplit{$file}{$n}{$str}{"$chr,$fiveend,$tstrand"}+=$reads/$ntm; #store the strand information for guide strand
 	            #my $indexStart=$start;
 	            
-	            $totalTenthBaseTrial{$file}{$n}{substr($seq,$n,1)}{$str}{substr($seq,0,$basep)}+=$reads/$ntm;
+	            $totalTenthBaseTrial{$file}{$n}{substr($dnaseq,$n,1)}{$str}{substr($dnaseq,0,$basep)}+=$reads/$ntm;
 	            
         	}
          	else
@@ -357,7 +357,7 @@ sub InputFileProcessing
 	            #store chr, 5'end and strand information separately for each guide 16nt prefix	
 	            $targetpfsplit{$file}{$n}{$str}{"$chr,$fiveend,$tstrand"}+=$reads/$ntm;
 	            
-	            $totalTenthBaseTrial{$file}{$n}{substr($seq,$n,1)}{$str}{substr($seq,0,$basep)}+=$reads/$ntm;
+	            $totalTenthBaseTrial{$file}{$n}{substr($dnaseq,$n,1)}{$str}{substr($dnaseq,0,$basep)}+=$reads/$ntm;
 	            
         	}#ifelse
       	}#for
