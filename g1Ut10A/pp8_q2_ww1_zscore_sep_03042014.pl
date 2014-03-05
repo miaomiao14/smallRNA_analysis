@@ -1133,6 +1133,43 @@ sub ZscoreCal
 #remove intermediate files
 #`rm *.ebwt`;
 #`rm *.bowtie.out`;
+sub g1Frac
+{
+	my $input= shift ;
+	#input format
+	#seq reads
+	my %g1Stat=();
+	open IN, $input;
+	while(my $line=<IN>)
+	{
+		my($seq,$readn)=split(/\t/,$line);
+		my $g1=substr($seq,0,1);
+		$g1Stat{$g1}{$seq}+=$readn;
+
+	}
+	close(IN);
+	return \%g1Stat;
+}
+
+sub t10Frac
+{
+	my $input= shift ;
+	#input format
+	#seq reads
+	my %t10Stat=();
+	open IN, $input;
+	while(my $line=<IN>)
+	{
+		my($seq,$readn)=split(/\t/,$line);
+		my $g1=substr($seq,9,1);
+		$t10Stat{$g1}{$seq}+=$readn;
+
+	}
+	close(IN);
+	return \%t10Stat;
+}
+
+
 
 sub mean 
 {
