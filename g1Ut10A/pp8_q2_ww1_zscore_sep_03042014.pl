@@ -259,7 +259,7 @@ sub InputFileProcessing
 			$ntm=1;
 		}
 		
-		next if (length($seq)>29 || length($seq)<23);
+		if($inputfile=~/SRA/){next if (length($seq)>29 || length($seq)<23);}
 		next if (/data/);
 		
 		$total{$file}+=$reads/$ntm; #no nta in norm.bed format
@@ -357,7 +357,7 @@ sub InputFileProcessing
 	            #store chr, 5'end and strand information separately for each guide 16nt prefix	
 	            $targetpfsplit{$file}{$n}{$str}{"$chr,$fiveend,$tstrand"}+=$reads/$ntm;
 	            
-	             $totalTenthBaseTrial{$file}{$n}{substr($seq,$n,1)}{$str}{substr($seq,0,$basep)}+=$reads/$ntm;
+	            $totalTenthBaseTrial{$file}{$n}{substr($seq,$n,1)}{$str}{substr($seq,0,$basep)}+=$reads/$ntm;
 	            
         	}#ifelse
       	}#for
