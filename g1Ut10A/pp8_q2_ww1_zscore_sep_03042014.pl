@@ -537,7 +537,7 @@ sub PingPongProcessing
 		       }
 		       					       
 		       #store target seq from query populations, as it's from bowtie output, by default, it has a partner
-		       print PPSEQ "$l[2]\n" if ($n==9);
+
 	      	}#perfect pair
 
 	      	elsif ($l[3]=~/(\d+):(\w)>(\w)/)
@@ -588,8 +588,7 @@ sub PingPongProcessing
 		       $transallPairSpecies{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]};
 			   $transallPair10Species{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]} if($n==9);
 			   $transallPairReads{$n}{$l[2]}+=$gttotal/$NTM{$l[2]};
-		       
-		       print PPSEQ "$l[2]\n" if ($n==9);
+
 			}
 		} #while
 		close(IN);
@@ -667,19 +666,8 @@ sub PingPongProcessing
 	   		
 	   		
 	   }
-#	   foreach my $b (keys %{$pairedExpectedTenthBase{$targetStrandFile}{$n}})
-#	   {
-#	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$pairedExpectedTenthBase{$targetStrandFile}{$n}{$b}};
-#	   		$pairedTenthBaseReadsTotal+=$pairedTenthBaseReads{$b};
-#	   		#species
-#	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$pairedExpectedTenthBase{$targetStrandFile}{$n}{$b}});
-#	   		$pairedTenthBaseSpeciesTotal+=$pairedTenthBaseSpecies{$b};
-#	   		
-#	   		
-#	   }
-#	   
-	   
-	   
+
+	  	   
 	   my %totalTenthBaseTemp=();
 	   foreach my $b (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}})
 	   {
@@ -748,149 +736,146 @@ sub PingPongProcessing
 			print PPUAFRACTION "$m\t$b\tt10\t$pairedTenthBaseSpeciesF{$b}\t$totalTenthBaseSpeciesF{$b}\t$pairedTenthBaseReadsF{$b}\t$totalTenthBaseReadsF{$b}\n";
 		}
 
-#		if($m==10)
-#		{
-#			$ppgseq="$OUTDIR/$guideStrandFile.$basep.G.ppseq";
-#			$seqFile="$OUTDIR/$guideStrandFile.seq";
-#			$ppgseqm="$OUTDIR/$guideStrandFile.$basep.G.ppseq.reads";
-#			`match.pl $ppgseq $seqFile >$ppgseqm`;
-#		
-#			my @bases=("A","C","G","T");
-#			#total
-#			my %totalG1guideStat=();
-#			$totalG1guideStatRef=&g1Frac($seqFile);
-#			%totalG1guideStat=%{$totalG1guideStatRef};
-#			my $totalG1Species=0;
-#			my $totalG1Reads=0;
-#			my %totalG1SpeciesC=();
-#			my %totalG1ReadsC=();
-#			my %totalG1SpeciesF=();
-#			my %totalG1ReadsF=();
-#			foreach my $b (keys %totalG1guideStat)
-#			{
-#				$totalG1SpeciesC{$b}=scalar (keys %{$totalG1guideStat{$b}});
-#				$totalG1Species+=$totalG1SpeciesC{$b};
-#				map {$totalG1ReadsC{$b}+=$_} values %{$totalG1guideStat{$b}};
-#				$totalG1Reads+=$totalG1ReadsC{$b};
-#			}
-#		
-#			foreach my $b(keys %totalG1SpeciesC )
-#			{
-#				$totalG1SpeciesF{$b}=$totalG1SpeciesC{$b}/$totalG1Species;
-#				$totalG1SpeciesF{$b}=&restrict_num_decimal_digits($totalG1SpeciesF{$b},4);
-#				$totalG1ReadsF{$b}=$totalG1ReadsC{$b}/$totalG1Reads;
-#				$totalG1ReadsF{$b}=&restrict_num_decimal_digits($totalG1ReadsF{$b},4);
-#			}
-#			$totalG1Species=&restrict_num_decimal_digits( $totalG1Species,4);
-#			$totalG1Reads=&restrict_num_decimal_digits($totalG1Reads,4);
-#			
-#			
-#			#paired
-#			my %pairedG1guideStat=();
-#			$pairedG1guideStatRef=&g1Frac($ppgseqm);
-#			%pairedG1guideStat=%{$pairedG1guideStatRef};
-#			my $pairedG1Species=0;
-#			my $pairedG1Reads=0;
-#			my %pairedG1SpeciesC=();
-#			my %pairedG1ReadsC=();
-#			my %pairedG1SpeciesF=();
-#			my %pairedG1ReadsF=();
-#			foreach my $b (keys %pairedG1guideStat)
-#			{
-#				$pairedG1SpeciesC{$b}=scalar (keys %{$pairedG1guideStat{$b}});
-#				$pairedG1Species+=$pairedG1SpeciesC{$b};
-#				map {$pairedG1ReadsC{$b}+=$_} values %{$pairedG1guideStat{$b}};
-#				$pairedG1Reads+=$pairedG1ReadsC{$b};
-#			}
-#		
-#			foreach my $b(keys %pairedG1SpeciesC )
-#			{
-#				$pairedG1SpeciesF{$b}=$pairedG1SpeciesC{$b}/$pairedG1Species;
-#				$pairedG1SpeciesF{$b}=&restrict_num_decimal_digits($pairedG1SpeciesF{$b},4);
-#				$pairedG1ReadsF{$b}=$pairedG1ReadsC{$b}/$pairedG1Reads;
-#				$pairedG1ReadsF{$b}=&restrict_num_decimal_digits($pairedG1ReadsF{$b},4);
-#			}
-#			$pairedG1Species=&restrict_num_decimal_digits( $pairedG1Species,4);
-#			$pairedG1Reads=&restrict_num_decimal_digits($pairedG1Reads,4);
-#			
-#			
-#			print PPUAFRACTION "10\tg1totalByfile\tg1\t$pairedG1Species\t$totalG1Species\t$pairedG1Reads\t$totalG1Reads\n";
-#			foreach my $b(@bases)
-#			{
-#				print PPUAFRACTION "10\t$b\tg1Byfile\t$pairedG1SpeciesF{$b}\t$totalG1SpeciesF{$b}\t$pairedG1ReadsF{$b}\t$totalG1ReadsF{$b}\n";
-#			}
-#			
-#			$pptseq="$OUTDIR/$targetStrandFile.$basep.T.ppseq";
-#			$seqFile="$OUTDIR/$targetStrandFile.seq";
-#			$pptseqm="$OUTDIR/$targetStrandFile.$basep.T.ppseq.reads";
-#			`match.pl $pptseq $seqFile >$pptseqm`;
-#			
-#			my %totalT10guideStat=();
-#			
-#			$totalT10guideStatRef=&t10Frac($seqFile);
-#			%totalT10guideStat=%{$totalT10guideStatRef};
-#			my $totalT10Species=0;
-#			my $totalT10Reads=0;
-#			my %totalT10SpeciesC=();
-#			my %totalT10ReadsC=();
-#			my %totalT10SpeciesF=();
-#			my %totalT10ReadsF=();
-#			foreach my $b (keys %totalT10guideStat)
-#			{
-#				$totalT10SpeciesC{$b}=scalar (keys %{$totalT10guideStat{$b}});
-#				$totalT10Species+=$totalT10SpeciesC{$b};
-#				map {$totalT10ReadsC{$b}+=$_} values %{$totalT10guideStat{$b}};
-#				$totalT10Reads+=$totalT10ReadsC{$b};
-#			}
-#		
-#			foreach my $b(keys %totalT10SpeciesC )
-#			{
-#				$totalT10SpeciesF{$b}=$totalT10SpeciesC{$b}/$totalT10Species;
-#				$totalT10SpeciesF{$b}=&restrict_num_decimal_digits($totalT10SpeciesF{$b},4);
-#				$totalT10ReadsF{$b}=$totalT10ReadsC{$b}/$totalT10Reads;
-#				$totalT10ReadsF{$b}=&restrict_num_decimal_digits($totalT10ReadsF{$b},4);
-#			}
-#			$totalT10Species=&restrict_num_decimal_digits( $totalT10Species,4);
-#			$totalT10Reads=&restrict_num_decimal_digits($totalT10Reads,4);
-#			
-#			#paired
-#			my %pairedT10guideStat=();
-#			$pairedT10guideStatRef=&t10Frac($pptseqm);
-#			%pairedT10guideStat=%{$pairedT10guideStatRef};
-#			my $pairedT10Species=0;
-#			my $pairedT10Reads=0;
-#			my %pairedT10SpeciesC=();
-#			my %pairedT10ReadsC=();
-#			my %pairedT10SpeciesF=();
-#			my %pairedT10ReadsF=();
-#			foreach my $b (keys %pairedT10guideStat)
-#			{
-#				$pairedT10SpeciesC{$b}=scalar (keys %{$pairedT10guideStat{$b}});
-#				$pairedT10Species+=$pairedT10SpeciesC{$b};
-#				map {$pairedT10ReadsC{$b}+=$_} values %{$pairedT10guideStat{$b}};
-#				$pairedT10Reads+=$pairedT10ReadsC{$b};
-#			}
-#		
-#			foreach my $b(keys %pairedT10SpeciesC )
-#			{
-#				$pairedT10SpeciesF{$b}=$pairedT10SpeciesC{$b}/$pairedT10Species;
-#				$pairedT10SpeciesF{$b}=&restrict_num_decimal_digits($pairedT10SpeciesF{$b},4);
-#				$pairedT10ReadsF{$b}=$pairedT10ReadsC{$b}/$pairedT10Reads;
-#				$pairedT10ReadsF{$b}=&restrict_num_decimal_digits($pairedT10ReadsF{$b},4);
-#			}
-#			$pairedT10Species=&restrict_num_decimal_digits( $pairedT10Species,4);
-#			$pairedT10Reads=&restrict_num_decimal_digits($pairedT10Reads,4);
-#			
-#			
-#			print PPUAFRACTION "10\tT10totalByfile\tT10\t$pairedT10Species\t$totalT10Species\t$pairedT10Reads\t$totalT10Reads\n";
-#			foreach my $b(@bases)
-#			{
-#				print PPUAFRACTION "10\t$b\tT10Byfile\t$pairedT10SpeciesF{$b}\t$totalT10SpeciesF{$b}\t$pairedT10ReadsF{$b}\t$totalT10ReadsF{$b}\n";
-#			}
-#		}
-#		
-#		
+		if($m==10)
+		{
+			$ppgseq="$OUTDIR/$guideStrandFile.G.ppseq";
+			$seqFile="$OUTDIR/$guideStrandFile.seq";
+			$ppgseqm="$OUTDIR/$guideStrandFile.G.ppseq.reads";
+			`match.pl $ppgseq $seqFile >$ppgseqm`;
 		
+			my @bases=("A","C","G","T");
+			#total
+			my %totalG1guideStat=();
+			$totalG1guideStatRef=&g1Frac($seqFile);
+			%totalG1guideStat=%{$totalG1guideStatRef};
+			my $totalG1Species=0;
+			my $totalG1Reads=0;
+			my %totalG1SpeciesC=();
+			my %totalG1ReadsC=();
+			my %totalG1SpeciesF=();
+			my %totalG1ReadsF=();
+			foreach my $b (keys %totalG1guideStat)
+			{
+				$totalG1SpeciesC{$b}=scalar (keys %{$totalG1guideStat{$b}});
+				$totalG1Species+=$totalG1SpeciesC{$b};
+				map {$totalG1ReadsC{$b}+=$_} values %{$totalG1guideStat{$b}};
+				$totalG1Reads+=$totalG1ReadsC{$b};
+			}
+		
+			foreach my $b(keys %totalG1SpeciesC )
+			{
+				$totalG1SpeciesF{$b}=$totalG1SpeciesC{$b}/$totalG1Species;
+				$totalG1SpeciesF{$b}=&restrict_num_decimal_digits($totalG1SpeciesF{$b},4);
+				$totalG1ReadsF{$b}=$totalG1ReadsC{$b}/$totalG1Reads;
+				$totalG1ReadsF{$b}=&restrict_num_decimal_digits($totalG1ReadsF{$b},4);
+			}
+			$totalG1Species=&restrict_num_decimal_digits( $totalG1Species,4);
+			$totalG1Reads=&restrict_num_decimal_digits($totalG1Reads,4);
+			
+			
+			#paired
+			my %pairedG1guideStat=();
+			$pairedG1guideStatRef=&g1Frac($ppgseqm);
+			%pairedG1guideStat=%{$pairedG1guideStatRef};
+			my $pairedG1Species=0;
+			my $pairedG1Reads=0;
+			my %pairedG1SpeciesC=();
+			my %pairedG1ReadsC=();
+			my %pairedG1SpeciesF=();
+			my %pairedG1ReadsF=();
+			foreach my $b (keys %pairedG1guideStat)
+			{
+				$pairedG1SpeciesC{$b}=scalar (keys %{$pairedG1guideStat{$b}});
+				$pairedG1Species+=$pairedG1SpeciesC{$b};
+				map {$pairedG1ReadsC{$b}+=$_} values %{$pairedG1guideStat{$b}};
+				$pairedG1Reads+=$pairedG1ReadsC{$b};
+			}
+		
+			foreach my $b(keys %pairedG1SpeciesC )
+			{
+				$pairedG1SpeciesF{$b}=$pairedG1SpeciesC{$b}/$pairedG1Species;
+				$pairedG1SpeciesF{$b}=&restrict_num_decimal_digits($pairedG1SpeciesF{$b},4);
+				$pairedG1ReadsF{$b}=$pairedG1ReadsC{$b}/$pairedG1Reads;
+				$pairedG1ReadsF{$b}=&restrict_num_decimal_digits($pairedG1ReadsF{$b},4);
+			}
+			$pairedG1Species=&restrict_num_decimal_digits( $pairedG1Species,4);
+			$pairedG1Reads=&restrict_num_decimal_digits($pairedG1Reads,4);
+			
+			
+			print PPUAFRACTION "10\tg1totalByfile\tg1\t$pairedG1Species\t$totalG1Species\t$pairedG1Reads\t$totalG1Reads\n";
+			foreach my $b(@bases)
+			{
+				print PPUAFRACTION "10\t$b\tg1Byfile\t$pairedG1SpeciesF{$b}\t$totalG1SpeciesF{$b}\t$pairedG1ReadsF{$b}\t$totalG1ReadsF{$b}\n";
+			}
+			
+			$pptseq="$OUTDIR/$targetStrandFile.T.ppseq";
+			$seqFile="$OUTDIR/$targetStrandFile.seq";
+			$pptseqm="$OUTDIR/$targetStrandFile.T.ppseq.reads";
+			`match.pl $pptseq $seqFile >$pptseqm`;
+			
+			my %totalT10guideStat=();
+			
+			$totalT10guideStatRef=&t10Frac($seqFile);
+			%totalT10guideStat=%{$totalT10guideStatRef};
+			my $totalT10Species=0;
+			my $totalT10Reads=0;
+			my %totalT10SpeciesC=();
+			my %totalT10ReadsC=();
+			my %totalT10SpeciesF=();
+			my %totalT10ReadsF=();
+			foreach my $b (keys %totalT10guideStat)
+			{
+				$totalT10SpeciesC{$b}=scalar (keys %{$totalT10guideStat{$b}});
+				$totalT10Species+=$totalT10SpeciesC{$b};
+				map {$totalT10ReadsC{$b}+=$_} values %{$totalT10guideStat{$b}};
+				$totalT10Reads+=$totalT10ReadsC{$b};
+			}
+		
+			foreach my $b(keys %totalT10SpeciesC )
+			{
+				$totalT10SpeciesF{$b}=$totalT10SpeciesC{$b}/$totalT10Species;
+				$totalT10SpeciesF{$b}=&restrict_num_decimal_digits($totalT10SpeciesF{$b},4);
+				$totalT10ReadsF{$b}=$totalT10ReadsC{$b}/$totalT10Reads;
+				$totalT10ReadsF{$b}=&restrict_num_decimal_digits($totalT10ReadsF{$b},4);
+			}
+			$totalT10Species=&restrict_num_decimal_digits( $totalT10Species,4);
+			$totalT10Reads=&restrict_num_decimal_digits($totalT10Reads,4);
+			
+			#paired
+			my %pairedT10guideStat=();
+			$pairedT10guideStatRef=&t10Frac($pptseqm);
+			%pairedT10guideStat=%{$pairedT10guideStatRef};
+			my $pairedT10Species=0;
+			my $pairedT10Reads=0;
+			my %pairedT10SpeciesC=();
+			my %pairedT10ReadsC=();
+			my %pairedT10SpeciesF=();
+			my %pairedT10ReadsF=();
+			foreach my $b (keys %pairedT10guideStat)
+			{
+				$pairedT10SpeciesC{$b}=scalar (keys %{$pairedT10guideStat{$b}});
+				$pairedT10Species+=$pairedT10SpeciesC{$b};
+				map {$pairedT10ReadsC{$b}+=$_} values %{$pairedT10guideStat{$b}};
+				$pairedT10Reads+=$pairedT10ReadsC{$b};
+			}
+		
+			foreach my $b(keys %pairedT10SpeciesC )
+			{
+				$pairedT10SpeciesF{$b}=$pairedT10SpeciesC{$b}/$pairedT10Species;
+				$pairedT10SpeciesF{$b}=&restrict_num_decimal_digits($pairedT10SpeciesF{$b},4);
+				$pairedT10ReadsF{$b}=$pairedT10ReadsC{$b}/$pairedT10Reads;
+				$pairedT10ReadsF{$b}=&restrict_num_decimal_digits($pairedT10ReadsF{$b},4);
+			}
+			$pairedT10Species=&restrict_num_decimal_digits( $pairedT10Species,4);
+			$pairedT10Reads=&restrict_num_decimal_digits($pairedT10Reads,4);
+			
+			
+			print PPUAFRACTION "10\tT10totalByfile\tT10\t$pairedT10Species\t$totalT10Species\t$pairedT10Reads\t$totalT10Reads\n";
+			foreach my $b(@bases)
+			{
+				print PPUAFRACTION "10\t$b\tT10Byfile\t$pairedT10SpeciesF{$b}\t$totalT10SpeciesF{$b}\t$pairedT10ReadsF{$b}\t$totalT10ReadsF{$b}\n";
+			}
+		}
 	   
 	   #total Ping-Pong
 	   
