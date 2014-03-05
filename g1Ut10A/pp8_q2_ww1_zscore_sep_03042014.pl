@@ -738,15 +738,15 @@ sub PingPongProcessing
 
 		if($m==10)
 		{
-			$ppgseq="$OUTDIR/$guideStrandFile.G.ppseq";
+			$ppgseq="$OUTDIR/$guideStrandFile.$basep.prefix.G.ppseq";#$basep.prefix.
 			$seqFile="$OUTDIR/$guideStrandFile.seq";
-			$ppgseqm="$OUTDIR/$guideStrandFile.G.ppseq.reads";
+			$ppgseqm="$OUTDIR/$guideStrandFile.$basep.prefix.G.ppseq.reads";
 			`match.pl $ppgseq $seqFile >$ppgseqm`;
 		
 			my @bases=("A","C","G","T");
 			#total
 			my %totalG1guideStat=();
-			$totalG1guideStatRef=&g1Frac($seqFile);
+			my $totalG1guideStatRef=&g1Frac($seqFile);
 			%totalG1guideStat=%{$totalG1guideStatRef};
 			my $totalG1Species=0;
 			my $totalG1Reads=0;
@@ -808,9 +808,9 @@ sub PingPongProcessing
 				print PPUAFRACTION "10\t$b\tg1Byfile\t$pairedG1SpeciesF{$b}\t$totalG1SpeciesF{$b}\t$pairedG1ReadsF{$b}\t$totalG1ReadsF{$b}\n";
 			}
 			
-			$pptseq="$OUTDIR/$targetStrandFile.T.ppseq";
+			$pptseq="$OUTDIR/$targetStrandFile.$basep.prefix.T.ppseq";
 			$seqFile="$OUTDIR/$targetStrandFile.seq";
-			$pptseqm="$OUTDIR/$targetStrandFile.T.ppseq.reads";
+			$pptseqm="$OUTDIR/$targetStrandFile.$basep.prefix.T.ppseq.reads";
 			`match.pl $pptseq $seqFile >$pptseqm`;
 			
 			my %totalT10guideStat=();
