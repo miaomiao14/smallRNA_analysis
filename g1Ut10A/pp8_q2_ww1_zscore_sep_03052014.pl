@@ -553,8 +553,8 @@ sub PingPongProcessing
 		       #trans PingPong pair in reads
 		       $transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$gttotal/$NTM{$l[2]};
 		       
-		       $pp8allPairSpecies{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]};
-		       $pp8allPairReads{$n}{$l[2]}+=$gttotal/$NTM{$l[2]};
+		       $testpp8allPairSpecies{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]};
+		       $testpp8allPairReads{$n}{$l[2]}+=$gttotal/$NTM{$l[2]};
 		       
 		       #$transallPairSpecies{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]};
 			   #$transallPairReads{$n}{$l[2]}+=$gttotal/$NTM{$l[2]};
