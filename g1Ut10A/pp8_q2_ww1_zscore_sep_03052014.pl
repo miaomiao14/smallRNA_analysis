@@ -153,8 +153,8 @@ if($indexFlag)
 	    
 	    &InputFileProcessing($inputfiles[$i],$file);
 	     
-		if ($total{$file}>10)
-		{
+		#if ($total{$file}>10)
+		#{
 			$seqFile="$OUTDIR/$file.seq";
 			if( ! -s $seqFile )#test the existence of file
 			{
@@ -179,7 +179,7 @@ if($indexFlag)
 				}
 	
 			}#for loop of the n
-		}#if the total
+		#}#if the total
 	} #for loop of the file
 } #if
 else #if indexFlag
@@ -224,15 +224,15 @@ for ($i=0; $i<$numOfInput; $i++)
 
 
    
-		if ($total{$file1}<10 || $total{$file2}<10) {print PPZ "$file2-$file1\t-10\n";} #only when consider per cluster or per transposon family
-		else
-		{
+		#if ($total{$file1}<10 || $total{$file2}<10) {print PPZ "$file2-$file1\t-10\n";} #only when consider per cluster or per transposon family
+		#else
+		#{
 			&PingPongProcessing($file2,$file1);
 			if($file1 ne $file2 ) #added on 11/14/2013
 			{   				
 			   &PingPongProcessing($file1,$file2);    
 			}#when file1 and file2 are the same the second iteration is skipped
-		}#ifelse: total reads>10 
+		#}#ifelse: total reads>10 
 
 	}#j
 }#i
@@ -390,8 +390,7 @@ sub PingPongProcessing
 	my %transPairSpecies=();
 	my %transPairReads=();
 	
-	my %testpp8allPairReads=();
-	my %testpp8allPairSpecies=();
+
 	
 	
 
@@ -471,9 +470,7 @@ sub PingPongProcessing
 				print PPGSEQ "$l[2]\n" if ($n==9);
 		        
 
-		       
-		       $testpp8allPairReads{$n}{$l[2]}+=$gttotal/$NTM{$l[2]}; 
-		       $testpp8allPairSpecies{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]};#no g1t10 as key compare to the species hash, that's why fewer species from this pp8allPairSpecies
+
 
 		       		     		       
 		       foreach my $record (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}} )
@@ -499,8 +496,7 @@ sub PingPongProcessing
 		       			#trans PingPong pair in reads
 		       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*($targettotal - $targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"})/$NTM{$l[2]};
 		       			
-		       			#$transallPairSpecies{$n}{$l[2]}+=($nTcor-1)/$NTM{$l[2]} ;
-						#$transallPairReads{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*($targettotal - $targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"})/$NTM{$l[2]};
+
 		       			
 		       			
 		       		}
@@ -511,8 +507,7 @@ sub PingPongProcessing
 		       			#trans PingPong pair in reads
 		       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targettotal/$NTM{$l[2]};
 		       			
-		       			#$transallPairSpecies{$n}{$l[2]}+=$nTcor/$NTM{$l[2]};
-						#$transallPairReads{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targettotal/$NTM{$l[2]};
+
 		       		}
 
 		       }
@@ -553,11 +548,7 @@ sub PingPongProcessing
 		       #trans PingPong pair in reads
 		       $transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$gttotal/$NTM{$l[2]};
 		       
-		       $testpp8allPairSpecies{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]};
-		       $testpp8allPairReads{$n}{$l[2]}+=$gttotal/$NTM{$l[2]};
-		       
-		       #$transallPairSpecies{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]};
-			   #$transallPairReads{$n}{$l[2]}+=$gttotal/$NTM{$l[2]};
+
 
 			}
 		} #while
