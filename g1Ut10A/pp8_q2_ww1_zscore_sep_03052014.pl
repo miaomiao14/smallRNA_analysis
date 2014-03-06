@@ -848,11 +848,6 @@ sub PingPongProcessing
 		undef  %pp8allPairSpecies;
 		undef %pp8allPairReads;
 		
-		
-		#Z-score for pp8; 
-	  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$PofSpecies,$PofSpeciesCor,$PofReads,$PP10ofSpecies,$PP10ofSpeciesCor,$PP10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%testpp8allPairSpecies,\%testpp8allPairReads);
-	    #how to normalize $X0{$p}?
-	    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\tall\tpp8\t$wsize\t$basep\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$PofSpecies\t$PofSpeciesCor\t$PofReads\t$PP10ofSpecies\t$PP10ofSpeciesCor\t$PP10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n";	   
 	
 
 	close(PPUAFRACTION);
