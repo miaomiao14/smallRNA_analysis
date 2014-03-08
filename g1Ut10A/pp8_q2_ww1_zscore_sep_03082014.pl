@@ -49,6 +49,10 @@ use List::Util qw(sum);
 #remove %allPairReads, %species,%species10
 #report each piRNA species which have Ping-Pong pairs
 
+#03/08
+#For guide or target that are multi-mappers, if one out of all the possible combinations of mapping coordinates is cis, this pair is considered cis.
+
+
 if(scalar(@ARGV)<6)
 {
         usage();
@@ -493,10 +497,11 @@ sub PingPongProcessing
 
 		       					   		       			
 		       			#with the same guide 16 nt prefix,there might be multiple trans-targets with 16nt complementarity, (originally it was viewed only one)
-		       			#trans PingPong pair in species
-		       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=($nTcor-1)/$NTM{$l[2]} ;
-		       			#trans PingPong pair in reads
-		       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*($targettotal - $targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"})/$NTM{$l[2]};
+		       			
+		       			#trans PingPong pair in species,reads
+		       			#$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=($nTcor-1)/$NTM{$l[2]} ;#03/08
+		       			#$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*($targettotal - $targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"})/$NTM{$l[2]};
+		       			#03/08, if the guide and target have at least cis-pair among all their possible pairs, then both the guide and target are masked from trans-pairs (no chance to be trans-pairs)
 		       			
 
 		       			

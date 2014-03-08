@@ -49,6 +49,9 @@ use List::Util qw(sum);
 #remove %allPairReads, %species,%species10
 #report each piRNA species which have Ping-Pong pairs
 
+#03/07
+#add one more parameters for g2t9 analysis
+
 if(scalar(@ARGV)<6)
 {
         usage();
@@ -76,7 +79,7 @@ my $fileFormat=$parameters->{format};
 my $wsize=$parameters->{winsize};
 my $basep=$parameters->{complementarity};
 my $fastafile=$parameters->{fa};
-
+my $guidep=$parameters->{guidep}-1;
 if($spe eq "fly")
 {
 	open IN, $fastafile;
@@ -92,6 +95,7 @@ if($spe eq "fly")
 	      $genome{$chr}=$_;
 	   }
 	}
+	close(IN);
 }
 elsif($spe eq "bombyx")
 {
@@ -110,8 +114,9 @@ elsif($spe eq "bombyx")
 	      $genome{$c[0]}=$_;
 	   }
 	}
+	close(IN);
 }
-close(IN);
+
 
 
 my @matchedpairs=("AT","TA","GC","CG");
@@ -286,7 +291,7 @@ sub InputFileProcessing
 
 			}
 			$dnaseq=substr($genome{$chr},$fiveend,$basep);
-			$totalFirstBase{$file}{substr($dnaseq,0,1)}{$dnaseq}+=$reads/$ntm;
+			$totalFirstBase{$file}{substr($dnaseq,$guidep,1)}{$dnaseq}+=$reads/$ntm;
 		
 			#store the seq of guide 20nt prefix only; for faster extract the reads number later
 			$guidepf{$file}{$dnaseq}+=$reads/$ntm;
@@ -310,7 +315,7 @@ sub InputFileProcessing
      		my $seqtemp=substr($genome{$chr},$seqstart,$basep);
      		$dnaseq=&revfa($seqtemp);
 				
-			$totalFirstBase{$file}{substr($dnaseq,0,1)}{$dnaseq}+=$reads/$ntm;
+			$totalFirstBase{$file}{substr($dnaseq,$guidep,1)}{$dnaseq}+=$reads/$ntm;
 		
 				#store the seq of guide 20nt prefix only; for faster extract the reads number later
 			$guidepf{$file}{$dnaseq}+=$reads/$ntm;
@@ -1090,6 +1095,8 @@ sub usage
 		print "-w  <background windowsize>\n\t";
 		print "-p  <the length of prefix>\n\t";
 		print "-a  <fasta file of the genome>\n\t";
+		print "-g  <the position of guide to monitor,1 based>\n\t";
+		
         print "This perl script is count the frequency of 10A irrespective of 1U\n";
 		print "It's maintained by WEI WANG. If you have any questions, please contact wei.wang2\@umassmed.edu\n";
         exit(1);
@@ -1110,6 +1117,7 @@ sub parse_command_line {
                 elsif($next_arg eq "-w"){ $parameters->{winsize}= shift(@ARGV); }
 				elsif($next_arg eq "-p"){ $parameters->{complementarity}= shift(@ARGV); }
 				elsif($next_arg eq "-a"){ $parameters->{fa} = shift(@ARGV); }
+				elsif($next_arg eq "-g"){ $parameters->{guidep} = shift(@ARGV); }
 
                 else{ print "Invalid argument: $next_arg"; usage(); }
         }
