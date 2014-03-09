@@ -317,61 +317,67 @@ sub InputFileProcessing
 				
 			$totalFirstBase{$file}{substr($dnaseq,$guidep,1)}{$dnaseq}+=$reads/$ntm;
 		
-				#store the seq of guide 20nt prefix only; for faster extract the reads number later
+			#store the seq of guide 20nt prefix only; for faster extract the reads number later
 			$guidepf{$file}{$dnaseq}+=$reads/$ntm;
 			$guidepfsplit{$file}{substr($dnaseq,0,$basep)}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
 
 	  	}
-      	for (my $n=0;$n<$wsize;$n++)
+      	for (my $n=0;$n<$wsize;$n++) #if $guidep=1, then for n=0, there is no corresponding target position nucloetide to record
       	{
-      		my $start=0;
-      		my $fiveend=0;
-        	if ($strand eq '+') #target strand information
-         	{
+			my $tarp=$n-$guidep; #if g2, then t9; if g3, then t8;
+			if($tarp>=0)
+			{
+	      		my $start=0;
+	      		my $fiveend=0;
+	        	if ($strand eq '+') #target strand information
+	         	{
          		
-         		if($fileFormat eq "bed")
-         		{
-	            	$start=$bedstart+$n+1-$basep; # $bedstart is 0 based and $start is 0 based, the intermediate end $bedstart+$n+1 is open
-	            	$fiveend=$start+$basep; #open
-         		}
-         		if($fileFormat eq "normbed")
-         		{
-         			$start=$bedstart+$n-$basep;
-         			$fiveend=$start+$basep;#convert to bed, open
-         		}
-	            my $str=substr($genome{$chr},$start,$basep); #substr function is 0 based
-	            $str=&revfa($str);
-	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
+	         		if($fileFormat eq "bed")
+	         		{
+		            	$start=$bedstart+$n+1-$basep; # $bedstart is 0 based and $start is 0 based, the intermediate end $bedstart+$n+1 is open
+		            	$fiveend=$start+$basep; #open
+	         		}
+	         		if($fileFormat eq "normbed")
+	         		{
+	         			$start=$bedstart+$n-$basep;
+	         			$fiveend=$start+$basep;#convert to bed, open
+	         		}
+		            my $str=substr($genome{$chr},$start,$basep); #substr function is 0 based
+		            $str=&revfa($str);
+		            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
 	            
-	            #store chr, 5'end and strand information separately for each guide 16nt prefix
-	            my $tstrand="-";
-	            $targetpfsplit{$file}{$n}{$str}{"$chr,$fiveend,$tstrand"}+=$reads/$ntm; #store the strand information for guide strand
-	            #my $indexStart=$start;
+		            #store chr, 5'end and strand information separately for each guide 16nt prefix
+		            my $tstrand="-";
+		            $targetpfsplit{$file}{$n}{$str}{"$chr,$fiveend,$tstrand"}+=$reads/$ntm; #store the strand information for guide strand
+		            #my $indexStart=$start;
 	            
-	            $totalTenthBaseTrial{$file}{$n}{substr($dnaseq,$n,1)}{$str}{substr($dnaseq,0,$basep)}+=$reads/$ntm;
+				
+				
+		            $totalTenthBaseTrial{$file}{$n}{substr($dnaseq,$tarp,1)}{$str}{substr($dnaseq,0,$basep)}+=$reads/$ntm;
 	            
-        	}
-         	else
-         	{
-         		if($fileFormat eq "bed")
-         		{
-		            $start=$bedend-$n-1; #closed
-		            $fiveend=$start; #0-based
-         		}
-         		if($fileFormat eq "normbed")
-         		{
-         			$start=$bedend-$n-1; #closed
-         			$fiveend=$start;	
-         		}
-	            my $str=substr($genome{$chr},$start,$basep);
-	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
-	            my $tstrand="+";
-	            #store chr, 5'end and strand information separately for each guide 16nt prefix	
-	            $targetpfsplit{$file}{$n}{$str}{"$chr,$fiveend,$tstrand"}+=$reads/$ntm;
+	        	}
+	         	else
+	         	{
+	         		if($fileFormat eq "bed")
+	         		{
+			            $start=$bedend-$n-1; #closed
+			            $fiveend=$start; #0-based
+	         		}
+	         		if($fileFormat eq "normbed")
+	         		{
+	         			$start=$bedend-$n-1; #closed
+	         			$fiveend=$start;	
+	         		}
+		            my $str=substr($genome{$chr},$start,$basep);
+		            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
+		            my $tstrand="+";
+		            #store chr, 5'end and strand information separately for each guide 16nt prefix	
+		            $targetpfsplit{$file}{$n}{$str}{"$chr,$fiveend,$tstrand"}+=$reads/$ntm;
 	            
-	            $totalTenthBaseTrial{$file}{$n}{substr($dnaseq,$n,1)}{$str}{substr($dnaseq,0,$basep)}+=$reads/$ntm;
+		            $totalTenthBaseTrial{$file}{$n}{substr($dnaseq,$tarp,1)}{$str}{substr($dnaseq,0,$basep)}+=$reads/$ntm;
 	            
-        	}#ifelse
+	        	}#ifelse
+			}
       	}#for
 	} #while
 	$gz->gzclose();
@@ -415,273 +421,278 @@ sub PingPongProcessing
 	
 	foreach ($n=0;$n<$wsize;$n++)
 	{
-		my %pairedFirstBase=();
-		my %pairedTenthBase=();
-		# file1 as ref
-		$indexb="$BOUTDIR/$targetStrandFile.$basep.$n";
-		$seqFile="$OUTDIR/$guideStrandFile.seq";
-		$bowtieOut="$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.$n.bowtie.out";
-	 	`[ ! -f $bowtieOut ] && bowtie $indexb -r -a -v 1 -p 8 $seqFile --suppress 1,4,6,7 | grep + > $bowtieOut`;
-	   	my %NTM=();
-	   	open IN, "$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.$n.bowtie.out";
-	   	while(my $line=<IN>)
-	   	{
-		   	chomp $line;
-		   	@l=split(/\t/,$line);
-		   	#($strand, $bowtieindex,$seq,$mm)=split(/\t/,$line); 
+		my $tarp=$n-$guidep; #if g2, then t9; if g3, then t8;
+		if($tarp>=0)
+		{
+			my %pairedFirstBase=();
+			my %pairedTenthBase=();
+			# file1 as ref
+			$indexb="$BOUTDIR/$targetStrandFile.$basep.$n";
+			$seqFile="$OUTDIR/$guideStrandFile.seq";
+			$bowtieOut="$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.$n.bowtie.out";
+		 	`[ ! -f $bowtieOut ] && bowtie $indexb -r -a -v 1 -p 8 $seqFile --suppress 1,4,6,7 | grep + > $bowtieOut`;
+		   	my %NTM=();
+		   	open IN, "$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.$n.bowtie.out";
+		   	while(my $line=<IN>)
+		   	{
+			   	chomp $line;
+			   	@l=split(/\t/,$line);
+			   	#($strand, $bowtieindex,$seq,$mm)=split(/\t/,$line); 
 		    
-		   	if ($l[3]=~/(\d+):/)
-		   	{ next if ($1!=0);}  # no seed mismatches 0 based
-		   	$NTM{$l[2]}++;
-	   	}
-	   	close(IN);
-	   	open IN, "$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.$n.bowtie.out";
-	   	while(my $line=<IN>)
-	   	{
-	      	chomp $line;
-	      	@l=split(/\t/,$line);
+			   	if ($l[3]=~/(\d+):/)
+			   	{ next if ($1!=$guidep);}  # no seed mismatches 0 based
+			   	$NTM{$l[2]}++;
+		   	}
+		   	close(IN);
+		   	open IN, "$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.$n.bowtie.out";
+		   	while(my $line=<IN>)
+		   	{
+		      	chomp $line;
+		      	@l=split(/\t/,$line);
 	      	
-	      	my $guidetotal=$guidepf{$guideStrandFile}{$l[2]};
-		    my $targettotal=$targetpf{$targetStrandFile}{$n}{$l[1]};
+		      	my $guidetotal=$guidepf{$guideStrandFile}{$l[2]};
+			    my $targettotal=$targetpf{$targetStrandFile}{$n}{$l[1]};
 	      	
-	      	my $gttotal=$guidetotal*$targettotal;
+		      	my $gttotal=$guidetotal*$targettotal;
 	      	
-	      	my $nGcor=scalar (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}});
-		    my $nTcor=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}});
+		      	my $nGcor=scalar (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}});
+			    my $nTcor=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}});
 		    
-		    my $nnGcorTcor=$nGcor*$nTcor;
+			    my $nnGcorTcor=$nGcor*$nTcor;
 	      	
-	      	if ($l[3] eq "")
-	      	{
+		      	if ($l[3] eq "")
+		      	{
 	      	
-	      	   $g_0_nt=substr($l[2],0,1); $t_9_nt=&revfa($g_0_nt);  ##here are different from pp8_q2_ww1.pl
-		       #targetpf index; guidepf seq
-			   $score{$n}+=$gttotal/$NTM{$l[2]}; #total pp8 ppscore
+		      	   $g_0_nt=substr($l[2],$guidep,1); $t_9_nt=&revfa($g_0_nt);  ##here are different from pp8_q2_ww1.pl
+			       #targetpf index; guidepf seq
+				   $score{$n}+=$gttotal/$NTM{$l[2]}; #total pp8 ppscore
 			   
-			   #how many of species start with U?
+				   #how many of species start with U?
   
-		       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]} if($totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]});
-			   	# expect to give the same results as %pairedTenthBase
+			       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]} if($totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]});
+				   	# expect to give the same results as %pairedTenthBase
 				
-				#$pairedExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]});#should not be accumulative			 
-				#compare to the results by ppseq files, the key(l[1],expected guides) reduce the number of targets from different locations (not every targets have the same expected guides) 
-				#however, compare to the %totalTenthBaseTrial, it has more reads, it has all targets link to the expected guides	
-				if($totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]})
-				{
-					foreach my $seq (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}})
+					#$pairedExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]});#should not be accumulative			 
+					#compare to the results by ppseq files, the key(l[1],expected guides) reduce the number of targets from different locations (not every targets have the same expected guides) 
+					#however, compare to the %totalTenthBaseTrial, it has more reads, it has all targets link to the expected guides	
+					if($totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]})
 					{
-						$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$seq}+=$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}{$seq};
-						print PPTSEQ "$seq\n" if ($n==9);
+						foreach my $seq (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}})
+						{
+							$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$seq}+=$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}{$seq};
+							#print PPTSEQ "$seq\n" if ($n==9);
+						}
 					}
-				}
-				print PPGSEQ "$l[2]\n" if ($n==9);
+					#print PPGSEQ "$l[2]\n" if ($n==9);
 		        
 
 
 
-		       		     		       
-		       foreach my $record (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}} )
-		       {
-		       		my ($chr,$gfiveend,$gstrand)=split(/,/,$record);
+		       	   	my $cisFlag=0; #this cisFlag is to mark if there is a cis pair among all the possible pairs(by coordinates) among a paired species 	     		       
+					foreach my $record (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}} )
+				    {
+				       		my ($chr,$gfiveend,$gstrand)=split(/,/,$record);
 
-		       		###note: how to define cistargets more accurately?
-		       		###in addition to excat match, what if just several nucleotides away?
+				       		###note: how to define cistargets more accurately?
+				       		###in addition to excat match, what if just several nucleotides away?
 		       		
-		       		my $tfiveend=$gfiveend;
-		       		my $tstrand=$gstrand;
+				       		my $tfiveend=$gfiveend;
+				       		my $tstrand=$gstrand;
 
-		       		if($targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"})
+				       	if($targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"})
+				       	{
+				       		$cisPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]}; #cis pair species must only have one by coordinate definition; but for different record, it has different cis pair
+							$cisPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$gttotal/$NTM{$l[2]};		       			
+		       			
+							$cisFlag=1;
+	       					   		       			
+			       			#with the same guide 16 nt prefix,there might be multiple trans-targets with 16nt complementarity, (originally it was viewed only one)
+			       			#trans PingPong pair in species,reads
+							#03-09-2014, to assign all the coordinates to cis-pairs
+							#$cisPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"}/$NTM{$l[2]};		       			
+			       			#$cisPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=1/$NTM{$l[2]} ; #cis pair species must only have one by coordinate definition; but for different record, it has different cis pair
+							#03-08-2014,for exclusive definition of cis and trans
+			       			#$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=($nTcor-1)/$NTM{$l[2]} ;
+			       			#$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*($targettotal - $targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"})/$NTM{$l[2]};
+	       					       					       			
+				       	}
+
+
+				    }
+			
+					if (! $cisFlag)
 		       		{
-		       			$cisPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"}/$NTM{$l[2]};		       			
-		       			$cisPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=1/$NTM{$l[2]} ; #cis pair species must only have one by coordinate definition; but for different record, it has different cis pair
-
-
-		       					   		       			
-		       			#with the same guide 16 nt prefix,there might be multiple trans-targets with 16nt complementarity, (originally it was viewed only one)
 		       			#trans PingPong pair in species
-		       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=($nTcor-1)/$NTM{$l[2]} ;
+		       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]};
 		       			#trans PingPong pair in reads
-		       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*($targettotal - $targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"})/$NTM{$l[2]};
-		       			
-
-		       			
-		       			
-		       		}
-		       		else
-		       		{
-		       			#trans PingPong pair in species
-		       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nTcor/$NTM{$l[2]};
-		       			#trans PingPong pair in reads
-		       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targettotal/$NTM{$l[2]};
-		       			
+		       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$gttotal/$NTM{$l[2]};
+       			
 
 		       		}
-
-		       }
 		       					       
-		       #store target seq from query populations, as it's from bowtie output, by default, it has a partner
+				       #store target seq from query populations, as it's from bowtie output, by default, it has a partner
 
-	      	}#perfect pair
+		      	}#perfect pair
 
-	      	elsif ($l[3]=~/(\d+):(\w)>(\w)/)
-	      	{
+		      	elsif ($l[3]=~/(\d+):(\w)>(\w)/)
+		      	{
 
-		       next if ($1!=0);  # allow 1mm at the 10th position of target strand
+			       next if ($1!=$guidep);  # allow 1mm at the 10th position of target strand
 		       
-		       $g_0_nt=$3;
-		       $t_9_nt=&revfa($2);
+			       $g_0_nt=$3;
+			       $t_9_nt=&revfa($2);
 		       
-		       $score{$n}+=$gttotal/$NTM{$l[2]}; #total pp8 ppscore
+			       $score{$n}+=$gttotal/$NTM{$l[2]}; #total pp8 ppscore
 		       
 		         
-		       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]} if($totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]});
-			   	# expect to give the same results as %pairedTenthBase
+			       	$pairedFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]}=$totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]} if($totalFirstBase{$guideStrandFile}{$g_0_nt}{$l[2]});
+				   	# expect to give the same results as %pairedTenthBase
 				
-				#$pairedExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]});#should not be accumulative			 
-				#compare to the results by ppseq files, the key(l[1],expected guides) reduce the number of targets from different locations (not every targets have the same expected guides) 
-				#however, compare to the %totalTenthBaseTrial, it has more reads, it has all targets link to the expected guides	
-				if($totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]})
-				{
-					foreach my $seq (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}})
+					#$pairedExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}=$totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]} if($totalExpectedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$l[1]});#should not be accumulative			 
+					#compare to the results by ppseq files, the key(l[1],expected guides) reduce the number of targets from different locations (not every targets have the same expected guides) 
+					#however, compare to the %totalTenthBaseTrial, it has more reads, it has all targets link to the expected guides	
+					if($totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]})
 					{
-						$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$seq}+=$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}{$seq};
-						print PPTSEQ "$seq\n" if ($n==9);
+						foreach my $seq (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}})
+						{
+							$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$seq}+=$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}{$seq};
+							#print PPTSEQ "$seq\n" if ($n==9);
+						}
 					}
-				}
-				print PPGSEQ "$l[2]\n" if ($n==9);
+					#print PPGSEQ "$l[2]\n" if ($n==9);
 		       	
-		       #trans PingPong pair in species
-		       $transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]};
-		       #trans PingPong pair in reads
-		       $transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$gttotal/$NTM{$l[2]};
+			       #trans PingPong pair in species
+			       $transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]};
+			       #trans PingPong pair in reads
+			       $transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$gttotal/$NTM{$l[2]};
 		       
 
 
-			}
-		} #while
-		close(IN);
+				}
+			} #while
+			close(IN);
 		
-		 #$firstBaseFraction
+			 #$firstBaseFraction
 
-	   my %pairedFirstBaseReads=();
-	   my $pairedFirstBaseReadsTotal=0;
-	   my %pairedFirstBaseReadsF=();
-	   my %pairedFirstBaseSpecies=();
-	   my $pairedFirstBaseSpeciesTotal=0;
-	   my %pairedFirstBaseSpeciesF=();
+		   my %pairedFirstBaseReads=();
+		   my $pairedFirstBaseReadsTotal=0;
+		   my %pairedFirstBaseReadsF=();
+		   my %pairedFirstBaseSpecies=();
+		   my $pairedFirstBaseSpeciesTotal=0;
+		   my %pairedFirstBaseSpeciesF=();
 	   
-	   my %totalFirstBaseReads=();
-	   my $totalFirstBaseReadsTotal=0;
-	   my %totalFirstBaseReadsF=();
-	   my %totalFirstBaseSpecies=();
-	   my $totalFirstBaseSpeciesTotal=0;
-	   my %totalFirstBaseSpeciesF=();
+		   my %totalFirstBaseReads=();
+		   my $totalFirstBaseReadsTotal=0;
+		   my %totalFirstBaseReadsF=();
+		   my %totalFirstBaseSpecies=();
+		   my $totalFirstBaseSpeciesTotal=0;
+		   my %totalFirstBaseSpeciesF=();
 	   
-	   foreach my $b (keys %{$pairedFirstBase{$guideStrandFile}})
-	   {
-	   		map {$pairedFirstBaseReads{$b}+=$_} values  %{$pairedFirstBase{$guideStrandFile}{$b}};
-	   		$pairedFirstBaseReadsTotal+=$pairedFirstBaseReads{$b};
-	   		$pairedFirstBaseSpecies{$b}=scalar (keys  %{$pairedFirstBase{$guideStrandFile}{$b}});
-	   		$pairedFirstBaseSpeciesTotal+=$pairedFirstBaseSpecies{$b};
+		   foreach my $b (keys %{$pairedFirstBase{$guideStrandFile}})
+		   {
+		   		map {$pairedFirstBaseReads{$b}+=$_} values  %{$pairedFirstBase{$guideStrandFile}{$b}};
+		   		$pairedFirstBaseReadsTotal+=$pairedFirstBaseReads{$b};
+		   		$pairedFirstBaseSpecies{$b}=scalar (keys  %{$pairedFirstBase{$guideStrandFile}{$b}});
+		   		$pairedFirstBaseSpeciesTotal+=$pairedFirstBaseSpecies{$b};
 	   		
-	   		#$totalFirstBase{$file}{substr($seq,0,1)}{substr($seq,0,20)}+=$reads/$ntm;
-	   		#total
-	   		map {$totalFirstBaseReads{$b}+=$_} values %{$totalFirstBase{$guideStrandFile}{$b}};
-	   		$totalFirstBaseReadsTotal+= $totalFirstBaseReads{$b};
-	   		$totalFirstBaseSpecies{$b}=scalar (keys %{$totalFirstBase{$guideStrandFile}{$b}});
-	   		$totalFirstBaseSpeciesTotal+= $totalFirstBaseSpecies{$b};
-	   }
-	   foreach my $b (keys  %pairedFirstBaseReads)
-	   {			
-	   		$pairedFirstBaseReadsF{$b}=$pairedFirstBaseReads{$b}/$pairedFirstBaseReadsTotal;
-	   		$pairedFirstBaseReadsF{$b}=&restrict_num_decimal_digits($pairedFirstBaseReadsF{$b},4);
-	   		$pairedFirstBaseSpeciesF{$b}=$pairedFirstBaseSpecies{$b}/$pairedFirstBaseSpeciesTotal;
-	   		$pairedFirstBaseSpeciesF{$b}=&restrict_num_decimal_digits($pairedFirstBaseSpeciesF{$b},4);
+		   		#$totalFirstBase{$file}{substr($seq,0,1)}{substr($seq,0,20)}+=$reads/$ntm;
+		   		#total
+		   		map {$totalFirstBaseReads{$b}+=$_} values %{$totalFirstBase{$guideStrandFile}{$b}};
+		   		$totalFirstBaseReadsTotal+= $totalFirstBaseReads{$b};
+		   		$totalFirstBaseSpecies{$b}=scalar (keys %{$totalFirstBase{$guideStrandFile}{$b}});
+		   		$totalFirstBaseSpeciesTotal+= $totalFirstBaseSpecies{$b};
+		   }
+		   foreach my $b (keys  %pairedFirstBaseReads)
+		   {			
+		   		$pairedFirstBaseReadsF{$b}=$pairedFirstBaseReads{$b}/$pairedFirstBaseReadsTotal;
+		   		$pairedFirstBaseReadsF{$b}=&restrict_num_decimal_digits($pairedFirstBaseReadsF{$b},4);
+		   		$pairedFirstBaseSpeciesF{$b}=$pairedFirstBaseSpecies{$b}/$pairedFirstBaseSpeciesTotal;
+		   		$pairedFirstBaseSpeciesF{$b}=&restrict_num_decimal_digits($pairedFirstBaseSpeciesF{$b},4);
 	   		
-	   		$totalFirstBaseReadsF{$b}=$totalFirstBaseReads{$b}/$totalFirstBaseReadsTotal;
-	   		$totalFirstBaseReadsF{$b}=&restrict_num_decimal_digits($totalFirstBaseReadsF{$b},4);
-	   		$totalFirstBaseSpeciesF{$b}=$totalFirstBaseSpecies{$b}/$totalFirstBaseSpeciesTotal;
-	   		$totalFirstBaseSpeciesF{$b}=&restrict_num_decimal_digits($totalFirstBaseSpeciesF{$b},4);
-	   }
+		   		$totalFirstBaseReadsF{$b}=$totalFirstBaseReads{$b}/$totalFirstBaseReadsTotal;
+		   		$totalFirstBaseReadsF{$b}=&restrict_num_decimal_digits($totalFirstBaseReadsF{$b},4);
+		   		$totalFirstBaseSpeciesF{$b}=$totalFirstBaseSpecies{$b}/$totalFirstBaseSpeciesTotal;
+		   		$totalFirstBaseSpeciesF{$b}=&restrict_num_decimal_digits($totalFirstBaseSpeciesF{$b},4);
+		   }
 	   
-	   	$pairedFirstBaseSpeciesTotal=&restrict_num_decimal_digits($pairedFirstBaseSpeciesTotal,4);
-		$pairedFirstBaseReadsTotal=&restrict_num_decimal_digits($pairedFirstBaseReadsTotal,4);
-	   	$totalFirstBaseSpeciesTotal=&restrict_num_decimal_digits($totalFirstBaseSpeciesTotal,4);
-		$totalFirstBaseReadsTotal=&restrict_num_decimal_digits($totalFirstBaseReadsTotal,4);
-	   #tenthBaseFraction
-	   my %pairedTenthBaseReads=();
-	   my $pairedTenthBaseReadsTotal=0;
-	   my %pairedTenthBaseReadsF=();
-	   my %pairedTenthBaseSpecies=();
-	   my $pairedTenthBaseSpeciesTotal=0;
-	   my %pairedTenthBaseSpeciesF=();
+		   	$pairedFirstBaseSpeciesTotal=&restrict_num_decimal_digits($pairedFirstBaseSpeciesTotal,4);
+			$pairedFirstBaseReadsTotal=&restrict_num_decimal_digits($pairedFirstBaseReadsTotal,4);
+		   	$totalFirstBaseSpeciesTotal=&restrict_num_decimal_digits($totalFirstBaseSpeciesTotal,4);
+			$totalFirstBaseReadsTotal=&restrict_num_decimal_digits($totalFirstBaseReadsTotal,4);
+		   #tenthBaseFraction
+		   my %pairedTenthBaseReads=();
+		   my $pairedTenthBaseReadsTotal=0;
+		   my %pairedTenthBaseReadsF=();
+		   my %pairedTenthBaseSpecies=();
+		   my $pairedTenthBaseSpeciesTotal=0;
+		   my %pairedTenthBaseSpeciesF=();
 	   
 	   
-	   my %totalTenthBaseReads=();
-	   my $totalTenthBaseReadsTotal=0;
-	   my %totalTenthBaseReadsF=();
-	   my %totalTenthBaseSpecies=();
-	   my $totalTenthBaseSpeciesTotal=0;
-	   my %totalTenthBaseSpeciesF=();
+		   my %totalTenthBaseReads=();
+		   my $totalTenthBaseReadsTotal=0;
+		   my %totalTenthBaseReadsF=();
+		   my %totalTenthBaseSpecies=();
+		   my $totalTenthBaseSpeciesTotal=0;
+		   my %totalTenthBaseSpeciesF=();
 	   
-	   foreach my $b (keys %{$pairedTenthBase{$targetStrandFile}{$n}})
-	   {
-	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}};
-	   		$pairedTenthBaseReadsTotal+=$pairedTenthBaseReads{$b};
-	   		#species
-	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}});
-	   		$pairedTenthBaseSpeciesTotal+=$pairedTenthBaseSpecies{$b};
+		   foreach my $b (keys %{$pairedTenthBase{$targetStrandFile}{$n}})
+		   {
+		   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}};
+		   		$pairedTenthBaseReadsTotal+=$pairedTenthBaseReads{$b};
+		   		#species
+		   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}});
+		   		$pairedTenthBaseSpeciesTotal+=$pairedTenthBaseSpecies{$b};
 	   		
 	   		
-	   }
+		   }
 
 	  	   
-	   my %totalTenthBaseTemp=();
-	   foreach my $b (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}})
-	   {
+		   my %totalTenthBaseTemp=();
+		   foreach my $b (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}})
+		   {
 	   		
-	   		foreach my $expTargets (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$b}})
-	   		{
-		   			#$totalTenthBase{$file}{substr($seq,0,1)}{substr($seq,0,20)}+=$reads/$ntm;
-		   		foreach my $realTargets (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$b}{$expTargets}})
+		   		foreach my $expTargets (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$b}})
 		   		{
-		   		$totalTenthBaseTemp{$targetStrandFile}{$n}{$b}{$realTargets}+=$totalTenthBaseTrial{$targetStrandFile}{$n}{$b}{$expTargets}{$realTargets};
-		   		}
+			   			#$totalTenthBase{$file}{substr($seq,0,1)}{substr($seq,0,20)}+=$reads/$ntm;
+			   		foreach my $realTargets (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$b}{$expTargets}})
+			   		{
+			   		$totalTenthBaseTemp{$targetStrandFile}{$n}{$b}{$realTargets}+=$totalTenthBaseTrial{$targetStrandFile}{$n}{$b}{$expTargets}{$realTargets};
+			   		}
 
 		   		
-	   		}
-	   		#reads
-		   	map {$totalTenthBaseReads{$b}+=$_} values %{$totalTenthBaseTemp{$targetStrandFile}{$n}{$b}};
-		   	$totalTenthBaseReadsTotal+= $totalTenthBaseReads{$b};
-		   	#species
-		   	$totalTenthBaseSpecies{$b}+=scalar (keys %{$totalTenthBaseTemp{$targetStrandFile}{$n}{$b}});
+		   		}
+		   		#reads
+			   	map {$totalTenthBaseReads{$b}+=$_} values %{$totalTenthBaseTemp{$targetStrandFile}{$n}{$b}};
+			   	$totalTenthBaseReadsTotal+= $totalTenthBaseReads{$b};
+			   	#species
+			   	$totalTenthBaseSpecies{$b}+=scalar (keys %{$totalTenthBaseTemp{$targetStrandFile}{$n}{$b}});
 	   		
-	   		$totalTenthBaseSpeciesTotal+= $totalTenthBaseSpecies{$b};
-	   }
+		   		$totalTenthBaseSpeciesTotal+= $totalTenthBaseSpecies{$b};
+		   }
 	   
 
 	   
-	   #$pairedExpectedTenthBase
+		   #$pairedExpectedTenthBase
 	   
-	   foreach my $b (keys  %pairedTenthBaseReads)
-	   {			
-	   		$pairedTenthBaseReadsF{$b}=$pairedTenthBaseReads{$b}/$pairedTenthBaseReadsTotal;
-	   		$pairedTenthBaseReadsF{$b}=&restrict_num_decimal_digits($pairedTenthBaseReadsF{$b},4);
-	   		$pairedTenthBaseSpeciesF{$b}=$pairedTenthBaseSpecies{$b}/$pairedTenthBaseSpeciesTotal;
-	   		$pairedTenthBaseSpeciesF{$b}=&restrict_num_decimal_digits($pairedTenthBaseSpeciesF{$b},4);
+		   foreach my $b (keys  %pairedTenthBaseReads)
+		   {			
+		   		$pairedTenthBaseReadsF{$b}=$pairedTenthBaseReads{$b}/$pairedTenthBaseReadsTotal;
+		   		$pairedTenthBaseReadsF{$b}=&restrict_num_decimal_digits($pairedTenthBaseReadsF{$b},4);
+		   		$pairedTenthBaseSpeciesF{$b}=$pairedTenthBaseSpecies{$b}/$pairedTenthBaseSpeciesTotal;
+		   		$pairedTenthBaseSpeciesF{$b}=&restrict_num_decimal_digits($pairedTenthBaseSpeciesF{$b},4);
 	   		
-	   		$totalTenthBaseReadsF{$b}=$totalTenthBaseReads{$b}/$totalTenthBaseReadsTotal;
-	   		$totalTenthBaseReadsF{$b}=&restrict_num_decimal_digits($totalTenthBaseReadsF{$b},4);
-	   		$totalTenthBaseSpeciesF{$b}=$totalTenthBaseSpecies{$b}/$totalTenthBaseSpeciesTotal;
-	   		$totalTenthBaseSpeciesF{$b}=&restrict_num_decimal_digits($totalTenthBaseSpeciesF{$b},4);
-	   }
+		   		$totalTenthBaseReadsF{$b}=$totalTenthBaseReads{$b}/$totalTenthBaseReadsTotal;
+		   		$totalTenthBaseReadsF{$b}=&restrict_num_decimal_digits($totalTenthBaseReadsF{$b},4);
+		   		$totalTenthBaseSpeciesF{$b}=$totalTenthBaseSpecies{$b}/$totalTenthBaseSpeciesTotal;
+		   		$totalTenthBaseSpeciesF{$b}=&restrict_num_decimal_digits($totalTenthBaseSpeciesF{$b},4);
+		   }
 
-		$pairedTenthBaseSpeciesTotal=&restrict_num_decimal_digits($pairedTenthBaseSpeciesTotal,4);
-		$pairedTenthBaseReadsTotal=&restrict_num_decimal_digits($pairedTenthBaseReadsTotal,4);
+			$pairedTenthBaseSpeciesTotal=&restrict_num_decimal_digits($pairedTenthBaseSpeciesTotal,4);
+			$pairedTenthBaseReadsTotal=&restrict_num_decimal_digits($pairedTenthBaseReadsTotal,4);
 		
 
-		$totalTenthBaseSpeciesTotal=&restrict_num_decimal_digits($totalTenthBaseSpeciesTotal,4);
-		$totalTenthBaseReadsTotal=&restrict_num_decimal_digits($totalTenthBaseReadsTotal,4);
+			$totalTenthBaseSpeciesTotal=&restrict_num_decimal_digits($totalTenthBaseSpeciesTotal,4);
+			$totalTenthBaseReadsTotal=&restrict_num_decimal_digits($totalTenthBaseReadsTotal,4);
 		
 			  
 		
@@ -689,62 +700,62 @@ sub PingPongProcessing
 		
 		
 		
-		$m=$n+1;	
-		my @bases=("A","C","G","T");
-		print PPUAFRACTION "$m\ttotal\tg1\t$pairedFirstBaseSpeciesTotal\t$totalFirstBaseSpeciesTotal\t$pairedFirstBaseReadsTotal\t$totalFirstBaseReadsTotal\n";
+			$m=$n+1;	
+			my @bases=("A","C","G","T");
+			print PPUAFRACTION "$m\ttotal\tg1\t$pairedFirstBaseSpeciesTotal\t$totalFirstBaseSpeciesTotal\t$pairedFirstBaseReadsTotal\t$totalFirstBaseReadsTotal\n";
 		
-		foreach my $b(@bases)
-		{
-			print PPUAFRACTION "$m\t$b\tg1\t$pairedFirstBaseSpeciesF{$b}\t$totalFirstBaseSpeciesF{$b}\t$pairedFirstBaseReadsF{$b}\t$totalFirstBaseReadsF{$b}\n";
+			foreach my $b(@bases)
+			{
+				print PPUAFRACTION "$m\t$b\tg1\t$pairedFirstBaseSpeciesF{$b}\t$totalFirstBaseSpeciesF{$b}\t$pairedFirstBaseReadsF{$b}\t$totalFirstBaseReadsF{$b}\n";
 			
-		}
-		print PPUAFRACTION "$m\ttotal\tt10\t$pairedTenthBaseSpeciesTotal\t$totalTenthBaseSpeciesTotal\t$pairedTenthBaseReadsTotal\t$totalTenthBaseReadsTotal\n";
-		foreach my $b(@bases)
-		{
-			print PPUAFRACTION "$m\t$b\tt10\t$pairedTenthBaseSpeciesF{$b}\t$totalTenthBaseSpeciesF{$b}\t$pairedTenthBaseReadsF{$b}\t$totalTenthBaseReadsF{$b}\n";
-		}
+			}
+			print PPUAFRACTION "$m\ttotal\tt10\t$pairedTenthBaseSpeciesTotal\t$totalTenthBaseSpeciesTotal\t$pairedTenthBaseReadsTotal\t$totalTenthBaseReadsTotal\n";
+			foreach my $b(@bases)
+			{
+				print PPUAFRACTION "$m\t$b\tt10\t$pairedTenthBaseSpeciesF{$b}\t$totalTenthBaseSpeciesF{$b}\t$pairedTenthBaseReadsF{$b}\t$totalTenthBaseReadsF{$b}\n";
+			}
 	   
-	   #total Ping-Pong
+		   #total Ping-Pong
 	   
-		$score{$n}=0 if (!exists $score{$n});
-		my $m=$n+1;
-	    print PPSCORE "$m\t$score{$n}\n";
-	    $count_N++ if ($score{$n}>0);
+			$score{$n}=0 if (!exists $score{$n});
+			my $m=$n+1;
+		    print PPSCORE "$m\t$score{$n}\n";
+		    $count_N++ if ($score{$n}>0);
 	   
 	
 	   
-	   #Ping-Pong score according to different G1T10 pairs
-	   #for matched pairs, cis only  
-		foreach my $p (@matchedpairs)
-		{  
-			my $n_of_cisPairSpecies=0;
-			$n_of_cisPairSpecies=scalar (keys %{$cisPairSpecies{$p}{$n}});					    
-			my $n_of_cisPairSpecies_cor=0;
-			map {$n_of_cisPairSpecies_cor+=$_} values %{$cisPairSpecies{$p}{$n}} ;					     
-			my $n_of_cisPairReads=0;
-			map {$n_of_cisPairReads+=$_} values %{$cisPairReads{$p}{$n}} ;
-			$n_of_cisPairReads=&restrict_num_decimal_digits($n_of_cisPairReads,3);
+		   #Ping-Pong score according to different G1T10 pairs
+		   #for matched pairs, cis only  
+			foreach my $p (@matchedpairs)
+			{  
+				my $n_of_cisPairSpecies=0;
+				$n_of_cisPairSpecies=scalar (keys %{$cisPairSpecies{$p}{$n}});					    
+				my $n_of_cisPairSpecies_cor=0;
+				map {$n_of_cisPairSpecies_cor+=$_} values %{$cisPairSpecies{$p}{$n}} ;					     
+				my $n_of_cisPairReads=0;
+				map {$n_of_cisPairReads+=$_} values %{$cisPairReads{$p}{$n}} ;
+				$n_of_cisPairReads=&restrict_num_decimal_digits($n_of_cisPairReads,3);
 			
-			print PPSCOREUA "$m\tcis\t$p\t$n_of_cisPairSpecies\t$n_of_cisPairSpecies_cor\t$n_of_cisPairReads\n";
-	   }
-	     #for all pairs, trans only 
-		foreach my $p (@pairs)
-		{
-		     my $n_of_transPairSpecies=0;					     					   
-		     $n_of_transPairSpecies=scalar (keys %{$transPairSpecies{$p}{$n}});
-		     my $n_of_transPairSpecies_cor=0;
-		     map {$n_of_transPairSpecies_cor+=$_} values %{$transPairSpecies{$p}{$n}};					     
-		     my $n_of_transPairReads=0;
-		     map {$n_of_transPairReads+=$_} values %{$transPairReads{$p}{$n}} ;
-		     $n_of_transPairReads=&restrict_num_decimal_digits($n_of_transPairReads,3);
+				print PPSCOREUA "$m\tcis\t$p\t$n_of_cisPairSpecies\t$n_of_cisPairSpecies_cor\t$n_of_cisPairReads\n";
+		   }
+		     #for all pairs, trans only 
+			foreach my $p (@pairs)
+			{
+			     my $n_of_transPairSpecies=0;					     					   
+			     $n_of_transPairSpecies=scalar (keys %{$transPairSpecies{$p}{$n}});
+			     my $n_of_transPairSpecies_cor=0;
+			     map {$n_of_transPairSpecies_cor+=$_} values %{$transPairSpecies{$p}{$n}};					     
+			     my $n_of_transPairReads=0;
+			     map {$n_of_transPairReads+=$_} values %{$transPairReads{$p}{$n}} ;
+			     $n_of_transPairReads=&restrict_num_decimal_digits($n_of_transPairReads,3);
 		     
-		    print PPSCOREUA "$m\ttrans\t$p\t$n_of_transPairSpecies\t$n_of_transPairSpecies_cor\t$n_of_transPairReads\n";
+			    print PPSCOREUA "$m\ttrans\t$p\t$n_of_transPairSpecies\t$n_of_transPairSpecies_cor\t$n_of_transPairReads\n";
 
-		     $count_N0{$p}++ if ($n_of_transPairSpecies>0);
-	     }
+			     $count_N0{$p}++ if ($n_of_transPairSpecies>0);
+		     }
 	     
 	     
-	     
+	     }# $tarp >=0
 	     
 	}#n=1..20
 	   $X=$score{9}; delete $score{9};
@@ -895,23 +906,27 @@ sub ZscoreCal
 	    my @numOfSpeciesCor=();
 	    my @numOfReads=();
 	    
-	    for(my $i=0;$i<$wsize;$i++)
+	    for(my $n=0;$n<$wsize;$n++)
 	    {
-	    	my $n1=scalar (keys %{$transPairSpeciesRef->{$i}});
-	    	my $n2=scalar (keys %{$transPairReadsRef->{$i}});
-	    	
-	    	if($n1>0) #$transPairSpeciesRef->{9} was deleted
-	    	{
-	    		push @numOfSpecies, scalar (keys %{$transPairSpeciesRef->{$i}}) ;
-	    		my $XnSpecies=0;
-	    		map { $XnSpecies+=$_ } (values %{$transPairSpeciesRef->{$i}});
-	    		push @numOfSpeciesCor, $XnSpecies ;
-	    	}
-			if($n2>0) #$transPairReadsRef->{9} was deleted
+			my $tarp=$n-$guidep; #if g2, then t9; if g3, then t8;
+			if($tarp>=0)
 			{
-				my $XnReads=0;
-				map { $XnReads+=$_ } (values %{$transPairReadsRef->{$i}}); 
-				push @numOfReads, $XnReads ;
+		    	my $n1=scalar (keys %{$transPairSpeciesRef->{$n}});
+		    	my $n2=scalar (keys %{$transPairReadsRef->{$n}});
+	    	
+		    	if($n1>0) #$transPairSpeciesRef->{9} was deleted
+		    	{
+		    		push @numOfSpecies, scalar (keys %{$transPairSpeciesRef->{$n}}) ;
+		    		my $XnSpecies=0;
+		    		map { $XnSpecies+=$_ } (values %{$transPairSpeciesRef->{$n}});
+		    		push @numOfSpeciesCor, $XnSpecies ;
+		    	}
+				if($n2>0) #$transPairReadsRef->{9} was deleted
+				{
+					my $XnReads=0;
+					map { $XnReads+=$_ } (values %{$transPairReadsRef->{$n}}); 
+					push @numOfReads, $XnReads ;
+				}
 			}				    	
 	    }
 	    $X0=$numOfSpecies[9];
