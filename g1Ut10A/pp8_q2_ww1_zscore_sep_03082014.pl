@@ -479,45 +479,48 @@ sub PingPongProcessing
 
 
 		       		     		       
-		       foreach my $record (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}} )
-		       {
-		       		my ($chr,$gfiveend,$gstrand)=split(/,/,$record);
+		       
+	       	   	my $cisFlag=0; #this cisFlag is to mark if there is a cis pair among all the possible pairs(by coordinates) among a paired species 	     		       
+				foreach my $record (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}} )
+			    {
+			       		my ($chr,$gfiveend,$gstrand)=split(/,/,$record);
 
-		       		###note: how to define cistargets more accurately?
-		       		###in addition to excat match, what if just several nucleotides away?
-		       		
-		       		my $tfiveend=$gfiveend;
-		       		my $tstrand=$gstrand;
+			       		###note: how to define cistargets more accurately?
+			       		###in addition to excat match, what if just several nucleotides away?
+	       		
+			       		my $tfiveend=$gfiveend;
+			       		my $tstrand=$gstrand;
 
-		       		if($targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"})
-		       		{
-		       			$cisPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"}/$NTM{$l[2]};		       			
-		       			$cisPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=1/$NTM{$l[2]} ; #cis pair species must only have one by coordinate definition; but for different record, it has different cis pair
-
-
-		       					   		       			
+			       	if($targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"})
+			       	{
+			       		$cisPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]}; #cis pair species must only have one by coordinate definition; but for different record, it has different cis pair
+						$cisPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$gttotal/$NTM{$l[2]};		       			
+	       			
+						$cisFlag=1;
+       					   		       			
 		       			#with the same guide 16 nt prefix,there might be multiple trans-targets with 16nt complementarity, (originally it was viewed only one)
-		       			
 		       			#trans PingPong pair in species,reads
-		       			#$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=($nTcor-1)/$NTM{$l[2]} ;#03/08
+						#03-09-2014, to assign all the coordinates to cis-pairs
+						#$cisPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"}/$NTM{$l[2]};		       			
+		       			#$cisPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=1/$NTM{$l[2]} ; #cis pair species must only have one by coordinate definition; but for different record, it has different cis pair
+						#03-08-2014,for exclusive definition of cis and trans
+		       			#$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=($nTcor-1)/$NTM{$l[2]} ;
 		       			#$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*($targettotal - $targetpfsplit{$targetStrandFile}{$n}{$l[1]}{"$chr,$tfiveend,$tstrand"})/$NTM{$l[2]};
-		       			#03/08, if the guide and target have at least cis-pair among all their possible pairs, then both the guide and target are masked from trans-pairs (no chance to be trans-pairs)
-		       			
+       					       					       			
+			       	}
 
-		       			
-		       			
-		       		}
-		       		else
-		       		{
-		       			#trans PingPong pair in species
-		       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nTcor/$NTM{$l[2]};
-		       			#trans PingPong pair in reads
-		       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$record}*$targettotal/$NTM{$l[2]};
-		       			
 
-		       		}
+			    }
+		
+				if (! $cisFlag)
+	       		{
+	       			#trans PingPong pair in species
+	       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]};
+	       			#trans PingPong pair in reads
+	       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$gttotal/$NTM{$l[2]};
+   			
 
-		       }
+	       		}
 		       					       
 		       #store target seq from query populations, as it's from bowtie output, by default, it has a partner
 
