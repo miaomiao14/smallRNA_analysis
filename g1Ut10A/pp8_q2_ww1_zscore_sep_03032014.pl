@@ -37,9 +37,15 @@ use List::Util qw(sum);
 #02/25/2014
 #fix a bug for base fraction; target strand
 
+#02/28
+#add two parameters: 
+#1. windowsize for background calculation
+#2. flexibal length of complementarity
 
 #03/02/2014
 #add winsize, prefix as parameters
+
+
 if(scalar(@ARGV)<6)
 {
         usage();
