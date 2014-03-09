@@ -470,10 +470,10 @@ sub PingPongProcessing
 					foreach my $seq (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}})
 					{
 						$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$seq}+=$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}{$seq};
-						print PPTSEQ "$seq\n" if ($n==9);
+						#print PPTSEQ "$seq\n" if ($n==9);
 					}
 				}
-				print PPGSEQ "$l[2]\n" if ($n==9);
+				#print PPGSEQ "$l[2]\n" if ($n==9);
 		        
 
 
@@ -545,10 +545,10 @@ sub PingPongProcessing
 					foreach my $seq (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}})
 					{
 						$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$seq}+=$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}{$seq};
-						print PPTSEQ "$seq\n" if ($n==9);
+						#print PPTSEQ "$seq\n" if ($n==9);
 					}
 				}
-				print PPGSEQ "$l[2]\n" if ($n==9);
+				#print PPGSEQ "$l[2]\n" if ($n==9);
 		       	
 		       #trans PingPong pair in species
 		       $transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]};
