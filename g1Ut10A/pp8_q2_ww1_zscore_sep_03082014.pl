@@ -503,6 +503,7 @@ sub PingPongProcessing
 						$cisPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$gttotal/$NTM{$l[2]};		       			
 	       			
 						$cisFlag=1;
+						last;
        					   		       			
 		       			#with the same guide 16 nt prefix,there might be multiple trans-targets with 16nt complementarity, (originally it was viewed only one)
 		       			#trans PingPong pair in species,reads
