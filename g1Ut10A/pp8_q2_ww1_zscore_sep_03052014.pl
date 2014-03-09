@@ -49,6 +49,9 @@ use List::Util qw(sum);
 #remove %allPairReads, %species,%species10
 #report each piRNA species which have Ping-Pong pairs
 
+#03/09
+#add mapping output dir and query seq output dir
+
 if(scalar(@ARGV)<6)
 {
         usage();
@@ -76,6 +79,10 @@ my $fileFormat=$parameters->{format};
 my $wsize=$parameters->{winsize};
 my $basep=$parameters->{complementarity};
 my $fastafile=$parameters->{fa};
+
+my $MOUTDIR=$parameters->{mappingoutdir};
+my $QOUTDIR=$parameters->{queryseqoutdir};
+
 
 if($spe eq "fly")
 {
@@ -155,7 +162,7 @@ if($indexFlag)
 	     
 		#if ($total{$file}>10)
 		#{
-			$seqFile="$OUTDIR/$file.seq";
+			$seqFile="$QOUTDIR/$file.$basep.seq";
 			if( ! -s $seqFile )#test the existence of file
 			{
 				open OUT, ">$seqFile";
@@ -414,11 +421,11 @@ sub PingPongProcessing
 		my %pairedTenthBase=();
 		# file1 as ref
 		$indexb="$BOUTDIR/$targetStrandFile.$basep.$n";
-		$seqFile="$OUTDIR/$guideStrandFile.seq";
-		$bowtieOut="$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.$n.bowtie.out";
+		$seqFile="$QOUTDIR/$guideStrandFile.$basep.seq";
+		$bowtieOut="$MOUTDIR/$guideStrandFile.$targetStrandFile.$basep.$n.bowtie.out";
 	 	`[ ! -f $bowtieOut ] && bowtie $indexb -r -a -v 1 -p 8 $seqFile --suppress 1,4,6,7 | grep + > $bowtieOut`;
 	   	my %NTM=();
-	   	open IN, "$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.$n.bowtie.out";
+	   	open IN, "$MOUTDIR/$guideStrandFile.$targetStrandFile.$basep.$n.bowtie.out";
 	   	while(my $line=<IN>)
 	   	{
 		   	chomp $line;
@@ -430,7 +437,7 @@ sub PingPongProcessing
 		   	$NTM{$l[2]}++;
 	   	}
 	   	close(IN);
-	   	open IN, "$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.$n.bowtie.out";
+	   	open IN, "$MOUTDIR/$guideStrandFile.$targetStrandFile.$basep.$n.bowtie.out";
 	   	while(my $line=<IN>)
 	   	{
 	      	chomp $line;
@@ -466,10 +473,10 @@ sub PingPongProcessing
 					foreach my $seq (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}})
 					{
 						$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$seq}+=$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}{$seq};
-						print PPTSEQ "$seq\n" if ($n==9);
+						#print PPTSEQ "$seq\n" if ($n==9);
 					}
 				}
-				print PPGSEQ "$l[2]\n" if ($n==9);
+				#print PPGSEQ "$l[2]\n" if ($n==9);
 		        
 
 
@@ -540,10 +547,10 @@ sub PingPongProcessing
 					foreach my $seq (keys %{$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}})
 					{
 						$pairedTenthBase{$targetStrandFile}{$n}{$t_9_nt}{$seq}+=$totalTenthBaseTrial{$targetStrandFile}{$n}{$t_9_nt}{$l[1]}{$seq};
-						print PPTSEQ "$seq\n" if ($n==9);
+						#print PPTSEQ "$seq\n" if ($n==9);
 					}
 				}
-				print PPGSEQ "$l[2]\n" if ($n==9);
+				#print PPGSEQ "$l[2]\n" if ($n==9);
 		       	
 		       #trans PingPong pair in species
 		       $transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]};
@@ -783,6 +790,7 @@ sub PingPongProcessing
 		    }
 		}
 		
+		print ZSCOREUA "guide-target\tpairmode\tstatmode\twindowSize\tbasePairingext\tZscoreofSpecies\tZscoreofSpeciesCor\tZscoreofpairsofReads\tPercentageofSpecies\tPercentageofSpeciesCor\tPercentageofparisofReads\tnumofSpeciesofpp10\tnumofSpeciesCorofpp10\tpairsofReadsofpp10\tmeanofSpecies\tmeanofSpeciesCor\tmeanofpairsofReads\tstdofSpecies\tstdofSpeciesCor\tstdofpairsofReads\n";		   	   
 				   	   
 	   #Z-score for pp6
 	  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$PofSpecies,$PofSpeciesCor,$PofReads,$PP10ofSpecies,$PP10ofSpeciesCor,$PP10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%pp6cisPairSpecies,\%pp6cisPairReads);
@@ -1090,6 +1098,8 @@ sub usage
 		print "-w  <background windowsize>\n\t";
 		print "-p  <the length of prefix>\n\t";
 		print "-a  <fasta file of the genome>\n\t";
+		print "-m  <mapping output dir>\n\t";
+		print "-q  <query seq output dir>\n\t";
         print "This perl script is count the frequency of 10A irrespective of 1U\n";
 		print "It's maintained by WEI WANG. If you have any questions, please contact wei.wang2\@umassmed.edu\n";
         exit(1);
@@ -1110,8 +1120,9 @@ sub parse_command_line {
                 elsif($next_arg eq "-w"){ $parameters->{winsize}= shift(@ARGV); }
 				elsif($next_arg eq "-p"){ $parameters->{complementarity}= shift(@ARGV); }
 				elsif($next_arg eq "-a"){ $parameters->{fa} = shift(@ARGV); }
+				elsif($next_arg eq "-m"){ $parameters->{mappingoutdir}= shift(@ARGV); }
+				elsif($next_arg eq "-q"){ $parameters->{queryseqoutdir} = shift(@ARGV); }
 
                 else{ print "Invalid argument: $next_arg"; usage(); }
         }
 }
-
