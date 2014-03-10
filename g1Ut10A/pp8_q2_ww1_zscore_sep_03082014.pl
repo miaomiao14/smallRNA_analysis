@@ -730,7 +730,8 @@ sub PingPongProcessing
 			my $n_of_cisPairSpecies=0;
 			$n_of_cisPairSpecies=scalar (keys %{$cisPairSpecies{$p}{$n}});					    
 			my $n_of_cisPairSpecies_cor=0;
-			map {$n_of_cisPairSpecies_cor+=$_} values %{$cisPairSpecies{$p}{$n}} ;					     
+			map {$n_of_cisPairSpecies_cor+=$_} values %{$cisPairSpecies{$p}{$n}} ;
+			$n_of_cisPairSpecies_cor=&restrict_num_decimal_digits($n_of_cisPairSpecies_cor,3);						     
 			my $n_of_cisPairReads=0;
 			map {$n_of_cisPairReads+=$_} values %{$cisPairReads{$p}{$n}} ;
 			$n_of_cisPairReads=&restrict_num_decimal_digits($n_of_cisPairReads,3);
@@ -743,7 +744,9 @@ sub PingPongProcessing
 		     my $n_of_transPairSpecies=0;					     					   
 		     $n_of_transPairSpecies=scalar (keys %{$transPairSpecies{$p}{$n}});
 		     my $n_of_transPairSpecies_cor=0;
-		     map {$n_of_transPairSpecies_cor+=$_} values %{$transPairSpecies{$p}{$n}};					     
+		     map {$n_of_transPairSpecies_cor+=$_} values %{$transPairSpecies{$p}{$n}};
+			 $n_of_transPairSpecies_cor=&restrict_num_decimal_digits($n_of_transPairSpecies_cor);
+			
 		     my $n_of_transPairReads=0;
 		     map {$n_of_transPairReads+=$_} values %{$transPairReads{$p}{$n}} ;
 		     $n_of_transPairReads=&restrict_num_decimal_digits($n_of_transPairReads,3);
@@ -906,23 +909,32 @@ sub ZscoreCal
 	    my @numOfSpeciesCor=();
 	    my @numOfReads=();
 	    
-	    for(my $i=0;$i<$wsize;$i++)
+	    for(my $n=0;$n<$wsize;$n++)
 	    {
-	    	my $n1=scalar (keys %{$transPairSpeciesRef->{$i}});
-	    	my $n2=scalar (keys %{$transPairReadsRef->{$i}});
-	    	
+	    	my $n1=scalar (keys %{$transPairSpeciesRef->{$n}});
+	    	my $n2=scalar (keys %{$transPairReadsRef->{$n}});
+    	
 	    	if($n1>0) #$transPairSpeciesRef->{9} was deleted
 	    	{
-	    		push @numOfSpecies, scalar (keys %{$transPairSpeciesRef->{$i}}) ;
+	    		push @numOfSpecies, scalar (keys %{$transPairSpeciesRef->{$n}}) ;
 	    		my $XnSpecies=0;
-	    		map { $XnSpecies+=$_ } (values %{$transPairSpeciesRef->{$i}});
+	    		map { $XnSpecies+=$_ } (values %{$transPairSpeciesRef->{$n}});
 	    		push @numOfSpeciesCor, $XnSpecies ;
 	    	}
+			else
+			{
+				push @numOfSpecies,0;
+				push @numOfSpeciesCor,0;
+			}
 			if($n2>0) #$transPairReadsRef->{9} was deleted
 			{
 				my $XnReads=0;
-				map { $XnReads+=$_ } (values %{$transPairReadsRef->{$i}}); 
+				map { $XnReads+=$_ } (values %{$transPairReadsRef->{$n}}); 
 				push @numOfReads, $XnReads ;
+			}
+			else
+			{
+				push @numOfReads,0;
 			}				    	
 	    }
 	    $X0=$numOfSpecies[9];
