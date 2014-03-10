@@ -717,6 +717,7 @@ sub PingPongProcessing
 	   
 			$score{$n}=0 if (!exists $score{$n});
 			my $m=$n+1;
+			$score{$n}=&restrict_num_decimal_digits($score{$n},4);
 		    print PPSCORE "$m\t$score{$n}\n";
 		    $count_N++ if ($score{$n}>0);
 	   
@@ -729,7 +730,8 @@ sub PingPongProcessing
 				my $n_of_cisPairSpecies=0;
 				$n_of_cisPairSpecies=scalar (keys %{$cisPairSpecies{$p}{$n}});					    
 				my $n_of_cisPairSpecies_cor=0;
-				map {$n_of_cisPairSpecies_cor+=$_} values %{$cisPairSpecies{$p}{$n}} ;					     
+				map {$n_of_cisPairSpecies_cor+=$_} values %{$cisPairSpecies{$p}{$n}} ;
+				$n_of_cisPairSpecies_cor=&restrict_num_decimal_digits($n_of_cisPairSpecies_cor,3);					     
 				my $n_of_cisPairReads=0;
 				map {$n_of_cisPairReads+=$_} values %{$cisPairReads{$p}{$n}} ;
 				$n_of_cisPairReads=&restrict_num_decimal_digits($n_of_cisPairReads,3);
@@ -906,9 +908,9 @@ sub ZscoreCal
 	    
 	    for(my $n=0;$n<$wsize;$n++)
 	    {
-			my $tarp=$n-$guidep; #if g2, then t9; if g3, then t8;
-			if($tarp>=0)
-			{
+			#my $tarp=$n-$guidep; #if g2, then t9; if g3, then t8;
+			#if($tarp>=0)
+			#{
 		    	my $n1=scalar (keys %{$transPairSpeciesRef->{$n}});
 		    	my $n2=scalar (keys %{$transPairReadsRef->{$n}});
 	    	
@@ -919,13 +921,22 @@ sub ZscoreCal
 		    		map { $XnSpecies+=$_ } (values %{$transPairSpeciesRef->{$n}});
 		    		push @numOfSpeciesCor, $XnSpecies ;
 		    	}
+				else
+				{
+					push @numOfSpecies,0;
+					push @numOfSpeciesCor,0;
+				}
 				if($n2>0) #$transPairReadsRef->{9} was deleted
 				{
 					my $XnReads=0;
 					map { $XnReads+=$_ } (values %{$transPairReadsRef->{$n}}); 
 					push @numOfReads, $XnReads ;
 				}
-			}				    	
+				else
+				{
+					push @numOfReads,0;
+				}
+			#}				    	
 	    }
 	    $X0=$numOfSpecies[9];
 	    $X1=$numOfSpeciesCor[9];
@@ -993,6 +1004,9 @@ sub ZscoreCal
 	    $Z0=&restrict_num_decimal_digits($Z0,3);
 	    $Z1=&restrict_num_decimal_digits($Z1,3);
 	    $Z2=&restrict_num_decimal_digits($Z2,3);
+	    $P0=&restrict_num_decimal_digits($P0,4);
+	    $P1=&restrict_num_decimal_digits($P1,4);
+	    $P2=&restrict_num_decimal_digits($P2,4);
 	    $X0=&restrict_num_decimal_digits($X0,3);
 	    $X1=&restrict_num_decimal_digits($X1,3);
 	    $X2=&restrict_num_decimal_digits($X2,3);
@@ -1002,9 +1016,7 @@ sub ZscoreCal
 	    $std0=&restrict_num_decimal_digits($std0,3);
 	    $std1=&restrict_num_decimal_digits($std1,3);
 	    $std2=&restrict_num_decimal_digits($std2,3);
-	    $P0=&restrict_num_decimal_digits($P0,4);
-	    $P1=&restrict_num_decimal_digits($P1,4);
-	    $P2=&restrict_num_decimal_digits($P2,4);
+
 	    
 	    
 	    
