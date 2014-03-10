@@ -166,9 +166,9 @@ if($indexFlag)
 			if( ! -s $seqFile )#test the existence of file
 			{
 				open OUT, ">$seqFile";
-				foreach my $prefix (keys %{$guidepf{$file}})
+				foreach my $prefix (keys %{$guidepfsplit{$file}})
 				{
-					print OUT "$prefix\t$guidepf{$file}{$prefix}\n" if (length($prefix)==$basep);
+					print OUT "$prefix\t$guidepfsplit{$file}{$prefix}\n" if (length($prefix)==$basep);
 				}
 				close(OUT);
 			}
@@ -179,9 +179,9 @@ if($indexFlag)
 				if(! -s $indexb) #test the existence of file
 				{
 					open OUT, ">$fa";
-					foreach my $prefix (keys %{$targetpf{$file}{$n}})
+					foreach my $prefix (keys %{$targetpfsplit{$file}{$n}})
 					{
-						print OUT ">$prefix\t$targetpf{$file}{$n}{$prefix}\n$prefix\n" if (length($prefix)==$basep);
+						print OUT ">$prefix\t$targetpfsplit{$file}{$n}{$prefix}\n$prefix\n" if (length($prefix)==$basep);
 					}
 					close(OUT);
 					`bowtie-build $fa $indexb && rm $fa`;
@@ -408,7 +408,7 @@ sub PingPongProcessing
 	open ZSCOREUA, ">$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.prefix.UA_VA.zscore.out";
 	open PPSCOREUA, ">$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.prefix.UA_VA.pp";
 	
-	open PPUAFRACTION, ">$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.prefix.UA_VA.base.fraction.txt";
+	#open PPUAFRACTION, ">$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.prefix.UA_VA.base.fraction.txt";
 	
 
 	
@@ -442,11 +442,17 @@ sub PingPongProcessing
 	      	
 	      	my $nGcor=scalar (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}});
 			my $nGcorReads=0;
-			map {$nGcorReads+=$_} values %{$guidepfsplit{$guideStrandFile}{$l[2]}};
+			foreach my $piQuery (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}})
+			{
+				map {$nGcorReads+=$_} values %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}};
+			}
 			
 		    my $nTcor=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}});		
 		    my $nTcorReads=0;
-			map {$nTcorReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}};
+			foreach my $piGuideSpe (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}} )
+			{
+				map {$nTcorReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piGuideSpe}};
+			}
 		    
 		    my $nnGcorTcor=$nGcor*$nTcor;
 	      	my $gttotal=$nGcorReads*$nTcorReads;
@@ -557,7 +563,7 @@ sub PingPongProcessing
 		close(IN);
 
 
-
+				$m=$n+1;
 			   #Ping-Pong score according to different G1T10 pairs
 			   #for matched pairs, cis only  
 				foreach my $p (@matchedpairs)
@@ -696,7 +702,7 @@ sub PingPongProcessing
 
 
 
-			close(PPUAFRACTION);
+			#close(PPUAFRACTION);
 			close(PPSCOREUA);
 			close(ZSCOREUA);
  	
@@ -711,7 +717,7 @@ sub PingPongProcessing
 			    my @numOfSpeciesCor=();
 			    my @numOfReads=();
 
-			    for(my $i=0;$i<$wsize;$i++)
+			    for(my $n=0;$n<$wsize;$n++)
 			    {
 			    	my $n1=scalar (keys %{$transPairSpeciesRef->{$n}});
 			    	my $n2=scalar (keys %{$transPairReadsRef->{$n}});
