@@ -6,6 +6,9 @@ require "Jia.pm";
 use File::Basename;
 use Compress::Zlib;
 use List::Util qw(sum);
+use Memory::Usage;
+my $mu = Memory::Usage->new();
+$mu->record('starting work');
 # rule is p1 and p17-21 doesn't need to pair but p2-16 need
 # simplifized version with prefix 16nt
 # input as norm.bed ( no header)
@@ -162,7 +165,10 @@ if($indexFlag)
 	    $file=$name;
 	    
 	    &InputFileProcessing($inputfiles[$i],$file);
-	     
+	    $mu->record('after one InputFileProcess() of $file');
+	    # Spit out a report
+	    $mu->dump();
+		
 		#if ($total{$file}>10)
 		#{
 			$seqFile="$QOUTDIR/$file.$basep.seq";
@@ -240,9 +246,16 @@ for ($i=0; $i<$numOfInput; $i++)
 		#else
 		#{
 			&PingPongProcessing($file2,$file1);
+			$mu->record('after PingPong processing of file2 and file1');
+		    # Spit out a report
+		    $mu->dump();
+			
 			if($file1 ne $file2 ) #added on 11/14/2013
 			{   				
-			   &PingPongProcessing($file1,$file2);    
+			   &PingPongProcessing($file1,$file2);
+			$mu->record('after PingPong processing of file1 and file2');
+		    # Spit out a report
+		    $mu->dump();    
 			}#when file1 and file2 are the same the second iteration is skipped
 		#}#ifelse: total reads>10 
 
@@ -756,7 +769,9 @@ sub PingPongProcessing
 		     $count_N0{$p}++ if ($n_of_transPairSpecies>0);
 	     }
 	     
-	     
+	     	$mu->record('after each m iteration of file2 and file1');
+		    # Spit out a report
+		    $mu->dump();
 	     
 	     
 	}#n=1..20
@@ -800,7 +815,9 @@ sub PingPongProcessing
 		       	}
 		    }
 		}
-		
+		$mu->record('after pp6 construct');
+	    # Spit out a report
+	    $mu->dump();
 		print ZSCOREUA "guide-target\tpairmode\tstatmode\twindowSize\tbasePairingext\tZscoreofSpecies\tZscoreofSpeciesCor\tZscoreofpairsofReads\tPercentageofSpecies\tPercentageofSpeciesCor\tPercentageofparisofReads\tnumofSpeciesofpp10\tnumofSpeciesCorofpp10\tpairsofReadsofpp10\tmeanofSpecies\tmeanofSpeciesCor\tmeanofpairsofReads\tstdofSpecies\tstdofSpeciesCor\tstdofpairsofReads\n";		   	   
 				   	   
 	   #Z-score for pp6
@@ -852,7 +869,9 @@ sub PingPongProcessing
 		       	}
 		    }
 		}
-		
+		$mu->record('after pp8 and transall construct');
+	    # Spit out a report
+	    $mu->dump();
 		#Z-score for all trans pairs;
 		my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$PofSpecies,$PofSpeciesCor,$PofReads,$PP10ofSpecies,$PP10ofSpeciesCor,$PP10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%transallPairSpecies,\%transallPairReads);
 	    #how to normalize $X0{$p}?
