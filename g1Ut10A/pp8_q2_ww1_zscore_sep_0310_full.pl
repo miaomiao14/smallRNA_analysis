@@ -6,6 +6,9 @@ require "Jia.pm";
 use File::Basename;
 use Compress::Zlib;
 use List::Util qw(sum);
+use Memory::Usage;
+my $mu = Memory::Usage->new();
+$mu->record('starting work');
 # rule is p1 and p17-21 doesn't need to pair but p2-16 need
 # simplifized version with prefix 16nt
 # input as norm.bed ( no header)
@@ -59,6 +62,10 @@ use List::Util qw(sum);
 #store each piRNA species when they are collapsed into the same $basep prefix 
 #calculate the number of prefix species, the number of species for pp10
 
+#03/13/2014
+#don't if cis-pairs are assigned correctly, try to save some trans-pairs from last version
+#do I need to reconsider NTM?
+
 if(scalar(@ARGV)<6)
 {
         usage();
@@ -91,41 +98,8 @@ my $MOUTDIR=$parameters->{mappingoutdir};
 my $QOUTDIR=$parameters->{queryseqoutdir};
 
 
-if($spe eq "fly")
-{
-	open IN, $fastafile;
-	while(<IN>)
-	{
-	   if (/>(.+) type/)
-	   {
-	      $chr="chr$1";
-	   }
-	   else
-	   {
-	      chomp;
-	      $genome{$chr}=$_;
-	   }
-	}
-}
-elsif($spe eq "bombyx")
-{
-	
-	open IN, $fastafile or die "Fail to open $fastafile: $!";
-	while(<IN>)
-	{
-	   if (/>(.+)\s*\//) #this is specific for the case: >nscaf100 /length=4083 /lengthwogaps=4073
-	   {
-	      $chr="$1";
-	      @c=split(/ /,$chr);
-	   }
-	   else
-	   {
-	      chomp;
-	      $genome{$c[0]}=$_;
-	   }
-	}
-}
-close(IN);
+
+
 
 
 my @matchedpairs=("AT","TA","GC","CG");
@@ -146,6 +120,42 @@ my %total=();
 #main, preprocessing
 if($indexFlag)
 {
+	if($spe eq "fly")
+	{
+		open IN, $fastafile;
+		while(<IN>)
+		{
+		   if (/>(.+) type/)
+		   {
+		      $chr="chr$1";
+		   }
+		   else
+		   {
+		      chomp;
+		      $genome{$chr}=$_;
+		   }
+		}
+		close(IN);
+	}
+	elsif($spe eq "bombyx")
+	{
+
+		open IN, $fastafile or die "Fail to open $fastafile: $!";
+		while(<IN>)
+		{
+		   if (/>(.+)\s*\//) #this is specific for the case: >nscaf100 /length=4083 /lengthwogaps=4073
+		   {
+		      $chr="$1";
+		      @c=split(/ /,$chr);
+		   }
+		   else
+		   {
+		      chomp;
+		      $genome{$c[0]}=$_;
+		   }
+		}
+		close(IN);
+	}
 	# make bowtie index
 	for ($i=0; $i<$numOfInput; $i++)
 	{
@@ -155,13 +165,17 @@ if($indexFlag)
 		{$name=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
 		if($spe eq "bombyx")
 	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
-	    push @argos, $name;
 	    $file=$name;
 	    
 	    &InputFileProcessing($inputfiles[$i],$file);
-	     
+	    
+		$mu->record('after one InputFileProcess() of $file');
+	    # Spit out a report
+	    $mu->dump();
+		
 		#if ($total{$file}>10)
 		#{
+			#query seq file 
 			$seqFile="$QOUTDIR/$file.$basep.seq";
 			if( ! -s $seqFile )#test the existence of file
 			{
@@ -172,6 +186,7 @@ if($indexFlag)
 				}
 				close(OUT);
 			}
+			#bowtie index file
 			for ($n=0;$n<$wsize;$n++)
 			{
 				$fa="$OUTDIR/$file.ref.$n.fa";
@@ -201,7 +216,6 @@ else #if indexFlag
 		{$name=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
 		if($spe eq "bombyx")
 	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
-    	push @argos, $name;
     	$file=$name;
    		&InputFileProcessing($inputfiles[$i],$file);
 	}#for loop of the file
@@ -230,23 +244,33 @@ for ($i=0; $i<$numOfInput; $i++)
 	    {$name2=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
 		$file2=$name2;
 		#modify the order of filename on 02-10-2014 to clearly indicate guide target   
-
-
+		#my $memnow=qx{ `grep -i VmSize /proc/$$/status` };
+		#print LOG "the memory used for preprocessing is: $memnow";
    
+		$mu->record('before Ping-Pong processing');
+	    # Spit out a report
+	    $mu->dump();
+
 		#if ($total{$file1}<10 || $total{$file2}<10) {print PPZ "$file2-$file1\t-10\n";} #only when consider per cluster or per transposon family
 		#else
 		#{
 			&PingPongProcessing($file2,$file1);
+			$mu->record('after Ping-Pong processing');
+		    # Spit out a report
+		    $mu->dump();
 			if($file1 ne $file2 ) #added on 11/14/2013
 			{   				
-			   &PingPongProcessing($file1,$file2);    
+			   &PingPongProcessing($file1,$file2); 
+				$mu->record('after Ping-Pong processing');
+		    	# Spit out a report
+		    	$mu->dump();   
 			}#when file1 and file2 are the same the second iteration is skipped
 		#}#ifelse: total reads>10 
 
 	}#j
 }#i
 close(PPZ);
-
+close(LOG);
 sub InputFileProcessing
 {
 	my ($inputfile,$file)= @_;
@@ -399,6 +423,9 @@ sub PingPongProcessing
 	my %transPairSpecies=();
 	my %transPairReads=();
 	
+	my %transTempPairSpecies=();
+	my %transTempPairReads=();
+	
 
 	
 	
@@ -461,84 +488,60 @@ sub PingPongProcessing
 	      	
 	      	   $g_0_nt=substr($l[2],0,1); $t_9_nt=&revfa($g_0_nt);  ##here are different from pp8_q2_ww1.pl
 		       #targetpf index; guidepf seq
-
-			   
 			   #how many of species start with U?
   		        		       		     		      		       
-	       	   	     		       
+	       	   	#my %cisFlag=(); #this cisFlag is to mark if there is a cis pair among all the possible pairs(by coordinates) among a paired species	    		       
 				foreach my $piQuery (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}} )
 			    {
 					my $guideQuerySpecies=0;
 					$guideQuerySpecies=scalar (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}});
 					my $guideQueryReads=0;
 					map {$guideQueryReads+=$_} values %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}};
-					
-					my %cisFlag=(); #this cisFlag is to mark if there is a cis pair among all the possible pairs(by coordinates) among a paired species
-					my $cisRecordFlag=0; 	
-					foreach my $record (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}})
-					{
-			       		my ($chr,$gfiveend,$gstrand)=split(/,/,$record);
+				
+					foreach my $piGuideSpe (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}} )
+					{	
 
-			       		###note: how to define cistargets more accurately?
-			       		###in addition to excat match, what if just several nucleotides away?
-       		
-			       		my $tfiveend=$gfiveend;
-			       		my $tstrand=$gstrand;
+						#my $targetpiGuideSpecies=0;	
+						#$targetpiGuideSpecies=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piGuideSpe}});
+						my $targetpiGuideReads=0;
+						map {$targetpiGuideReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piGuideSpe}};
 						
-						foreach my $piGuideSpe (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}} )
-						{	
-							if(! $cisFlag{$piGuideSpe}) #so that no need to check for already cispaired piRNA species
-							{
-								#my $targetpiGuideSpecies=0;	
-								#$targetpiGuideSpecies=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piGuideSpe}});
-								my $targetpiGuideReads=0;
-								map {$targetpiGuideReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piGuideSpe}};
-							
-							
-						       	if($targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piGuideSpe}{"$chr,$tfiveend,$tstrand"})
-						       	{
-						       		$cisPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=1/$NTM{$l[2]}; #cis pair species must only have one by coordinate definition; but for different record, it has different cis pair
-									$cisPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$record}*$targetpiGuideReads/$NTM{$l[2]};		       			
-	       			
-									$cisFlag{$piGuideSpe}=1;
-									$cisRecordFlag=1;
-									last;
-       					       					       			
-						       	}
-							}
-						}#piGuideSpe
+						my $cisRecordFlag=0; #flag of cispair
 						
+						foreach my $record (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}})
+						{
+				       		my ($chr,$gfiveend,$gstrand)=split(/,/,$record);
+
+				       		###note: how to define cistargets more accurately?
+				       		###in addition to excat match, what if just several nucleotides away?
+
+				       		my $tfiveend=$gfiveend;
+				       		my $tstrand=$gstrand;
+					
+					       	if($targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piGuideSpe}{"$chr,$tfiveend,$tstrand"}) #here it checks all coordinates associated with $piGuideSpe
+					       	{
+					       		$cisPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=1/$NTM{$l[2]}; #cis pair species must only have one by coordinate definition; but for different record, it has different cis pair
+								$cisPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guideQueryReads*$targetpiGuideReads/$NTM{$l[2]};		       			
+      			
+								#$cisFlag{$piGuideSpe}+=1;
+								$cisRecordFlag=1;
+								last; #no need to check other coordinates (record) for this pair of piRNA species      					       					       			
+					       	}
+						} #record
 						#for each query, if there is a cismatch, then the whole species (no matter how many other possible pairs it has) is viewed as cispair
-						if (! $cisRecordFlag)
+						if (! $cisRecordFlag) #after check all the records associated with piQuery
 			       		{
 			       			#trans PingPong pair in species
-			       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nTcor/$NTM{$l[2]};
+			       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=1/$NTM{$l[2]};
 			       			#trans PingPong pair in reads
-			       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$record}*$nTcorReads/$NTM{$l[2]};
-
-
+			       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guideQueryReads*$targetpiGuideReads/$NTM{$l[2]};
 			       		}
-						else
-						{	if($nTcor>1) #if targets prefix are from at least two different piRNA species
-							{
-							#trans PingPong pair in species
-			       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=($nTcor-1)/$NTM{$l[2]};
-			       			#trans PingPong pair in reads
-			       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$record}*($nTcorReads-$targetpiGuideReads)/$NTM{$l[2]};
-							}
-						}
-												
-					} #record
-					
-										
-
-
-
+						
+						#if(! $cisFlag{$piGuideSpe}) #so that no need to check for already cispaired piRNA species
+						#{
+						#}
+					}#piGuideSpe
 			    }#piSpecies
-
-		       					       
-		       #store target seq from query populations, as it's from bowtie output, by default, it has a partner
-
 	      	}#perfect pair
 
 	      	elsif ($l[3]=~/(\d+):(\w)>(\w)/)
@@ -597,7 +600,12 @@ sub PingPongProcessing
 				     $count_N0{$p}++ if ($n_of_transPairSpecies>0);
 			     }
 
-
+				#my $memnow=qx{ `grep -i VmSize /proc/$$/status` };
+				#print LOG "the memory used for cis and trans pair detection for overlap $m is: $memnow";
+				
+				$mu->record('after Ping-Pong processing for $m');
+			    # Spit out a report
+			    $mu->dump();
 
 
 			}#n=1..20
@@ -631,7 +639,13 @@ sub PingPongProcessing
 				       	}
 				    }
 				}
-
+				#my $memnow=qx{ `grep -i VmSize /proc/$$/status` };
+				#print LOG "the memory used for construct pp6 hash in PP processing of $guideStrandFile.$targetStrandFile is: $memnow";
+				
+				$mu->record('after construct pp6 hash ');
+			    # Spit out a report
+			    $mu->dump();
+				
 				print ZSCOREUA "guide-target\tpairmode\tstatmode\twindowSize\tbasePairingext\tZscoreofprefixSpecies\tZscoreofSpecies\tZscoreofpairsofReads\tPercentageofprefixSpecies\tPercentageofSpecies\tPercentageofparisofReads\tnumofprefixSpeciesofpp10\tnumofSpeciesofpp10\tpairsofReadsofpp10\tmeanofprefixSpecies\tmeanofSpecies\tmeanofpairsofReads\tstdofprefixSpecies\tstdofSpecies\tstdofpairsofReads\n";		   	   
 
 			   #Z-score for pp6
@@ -683,7 +697,14 @@ sub PingPongProcessing
 				       	}
 				    }
 				}
-
+				
+				#my $memnow=qx{ `grep -i VmSize /proc/$$/status` };
+				#print LOG "the memory used for constructing transall and pp8 hashes during $guideStrandFile.$targetStrandFile processing is: $memnow";
+				
+				$mu->record('after construct transall and pp8 hashes');
+			    # Spit out a report
+			    $mu->dump();
+				
 				#Z-score for all trans pairs;
 				my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$PofSpecies,$PofSpeciesCor,$PofReads,$PP10ofSpecies,$PP10ofSpeciesCor,$PP10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%transallPairSpecies,\%transallPairReads);
 			    #how to normalize $X0{$p}?
