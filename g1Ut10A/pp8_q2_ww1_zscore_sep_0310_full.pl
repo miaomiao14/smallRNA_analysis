@@ -7,6 +7,7 @@ use File::Basename;
 use Compress::Zlib;
 use List::Util qw(sum);
 use Memory::Usage;
+use Devel::Size qw(size total_size);
 my $mu = Memory::Usage->new();
 $mu->record('starting work');
 # rule is p1 and p17-21 doesn't need to pair but p2-16 need
@@ -66,6 +67,8 @@ $mu->record('starting work');
 #don't if cis-pairs are assigned correctly, try to save some trans-pairs from last version
 #do I need to reconsider NTM?
 
+
+
 if(scalar(@ARGV)<6)
 {
         usage();
@@ -99,7 +102,7 @@ my $QOUTDIR=$parameters->{queryseqoutdir};
 
 
 
-
+open LOG, ">${OUTDIR}/LOG.txt";
 
 
 my @matchedpairs=("AT","TA","GC","CG");
@@ -108,13 +111,14 @@ my @pairs=("AT","TA","GC","CG","AA","AC","AG","CA","CC","CT","GA","GG","GT","TC"
 
 
 
-my %targetpf=();
-my %guidepf=(); 
+#my %targetpf=();
+#my %guidepf=(); 
 
 my %targetpfsplit=();
 my %guidepfsplit=();
 
 my %total=();
+my %genome=();
 #store genome
 if($spe eq "fly")
 {
@@ -152,6 +156,9 @@ elsif($spe eq "bombyx")
 	}
 	close(IN);
 }
+my $total_size = total_size(\%genome);
+print LOG "The memory occupied by genome is $total_size bytes\n";
+
 #main, preprocessing
 if($indexFlag)
 {
@@ -172,6 +179,13 @@ if($indexFlag)
 		$mu->record('after one InputFileProcess() of $file');
 	    # Spit out a report
 	    $mu->dump();
+	
+		my $total_size = total_size(\%guidepfsplit);
+		print LOG "The memory occupied by query seq information from $file is $total_size bytes\n";
+		
+		my $total_size = total_size(\%targetpfsplit);
+		print LOG "The memory occupied by potential targets with overlap from 1..20 information from $file is $total_size bytes\n";
+		
 		
 		#if ($total{$file}>10)
 		#{
@@ -408,29 +422,16 @@ sub PingPongProcessing
 
 	my ($guideStrandFile,	$targetStrandFile)=@_;		
 
-	my $X=0; 
-	my $Z=0; 
-	my %score=();
+
 	my $count_N=0;
-	my %allPairReads=(); 
 	my %count_N0=();
-	my %species=(); 
-	my %speciesn10=();
+
 	
 	my %cisPairSpecies=();
 	my %cisPairReads=();
 	
 	my %transPairSpecies=();
-	my %transPairReads=();
-	
-	my %transTempPairSpecies=();
-	my %transTempPairReads=();
-	
-
-	
-	
-
-	
+	my %transPairReads=();	
 
 	open ZSCOREUA, ">$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.prefix.UA_VA.zscore.out";
 	open PPSCOREUA, ">$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.prefix.UA_VA.pp";
@@ -460,6 +461,8 @@ sub PingPongProcessing
 		   	$NTM{$l[2]}++; #need to think about why only query sequences are nomalized to NTM, but not indexes
 	   	}
 	   	close(IN);
+		my $total_size = total_size(\%NTM);
+		print LOG "The memory occupied by NTM from $file is $total_size bytes\n";
 	   	open IN, "$MOUTDIR/$guideStrandFile.$targetStrandFile.$basep.$n.bowtie.out";
 	   	while(my $line=<IN>)
 	   	{
@@ -564,9 +567,19 @@ sub PingPongProcessing
 			}
 		} #while
 		close(IN);
+        
+		$m=$n+1;
+		my $total_size = total_size(\%transPairSpecies);
+		print LOG "The memory occupied by transPairSpecies for overlap $m between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
+		$total_size = total_size(\%transPairReads);
+		print LOG "The memory occupied by transPairReads for overlap $m between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
+		
+		$total_size = total_size(\%cisPairSpecies);
+		print LOG "The memory occupied by cisPairSpecies for overlap $m between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
+		$total_size = total_size(\%cisPairReads);
+		print LOG "The memory occupied by cisPairReads for overlap $m between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
 
-
-				$m=$n+1;
+				
 			   #Ping-Pong score according to different G1T10 pairs
 			   #for matched pairs, cis only  
 				foreach my $p (@matchedpairs)
@@ -645,6 +658,11 @@ sub PingPongProcessing
 				$mu->record('after construct pp6 hash ');
 			    # Spit out a report
 			    $mu->dump();
+			
+				$total_size = total_size(\%pp6cisPairSpecies);
+				print LOG "The memory occupied by pp6cisPairSpecies between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
+				$total_size = total_size(\%pp6cisPairReads);
+				print LOG "The memory occupied by pp6cisPairReads between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
 				
 				print ZSCOREUA "guide-target\tpairmode\tstatmode\twindowSize\tbasePairingext\tZscoreofprefixSpecies\tZscoreofSpecies\tZscoreofpairsofReads\tPercentageofprefixSpecies\tPercentageofSpecies\tPercentageofparisofReads\tnumofprefixSpeciesofpp10\tnumofSpeciesofpp10\tpairsofReadsofpp10\tmeanofprefixSpecies\tmeanofSpecies\tmeanofpairsofReads\tstdofprefixSpecies\tstdofSpecies\tstdofpairsofReads\n";		   	   
 
@@ -704,6 +722,22 @@ sub PingPongProcessing
 				$mu->record('after construct transall and pp8 hashes');
 			    # Spit out a report
 			    $mu->dump();
+			
+				$total_size = total_size(\%pp6cisPairSpecies);
+				print LOG "The memory occupied by pp6cisPairSpecies between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
+				$total_size = total_size(\%pp6cisPairReads);
+				print LOG "The memory occupied by pp6cisPairReads between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
+				
+				$total_size = total_size(\%pp8allPairSpecies);
+				print LOG "The memory occupied by pp8allPairSpecies between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
+				$total_size = total_size(\%pp8allPairReads);
+				print LOG "The memory occupied by pp8allPairReads between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
+				
+				$total_size = total_size(\%transallPairSpecies);
+				print LOG "The memory occupied by transallPairSpecies between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
+				$total_size = total_size(\%transallPairReads);
+				print LOG "The memory occupied by transallPairReads between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
+				
 				
 				#Z-score for all trans pairs;
 				my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$PofSpecies,$PofSpeciesCor,$PofReads,$PP10ofSpecies,$PP10ofSpeciesCor,$PP10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%transallPairSpecies,\%transallPairReads);
@@ -720,6 +754,16 @@ sub PingPongProcessing
 
 				undef  %pp8allPairSpecies;
 				undef %pp8allPairReads;
+				
+				$total_size = total_size(\%pp8allPairSpecies);
+				print LOG "The memory occupied by pp8allPairSpecies between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
+				$total_size = total_size(\%pp8allPairReads);
+				print LOG "The memory occupied by pp8allPairReads between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
+				
+				$total_size = total_size(\%transallPairSpecies);
+				print LOG "The memory occupied by transallPairSpecies between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
+				$total_size = total_size(\%transallPairReads);
+				print LOG "The memory occupied by transallPairReads between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
 
 
 
