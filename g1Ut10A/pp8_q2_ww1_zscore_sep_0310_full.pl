@@ -115,47 +115,47 @@ my %targetpfsplit=();
 my %guidepfsplit=();
 
 my %total=();
+#store genome
+if($spe eq "fly")
+{
+	open IN, $fastafile;
+	while(<IN>)
+	{
+	   if (/>(.+) type/)
+	   {
+	      $chr="chr$1";
+	   }
+	   else
+	   {
+	      chomp;
+	      $genome{$chr}=$_;
+	   }
+	}
+	close(IN);
+}
+elsif($spe eq "bombyx")
+{
 
-
+	open IN, $fastafile or die "Fail to open $fastafile: $!";
+	while(<IN>)
+	{
+	   if (/>(.+)\s*\//) #this is specific for the case: >nscaf100 /length=4083 /lengthwogaps=4073
+	   {
+	      $chr="$1";
+	      @c=split(/ /,$chr);
+	   }
+	   else
+	   {
+	      chomp;
+	      $genome{$c[0]}=$_;
+	   }
+	}
+	close(IN);
+}
 #main, preprocessing
 if($indexFlag)
 {
-	if($spe eq "fly")
-	{
-		open IN, $fastafile;
-		while(<IN>)
-		{
-		   if (/>(.+) type/)
-		   {
-		      $chr="chr$1";
-		   }
-		   else
-		   {
-		      chomp;
-		      $genome{$chr}=$_;
-		   }
-		}
-		close(IN);
-	}
-	elsif($spe eq "bombyx")
-	{
 
-		open IN, $fastafile or die "Fail to open $fastafile: $!";
-		while(<IN>)
-		{
-		   if (/>(.+)\s*\//) #this is specific for the case: >nscaf100 /length=4083 /lengthwogaps=4073
-		   {
-		      $chr="$1";
-		      @c=split(/ /,$chr);
-		   }
-		   else
-		   {
-		      chomp;
-		      $genome{$c[0]}=$_;
-		   }
-		}
-		close(IN);
-	}
 	# make bowtie index
 	for ($i=0; $i<$numOfInput; $i++)
 	{
