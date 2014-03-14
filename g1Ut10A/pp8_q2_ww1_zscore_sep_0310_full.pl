@@ -176,7 +176,7 @@ if($indexFlag)
 	    
 	    &InputFileProcessing($inputfiles[$i],$file);
 	    
-		$mu->record('after one InputFileProcess() of $file');
+		$mu->record('after one InputFileProcess of $file');
 	    # Spit out a report
 	    $mu->dump();
 	
@@ -261,7 +261,7 @@ for ($i=0; $i<$numOfInput; $i++)
 		#my $memnow=qx{ `grep -i VmSize /proc/$$/status` };
 		#print LOG "the memory used for preprocessing is: $memnow";
    
-		$mu->record('before Ping-Pong processing');
+		$mu->record('before Ping-Pong processing'.$j);
 	    # Spit out a report
 	    $mu->dump();
 
@@ -285,6 +285,8 @@ for ($i=0; $i<$numOfInput; $i++)
 }#i
 close(PPZ);
 close(LOG);
+
+
 sub InputFileProcessing
 {
 	my ($inputfile,$file)= @_;
@@ -365,6 +367,7 @@ sub InputFileProcessing
 			$guidepfsplit{$file}{$dnaseq}{$piRNA}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
 
 	  	}
+
       	for (my $n=0;$n<$wsize;$n++)
       	{
       		my $start=0;
