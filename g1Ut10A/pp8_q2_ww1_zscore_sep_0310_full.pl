@@ -336,11 +336,15 @@ sub InputFileProcessing
 				$fiveend=$bedstart-1;#convert to 0-based,closed
 
 			}
-			$piRNA=substr($genome{$chr},$fiveend,$len);
+			#the piRNA species
+			$piRNA=substr($genome{$chr},$fiveend,$len); #this is from genome strand (+ strand)
+			#the prefix of piRNA species
 			$dnaseq=substr($piRNA,0,$basep);
 					
 			#store the seq of guide 20nt prefix only; for faster extract the reads number later
 			#$guidepf{$file}{$dnaseq}+=$reads/$ntm;
+			
+			#the coordinates of each piRNA species
 			$guidepfsplit{$file}{$dnaseq}{$piRNA}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
 
 
@@ -357,8 +361,8 @@ sub InputFileProcessing
 				
 				
 			}
-			my $seqstart=$fiveend-$basep;
-     		my $seqtemp=substr($genome{$chr},$seqstart,$len);
+			my $seqstart=$fiveend-$len; #fix this bug on 03-14-2014
+     		my $seqtemp=substr($genome{$chr},$seqstart,$len); #this is the genomic strand (+ strand)
      		$piRNA=&revfa($seqtemp);
 			$dnaseq=substr($piRNA,0,$basep);
 						
@@ -474,21 +478,27 @@ sub PingPongProcessing
 	      	
 	      	
 	      	my $nGcor=scalar (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}});
-			my $nGcorReads=0;
+			
+			my $nGcorTotalReads=0;
 			foreach my $piQuery (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}})
 			{
+				my $nGcorReads=0;
 				map {$nGcorReads+=$_} values %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}};
+				$nGcorTotalReads+=$nGcorReads;
 			}
 			
 		    my $nTcor=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}});		
-		    my $nTcorReads=0;
+		    
+			my $nTcorTotalReads=0;
 			foreach my $piGuideSpe (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}} )
 			{
+				my $nTcorReads=0;
 				map {$nTcorReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piGuideSpe}};
+				$nTcorTotalReads+=$nTcorReads;
 			}
 		    
 		    my $nnGcorTcor=$nGcor*$nTcor;
-	      	my $gttotal=$nGcorReads*$nTcorReads;
+	      	my $gttotal=$nGcorTotalReads*$nTcorTotalReads;
 	      	if ($l[3] eq "")
 	      	{
 	      	
