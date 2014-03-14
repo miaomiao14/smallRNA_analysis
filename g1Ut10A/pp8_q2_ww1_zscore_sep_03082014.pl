@@ -133,8 +133,8 @@ my @pairs=("AT","TA","GC","CG","AA","AC","AG","CA","CC","CT","GA","GG","GT","TC"
 
 
 
-my %targetpf=();
-my %guidepf=(); 
+#my %targetpf=();
+#my %guidepf=(); 
 
 my %targetpfsplit=();
 my %guidepfsplit=();
@@ -312,7 +312,7 @@ sub InputFileProcessing
 			$totalFirstBase{$file}{substr($dnaseq,0,1)}{$dnaseq}+=$reads/$ntm;
 		
 			#store the seq of guide 20nt prefix only; for faster extract the reads number later
-			$guidepf{$file}{$dnaseq}+=$reads/$ntm;
+			#$guidepf{$file}{$dnaseq}+=$reads/$ntm;
 			$guidepfsplit{$file}{substr($dnaseq,0,$basep)}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
 			
 
@@ -336,7 +336,7 @@ sub InputFileProcessing
 			$totalFirstBase{$file}{substr($dnaseq,0,1)}{$dnaseq}+=$reads/$ntm;
 		
 				#store the seq of guide 20nt prefix only; for faster extract the reads number later
-			$guidepf{$file}{$dnaseq}+=$reads/$ntm;
+			#$guidepf{$file}{$dnaseq}+=$reads/$ntm;
 			$guidepfsplit{$file}{substr($dnaseq,0,$basep)}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
 
 	  	}
@@ -459,9 +459,13 @@ sub PingPongProcessing
 	      	chomp $line;
 	      	@l=split(/\t/,$line);
 	      	
-	      	my $guidetotal=$guidepf{$guideStrandFile}{$l[2]};
-		    my $targettotal=$targetpf{$targetStrandFile}{$n}{$l[1]};
-	      	
+	      	#my $guidetotal=$guidepf{$guideStrandFile}{$l[2]};
+		    #my $targettotal=$targetpf{$targetStrandFile}{$n}{$l[1]};
+			my $guidetotal=0;
+			my $targettotal=0;
+	      	map {$guidetotal+=$_} values %{$guidepfsplit{$guideStrandFile}{$l[2]}};
+			map {$targettotal+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}};
+	
 	      	my $gttotal=$guidetotal*$targettotal;
 	      	
 	      	my $nGcor=scalar (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}});
