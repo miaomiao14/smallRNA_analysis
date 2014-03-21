@@ -123,11 +123,11 @@ checkExist "information_content.py" # calculate information content from fasta
 checkExist "ParaFly" # a handy tool in trinity package to wrap a serials independent commands and run them with multiple threads
 checkExist "bedGraphToBigWig" # a tool from kent source to convert bedgraph to bigWig format
 checkExist "phred_test" # in-house C++ program to find out wether a fastq format is in phred+33 or phred+64 mode
-checkExist "ppbed2" # in-house C++ program to calculate ping-pong score from two bed2 files
-checkExist "ppbed2each" # in-house C++ program to calculate ping-pong score of each chr/transcript from two bed2 file
-checkExist "istBedToBed2" # in-house C++ program to convert bed file, which is made by bowtie-mapping of insert file to bed2 format
-checkExist "calculate_miRNA_heterogeneity" # in-house C++ program to calculate miRNA heterogeneity from bed2 format
-checkExist "fastq2insert" # in-house C++ program to convert compressed/uncompressed fastq file to insert file
+#checkExist "ppbed2" # in-house C++ program to calculate ping-pong score from two bed2 files
+#checkExist "ppbed2each" # in-house C++ program to calculate ping-pong score of each chr/transcript from two bed2 file
+#checkExist "istBedToBed2" # in-house C++ program to convert bed file, which is made by bowtie-mapping of insert file to bed2 format
+#checkExist "calculate_miRNA_heterogeneity" # in-house C++ program to calculate miRNA heterogeneity from bed2 format
+#checkExist "fastq2insert" # in-house C++ program to convert compressed/uncompressed fastq file to insert file
 echo -e "\e[1;35mDone with testing required softwares/scripts, starting pipeline...\e[0m"
 
 ##################
