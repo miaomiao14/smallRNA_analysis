@@ -117,7 +117,7 @@ checkExist "bowtie-build" # building index for bowtie
 checkExist "gsnap" # mapping tool, used for mapping to exon-exon junction
 checkExist "gtf_splicesites" # used to create splice site file for gsnap
 checkExist "iit_store" # used to create splice site file for gsnap
-checkExist "genomeCoverageBed2" # modified bedtools to take in-house bed2 format and make bedgraph format
+#checkExist "genomeCoverageBed2" # modified bedtools to take in-house bed2 format and make bedgraph format
 checkExist "weblogo" # make weblogo 
 checkExist "information_content.py" # calculate information content from fasta
 checkExist "ParaFly" # a handy tool in trinity package to wrap a serials independent commands and run them with multiple threads
