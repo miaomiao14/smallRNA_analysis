@@ -469,7 +469,7 @@ fi
 touch ${OUTDIR}/.status.${STEP}.intersectGeneandTE
 STEP=$((STEP+1))
 
-touch ${OUTDIR}/.status.${STEP}.bed2mapper2
+#touch ${OUTDIR}/.status.${STEP}.bed2mapper2
 [ ! -f .status.${STEP}.bed2mapper2 ] && \
 parafly_file=${OUTDIR}/bed2mapper2.para && \
 for t in ${TARGETS[@]}
@@ -517,7 +517,7 @@ touch ${OUTDIR}/.status.${STEP}.uniqreads.stat
 STEP=$((STEP+1))
 
 #seqLogo
-touch .status.${STEP}.seqLogo
+#touch .status.${STEP}.seqLogo
 [ ! -f .status.${STEP}.seqLogo ] && \
 for i in `ls *.uniq.reads.gz`
 do
