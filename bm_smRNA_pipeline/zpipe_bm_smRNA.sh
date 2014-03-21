@@ -522,7 +522,7 @@ touch .status.${STEP}.seqLogo
 for i in `ls *.uniq.reads.gz`
 do
 ex $i
-awk '{OFS="\t"}{if(length($1)>=23 && length($1)<=30) print $0}' ${i%.gz} >${i%.gz}.23-29
+awk '{OFS="\t"}{if(length($1)>=23 && length($1)<=30) print $0}' ${i%.gz} >${i%.gz}.23-29 &&
 seqlogo_ww ${i%.gz}.23-29 29 /home/wangw1/isilon_temp/BmN4/seqLogo r && rm /home/wangw1/isilon_temp/BmN4/seqLogo/*.uniq.seq
 
 done
