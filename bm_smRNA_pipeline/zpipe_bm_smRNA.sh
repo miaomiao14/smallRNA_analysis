@@ -449,7 +449,7 @@ miRNAASSpeciesNum=`wc -l ${allBed2%*.bed2}.all.xrRNA.xtRNA.miRNA.AS.uniq.reads|c
 
 
 #interesect with gene, TE annotations
-touch ${OUTDIR}/.status.${STEP}.intersectGeneandTE
+#touch ${OUTDIR}/.status.${STEP}.intersectGeneandTE
 declare -a TARGETS=("GENE" "KNOWNTE" "ReASTE")
 echo -e "`date "+$ISO_8601"`\tintersect with gene and TES, converting format to mapper2" | tee -a $LOG
 [ ! -f .status.${STEP}.intersectGeneandTE ] && \
