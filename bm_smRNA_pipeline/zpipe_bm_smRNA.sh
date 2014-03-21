@@ -492,7 +492,7 @@ touch ${OUTDIR}/.status.${STEP}.bed2mapper2
 STEP=$((STEP+1))
 
 #stat
-touch .status.${STEP}.uniqreads.stat
+#touch .status.${STEP}.uniqreads.stat
 [ ! -f .status.${STEP}.uniqreads.stat ] && \
 for t in ${TARGETS[@]}
 do
