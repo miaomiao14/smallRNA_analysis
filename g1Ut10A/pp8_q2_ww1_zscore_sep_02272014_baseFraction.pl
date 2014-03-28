@@ -5,9 +5,11 @@ require "restrict_digts.pm";
 require "Jia.pm";
 use File::Basename;
 use Compress::Zlib;
+
+
 # rule is p1 doesn't need to pair but p2-20 need
 # simplifized version with prefix 20nt
-# input as norm.bed ( no header)
+
 
 #this version is staring form the target, and look for guides (converting the target information to guides), make index of the potential guides
 
@@ -39,6 +41,9 @@ use Compress::Zlib;
 #02/27/2014
 #fix a bug for background calculation n=17..20, the complementarity actually are 15,14,13,12, can not gurantee 16 nt complementarity
 #so for n=1..20, the prefix should be 20 at least  
+
+#03/28
+#replace prefix 20 as a parameter $basep
 
 if(scalar(@ARGV)<6)
 {
@@ -147,12 +152,15 @@ if($indexFlag)
 			{
 				$fa="$OUTDIR/$file.ref.$n.fa";
 				$indexb="$OUTDIR/$file.20.$n";
-				open OUT, ">$fa";
-				foreach my $prefix (keys %{$targetpf{$file}{$n}})
+				if(! -s $indexb) #test the existence of file
 				{
-					print OUT ">$prefix\t$targetpf{$file}{$n}{$prefix}\n$prefix\n" if (length($prefix)==20);
+					open OUT, ">$fa";
+					foreach my $prefix (keys %{$targetpf{$file}{$n}})
+					{
+						print OUT ">$prefix\t$targetpf{$file}{$n}{$prefix}\n$prefix\n" if (length($prefix)==20);
+					}
+					`bowtie-build $fa $indexb && rm $fa`;
 				}
-				`[ ! -s $indexb ] && bowtie-build $fa $indexb && rm $fa`;
 	
 			}#for loop of the n
 

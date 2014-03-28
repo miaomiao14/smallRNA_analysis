@@ -74,14 +74,15 @@ my $numOfInput=$parameters->{num};
 my $spe=$parameters->{species};
 my $OUTDIR=$parameters->{outdir};
 my $BOUTDIR=$parameters->{indexoutdir};
+my $MOUTDIR=$parameters->{mappingoutdir};
+my $QOUTDIR=$parameters->{queryseqoutdir};
 my $indexFlag=$parameters->{indexflag};
 my $fileFormat=$parameters->{format};
 my $wsize=$parameters->{winsize};
 my $basep=$parameters->{complementarity};
 my $fastafile=$parameters->{fa};
 
-my $MOUTDIR=$parameters->{mappingoutdir};
-my $QOUTDIR=$parameters->{queryseqoutdir};
+
 
 
 if($spe eq "fly")

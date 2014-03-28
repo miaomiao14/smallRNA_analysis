@@ -51,6 +51,8 @@ use List::Util qw(sum);
 
 #03/07
 #add one more parameters for g2t9 analysis
+# not finish testing yet
+
 
 if(scalar(@ARGV)<6)
 {

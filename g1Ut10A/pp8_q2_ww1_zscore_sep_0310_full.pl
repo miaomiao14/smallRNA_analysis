@@ -91,14 +91,15 @@ my $numOfInput=$parameters->{num};
 my $spe=$parameters->{species};
 my $OUTDIR=$parameters->{outdir};
 my $BOUTDIR=$parameters->{indexoutdir};
+my $MOUTDIR=$parameters->{mappingoutdir};
+my $QOUTDIR=$parameters->{queryseqoutdir};
 my $indexFlag=$parameters->{indexflag};
 my $fileFormat=$parameters->{format};
 my $wsize=$parameters->{winsize};
 my $basep=$parameters->{complementarity};
 my $fastafile=$parameters->{fa};
 
-my $MOUTDIR=$parameters->{mappingoutdir};
-my $QOUTDIR=$parameters->{queryseqoutdir};
+
 
 
 
@@ -156,6 +157,7 @@ elsif($spe eq "bombyx")
 	}
 	close(IN);
 }
+#memory
 my $total_size = total_size(\%genome);
 print LOG "The memory occupied by genome is $total_size bytes\n";
 
@@ -361,7 +363,7 @@ sub InputFileProcessing
 				
 				
 			}
-			my $seqstart=$fiveend-$len; #fix this bug on 03-14-2014
+			my $seqstart=$fiveend-$len; #fix this bug on 03-14-2014; this is the full length of piRNA species, not the same as prefix
      		my $seqtemp=substr($genome{$chr},$seqstart,$len); #this is the genomic strand (+ strand)
      		$piRNA=&revfa($seqtemp);
 			$dnaseq=substr($piRNA,0,$basep);
