@@ -13,7 +13,6 @@ STEP=1
 declare PI="Carroll"
 declare -a GT=("Hets")
 declare -a ORG=("mice")
-#declare -a GT=("ago3Hets" "aubHets" "qinHets" "nosAgo3CDrescue" "nosAgo3WTrescue")
 declare -a OX=("unox")
 declare -a PRO=("MiliIP" "Miwi2IP")
 declare -a REP=("rep1" "rep2")
@@ -28,10 +27,10 @@ do
 		for r in "${REP[@]}"
 		do
 		cd ${OUTPUTDIR}	
-		echo -ne " A=${PI}.SRA.${PRO[0]}.${g}.${o}.${ORG}.${r}.trimmed && " >>${parafile}
-		echo -ne " B=${PI}.SRA.${PRO[1]}.${g}.${o}.${ORG}.${r}.trimmed && " >>${parafile}
-		echo -ne " ANEW=${PI}.SRA.${PRO[0]}uniq.${g}.${o}.${ORG}.${r}.trimmed && " >>${parafile}
-		echo -ne " BNEW=${PI}.SRA.${PRO[1]}uniq.${g}.${o}.${ORG}.${r}.trimmed && " >>${parafile}
+		echo -ne " A=${PI}.SRA.${PRO[0]}.${g}.${o}.${ORG}.${r}.mm0.trimmed && " >>${parafile}
+		echo -ne " B=${PI}.SRA.${PRO[1]}.${g}.${o}.${ORG}.${r}.mm0.trimmed && " >>${parafile}
+		echo -ne " ANEW=${PI}.SRA.${PRO[0]}uniq.${g}.${o}.${ORG}.${r}.mm0.trimmed && " >>${parafile}
+		echo -ne " BNEW=${PI}.SRA.${PRO[1]}uniq.${g}.${o}.${ORG}.${r}.mm0.trimmed && " >>${parafile}
 		echo -ne " ln -s ${INPUTDIR}/\${A} ${OUTPUTDIR} && " >>${parafile}
 		echo -ne " ln -s ${INPUTDIR}/\${B} ${OUTPUTDIR} && " >>${parafile}
 	 
