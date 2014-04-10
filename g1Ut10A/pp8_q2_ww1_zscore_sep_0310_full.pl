@@ -157,6 +157,23 @@ elsif($spe eq "bombyx")
 	}
 	close(IN);
 }
+elsif($spe eq "mouse")
+{
+	open IN, $fastafile or die "Fail to open $fastafile: $!";
+	while(<IN>)
+	{
+	   if (/>(.+)/) #this is specific for the case: >nscaf100 /length=4083 /lengthwogaps=4073
+	   {
+	      $chr="$1";
+	   }
+	   else
+	   {
+	      chomp;
+	      $genome{$c[0]}=$_;
+	   }
+	}
+	close(IN);
+}
 #memory
 my $total_size = total_size(\%genome);
 print LOG "The memory occupied by genome is $total_size bytes\n";
@@ -174,6 +191,9 @@ if($indexFlag)
 		{$name=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
 		if($spe eq "bombyx")
 	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
+	    if($spe eq "mouse")
+	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13]"_".$namefield[6];}
+	    
 	    $file=$name;
 	    
 	    &InputFileProcessing($inputfiles[$i],$file);
@@ -232,6 +252,8 @@ else #if indexFlag
 		{$name=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
 		if($spe eq "bombyx")
 	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
+	    if($spe eq "mouse")
+	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13]"_".$namefield[6];}
     	$file=$name;
    		&InputFileProcessing($inputfiles[$i],$file);
 	}#for loop of the file
@@ -251,6 +273,8 @@ for ($i=0; $i<$numOfInput; $i++)
 		{$name1=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
 		if($spe eq "bombyx")
 	    {$name1=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
+	    if($spe eq "mouse")
+	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13]"_".$namefield[6];}
 		$file1=$name1;
 		$file2=fileparse($inputfiles[$j]);
 		@namefield=split(/\./,$file2);
@@ -258,6 +282,8 @@ for ($i=0; $i<$numOfInput; $i++)
 		{$name2=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
 		if($spe eq "bombyx")
 	    {$name2=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
+	    if($spe eq "mouse")
+	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13]"_".$namefield[6];}
 		$file2=$name2;
 		#modify the order of filename on 02-10-2014 to clearly indicate guide target   
 		#my $memnow=qx{ `grep -i VmSize /proc/$$/status` };
@@ -953,13 +979,12 @@ sub PingPongProcessing
 		{
 		        print "\nUsage:$0\n\n\t";
 		        print "REQUIRED\n\t";
-		        print "inputfile1 inputfile2 n type(fly|bombyx) outdir indexflag\n\t";
 		        print "-i  <inputfile1>\n\t";
 				print "-j  <inputfile2[can be as same as inputfile1]>\n\t";
 				print "-o  <outputdir>\n\t";
 				print "-b  <bowtie index outputdir>\n\t";
 				print "-n  <number of inputfiles>\n\t";
-				print "-s  <species name[fly|bombyx]>\n\t";
+				print "-s  <species name[fly|bombyx|mouse]>\n\t";
 				print "-d  <flag of index[0|1]>\n\t";
 				print "-f  <flag of index[bed|normbed]>\n\t";
 				print "-w  <background windowsize>\n\t";
