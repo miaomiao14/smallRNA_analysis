@@ -6,10 +6,7 @@ require "Jia.pm";
 use File::Basename;
 use Compress::Zlib;
 use List::Util qw(sum);
-use Memory::Usage;
-use Devel::Size qw(size total_size);
-my $mu = Memory::Usage->new();
-$mu->record('starting work');
+
 # rule is p1 and p17-21 doesn't need to pair but p2-16 need
 # simplifized version with prefix 16nt
 # input as norm.bed ( no header)
@@ -175,8 +172,7 @@ elsif($spe eq "mouse")
 	close(IN);
 }
 #memory
-my $total_size = total_size(\%genome);
-print LOG "The memory occupied by genome is $total_size bytes\n";
+
 
 #main, preprocessing
 if($indexFlag)
@@ -192,21 +188,13 @@ if($indexFlag)
 		if($spe eq "bombyx")
 	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
 	    if($spe eq "mouse")
-	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13]."_".$namefield[6];}
+	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13]"_".$namefield[6];}
 	    
 	    $file=$name;
 	    
 	    &InputFileProcessing($inputfiles[$i],$file);
 	    
-		$mu->record('after one InputFileProcess of $file');
-	    # Spit out a report
-	    $mu->dump();
-	
-		my $total_size = total_size(\%guidepfsplit);
-		print LOG "The memory occupied by query seq information from $file is $total_size bytes\n";
-		
-		my $total_size = total_size(\%targetpfsplit);
-		print LOG "The memory occupied by potential targets with overlap from 1..20 information from $file is $total_size bytes\n";
+
 		
 		
 		#if ($total{$file}>10)
@@ -289,23 +277,17 @@ for ($i=0; $i<$numOfInput; $i++)
 		#my $memnow=qx{ `grep -i VmSize /proc/$$/status` };
 		#print LOG "the memory used for preprocessing is: $memnow";
    
-		$mu->record('before Ping-Pong processing'.$j);
-	    # Spit out a report
-	    $mu->dump();
+
 
 		#if ($total{$file1}<10 || $total{$file2}<10) {print PPZ "$file2-$file1\t-10\n";} #only when consider per cluster or per transposon family
 		#else
 		#{
 			&PingPongProcessing($file2,$file1);
-			$mu->record('after Ping-Pong processing');
-		    # Spit out a report
-		    $mu->dump();
+
 			if($file1 ne $file2 ) #added on 11/14/2013
 			{   				
 			   &PingPongProcessing($file1,$file2); 
-				$mu->record('after Ping-Pong processing');
-		    	# Spit out a report
-		    	$mu->dump();   
+
 			}#when file1 and file2 are the same the second iteration is skipped
 		#}#ifelse: total reads>10 
 
@@ -496,7 +478,7 @@ sub PingPongProcessing
 		   	$NTM{$l[2]}++; #need to think about why only query sequences are nomalized to NTM, but not indexes
 	   	}
 	   	close(IN);
-		my $total_size = total_size(\%NTM);
+
 		print LOG "The memory occupied by NTM from $file is $total_size bytes\n";
 	   	open IN, "$MOUTDIR/$guideStrandFile.$targetStrandFile.$basep.$n.bowtie.out";
 	   	while(my $line=<IN>)
@@ -610,17 +592,7 @@ sub PingPongProcessing
 		close(IN);
         
 		$m=$n+1;
-		my $total_size = total_size(\%transPairSpecies);
-		print LOG "The memory occupied by transPairSpecies for overlap $m between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
-		$total_size = total_size(\%transPairReads);
-		print LOG "The memory occupied by transPairReads for overlap $m between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
-		
-		$total_size = total_size(\%cisPairSpecies);
-		print LOG "The memory occupied by cisPairSpecies for overlap $m between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
-		$total_size = total_size(\%cisPairReads);
-		print LOG "The memory occupied by cisPairReads for overlap $m between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
-
-				
+	
 			   #Ping-Pong score according to different G1T10 pairs
 			   #for matched pairs, cis only  
 				foreach my $p (@matchedpairs)
@@ -654,12 +626,7 @@ sub PingPongProcessing
 				     $count_N0{$p}++ if ($n_of_transPairSpecies>0);
 			     }
 
-				#my $memnow=qx{ `grep -i VmSize /proc/$$/status` };
-				#print LOG "the memory used for cis and trans pair detection for overlap $m is: $memnow";
-				
-				$mu->record('after Ping-Pong processing for $m');
-			    # Spit out a report
-			    $mu->dump();
+
 
 
 			}#n=1..20
@@ -693,12 +660,7 @@ sub PingPongProcessing
 				       	}
 				    }
 				}
-				#my $memnow=qx{ `grep -i VmSize /proc/$$/status` };
-				#print LOG "the memory used for construct pp6 hash in PP processing of $guideStrandFile.$targetStrandFile is: $memnow";
-				
-				$mu->record('after construct pp6 hash ');
-			    # Spit out a report
-			    $mu->dump();
+
 			
 				$total_size = total_size(\%pp6cisPairSpecies);
 				print LOG "The memory occupied by pp6cisPairSpecies between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
@@ -759,10 +721,7 @@ sub PingPongProcessing
 				
 				#my $memnow=qx{ `grep -i VmSize /proc/$$/status` };
 				#print LOG "the memory used for constructing transall and pp8 hashes during $guideStrandFile.$targetStrandFile processing is: $memnow";
-				
-				$mu->record('after construct transall and pp8 hashes');
-			    # Spit out a report
-			    $mu->dump();
+
 			
 				$total_size = total_size(\%pp6cisPairSpecies);
 				print LOG "The memory occupied by pp6cisPairSpecies between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
