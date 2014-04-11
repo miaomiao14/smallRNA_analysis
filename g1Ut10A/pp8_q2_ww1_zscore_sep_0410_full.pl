@@ -188,7 +188,7 @@ if($indexFlag)
 		if($spe eq "bombyx")
 	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
 	    if($spe eq "mouse")
-	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13]"_".$namefield[6];}
+	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13]."_".$namefield[6];}
 	    
 	    $file=$name;
 	    
