@@ -121,16 +121,16 @@ my %genome=();
 if($spe eq "fly")
 {
 	open IN, $fastafile;
-	while(<IN>)
+	while(my $line=<IN>)
 	{
-	   if (/>(.+) type/)
+	   if ($line=~/>(.+) type/)
 	   {
 	      $chr="chr$1";
 	   }
 	   else
 	   {
-	      chomp;
-	      $genome{$chr}=$_;
+	      chomp $line;
+	      $genome{$chr}=$line;
 	   }
 	}
 	close(IN);
@@ -139,17 +139,17 @@ elsif($spe eq "bombyx")
 {
 
 	open IN, $fastafile or die "Fail to open $fastafile: $!";
-	while(<IN>)
+	while(my $line=<IN>)
 	{
-	   if (/>(.+)\s*\//) #this is specific for the case: >nscaf100 /length=4083 /lengthwogaps=4073
+	   if ($line=~/>(.+)\s*\//) #this is specific for the case: >nscaf100 /length=4083 /lengthwogaps=4073
 	   {
 	      $chr="$1";
 	      @c=split(/ /,$chr);
 	   }
 	   else
 	   {
-	      chomp;
-	      $genome{$c[0]}=$_;
+	      chomp $line;
+	      $genome{$c[0]}=$line;
 	   }
 	}
 	close(IN);
@@ -157,16 +157,16 @@ elsif($spe eq "bombyx")
 elsif($spe eq "mouse")
 {
 	open IN, $fastafile or die "Fail to open $fastafile: $!";
-	while(<IN>)
+	while(my $line=<IN>)
 	{
-	   if (/>(.+)/) #this is specific for the case: >nscaf100 /length=4083 /lengthwogaps=4073
+	   if ($line=~/>(.+)/) #>chr1
 	   {
 	      $chr="$1";
 	   }
 	   else
 	   {
-	      chomp;
-	      $genome{$c[0]}=$_;
+	      chomp $line;
+	      $genome{$chr}=$line;
 	   }
 	}
 	close(IN);
