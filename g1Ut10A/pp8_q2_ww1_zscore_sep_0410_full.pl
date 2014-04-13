@@ -479,7 +479,7 @@ sub PingPongProcessing
 	   	}
 	   	close(IN);
 
-		print LOG "The memory occupied by NTM from $file is $total_size bytes\n";
+
 	   	open IN, "$MOUTDIR/$guideStrandFile.$targetStrandFile.$basep.$n.bowtie.out";
 	   	while(my $line=<IN>)
 	   	{
@@ -720,20 +720,6 @@ sub PingPongProcessing
 				#print LOG "the memory used for constructing transall and pp8 hashes during $guideStrandFile.$targetStrandFile processing is: $memnow";
 
 			
-				$total_size = total_size(\%pp6cisPairSpecies);
-				print LOG "The memory occupied by pp6cisPairSpecies between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
-				$total_size = total_size(\%pp6cisPairReads);
-				print LOG "The memory occupied by pp6cisPairReads between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
-				
-				$total_size = total_size(\%pp8allPairSpecies);
-				print LOG "The memory occupied by pp8allPairSpecies between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
-				$total_size = total_size(\%pp8allPairReads);
-				print LOG "The memory occupied by pp8allPairReads between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
-				
-				$total_size = total_size(\%transallPairSpecies);
-				print LOG "The memory occupied by transallPairSpecies between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
-				$total_size = total_size(\%transallPairReads);
-				print LOG "The memory occupied by transallPairReads between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
 				
 				
 				#Z-score for all trans pairs;
@@ -752,15 +738,7 @@ sub PingPongProcessing
 				undef  %pp8allPairSpecies;
 				undef %pp8allPairReads;
 				
-				$total_size = total_size(\%pp8allPairSpecies);
-				print LOG "The memory occupied by pp8allPairSpecies between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
-				$total_size = total_size(\%pp8allPairReads);
-				print LOG "The memory occupied by pp8allPairReads between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
 				
-				$total_size = total_size(\%transallPairSpecies);
-				print LOG "The memory occupied by transallPairSpecies between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
-				$total_size = total_size(\%transallPairReads);
-				print LOG "The memory occupied by transallPairReads between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
 
 
 
