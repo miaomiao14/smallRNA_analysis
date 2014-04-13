@@ -204,7 +204,7 @@ if($indexFlag)
 			if( ! -s $seqFile )#test the existence of file
 			{
 				open OUT, ">$seqFile";
-				foreach my $prefix (keys %{$guidepfsplit{$file}})
+				foreach my $prefix (keys %{$guidepf{$file}})
 				{
 					print OUT "$prefix\t$guidepfsplit{$file}{$prefix}\n" if (length($prefix)==$basep);
 				}
@@ -218,7 +218,7 @@ if($indexFlag)
 				if(! -s $indexb) #test the existence of file
 				{
 					open OUT, ">$fa";
-					foreach my $prefix (keys %{$targetpfsplit{$file}{$n}})
+					foreach my $prefix (keys %{$targetpf{$file}{$n}})
 					{
 						print OUT ">$prefix\t$targetpfsplit{$file}{$n}{$prefix}\n$prefix\n" if (length($prefix)==$basep);
 					}
@@ -352,7 +352,7 @@ sub InputFileProcessing
 			$dnaseq=substr($piRNA,0,$basep);
 					
 			#store the seq of guide 20nt prefix only; for faster extract the reads number later
-			#$guidepf{$file}{$dnaseq}+=$reads/$ntm;
+			$guidepf{$file}{$dnaseq}+=$reads/$ntm;
 			
 			#the coordinates of each piRNA species
 			$guidepfsplit{$file}{$dnaseq}{$piRNA}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
@@ -377,7 +377,7 @@ sub InputFileProcessing
 			$dnaseq=substr($piRNA,0,$basep);
 						
 			#store the seq of guide 20nt prefix only; for faster extract the reads number later
-			#$guidepf{$file}{$dnaseq}+=$reads/$ntm;
+			$guidepf{$file}{$dnaseq}+=$reads/$ntm;
 			$guidepfsplit{$file}{$dnaseq}{$piRNA}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
 
 	  	}
@@ -401,7 +401,7 @@ sub InputFileProcessing
          		}
 	            my $str=substr($genome{$chr},$start,$basep); #substr function is 0 based
 	            $str=&revfa($str);
-	            #$targetpf{$file}{$n}{$str}+=$reads/$ntm;
+	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
 	            
 	            #store chr, 5'end and strand information separately for each guide 16nt prefix
 	            my $tstrand="-";
@@ -422,7 +422,7 @@ sub InputFileProcessing
          			$fiveend=$start;	
          		}
 	            my $str=substr($genome{$chr},$start,$basep);
-	            #$targetpf{$file}{$n}{$str}+=$reads/$ntm;
+	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
 	            my $tstrand="+";
 	            #store chr, 5'end and strand information separately for each guide 16nt prefix	
 	            $targetpfsplit{$file}{$n}{$str}{$piRNA}{"$chr,$fiveend,$tstrand"}+=$reads/$ntm;
