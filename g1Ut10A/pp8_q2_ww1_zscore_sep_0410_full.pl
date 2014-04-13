@@ -662,10 +662,7 @@ sub PingPongProcessing
 				}
 
 			
-				$total_size = total_size(\%pp6cisPairSpecies);
-				print LOG "The memory occupied by pp6cisPairSpecies between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
-				$total_size = total_size(\%pp6cisPairReads);
-				print LOG "The memory occupied by pp6cisPairReads between $guideStrandFile and $targetStrandFile is $total_size bytes\n";
+
 				
 				print ZSCOREUA "guide-target\tpairmode\tstatmode\twindowSize\tbasePairingext\tZscoreofprefixSpecies\tZscoreofSpecies\tZscoreofpairsofReads\tPercentageofprefixSpecies\tPercentageofSpecies\tPercentageofparisofReads\tnumofprefixSpeciesofpp10\tnumofSpeciesofpp10\tpairsofReadsofpp10\tmeanofprefixSpecies\tmeanofSpecies\tmeanofpairsofReads\tstdofprefixSpecies\tstdofSpecies\tstdofpairsofReads\n";		   	   
 
