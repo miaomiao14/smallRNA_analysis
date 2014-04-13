@@ -275,7 +275,7 @@ for ($i=0; $i<$numOfInput; $i++)
 		if($spe eq "bombyx")
 	    {$name1=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
 	    if($spe eq "mouse")
-	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13]."_".$namefield[6];}
+	    {$name1=$namefield[2]."_".$namefield[12]."_".$namefield[13]."_".$namefield[6];}
 		$file1=$name1;
 		$file2=fileparse($inputfiles[$j]);
 		@namefield=split(/\./,$file2);
@@ -284,7 +284,7 @@ for ($i=0; $i<$numOfInput; $i++)
 		if($spe eq "bombyx")
 	    {$name2=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
 	    if($spe eq "mouse")
-	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13]."_".$namefield[6];}
+	    {$name2=$namefield[2]."_".$namefield[12]."_".$namefield[13]."_".$namefield[6];}
 		$file2=$name2;
 		#modify the order of filename on 02-10-2014 to clearly indicate guide target   
 		#my $memnow=qx{ `grep -i VmSize /proc/$$/status` };
