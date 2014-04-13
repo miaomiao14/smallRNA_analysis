@@ -206,7 +206,7 @@ if($indexFlag)
 				open OUT, ">$seqFile";
 				foreach my $prefix (keys %{$guidepf{$file}})
 				{
-					print OUT "$prefix\t$guidepfsplit{$file}{$prefix}\n" if (length($prefix)==$basep);
+					print OUT "$prefix\t$guidepf{$file}{$prefix}\n" if (length($prefix)==$basep);
 				}
 				close(OUT);
 			}
@@ -220,7 +220,7 @@ if($indexFlag)
 					open OUT, ">$fa";
 					foreach my $prefix (keys %{$targetpf{$file}{$n}})
 					{
-						print OUT ">$prefix\t$targetpfsplit{$file}{$n}{$prefix}\n$prefix\n" if (length($prefix)==$basep);
+						print OUT ">$prefix\t$targetpf{$file}{$n}{$prefix}\n$prefix\n" if (length($prefix)==$basep);
 					}
 					close(OUT);
 					`bowtie-build $fa $indexb && rm $fa`;
