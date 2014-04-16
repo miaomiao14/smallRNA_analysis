@@ -4,10 +4,10 @@
 #WEI WANG
 #for Ping-Pong method paper, analyze the data from Yuki lab
 export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
-INDIR=/home/wangw1/data/projects/uava/
+INDIR=/home/wangw1/data/projects/uava/mouse
 
 
-OUTDIR=/home/wangw1/data/projects/uava/masterTablePP
+OUTDIR=/home/wangw1/data/projects/uava/mouse/masterTablePP
 [ ! -f ${OUTDIR} ] && mkdir ${OUTDIR}
 LOG=${OUTDIR}/LOG.txt
 
