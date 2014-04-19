@@ -19,8 +19,8 @@ do
 	cat $i |grep cis |cut -f1,3,5 |awk 'BEGIN{OFS="\t"}{print $2,$1,$3}' >${OUTDIR}/${filename}.piSpe.cis.txt
 	cat $i |grep cis |cut -f1,3,6 |awk 'BEGIN{OFS="\t"}{print $2,$1,$3}' >${OUTDIR}/${filename}.pairedReadsSpe.cis.txt
 	
-	[ ! -s ${OUTDIR}/masterTable.${filename}.prefixSpe.cis.txt ] && ${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${OUTDIR}/${filename}.prefixSpe.cis.txt ${OUTDIR}/masterTable.DC.${filename}.prefixSpePairs.cis.txt && rm ${OUTDIR}/${filename}.prefixSpe.cis.txt
-	[ ! -s ${OUTDIR}/masterTable.${filename}.piSpe.cis.txt ] && ${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${OUTDIR}/${filename}.piSpe.cis.txt ${OUTDIR}/masterTable.DC.${filename}.SpeciesPairs.cis.txt && rm ${OUTDIR}/${filename}.piSpe.cis.txt
-	[ ! -s ${OUTDIR}/masterTable.${filename}.pairedReadsSpe.cis.txt ] && ${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${OUTDIR}/${filename}.pairedReadsSpe.cis.txt ${OUTDIR}/masterTable.DC.${filename}.ReadsPairs.cis.txt && rm ${OUTDIR}/${filename}.pairedReadsSpe.cis.txt
+	[ ! -s ${OUTDIR}/masterTable.${filename}.prefixSpe.cis.txt ] && ${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${OUTDIR}/${filename}.prefixSpe.cis.txt ${OUTDIR}/masterTable.mouse.DC.${filename}.prefixSpePairs.cis.txt && rm ${OUTDIR}/${filename}.prefixSpe.cis.txt
+	[ ! -s ${OUTDIR}/masterTable.${filename}.piSpe.cis.txt ] && ${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${OUTDIR}/${filename}.piSpe.cis.txt ${OUTDIR}/masterTable.mouse.DC.${filename}.SpeciesPairs.cis.txt && rm ${OUTDIR}/${filename}.piSpe.cis.txt
+	[ ! -s ${OUTDIR}/masterTable.${filename}.pairedReadsSpe.cis.txt ] && ${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${OUTDIR}/${filename}.pairedReadsSpe.cis.txt ${OUTDIR}/masterTable.mouse.DC.${filename}.ReadsPairs.cis.txt && rm ${OUTDIR}/${filename}.pairedReadsSpe.cis.txt
 							
 done
