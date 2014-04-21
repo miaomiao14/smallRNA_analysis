@@ -108,7 +108,23 @@ elsif($spe eq "bombyx")
 	   }
 	}
 }
-
+elsif($spe eq "mouse")
+{
+	open IN, $fastafile or die "Fail to open $fastafile: $!";
+	while(my $line=<IN>)
+	{
+	   if ($line=~/>(.+)/) #>chr1
+	   {
+	      $chr="$1";
+	   }
+	   else
+	   {
+	      chomp $line;
+	      $genome{$chr}=$line;
+	   }
+	}
+	close(IN);
+}
 
 
 my @matchedpairs=("AT","TA","GC","CG");
@@ -145,6 +161,8 @@ if($indexFlag)
 		{$name=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
 		if($spe eq "bombyx")
 	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
+	    if($spe eq "mouse")
+	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13]."_".$namefield[6];}
 	    push @argos, $name;
 	    $file=$name;
 	    
@@ -189,6 +207,8 @@ else #if indexFlag
 		{$name=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
 		if($spe eq "bombyx")
 	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
+	    if($spe eq "mouse")
+	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13]."_".$namefield[6];}
     	push @argos, $name;
     	$file=$name;
    		&InputFileProcessing($inputfiles[$i],$file);
@@ -203,12 +223,15 @@ for ($i=0; $i<$numOfInput; $i++)
 	for ($j=0; $j<=$i; $j++)
 	{
       
+		      
 		$file1=fileparse($inputfiles[$i]); 
 		@namefield=split(/\./,$file1);
    	    if($spe eq "fly")
 		{$name1=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
 		if($spe eq "bombyx")
 	    {$name1=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
+	    if($spe eq "mouse")
+	    {$name1=$namefield[2]."_".$namefield[12]."_".$namefield[13]."_".$namefield[6];}
 		$file1=$name1;
 		$file2=fileparse($inputfiles[$j]);
 		@namefield=split(/\./,$file2);
@@ -216,6 +239,8 @@ for ($i=0; $i<$numOfInput; $i++)
 		{$name2=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
 		if($spe eq "bombyx")
 	    {$name2=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
+	    if($spe eq "mouse")
+	    {$name2=$namefield[2]."_".$namefield[12]."_".$namefield[13]."_".$namefield[6];}
 		$file2=$name2;
 		#modify the order of filename on 02-10-2014 to clearly indicate guide target   
 
