@@ -170,7 +170,7 @@ if($indexFlag)
 	     
 		if ($total{$file}>10)
 		{
-			$seqFile="$OUTDIR/$file.seq";
+			$seqFile="$QOUTDIR/$file.seq";
 			if( ! -s $seqFile )#test the existence of file
 			{
 				open OUT, ">$seqFile";
