@@ -8,10 +8,10 @@ use Compress::Zlib;
 
 
 $gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[0]: $gzerrno\n" ;
-while($gz->gzreadline($_) > 0) 
-{ chomp; split(/\t/);
-$_[2]=~/(\w.+):(\d+)-(\d+)\((.+)\)/;
-$key="$1\t$2\t$3\t$4\t$_[0]\t$_[1]\t$_[6]\t$_[3]\n";
+while($gz->gzreadline($line) > 0) 
+{ chomp $line; @l=split(/\t/,$line);
+$l[2]=~/(\w.+):(\d+)-(\d+)\((.+)\)/;
+$key="$1\t$2\t$3\t$4\t$l[0]\t$l[1]\t$l[6]\t$l[3]\n";
 $hash{$key}=0;
 }
 $gz->gzclose();
