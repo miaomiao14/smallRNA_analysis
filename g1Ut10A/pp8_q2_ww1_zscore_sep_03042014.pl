@@ -1069,9 +1069,31 @@ sub ZscoreCal
 				push @numOfReads, $XnReads ;
 			}				    	
 	    }
-	    $X0=$numOfSpecies[9];
-	    $X1=$numOfSpeciesCor[9];
-	    $X2=$numOfReads[9];
+	    if($numOfSpecies[9])
+	    {
+	    	$X0=$numOfSpecies[9];
+	    }
+	    else
+	    {
+	    	$X0=0;
+	    }
+	    if($numOfSpeciesCor[9])
+	    {
+	    	$X1=$numOfSpeciesCor[9];
+	    }
+	    else
+	    {
+	    	$X1=0;
+	    }
+	    if($numOfReads[9])
+	    {
+	    	$X2=$numOfReads[9];
+	    }
+	    else
+	    {
+	    	$X2=0;
+	    }
+
 	    
 	    $S0=sum(@numOfSpecies);
 	    $S1=sum(@numOfSpeciesCor);
