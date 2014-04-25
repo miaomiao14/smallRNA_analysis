@@ -1112,21 +1112,35 @@ sub ZscoreCal
 	    splice(@numOfSpeciesCor, 9, 1);
 	    splice(@numOfReads, 9, 1);
 	    
-	    $std0=&standard_deviation(@numOfSpecies);
-	    $std1=&standard_deviation(@numOfSpeciesCor);
-	    $std2=&standard_deviation(@numOfReads);
+	    if($S0!=0 && $S1!=0)
+	    {
 	    
-	    
-	    
-	    #to prove that $transPairReadsRef->{9} was deleted successfully
-	    #my $temp1=$#numOfSpecies+1;
-	    #my $temp2=$#numOfSpeciesCor+1;
-	    #my $temp3=scalar (@numOfReads);
-	    
-	    
-	    $m0=&mean(@numOfSpecies);
-	    $m1=&mean(@numOfSpeciesCor);
-	    $m2=&mean(@numOfReads);
+		    $std0=&standard_deviation(@numOfSpecies);
+		    $std1=&standard_deviation(@numOfSpeciesCor);
+		    $std2=&standard_deviation(@numOfReads);
+		    
+		    
+		    
+		    #to prove that $transPairReadsRef->{9} was deleted successfully
+		    #my $temp1=$#numOfSpecies+1;
+		    #my $temp2=$#numOfSpeciesCor+1;
+		    #my $temp3=scalar (@numOfReads);
+		    
+		    
+		    $m0=&mean(@numOfSpecies);
+		    $m1=&mean(@numOfSpeciesCor);
+		    $m2=&mean(@numOfReads);
+	    }
+	    else
+	    {
+	    	$std0=0;
+	    	$std1=0;
+	    	$std2=0;
+	    	$m0=0;
+	    	$m1=0;
+	    	$m2=0;
+	    	
+	    }
 	    
 	    if ($std0>0 && $count>=5) { $Z0=($X0-$m0)/$std0;} else {$Z0=-10;}#by species irrespective of coordinates
 	    if ($std1>0 && $count>=5) { $Z1=($X1-$m1)/$std1;} else {$Z1=-10;}#by species according to coordinates
