@@ -1084,6 +1084,7 @@ sub ZscoreCal
 	    else
 	    {
 	    	$P0=0;
+	    	$X0=0;
 	    }
 	    
 	    if($S1!=0)
@@ -1093,6 +1094,7 @@ sub ZscoreCal
 	    else
 	    {
 	    	$P1=0;
+	    	$X1=0;
 	    }
 	    
 	    if($S2!=0)
@@ -1102,6 +1104,7 @@ sub ZscoreCal
 	    else
 	    {
 	    	$P2=0;
+	    	$X2=0;
 	    }
 	    
 	 
