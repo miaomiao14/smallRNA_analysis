@@ -7,7 +7,7 @@ export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 INDIR=/home/wangw1/uava/
 
 
-OUTDIR=/home/wangw1/data/projects/uava/fly/masterTablecistransPP
+OUTDIR=/home/wangw1/uava/masterTablecistransPP
 [ ! -f ${OUTDIR} ] && mkdir ${OUTDIR}
 LOG=${OUTDIR}/LOG.txt
 
