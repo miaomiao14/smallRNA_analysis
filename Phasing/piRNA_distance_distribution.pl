@@ -26,8 +26,8 @@ use Compress::Zlib;
    
    %plus=(); %plus_end=(); %minus=();$mins_end=();
    
-	if($file1=~/gz/)
-	{
+#	if($file1=~/gz/)
+#	{
 		my $gz="";
 		$gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[0]: $gzerrno\n" ;
 		while($gz->gzreadline($line) > 0)
@@ -87,7 +87,7 @@ use Compress::Zlib;
         			
 		}
 		$gz->gzclose();
-	}
+#	}
   
     
     foreach $chr (keys %plus)
