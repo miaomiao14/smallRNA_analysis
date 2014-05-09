@@ -30,125 +30,65 @@ use Compress::Zlib;
 	{
 		my $gz="";
 		$gz = gzopen($ARGV[0], "rb") or die "Cannot open $ARGV[0]: $gzerrno\n" ;
-		while($gz->gzreadline($_) > 0)
+		while($gz->gzreadline($line) > 0)
 		{ 
-			chomp; s/\s+/\t/g;split(/\t/);  
-			next if (/data/);
+			chomp $line; $line=~s/\s+/\t/g;@l=split(/\t/,$line);  
+			next if ($line=~/data/);
         
         	if($format eq "normbed")
         	{
 				if($CLONE eq "SRA")
         		{
-				next if (length($_[4])>29 || length($_[4])<23);
+				next if (length($l[4])>29 || length($l[4])<23);
         		}
-				if ($_[3] eq '+')
+				if ($l[3] eq '+')
 				{
-	            	$plus{$_[0]}{$_[1]}+=$_[5]/$_[6];
-	            	$plus_end{$_[0]}{$_[1]}=$_[2];
+	            	$plus{$l[0]}{$l[1]}+=$l[5]/$l[6];
+	            	$plus_end{$l[0]}{$l[1]}=$l[2];
 	        	}
 	        	else
 	        	{
-	            	$minus{$_[0]}{$_[2]}+=$_[5]/$_[6];
+	            	$minus{$l[0]}{$l[2]}+=$l[5]/$l[6];
 	        	}
         	}
 			if($format eq "bed")
 			{
 
-        		($reads,$ntm,$dep)=split(/,/,$_[3]);
+        		($reads,$ntm,$dep)=split(/,/,$l[3]);
         		if($file1=~/plus/i) #strand information is not included in the data, but in the file name
         		{
-	            	$plus{$_[0]}{$_[1]}+=$reads/$ntm;
-	            	$plus_end{$_[0]}{$_[1]}=$_[2];
+	            	$plus{$l[0]}{$l[1]}+=$reads/$ntm;
+	            	$plus_end{$l[0]}{$l[1]}=$_[2];
 	        	}
 	        	if($file1=~/minus/i)
 	        	{
-	            	$minus{$_[0]}{$_[2]}+=$reads/$ntm;
+	            	$minus{$l[0]}{$l[2]}+=$reads/$ntm;
 	        	}
         	}
         	if($format eq "bed2")#bo's definition
 			{
 
-        		$reads=$_[3];
-        		$ntm=$_[4];
+        		$reads=$l[3];
+        		$ntm=$l[4];
         		if($CLONE eq "SRA")
         		{
-				next if (length($_[6])>29 || length($_[6])<23);
+				next if (length($l[6])>29 || length($l[6])<23);
         		}
-        		if($_[3] eq "+") #strand information is not included in the data, but in the file name
+        		if($l[3] eq "+") #strand information is not included in the data, but in the file name
         		{
-	            	$plus{$_[0]}{$_[1]}+=$reads/$ntm;
-	            	$plus_end{$_[0]}{$_[1]}=$_[2];
+	            	$plus{$l[0]}{$l[1]}+=$reads/$ntm;
+	            	$plus_end{$l[0]}{$l[1]}=$l[2];
 	        	}
 	        	else
 	        	{
-	            	$minus{$_[0]}{$_[2]}+=$reads/$ntm;
+	            	$minus{$l[0]}{$l[2]}+=$reads/$ntm;
 	        	}
         	}		
         			
 		}
 		$gz->gzclose();
 	}
-   else
-   {
-		open IN, $ARGV[0];
-    	while(<IN>)
-    	{
-        	chomp; s/\s+/\t/g;split(/\t/);  
-			next if (/data/);
-        
-        	if($format eq "normbed")
-        	{
-        		if($CLONE eq "SRA")
-        		{
-				next if (length($_[4])>29 || length($_[4])<23);
-        		}
-				if ($_[3] eq '+')
-				{
-	            	$plus{$_[0]}{$_[1]}+=$_[5]/$_[6];
-	            	$plus_end{$_[0]}{$_[1]}=$_[2];
-	        	}
-	        	else
-	        	{
-	            	$minus{$_[0]}{$_[2]}+=$_[5]/$_[6];
-	        	}
-        	}
-			if($format eq "bed")
-			{
-
-        		($reads,$ntm,$dep)=split(/,/,$_[3]);
-        		if($file1=~/plus/i) #strand information is not included in the data, but in the file name
-        		{
-	            	$plus{$_[0]}{$_[1]}+=$reads/$ntm;
-	            	$plus_end{$_[0]}{$_[1]}=$_[2];
-	        	}
-	        	if($file1=~/minus/i)
-	        	{
-	            	$minus{$_[0]}{$_[2]}+=$reads/$ntm;
-	        	}
-        	}
-        	if($format eq "bed2")#bo's definition
-			{
-
-        		$reads=$_[3];
-        		$ntm=$_[4];
-        		if($CLONE eq "SRA")
-        		{
-				next if (length($_[6])>29 || length($_[6])<23);
-        		}
-        		if($_[3] eq "+") #strand information is not included in the data, but in the file name
-        		{
-	            	$plus{$_[0]}{$_[1]}+=$reads/$ntm;
-	            	$plus_end{$_[0]}{$_[1]}=$_[2];
-	        	}
-	        	else
-	        	{
-	            	$minus{$_[0]}{$_[2]}+=$reads/$ntm;
-	        	}
-        	}		
-        	
-		}
-		close(IN);
-    }
+  
     
     foreach $chr (keys %plus)
     {
