@@ -1168,9 +1168,9 @@ sub ZscoreCal
 	    	
 	    }
 	    
-	    if ($std0>0 && $count>=5) { $Z0=($X0-$m0)/$std0;} else {$Z0=-10;}#by species irrespective of coordinates
-	    if ($std1>0 && $count>=5) { $Z1=($X1-$m1)/$std1;} else {$Z1=-10;}#by species according to coordinates
-	    if ($std2>0 && $count>=5) { $Z2=($X2-$m2)/$std2;} else {$Z2=-10;}
+	    if ($std0>0 ) { $Z0=($X0-$m0)/$std0;} else {$Z0=-10;}#by species irrespective of coordinates
+	    if ($std1>0 ) { $Z1=($X1-$m1)/$std1;} else {$Z1=-10;}#by species according to coordinates
+	    if ($std2>0 ) { $Z2=($X2-$m2)/$std2;} else {$Z2=-10;}
 	    
 	    $Z0=&restrict_num_decimal_digits($Z0,3);
 	    $Z1=&restrict_num_decimal_digits($Z1,3);
