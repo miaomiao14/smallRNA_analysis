@@ -171,7 +171,7 @@ if($indexFlag)
 	     
 		if ($total{$file}>10)
 		{
-			$seqFile="$QOUTDIR/$file.seq";
+			$seqFile="$QOUTDIR/$file.$basep.seq";
 			if( ! -s $seqFile )#test the existence of file
 			{
 				open OUT, ">$seqFile";
@@ -448,7 +448,7 @@ sub PingPongProcessing
 		my %pairedTenthBase=();
 		# file1 as ref
 		$indexb="$BOUTDIR/$targetStrandFile.$basep.$n";
-		$seqFile="$QOUTDIR/$guideStrandFile.seq";
+		$seqFile="$QOUTDIR/$guideStrandFile.$basep.seq";
 		$bowtieOut="$MOUTDIR/$guideStrandFile.$targetStrandFile.$basep.$n.bowtie.out";
 	 	`[ ! -f $bowtieOut ] && bowtie $indexb -r -a -v 1 -p 8 $seqFile --suppress 1,4,6,7 | grep + > $bowtieOut`;
 	   	my %NTM=();
@@ -969,7 +969,7 @@ sub PingPongProcessing
 	   $X=$score{9}; delete $score{9};
 	   $std=&standard_deviation(values %score);
 	   $m=&mean(values %score);
-	   if ($std>0 && $count_N>=5) { $Z=($X-$m)/$std;} else {$Z=-10;}
+	   if ($std>0) { $Z=($X-$m)/$std;} else {$Z=-10;}
 	   $Z=&restrict_num_decimal_digits($Z,3);
 	   $X=&restrict_num_decimal_digits($X,3);
 	   $std=&restrict_num_decimal_digits($std,3);
