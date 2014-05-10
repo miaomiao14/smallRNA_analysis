@@ -1047,9 +1047,11 @@ sub ZscoreCal
 	    #delete $transPairSpeciesRef->{9}; ##???
 	    #delete $transPairReadsRef->{9};###???
 	    
-	    my @numOfSpecies=();
-	    my @numOfSpeciesCor=();
-	    my @numOfReads=();
+	    my %numOfSpecies=();
+	    my %numOfSpeciesCor=();
+	    my %numOfReads=();
+	    
+	    
 	    
 	    for(my $n=$leftbound;$n<$wsize;$n++)
 	    {
@@ -1058,37 +1060,37 @@ sub ZscoreCal
 	    	
 	    	if($n1>0) #$transPairSpeciesRef->{9} was deleted
 	    	{
-	    		push @numOfSpecies, scalar (keys %{$transPairSpeciesRef->{$n}}) ;
+	    		$numOfSpecies{$n}= scalar (keys %{$transPairSpeciesRef->{$n}}) ;
 	    		my $XnSpecies=0;
 	    		map { $XnSpecies+=$_ } (values %{$transPairSpeciesRef->{$n}});
-	    		push @numOfSpeciesCor, $XnSpecies ;
+	    		$numOfSpeciesCor{$n}= $XnSpecies ;
 	    	}
 			if($n2>0) #$transPairReadsRef->{9} was deleted
 			{
 				my $XnReads=0;
 				map { $XnReads+=$_ } (values %{$transPairReadsRef->{$n}}); 
-				push @numOfReads, $XnReads ;
+				$numOfReads{$n}= $XnReads ;
 			}				    	
 	    }
-	    if($numOfSpecies[9])
+	    if($numOfSpecies{9})
 	    {
-	    	$X0=$numOfSpecies[9];
+	    	$X0=$numOfSpecies{9};
 	    }
 	    else
 	    {
 	    	$X0=0;
 	    }
-	    if($numOfSpeciesCor[9])
+	    if($numOfSpeciesCor{9})
 	    {
-	    	$X1=$numOfSpeciesCor[9];
+	    	$X1=$numOfSpeciesCor{9};
 	    }
 	    else
 	    {
 	    	$X1=0;
 	    }
-	    if($numOfReads[9])
+	    if($numOfReads{9})
 	    {
-	    	$X2=$numOfReads[9];
+	    	$X2=$numOfReads{9};
 	    }
 	    else
 	    {
@@ -1096,9 +1098,10 @@ sub ZscoreCal
 	    }
 
 	    
-	    $S0=sum(@numOfSpecies);
-	    $S1=sum(@numOfSpeciesCor);
-	    $S2=sum(@numOfReads);
+	    map { $S0+=$_ } (values %numOfSpecies);
+	    map { $S1+=$_ } (values %numOfSpeciesCor);
+	    map { $S2+=$_ } (values %numOfReads);
+
 	    
 	    if($S0!=0)
 	    {
@@ -1134,16 +1137,17 @@ sub ZscoreCal
 	    
 	    
 	    
-	    splice(@numOfSpecies, 9, 1);
-	    splice(@numOfSpeciesCor, 9, 1);
-	    splice(@numOfReads, 9, 1);
+	    delete $numOfSpecies{9};
+	    delete $numOfSpeciesCor{9};
+	    delete $numOfReads{9};
+
 	    
 	    if($S0!=0 && $S1!=0)
 	    {
 	    
-		    $std0=&standard_deviation(@numOfSpecies);
-		    $std1=&standard_deviation(@numOfSpeciesCor);
-		    $std2=&standard_deviation(@numOfReads);
+		    $std0=&standard_deviation(values %numOfSpecies);
+		    $std1=&standard_deviation(values %numOfSpeciesCor);
+		    $std2=&standard_deviation(values %numOfReads);
 		    
 		    
 		    
@@ -1153,9 +1157,9 @@ sub ZscoreCal
 		    #my $temp3=scalar (@numOfReads);
 		    
 		    
-		    $m0=&mean(@numOfSpecies);
-		    $m1=&mean(@numOfSpeciesCor);
-		    $m2=&mean(@numOfReads);
+		    $m0=&mean(values %numOfSpecies);
+		    $m1=&mean(values %numOfSpeciesCor);
+		    $m2=&mean(values %numOfReads);
 	    }
 	    else
 	    {
