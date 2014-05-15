@@ -16,8 +16,11 @@ use Compress::Zlib;
 #01/22/2014
 #wei.wang2@umassmed.edu
 
-open IN, "/home/xuj1/pipeline/common/fasta/dmel-all-chromosome-r5.5_TAS.fasta";
-while(<IN>) { if (/>(.+) type/) { $chr="chr$1";} else { chomp; $genome{$chr}=$_;}}
+#05/15-2014
+#change windowsize from 20 to 16
+$fa="/home/wangw1/data/common/dmel-all-chromosome-r5.5_TAS.fasta";
+open IN, $fa;
+while(my $line=<IN>) { if ($line=~/>(.+) type/) { $chr="chr$1";} else { chomp $line; $genome{$chr}=$line;}}
 
 #/home/hanb/nearline/small_RNA_Pipeline/common_files/dm3/genome.fa
 
@@ -29,55 +32,59 @@ $OUTDIR=$ARGV[3];
 for ($i=0; $i<$ARGV[2]; $i++)
 {
 	my $file=fileparse($ARGV[$i]);
+	$filename=$file;
 	@namefield=split(/\./,$file);
 	$name=$namefield[2]."_".$namefield[1]."_".$namefield[7];
 
 	$file=$name;
 	$gz = gzopen($ARGV[$i], "rb") or die "Cannot open $ARGV[$i]: $gzerrno\n" ;
-	while($gz->gzreadline($_) > 0)
+	while($gz->gzreadline($line) > 0)
 	#open IN, $ARGV[$i];
 	#while(<IN>) 
 	{
-		chomp; 
-		split(/\t/);  
-		#next if (length($_[4])>29 || length($_[4])<23); #can not use it for DEG
-		next if (/data/);
-		$total{$file}+=$_[5]/$_[6];
+		chomp $line; 
+		@l=split(/\t/,$line);
+		if($filename=~/SRA/ or $filename=~/LRA/)
+		{  
+			next if (length($l[4])>29 || length($l[4])<23); #can not use it for DEG
+		}
+		next if ($line=~/data/);
+		$total{$file}+=$l[5]/$l[6];
 		#$hash2{$file}{substr($_[4],0,16)}+=$_[5]/$_[6]; #here is the problem for DEG
 		
-		if($_[3] eq '+')
+		if($l[3] eq '+')
 		{
-			$seqstart=$_[1]-1; #norm.bed is 1-based
-            $hash2{$file}{substr($genome{$_[0]},$seqstart,16)}+=$_[5]/$_[6]; #hash2 is the guide
+			$seqstart=$l[1]-1; #norm.bed is 1-based
+            $hash2{$file}{substr($genome{$l[0]},$seqstart,16)}+=$l[5]/$l[6]; #hash2 is the guide
 		}
 		else
 		{
-			$seqstart=$_[2]-16;
-     		$seqtemp=substr($genome{$_[0]},$seqstart,16);
+			$seqstart=$l[2]-16;
+     		$seqtemp=substr($genome{$l[0]},$seqstart,16);
      		$seqtemp=&revfa($seqtemp);
-     		$hash2{$file}{$seqtemp}+=$_[5]/$_[6]; #hash2 is the guide
+     		$hash2{$file}{$seqtemp}+=$l[5]/$l[6]; #hash2 is the guide
 		}
 		
 		
-		for ($n=1;$n<=20;$n++)
+		for ($n=1;$n <=16;$n++)
 		{
-			if ($_[3] eq '+')
+			if ($l[3] eq '+')
 			{
-				$start=$_[1]+$n-17;
-				$str=substr($genome{$_[0]},$start,16);
+				$start=$l[1]+$n-17;
+				$str=substr($genome{$l[0]},$start,16);
 				$str=&revfa($str);
-                $hash1{$file}{$n}{$str}+=$_[5]/$_[6];     #str is the target; hash1
-                push @{$hash3{$file}{$n}{$str}},$_[4] if($n==10); #hash3, key is the target, value is the guide
+                $hash1{$file}{$n}{$str}+=$l[5]/$l[6];     #str is the target; hash1
+                push @{$hash3{$file}{$n}{$str}},$l[4] if($n==10); #hash3, key is the target, value is the guide
                 
                 
                 
 			}
 			else 
 			{
-				$start=$_[2]-$n;
-				$str=substr($genome{$_[0]},$start,16);
-      			$hash1{$file}{$n}{$str}+=$_[5]/$_[6]; #str is the target; hash1
-     			push @{$hash3{$file}{$n}{$str}},$_[4] if($n==10); #hash3, key is the target, value is the guide
+				$start=$l[2]-$n;
+				$str=substr($genome{$l[0]},$start,16);
+      			$hash1{$file}{$n}{$str}+=$l[5]/$l[6]; #str is the target; hash1
+     			push @{$hash3{$file}{$n}{$str}},$l[4] if($n==10); #hash3, key is the target, value is the guide
      			
      			
 
@@ -88,14 +95,14 @@ for ($i=0; $i<$ARGV[2]; $i++)
 	{
 		$seqFile="$OUTDIR/$file.seq";
 		open OUT, ">$seqFile";
-		foreach (keys %{$hash2{$file}}) { print OUT "$_\t$hash2{$file}{$_}\n" if (length($_)==16)}#guide as query
+		foreach my $prefix (keys %{$hash2{$file}}) { print OUT "$prefix\t$hash2{$file}{$prefix}\n" if (length($prefix)==16)}#guide as query
 		close(OUT);
-		for ($n=1;$n<=20;$n++) 
+		for ($n=1;$n <=16;$n++) 
 		{
 		$fa="$OUTDIR/$file.ref.$n.fa";
 	    $indexb="$OUTDIR/$file.$n";
 		open OUT, ">$fa";
-		foreach (keys %{$hash1{$file}{$n}}) { print OUT ">$_\t$hash1{$file}{$n}{$_}\n$_\n" if (length($_)==16)} #target as index
+		foreach my $prefix (keys %{$hash1{$file}{$n}}) { print OUT ">$prefix\t$hash1{$file}{$n}{$prefix}\n$prefix\n" if (length($prefix)==16)} #target as index
 		`bowtie-build $fa $indexb && rm $fa`;
 		#`bowtie-build $fa $indexb `;
 
@@ -130,31 +137,31 @@ for ($i=0; $i<$ARGV[2]; $i++)
 			
 			open PPSCORE, ">$OUTDIR/$file2.$file1.pp";
 			open PPSEQ, ">$OUTDIR/$file2.$file1.ppseq";
-			foreach ($n=1;$n<=20;$n++) 
+			foreach ($n=1;$n <=16;$n++) 
 			{
 				# file1 as ref; target as ref;
 		 		`bowtie $OUTDIR/$file1.$n -r -a -v 1 -p 8 $OUTDIR/$file2.seq --suppress 1,4,6,7 | grep + > $OUTDIR/$file2.$file1.$n.bowtie.out`;
 		  		%NTM=();
 		  		open IN, "$OUTDIR/$file2.$file1.$n.bowtie.out";
 		  		
-				while(<IN>)
+				while(my $line=<IN>)
 				{
-					chomp; split(/\t/);  
-					if ($_[3]=~/(\d+):/) { next if ($1<=9 && $1>=1);}  # no seed mismatches 0 based
-					$NTM{$_[2]}++; #a guide can map to multiple targets
+					chomp $line; @l= split(/\t/,$line);  
+					if ($l[3]=~/(\d+):/) { next if ($1<=9 && $1>=1);}  # no seed mismatches 0 based
+					$NTM{$l[2]}++; #a guide can map to multiple targets
 		  		}
 		  		close(IN);
 		  		open IN, "$OUTDIR/$file2.$file1.$n.bowtie.out";
-				while(<IN>)
+				while(my $line=<IN>)
 				{
-					chomp; split(/\t/);
-					if ($_[3]=~/(\d+):/){next if ($1<=9 && $1>=1);}  # no seed mismatches 0 based
-					$score{$n}+=$hash1{$file1}{$n}{$_[1]}*$hash2{$file2}{$_[2]}/$NTM{$_[2]};
+					chomp $line; @l=split(/\t/,$line);
+					if ($l[3]=~/(\d+):/){next if ($1<=9 && $1>=1);}  # no seed mismatches 0 based
+					$score{$n}+=$hash1{$file1}{$n}{$l[1]}*$hash2{$file2}{$l[2]}/$NTM{$l[2]};
 					if ($n==10)
 		     		{
-		      			print PPSEQ "$_[2]\t$hash2{$file2}{$_[2]}\t$hash1{$file1}{$n}{$_[1]}\t" ; #hash2 is the guide; 
+		      			print PPSEQ "$l[2]\t$hash2{$file2}{$l[2]}\t$hash1{$file1}{$n}{$l[1]}\t" ; #hash2 is the guide; 
 		      			local $"=',';
-		      			print PPSEQ "@{$hash3{$file1}{$n}{$_[1]}}";#hash3, key is the target seq, value is the guide seq
+		      			print PPSEQ "@{$hash3{$file1}{$n}{$l[1]}}";#hash3, key is the target seq, value is the guide seq
 		      			print PPSEQ "\n";
 		     		}
 		  		}
@@ -176,7 +183,7 @@ for ($i=0; $i<$ARGV[2]; $i++)
 		print PPZ "$file2-$file1\t$Z\t";
 		print "$file2-$file1\t$Z\t";
 	 	
-	 	$N1=`match.pl $OUTDIR/$file2.$file1.ppseq $OUTDIR/$file2.seq | sumcol+ 2`; chomp($N1);
+	 	$N1=`/home/wangw1/bin/match.pl $OUTDIR/$file2.$file1.ppseq $OUTDIR/$file2.seq | sumcol+ 2`; chomp($N1);
 	 	
 		if ($Z!=-10) 
 		{
@@ -196,7 +203,42 @@ for ($i=0; $i<$ARGV[2]; $i++)
 }#i
 close(PPZ);
 
+sub mean 
+{
+	my $count=0;
+	my(@numbers) =@_;
+	foreach my $num (@numbers) { $count+=$num;}
+	return $count/(scalar @numbers);
+}
 
-`rm $OUTDIR/*.ebwt`;
+sub std 
+{
+	my(@numbers) = @_;
+	#Prevent division by 0 error in case you get junk data
+	return undef unless(scalar(@numbers));
+	
+	# Step 1, find the mean of the numbers
+	my $total1 = 0;
+	foreach my $num (@numbers) {
+	$total1 += $num;
+	}
+	my $mean1 = $total1 / (scalar @numbers);
+	
+	# Step 2, find the mean of the squares of the differences
+	# between each number and the mean
+	my $total2 = 0;
+	foreach my $num (@numbers) {
+	$total2 += ($mean1-$num)**2;
+	}
+	my $mean2 = $total2 / (scalar @numbers);
+	
+	# Step 3, standard deviation is the square root of the
+	# above mean
+	my $std_dev = sqrt($mean2);
+	return $std_dev;
+}
+
+
+#`rm $OUTDIR/*.ebwt`;
 #`rm $OUTDIR/*.bowtie.out`;
 #`rm $OUTDIR/*.seq`;
