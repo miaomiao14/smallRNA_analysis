@@ -36,7 +36,7 @@ do
 		[ ! -f $smmapper2 ] && \
 	awk 'BEGIN{OFS="\t"}{if($3-$2<30) {start=$2+1;print $1,start,$3,$6,$7,$4,$5}}' $gt >${smmapper2} && gzip ${smmapper2}.gz	
 	#total Ping-Pong
-		[ ! -s ${OUT0}/${g}.total.pp8.out ] && echo "$script ${smmapper2}.gz ${smmapper2}.gz 1 ${OUTDIR}" >>${OUT0}/primary.total.pp8.win16.out" 
+		[ ! -s ${OUT0}/${g}.total.pp8.out ] && echo "$script ${smmapper2}.gz ${smmapper2}.gz 1 ${OUTDIR}" >>${OUT0}/primary.total.pp8.win16.out
 	done
 
 done
