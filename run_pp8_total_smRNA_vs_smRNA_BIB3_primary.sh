@@ -47,38 +47,38 @@ STEP=$((STEP+1))
 
 #declare -a GROUPGT=("zucMut" "w1" "AubWTrescuerep2" "aubvasAgo3WTrescuerep2" "aubvasAgo3CDrescuerep2" "ago3Mutsrep2" "aubMutsrep2" "AubCDrescuerep2" "ago3MutsAubMuts")
 #generate master table for ppscore
-
-masterOUT=${OUT0}/masterpp8score
-[ ! -d ${masterOUT} ] && mkdir -p ${masterOUT}
-if [ ! -f ${OUT0}/.status.${STEP}.SRA_DEG.pp8.master ] 
-then
-	for f in "${FEATURE[@]}"
-	do
-		[ -f ${masterOUT}/SRA_all.SRA_all.nonnormalized.pp8score.txt ] && rm ${masterOUT}/SRA_all.SRA_all.nonnormalized.pp8score.txt
-
-		
-		[ -f ${masterOUT}/SRA_all.SRA_all.normalized.pp8score.txt ] && rm ${masterOUT}/SRA_all.SRA_all.normalized.pp8score.txt
-
-		for gt in "${GROUPGT[@]}"
-		do
-			filename=${gt##*/}
-			gf=${filename%.trimmed*}
-			gn=${gf#*SRA.}
-			g=${gn%%.[ox|unox]*}
-			
-			OUTDIR=${OUT0}/${gn}_${f}
-			cut -f1,2 ${OUTDIR}/${g}_SRA_all.${g}_SRA_all.pp|awk -v gt=$gn 'BEGIN{OFS="\t"}{print gt,$1,$2}' >> ${masterOUT}/SRA_all.SRA_all.nonnormalized.pp8score.txt	
-			cut -f1,3 ${OUTDIR}/${g}_SRA_all.${g}_SRA_all.pp|awk -v gt=$gn 'BEGIN{OFS="\t"}{print gt,$1,$2}' >> ${masterOUT}/SRA_all.SRA_all.normalized.pp8score.txt
-	
-		done
-		
-	
-	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/SRA_all.SRA_all.nonnormalized.pp8score.txt ${masterOUT}/SRA_all.SRA_all.nonnormalized.pp8score.mastertable.txt
-		
-	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/SRA_all.SRA_all.normalized.pp8score.txt ${masterOUT}/SRA_all.SRA_all.normalized.pp8score.mastertable.txt
-	done
-fi
-
-[ $? == 0 ] && \
-	touch ${OUT0}/.status.${STEP}.SRA_DEG.pp8.master
-STEP=$((STEP+1))
+#
+#masterOUT=${OUT0}/masterpp8score
+#[ ! -d ${masterOUT} ] && mkdir -p ${masterOUT}
+#if [ ! -f ${OUT0}/.status.${STEP}.SRA_DEG.pp8.master ] 
+#then
+#	for f in "${FEATURE[@]}"
+#	do
+#		[ -f ${masterOUT}/SRA_all.SRA_all.nonnormalized.pp8score.txt ] && rm ${masterOUT}/SRA_all.SRA_all.nonnormalized.pp8score.txt
+#
+#		
+#		[ -f ${masterOUT}/SRA_all.SRA_all.normalized.pp8score.txt ] && rm ${masterOUT}/SRA_all.SRA_all.normalized.pp8score.txt
+#
+#		for gt in "${GROUPGT[@]}"
+#		do
+#			filename=${gt##*/}
+#			gf=${filename%.trimmed*}
+#			gn=${gf#*SRA.}
+#			g=${gn%%.[ox|unox]*}
+#			
+#			OUTDIR=${OUT0}/${gn}_${f}
+#			cut -f1,2 ${OUTDIR}/${g}_SRA_all.${g}_SRA_all.pp|awk -v gt=$gn 'BEGIN{OFS="\t"}{print gt,$1,$2}' >> ${masterOUT}/SRA_all.SRA_all.nonnormalized.pp8score.txt	
+#			cut -f1,3 ${OUTDIR}/${g}_SRA_all.${g}_SRA_all.pp|awk -v gt=$gn 'BEGIN{OFS="\t"}{print gt,$1,$2}' >> ${masterOUT}/SRA_all.SRA_all.normalized.pp8score.txt
+#	
+#		done
+#		
+#	
+#	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/SRA_all.SRA_all.nonnormalized.pp8score.txt ${masterOUT}/SRA_all.SRA_all.nonnormalized.pp8score.mastertable.txt
+#		
+#	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/SRA_all.SRA_all.normalized.pp8score.txt ${masterOUT}/SRA_all.SRA_all.normalized.pp8score.mastertable.txt
+#	done
+#fi
+#
+#[ $? == 0 ] && \
+#	touch ${OUT0}/.status.${STEP}.SRA_DEG.pp8.master
+#STEP=$((STEP+1))
