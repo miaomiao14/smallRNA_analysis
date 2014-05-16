@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-BEGIN { unshift @INC,"/home/xuj1/bin/";}
+BEGIN { unshift @INC,"/home/wangw1/git/smallRNA_analysis/Utils/";}
 require "Statstics.pm";
 require "Jia.pm";
 use File::Basename;
