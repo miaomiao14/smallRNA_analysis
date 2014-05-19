@@ -10,7 +10,7 @@ OUT0=${INDIR}/smRNA/pp8_smRNAtrn_vs_degradometrnoutcluster_total_05192014
 declare -a FEATURE=("FLY_TRN_ALL" "FLY_TRN_ALL_IN_CLUSTER" "FLY_TRN_ALL_OUT_CLUSTER")
 #g=$5
 #c=$6 #cpu
-declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubMutsWW" "AubCDrescue" "AubWTrescue" "w1")
+declare -a GROUPGT=("ago3MutsWW" "aubvasAgo3CDrescue" "aubvasAgo3WTrescue" "aubMutsWW" "AubCDrescue" "AubWTrescue")
 #declare -a GROUPGT=("ago3MutsWW")
 
 STEP=1
