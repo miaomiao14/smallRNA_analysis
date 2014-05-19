@@ -552,7 +552,7 @@ sub PingPongProcessing
 								$cisPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guideQueryReads*$targetpiGuideReads/$NTM{$l[2]};		       			
       							
       							##print out paired piRNA species
-      							print PPSEQPAIR "$piQuery\t$piGuideSpe\t\n" if ($n==9);
+      							print PPSEQPAIR "cis\t$piQuery\t$guideQueryReads\t$piGuideSpe\t$guideQueryReads\n" if ($n==9);
       							
 								#$cisFlag{$piGuideSpe}+=1;
 								$cisRecordFlag=1;
@@ -566,6 +566,7 @@ sub PingPongProcessing
 			       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=1/$NTM{$l[2]};
 			       			#trans PingPong pair in reads
 			       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guideQueryReads*$targetpiGuideReads/$NTM{$l[2]};
+			       			print PPSEQPAIR "trans\t$piQuery\t$guideQueryReads\t$piGuideSpe\t$guideQueryReads\n" if ($n==9);
 			       		}
 						
 						#if(! $cisFlag{$piGuideSpe}) #so that no need to check for already cispaired piRNA species
@@ -590,6 +591,7 @@ sub PingPongProcessing
 		       #trans PingPong pair in reads
 		       $transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$gttotal/$NTM{$l[2]};
 		       
+		       print PPSEQPAIR "trans\t$piQuery\t$nGcorTotalReads\t$piGuideSpe\t$nTcorTotalReads\n" if ($n==9);
 
 
 			}
@@ -748,6 +750,7 @@ sub PingPongProcessing
 
 
 			#close(PPUAFRACTION);
+			close(PPSEQPAIR);
 			close(PPSCOREUA);
 			close(ZSCOREUA);
  	
