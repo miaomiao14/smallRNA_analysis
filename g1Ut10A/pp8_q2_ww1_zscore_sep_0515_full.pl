@@ -456,7 +456,7 @@ sub PingPongProcessing
 	open PPSEQPAIR, ">$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.prefix.UA_VA.ppseq.txt";
 	
 	#open PPUAFRACTION, ">$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.prefix.UA_VA.base.fraction.txt";
-	
+	print PPSEQPAIR "pairmode\tguidepiRNAs\tguidepiRNAsReads\ttargetpiRNAs\ttargetpiRNAsReads\n";
 
 	
 	foreach ($n=0;$n<$wsize;$n++)
