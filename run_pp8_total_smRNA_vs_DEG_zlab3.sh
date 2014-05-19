@@ -4,7 +4,7 @@ script=${PIPELINE_DIRECTORY}/pp8_ww_smRNA_vs_DEG.pl
 INDIR=/home/wangw1/data/projects/cd/smRNA/pp8_SRADEG_datasets
 smRNAINDIR=${INDIR}/smRNA/jia_pipeline_results
 degraINDIR=${INDIR}/degradome/pipeline_output_12262013
-OUT0=${INDIR}/smRNA/pp8_smRNAtrn_vs_degradometrnoutcluster_total_05192014
+OUT0=/home/wangw1/data/projects/cd/smRNA/pp8_smRNAtrn_vs_degradometrnoutcluster_total_05192014
 
 #note: use window size 16 for complementarity 16 (updated into script)
 declare -a FEATURE=("FLY_TRN_ALL" "FLY_TRN_ALL_IN_CLUSTER" "FLY_TRN_ALL_OUT_CLUSTER")
