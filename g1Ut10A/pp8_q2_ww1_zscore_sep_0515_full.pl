@@ -155,7 +155,7 @@ elsif($spe eq "bombyx")
 	}
 	close(IN);
 }
-elsif($spe eq "mouse")
+elsif($spe eq "mouse" or "gfp")
 {
 	open IN, $fastafile or die "Fail to open $fastafile: $!";
 	while(my $line=<IN>)
@@ -184,7 +184,7 @@ if($indexFlag)
 	{
 		my $file=fileparse($inputfiles[$i]);
 	    @namefield=split(/\./,$file);
-	    if($spe eq "fly")
+	    if($spe eq "fly" or "gfp")
 		{$name=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
 		if($spe eq "bombyx")
 	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
@@ -237,7 +237,7 @@ else #if indexFlag
 	{
    		my $file=fileparse($inputfiles[$i]);
     	@namefield=split(/\./,$file);
-    	if($spe eq "fly")
+    	if($spe eq "fly" or "gfp")
 		{$name=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
 		if($spe eq "bombyx")
 	    {$name=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
@@ -258,7 +258,7 @@ for ($i=0; $i<$numOfInput; $i++)
       
 		$file1=fileparse($inputfiles[$i]); 
 		@namefield=split(/\./,$file1);
-   	    if($spe eq "fly")
+   	    if($spe eq "fly" or "gfp")
 		{$name1=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
 		if($spe eq "bombyx")
 	    {$name1=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
@@ -267,7 +267,7 @@ for ($i=0; $i<$numOfInput; $i++)
 		$file1=$name1;
 		$file2=fileparse($inputfiles[$j]);
 		@namefield=split(/\./,$file2);
-   	    if($spe eq "fly")
+   	    if($spe eq "fly" or "gfp")
 		{$name2=$namefield[2]."_".$namefield[3]."_".$namefield[4]."_".$namefield[11];}
 		if($spe eq "bombyx")
 	    {$name2=$namefield[2]."_".$namefield[12]."_".$namefield[13];}
