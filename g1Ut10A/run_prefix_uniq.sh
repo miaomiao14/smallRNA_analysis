@@ -33,8 +33,8 @@ cut -f1 ${Aub}.16prefix.uniq.species2.uniqB >${Aub}.16prefix.uniq.species2.uniqB
 zcat $Ago3 | awk 'BEGIN{OFS="\t"}{ print substr($5,1,16), $0}'  >${Ago3%.gz}.16prefix
 zcat $Aub | awk 'BEGIN{OFS="\t"}{ print substr($5,1,16), $0}'  >${Aub%.gz}.16prefix
 
-Ago3name=${Ago3/IPuniq/IPprefixuniq}
-Aubname=${Aub/IPuniq/IPprefixuniq}
+Ago3name=\${Ago3/IPuniq/IPprefixuniq}
+Aubname=\${Aub/IPuniq/IPprefixuniq}
 
 match.pl ${Ago3}.16prefix.uniq.species2.uniqA.weed ${Ago3%.gz}.16prefix > ${Ago3name%.gz}.16prefix
 match.pl ${Aub}.16prefix.uniq.species2.uniqB.weed ${Aub%.gz}.16prefix > ${Aubname%.gz}.16prefix
@@ -84,6 +84,26 @@ then
 	echo "$script -i $AubFile -j $Ago3File -o ${out} -a $faFile -b $indexDir -m $moutDir -q $queryDir -n 2 -s bombyx -w 16 -p 16 -d 1 -f normbed" >>Yuki.prefixuniqbound.parafile.pp8.v15  
 		
 	
+	
+fi
+
+if [ $organism eq "mouse" ]
+then
+	indexDir=/home/wangw1/data/projects/uava/mouse/bowtieIndex/
+	moutDir=/home/wangw1/data/projects/uava/mouse/mappingOutPut/
+	queryDir=/home/wangw1/data/projects/uava/mouse/querySeq/
+	faFile=/home/wangw1/data/common/mm9.formatted.fasta
+	script=/home/wangw1/git/smallRNA_analysis/g1Ut10A/pp8_q2_ww1_zscore_sep_0515_full.pl  
+#BmN4
+	
+	
+	out=/home/wangw1/data/projects/uava/${gt}_prefixuniq_Mili_Miwi2_rep1_prefix16_v15
+	[ ! -f $out ] && mkdir -p $out 
+	
+	AubFile=${Aubname%.gz}
+	Ago3File=${Ago3name%.gz}
+	
+	echo "$script -i $AubFile -j $Ago3File -o ${out} -a $faFile -b $indexDir -m $moutDir -q $queryDir -n 2 -s bombyx -w 16 -p 16 -d 1 -f normbed" >>Yuki.prefixuniqbound.parafile.pp8.prefix16.v15  
 	
 fi
 
