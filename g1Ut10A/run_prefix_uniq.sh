@@ -103,7 +103,7 @@ then
 	AubFile=${Aubname%.gz}
 	Ago3File=${Ago3name%.gz}
 	
-	echo "$script -i $AubFile -j $Ago3File -o ${out} -a $faFile -b $indexDir -m $moutDir -q $queryDir -n 2 -s bombyx -w 16 -p 16 -d 1 -f normbed" >>Yuki.prefixuniqbound.parafile.pp8.prefix16.v15  
+echo "$script -i $AubFile -j $Ago3File -o ${out} -a $faFile -b $indexDir -m $moutDir -q $queryDir -n 2 -s mouse -w 16 -p 16 -d 1 -f normbed" >>Caroll.prefixuniqbound.parafile.pp8.prefix16.v15  
 	
 fi
 
