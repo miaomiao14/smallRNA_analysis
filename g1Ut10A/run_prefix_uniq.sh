@@ -33,14 +33,14 @@ cut -f1 ${Aub}.16prefix.uniq.species2.uniqB >${Aub}.16prefix.uniq.species2.uniqB
 zcat $Ago3 | awk 'BEGIN{OFS="\t"}{ print substr($5,1,16), $0}'  >${Ago3%.gz}.16prefix
 zcat $Aub | awk 'BEGIN{OFS="\t"}{ print substr($5,1,16), $0}'  >${Aub%.gz}.16prefix
 
-Ago3name=\${Ago3/IPuniq/IPprefixuniq}
-Aubname=\${Aub/IPuniq/IPprefixuniq}
+Ago3name=${Ago3/IPuniq/IPprefixuniq}
+Aubname=${Aub/IPuniq/IPprefixuniq}
 
-match.pl ${Ago3}.16prefix.uniq.species2.uniqA.weed ${Ago3%.gz}.16prefix > ${Ago3name%.gz}.16prefix
-match.pl ${Aub}.16prefix.uniq.species2.uniqB.weed ${Aub%.gz}.16prefix > ${Aubname%.gz}.16prefix
+match.pl ${Ago3}.16prefix.uniq.species2.uniqA.weed ${Ago3%.gz}.16prefix > ${Ago3name%.gz}.16prefix && rm ${Ago3%.gz}.16prefix
+match.pl ${Aub}.16prefix.uniq.species2.uniqB.weed ${Aub%.gz}.16prefix > ${Aubname%.gz}.16prefix && rm ${Aub%.gz}.16prefix
 
-rm ${Ago3%.gz}.16prefix
-rm ${Aub%.gz}.16prefix
+
+
 
 cut -f2-8 ${Ago3name%.gz}.16prefix >${Ago3name%.gz} && rm ${Ago3name%.gz}.16prefix
 cut -f2-8 ${Aubname%.gz}.16prefix >${Aubname%.gz} && rm ${Aubname%.gz}.16prefix
