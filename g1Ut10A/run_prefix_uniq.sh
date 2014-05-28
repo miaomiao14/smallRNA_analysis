@@ -46,7 +46,7 @@ cut -f2-8 ${Ago3name%.gz}.16prefix >${Ago3name%.gz} && rm ${Ago3name%.gz}.16pref
 cut -f2-8 ${Aubname%.gz}.16prefix >${Aubname%.gz} && rm ${Aubname%.gz}.16prefix
 
 
-if [ $organism eq "fly" ]
+if [ $organism = "fly" ]
 then
 
 	faFile=/home/wangw1/data/common/dmel-all-chromosome-r5.5_TAS.fasta
@@ -63,7 +63,7 @@ then
 	echo "$script -i $AubFile -j $Ago3File -o ${out} -a $faFile -b $indexDir -m $moutDir -q $queryDir -n 2 -s fly -w 16 -p 16 -d 1 -f normbed"  >> Phil.trans.parafile.pp8.prefixuniq.prefix16.${gt}
 fi
 
-if [ $organism eq "bombyx" ]
+if [ $organism = "bombyx" ]
 then
 	
 
@@ -87,7 +87,7 @@ then
 	
 fi
 
-if [ $organism eq "mouse" ]
+if [ $organism = "mouse" ]
 then
 	indexDir=/home/wangw1/data/projects/uava/mouse/bowtieIndex/
 	moutDir=/home/wangw1/data/projects/uava/mouse/mappingOutPut/
