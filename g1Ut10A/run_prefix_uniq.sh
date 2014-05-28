@@ -23,6 +23,9 @@ awk 'BEGIN{OFS="\t"}{print $1,1}' ${Aub}.16prefix.uniq.species >${Aub}.16prefix.
 
 /home/wangw1/bin/inserts_file_methods.py -a ${Ago3}.16prefix.uniq.species2 -b ${Aub}.16prefix.uniq.species2 -u
 
+rm ${Ago3}.16prefix.uniq.species2
+rm ${Aub}.16prefix.uniq.species2
+
 cut -f1 ${Ago3}.16prefix.uniq.species2.uniqA >${Ago3}.16prefix.uniq.species2.uniqA.weed && rm ${Ago3}.16prefix.uniq.species2.uniqA
 cut -f1 ${Aub}.16prefix.uniq.species2.uniqB >${Aub}.16prefix.uniq.species2.uniqB.weed && rm ${Aub}.16prefix.uniq.species2.uniqB
 
@@ -33,7 +36,10 @@ Ago3name=${Ago3/IPuniq/IPprefixuniq}
 Aubname=${Aub/IPuniq/IPprefixuniq}
 
 match.pl ${Ago3}.16prefix.uniq.species2.uniqA.weed ${Ago3%.gz}.16prefix > ${Ago3name%.gz}.16prefix
-match.pl ${Aub}.16prefix.uniq.species2.uniqA.weed ${Aub%.gz}.16prefix > ${Aubname%.gz}.16prefix
+match.pl ${Aub}.16prefix.uniq.species2.uniqB.weed ${Aub%.gz}.16prefix > ${Aubname%.gz}.16prefix
+
+rm ${Ago3%.gz}.16prefix
+rm ${Aub%.gz}.16prefix
 
 cut -f2-8 ${Ago3name%.gz}.16prefix >${Ago3name%.gz} && rm ${Ago3name%.gz}.16prefix
 cut -f2-8 ${Aubname%.gz}.16prefix >${Aubname%.gz} && rm ${Aubname%.gz}.16prefix
@@ -51,6 +57,6 @@ out=/home/wangw1/data/projects/uava/fly/${gt}_prefixuniq_unox_AubIP_SRA_Ago3IP_S
 AubFile=${Aubname%.gz}
 Ago3File=${Ago3name%.gz}
 
-echo "$script -i $AubFile -j $Ago3File -o ${out} -a $faFile -b $indexDir -m $moutDir -q $queryDir -n 2 -s fly -w 16 -p 16 -d 1 -f normbed   "  >> Phil.trans.parafile.pp8.prefixuniq.prefix16.${gt}
+echo "$script -i $AubFile -j $Ago3File -o ${out} -a $faFile -b $indexDir -m $moutDir -q $queryDir -n 2 -s fly -w 16 -p 16 -d 1 -f normbed"  >> Phil.trans.parafile.pp8.prefixuniq.prefix16.${gt}
 
 
