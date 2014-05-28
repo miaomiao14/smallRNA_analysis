@@ -7,13 +7,14 @@ export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 INDIR=/home/wangw1/data/fly/
 
 
-OUTDIR=/home/wangw1/data/fly/
 
+OUTDIR=$5
 LOG=${OUTDIR}/LOG.txt
 
 Ago3=$1
 Aub=$2
 gt=$3
+organism=$4
 
 zcat $Ago3 |cut -f5 |awk 'BEGIN{OFS="\t"}{ print substr($1,1,16)}' |sort -u > ${Ago3}.16prefix.uniq.species
 zcat $Aub |cut -f5 |awk 'BEGIN{OFS="\t"}{ print substr($1,1,16)}' |sort -u >${Aub}.16prefix.uniq.species
@@ -45,18 +46,44 @@ cut -f2-8 ${Ago3name%.gz}.16prefix >${Ago3name%.gz} && rm ${Ago3name%.gz}.16pref
 cut -f2-8 ${Aubname%.gz}.16prefix >${Aubname%.gz} && rm ${Aubname%.gz}.16prefix
 
 
+if [ $organism eq "fly" ]
+then
 
-faFile=/home/wangw1/data/common/dmel-all-chromosome-r5.5_TAS.fasta
-indexDir=/home/wangw1/data/projects/uava/fly/bowtieIndex/
-moutDir=/home/wangw1/data/projects/uava/fly/mappingOutPut/
-queryDir=/home/wangw1/data/projects/uava/fly/querySeq/
-script=/home/wangw1/git/smallRNA_analysis/g1Ut10A/pp8_q2_ww1_zscore_sep_0515_full.pl
+	faFile=/home/wangw1/data/common/dmel-all-chromosome-r5.5_TAS.fasta
+	indexDir=/home/wangw1/data/projects/uava/fly/bowtieIndex/
+	moutDir=/home/wangw1/data/projects/uava/fly/mappingOutPut/
+	queryDir=/home/wangw1/data/projects/uava/fly/querySeq/
+	script=/home/wangw1/git/smallRNA_analysis/g1Ut10A/pp8_q2_ww1_zscore_sep_0515_full.pl
+	
+	out=/home/wangw1/data/projects/uava/fly/${gt}_prefixuniq_unox_AubIP_SRA_Ago3IP_SRA_prefix16_v15
+	[ ! -f $out ] && mkdir -p $out  
+	AubFile=${Aubname%.gz}
+	Ago3File=${Ago3name%.gz}
+	
+	echo "$script -i $AubFile -j $Ago3File -o ${out} -a $faFile -b $indexDir -m $moutDir -q $queryDir -n 2 -s fly -w 16 -p 16 -d 1 -f normbed"  >> Phil.trans.parafile.pp8.prefixuniq.prefix16.${gt}
+fi
 
-out=/home/wangw1/data/projects/uava/fly/${gt}_prefixuniq_unox_AubIP_SRA_Ago3IP_SRA_prefix16_v15
-[ ! -f $out ] && mkdir -p $out  
-AubFile=${Aubname%.gz}
-Ago3File=${Ago3name%.gz}
+if [ $organism eq "bombyx" ]
+then
+	
 
-echo "$script -i $AubFile -j $Ago3File -o ${out} -a $faFile -b $indexDir -m $moutDir -q $queryDir -n 2 -s fly -w 16 -p 16 -d 1 -f normbed"  >> Phil.trans.parafile.pp8.prefixuniq.prefix16.${gt}
-
+	faFile=/home/wangw1/data/common/silkgenome.formatted.fa
+	indexDir=/home/wangw1/data/bowtieIndex/
+	moutDir=/home/wangw1/data/mappingOutPut/
+	queryDir=/home/wangw1/data/querySeq/
+	script=/home/wangw1/git/smallRNA_analysis/g1Ut10A/pp8_q2_ww1_zscore_sep_0515_full.pl  
+#BmN4
+	
+	
+	out=/home/wangw1/data/projects/uava/${gt}_prefixuniq_BmAgo3uniq_Siwiuniq_KNOWNTE_prefix16_v15
+	[ ! -f $out ] && mkdir -p $out 
+	
+	AubFile=${Aubname%.gz}
+	Ago3File=${Ago3name%.gz}
+	
+	echo "$script -i $AubFile -j $Ago3File -o ${out} -a $faFile -b $indexDir -m $moutDir -q $queryDir -n 2 -s bombyx -w 16 -p 16 -d 1 -f normbed" >>Yuki.prefixuniqbound.parafile.pp8.v15  
+		
+	
+	
+fi
 
