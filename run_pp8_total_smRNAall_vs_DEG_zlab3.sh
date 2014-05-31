@@ -34,7 +34,7 @@ do
 		demapper2=${INDIR}/Phil.DEG.${g}.unox.ovary.PE.xkxh.${f}.mapper2.gz
 
 	#total Ping-Pong
-		[ ! -s ${OUT0}/${g}_${f}.total.pp8.out ] && echo "$script ${smmapper2%.gz}.norm.bed.gz ${demapper2%.gz}.norm.bed.gz 2 ${OUTDIR}" >>${OUT0}/para.${g}_${f}.total.pp8.out 
+		[ ! -s ${OUT0}/${g}_${f}.total.pp8.out ] && echo "$script ${smmapper2} ${demapper2%.gz}.norm.bed.gz 2 ${OUTDIR}" >>${OUT0}/para.${g}_${f}.total.pp8.out 
 		echo -e "`date` "+$ISO_8601"\ttotal Ping-Pong 8 analysis done..." >> $LOG
 	done
 done
