@@ -34,7 +34,7 @@ do
 	echo "bedtools intersect -a $candidateflam -b $ANNOB -f 0.99 -wa >  ${mapperflam} && rm $candidateflam " >> $parafly_file ; 
 	
 	echo "zcat $i |grep -v data |grep chr2R |bedtools sort -i stdin > $candidate42AB	&& " >> $parafly_file ;	
-	bedtools intersect -a $candidate42AB -b $ANNOA -f 0.99 -wa >  ${mapper42AB} && rm $candidate42AB " >> $parafly_file ;
+	echo "bedtools intersect -a $candidate42AB -b $ANNOA -f 0.99 -wa >  ${mapper42AB} && rm $candidate42AB " >> $parafly_file ;
 done
 if [[ ! -f ${parafly_file}.completed ]] || [[ -f $parafly_file.failed_commands ]]
 then
