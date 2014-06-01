@@ -36,7 +36,7 @@ do
 	echo "zcat $i |grep -v data |grep chr2R |bedtools sort -i stdin > $candidate42AB	&& " >> $parafly_file ;	
 	echo "bedtools intersect -a $candidate42AB -b $ANNOA -f 0.99 -wa >  ${mapper42AB} && rm $candidate42AB " >> $parafly_file ;
 done
-if [ ! -f ${parafly_file}.completed ] || [ -f $parafly_file.failed_commands ]
+if [[ ! -f ${parafly_file}.completed ]] || [[ -f $parafly_file.failed_commands ]]
 then
 	ParaFly -c $parafly_file -CPU $CPU -failed_cmds $parafly_file.failed_commands
 fi
