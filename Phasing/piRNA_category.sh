@@ -23,8 +23,8 @@ do
 	inserts=${FILE%%.inserts.*}
 	inserts=${inserts}.inserts
 	
-	candidateflam =${INDIR}/${insertsname}/${insertsname}.xkxh.norm.bed.chrX
-	candidate42AB =${INDIR}/${insertsname}/${insertsname}.xkxh.norm.bed.chr2R
+	candidateflam=${INDIR}/${insertsname}/${insertsname}.xkxh.norm.bed.chrX
+	candidate42AB=${INDIR}/${insertsname}/${insertsname}.xkxh.norm.bed.chr2R
 	
 	mapper42AB=${INDIR}/${insertsname}/${insertsname}.xkxh.norm.bed.42AB
 	mapperflam=${INDIR}/${insertsname}/${insertsname}.xkxh.norm.bed.flam
