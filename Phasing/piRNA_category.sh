@@ -23,11 +23,11 @@ do
 	inserts=${FILE%%.inserts.*}
 	inserts=${inserts}.inserts
 	
-	candidateflam=${INDIR}/${insertsname}/${insertsname}.xkxh.norm.bed.chrX
-	candidate42AB=${INDIR}/${insertsname}/${insertsname}.xkxh.norm.bed.chr2R
+	candidateflam=${INDIR}/${insertsname}/${inserts}.xkxh.norm.bed.chrX
+	candidate42AB=${INDIR}/${insertsname}/${inserts}.xkxh.norm.bed.chr2R
 	
-	mapper42AB=${INDIR}/${insertsname}/${insertsname}.xkxh.norm.bed.42AB
-	mapperflam=${INDIR}/${insertsname}/${insertsname}.xkxh.norm.bed.flam
+	mapper42AB=${INDIR}/${insertsname}/${inserts}.xkxh.norm.bed.42AB
+	mapperflam=${INDIR}/${insertsname}/${inserts}.xkxh.norm.bed.flam
 	
 	#assume cluster annotation in bed format
 	echo "zcat $i |grep -v data |grep chrX |bedtools sort -i stdin > $candidateflam && " >> $parafly_file ; 
