@@ -13,11 +13,11 @@ OUTDIR=/home/wangw1/data/projects/cd/smRNA/phasingbyCluster
 [ ! -d ${OUTDIR} ] && mkdir -p ${OUTDIR}
 
 
-parafly_file=${OUTDIR}/intersect.${RANDOM}.para && \
+parafly_file=${OUTDIR}/intersect.para
 rm -rf $parafly_file
 
 for i in `ls ${INDIR}/*.inserts/*.xkxh.norm.bed.gz |grep -v uniqmap`
-do 	
+do \
 	FILE=${i##*/}
 	insertsname=`basename $FILE .xkxh.norm.bed.gz`
 	inserts=${FILE%%.inserts.*}
@@ -30,11 +30,11 @@ do
 	mapperflam=${INDIR}/${insertsname}/${inserts}.xkxh.norm.bed.flam
 	
 	#assume cluster annotation in bed format
-	echo "zcat $i |grep -v data |grep chrX |bedtools sort -i stdin > $candidateflam && " >> $parafly_file ; 
-	echo "bedtools intersect -a $candidateflam -b $ANNOB -f 0.99 -wa >  ${mapperflam} && rm $candidateflam " >> $parafly_file ; 
+	echo -ne "zcat $i |grep -v data |grep chrX |bedtools sort -i stdin > $candidateflam && " >> $parafly_file ; 
+	echo -e "bedtools intersect -a $candidateflam -b $ANNOB -f 0.99 -wa >  ${mapperflam} && rm $candidateflam " >> $parafly_file ; 
 	
-	echo "zcat $i |grep -v data |grep chr2R |bedtools sort -i stdin > $candidate42AB	&& " >> $parafly_file ;	
-	echo "bedtools intersect -a $candidate42AB -b $ANNOA -f 0.99 -wa >  ${mapper42AB} && rm $candidate42AB " >> $parafly_file ;
+	echo -ne "zcat $i |grep -v data |grep chr2R |bedtools sort -i stdin > $candidate42AB	&& " >> $parafly_file ;	
+	echo -e "bedtools intersect -a $candidate42AB -b $ANNOA -f 0.99 -wa >  ${mapper42AB} && rm $candidate42AB " >> $parafly_file ;
 done
 if [[ ! -f ${parafly_file}.completed ]] || [[ -f $parafly_file.failed_commands ]]
 then
