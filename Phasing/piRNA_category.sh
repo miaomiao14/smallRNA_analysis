@@ -16,7 +16,7 @@ OUTDIR=/home/wangw1/data/projects/cd/smRNA/phasingbyCluster
 parafly_file=${OUTDIR}/intersect.${RANDOM}.para && \
 rm -rf $parafly_file
 
-for i in `ls ${INDIR}/*.inserts/*.xkxh.norm.bed.gz`
+for i in `ls ${INDIR}/*.inserts/*.xkxh.norm.bed.gz |grep -v uniqmap`
 do 	
 	FILE=${i##*/}
 	insertsname=`basename $FILE .xkxh.norm.bed.gz`
