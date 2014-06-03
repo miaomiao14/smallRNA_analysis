@@ -14,7 +14,7 @@ OUTDIR=/home/wangw1/data/projects/cd/smRNA/phasingbyCluster
 
 
 parafly_file=${OUTDIR}/intersect.para
-rm -rf $parafly_file
+
 
 for i in `ls ${INDIR}/*.inserts/*.xkxh.norm.bed.gz |grep -v uniqmap`
 do \
@@ -33,7 +33,7 @@ do \
 	echo "zcat $i |grep -v data |grep chrX |bedtools sort -i stdin > $candidateflam && bedtools intersect -a $candidateflam -b $ANNOB -f 0.99 -wa >  ${mapperflam} && rm $candidateflam" >> $parafly_file ; 
 
 	
-	echo "zcat $i |grep -v data |grep chr2R |bedtools sort -i stdin > $candidate42AB && bedtools intersect -a $candidate42AB -b $ANNOA -f 0.99 -wa >  ${mapper42AB} && rm $candidate42AB  " >> $parafly_file ;	
+	echo "zcat $i |grep -v data |grep chr2R |bedtools sort -i stdin > $candidate42AB && bedtools intersect -a $candidate42AB -b $ANNOA -f 0.99 -wa >  ${mapper42AB} && rm $candidate42AB" >> $parafly_file ;	
 
 done
 
