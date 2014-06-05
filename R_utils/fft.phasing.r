@@ -44,8 +44,8 @@ plotFFTaxes <- function(x, y, samplingFreq, shadeNyq=FALSE, showPeriod = TRUE)
 distance=x
 distancePairFre=test
 par(mfrow=c(2,1))
-#plot(x,y,ty='l')
-#test_fft=plotFFT(distance,distancePairFre,1)
+plot(distance,distancePairFre,ty='l')
+test_fft=plotFFT(distance,distancePairFre,1)
 plot(distance,distancePairFre,ty='l')
 test_ff=plotFFTaxes(distance,distancePairFre,1)
 

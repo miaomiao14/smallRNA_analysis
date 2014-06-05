@@ -7,6 +7,8 @@ degraINDIR=${INDIR}/degradome/pipeline_output_12262013
 OUT0=/home/wangw1/data/projects/cd/smRNA/pp8_smRNAall_vs_degradometrnoutcluster_total_05312014
 
 #note: use window size 16 for complementarity 16 (updated into script)
+
+#use all small RNAs 
 declare -a FEATURE=("FLY_TRN_ALL" "FLY_TRN_ALL_IN_CLUSTER" "FLY_TRN_ALL_OUT_CLUSTER")
 #g=$5
 #c=$6 #cpu
@@ -48,45 +50,45 @@ STEP=$((STEP+1))
 masterOUT=${OUT0}/masterpp8score
 [ ! -d ${masterOUT} ] && mkdir -p ${masterOUT}
 
-touch ${OUT0}/.status.${STEP}.SRA_DEG.pp8.master
+#touch ${OUT0}/.status.${STEP}.SRA_DEG.pp8.master
 
 if [ ! -f ${OUT0}/.status.${STEP}.SRA_DEG.pp8.master ] 
 then
 	for f in "${FEATURE[@]}"
 	do
-		[ -f ${masterOUT}/SRA_transposon.SRA_transposon_${f}.nonnormalized.pp8score.txt ] && rm ${masterOUT}/SRA_transposon.SRA_transposon_${f}.nonnormalized.pp8score.txt
-		[ -f ${masterOUT}/SRA_transposon.DEG_${f}.nonnormalized.pp8score.txt ] && rm ${masterOUT}/SRA_transposon.DEG_${f}.nonnormalized.pp8score.txt
-		[ -f ${masterOUT}/DEG_${f}.SRA_transposon.nonnormalized.pp8score.txt ] && rm ${masterOUT}/DEG_${f}.SRA_transposon.nonnormalized.pp8score.txt
+		[ -f ${masterOUT}/SRA_norm.SRA_norm_${f}.nonnormalized.pp8score.txt ] && rm ${masterOUT}/SRA_norm.SRA_norm_${f}.nonnormalized.pp8score.txt
+		[ -f ${masterOUT}/SRA_norm.DEG_${f}.nonnormalized.pp8score.txt ] && rm ${masterOUT}/SRA_norm.DEG_${f}.nonnormalized.pp8score.txt
+		[ -f ${masterOUT}/DEG_${f}.SRA_norm.nonnormalized.pp8score.txt ] && rm ${masterOUT}/DEG_${f}.SRA_norm.nonnormalized.pp8score.txt
 		[ -f ${masterOUT}/DEG_${f}.DEG_${f}.nonnormalized.pp8score.txt ] && rm ${masterOUT}/DEG_${f}.DEG_${f}.nonnormalized.pp8score.txt
 		
-		[ -f ${masterOUT}/SRA_transposon.SRA_transposon_${f}.normalized.pp8score.txt ] && rm ${masterOUT}/SRA_transposon.SRA_transposon_${f}.normalized.pp8score.txt
-		[ -f ${masterOUT}/SRA_transposon.DEG_${f}.normalized.pp8score.txt ] && rm ${masterOUT}/SRA_transposon.DEG_${f}.normalized.pp8score.txt
-		[ -f ${masterOUT}/DEG_${f}.SRA_transposon.normalized.pp8score.txt ] && rm ${masterOUT}/DEG_${f}.SRA_transposon.normalized.pp8score.txt
+		[ -f ${masterOUT}/SRA_norm.SRA_norm_${f}.normalized.pp8score.txt ] && rm ${masterOUT}/SRA_norm.SRA_norm_${f}.normalized.pp8score.txt
+		[ -f ${masterOUT}/SRA_norm.DEG_${f}.normalized.pp8score.txt ] && rm ${masterOUT}/SRA_norm.DEG_${f}.normalized.pp8score.txt
+		[ -f ${masterOUT}/DEG_${f}.SRA_norm.normalized.pp8score.txt ] && rm ${masterOUT}/DEG_${f}.SRA_norm.normalized.pp8score.txt
 		[ -f ${masterOUT}/DEG_${f}.DEG_${f}.normalized.pp8score.txt ] && rm ${masterOUT}/DEG_${f}.DEG_${f}.normalized.pp8score.txt
 		for g in "${GROUPGT[@]}"
 		do
 			OUTDIR=${OUT0}/${g}_${f}
-			cut -f1,2 ${OUTDIR}/${g}_SRA_transposon.${g}_SRA_transposon.pp|awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}' >> ${masterOUT}/SRA_transposon.SRA_transposon_${f}.nonnormalized.pp8score.txt
-			cut -f1,2 ${OUTDIR}/${g}_SRA_transposon.${g}_DEG_${f}.pp |awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}'>> ${masterOUT}/SRA_transposon.DEG_${f}.nonnormalized.pp8score.txt
-			cut -f1,2 ${OUTDIR}/${g}_DEG_${f}.${g}_SRA_transposon.pp |awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}'>> ${masterOUT}/DEG_${f}.SRA_transposon.nonnormalized.pp8score.txt
+			cut -f1,2 ${OUTDIR}/${g}_SRA_norm.${g}_SRA_norm.pp|awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}' >> ${masterOUT}/SRA_norm.SRA_norm_${f}.nonnormalized.pp8score.txt
+			cut -f1,2 ${OUTDIR}/${g}_SRA_norm.${g}_DEG_${f}.pp |awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}'>> ${masterOUT}/SRA_norm.DEG_${f}.nonnormalized.pp8score.txt
+			cut -f1,2 ${OUTDIR}/${g}_DEG_${f}.${g}_SRA_norm.pp |awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}'>> ${masterOUT}/DEG_${f}.SRA_norm.nonnormalized.pp8score.txt
 			cut -f1,2 ${OUTDIR}/${g}_DEG_${f}.${g}_DEG_${f}.pp |awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}'>> ${masterOUT}/DEG_${f}.DEG_${f}.nonnormalized.pp8score.txt
 	
-			cut -f1,3 ${OUTDIR}/${g}_SRA_transposon.${g}_SRA_transposon.pp|awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}' >> ${masterOUT}/SRA_transposon.SRA_transposon_${f}.normalized.pp8score.txt
-			cut -f1,3 ${OUTDIR}/${g}_SRA_transposon.${g}_DEG_${f}.pp |awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}'>> ${masterOUT}/SRA_transposon.DEG_${f}.normalized.pp8score.txt
-			cut -f1,3 ${OUTDIR}/${g}_DEG_${f}.${g}_SRA_transposon.pp |awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}'>> ${masterOUT}/DEG_${f}.SRA_transposon.normalized.pp8score.txt
+			cut -f1,3 ${OUTDIR}/${g}_SRA_norm.${g}_SRA_norm.pp|awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}' >> ${masterOUT}/SRA_norm.SRA_norm_${f}.normalized.pp8score.txt
+			cut -f1,3 ${OUTDIR}/${g}_SRA_norm.${g}_DEG_${f}.pp |awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}'>> ${masterOUT}/SRA_norm.DEG_${f}.normalized.pp8score.txt
+			cut -f1,3 ${OUTDIR}/${g}_DEG_${f}.${g}_SRA_norm.pp |awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}'>> ${masterOUT}/DEG_${f}.SRA_norm.normalized.pp8score.txt
 			cut -f1,3 ${OUTDIR}/${g}_DEG_${f}.${g}_DEG_${f}.pp |awk -v gt=$g 'BEGIN{OFS="\t"}{print gt,$1,$2}'>> ${masterOUT}/DEG_${f}.DEG_${f}.normalized.pp8score.txt
 	
 		done
 		
 	
-	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/SRA_transposon.SRA_transposon_${f}.nonnormalized.pp8score.txt ${masterOUT}/SRA_transposon.SRA_transposon_${f}.nonnormalized.pp8score.mastertable.txt
-	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/SRA_transposon.DEG_${f}.nonnormalized.pp8score.txt ${masterOUT}/SRA_transposon.DEG_${f}.nonnormalized.pp8score.mastertable.txt
-	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/DEG_${f}.SRA_transposon.nonnormalized.pp8score.txt ${masterOUT}/DEG_${f}.SRA_transposon.nonnormalized.pp8score.mastertable.txt
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/SRA_norm.SRA_norm_${f}.nonnormalized.pp8score.txt ${masterOUT}/SRA_norm.SRA_norm_${f}.nonnormalized.pp8score.mastertable.txt
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/SRA_norm.DEG_${f}.nonnormalized.pp8score.txt ${masterOUT}/SRA_norm.DEG_${f}.nonnormalized.pp8score.mastertable.txt
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/DEG_${f}.SRA_norm.nonnormalized.pp8score.txt ${masterOUT}/DEG_${f}.SRA_norm.nonnormalized.pp8score.mastertable.txt
 	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/DEG_${f}.DEG_${f}.nonnormalized.pp8score.txt ${masterOUT}/DEG_${f}.DEG_${f}.nonnormalized.pp8score.mastertable.txt
 		
-	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/SRA_transposon.SRA_transposon_${f}.normalized.pp8score.txt ${masterOUT}/SRA_transposon.SRA_transposon_${f}.normalized.pp8score.mastertable.txt
-	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/SRA_transposon.DEG_${f}.normalized.pp8score.txt ${masterOUT}/SRA_transposon.DEG_${f}.normalized.pp8score.mastertable.txt
-	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/DEG_${f}.SRA_transposon.normalized.pp8score.txt ${masterOUT}/DEG_${f}.SRA_transposon.normalized.pp8score.mastertable.txt
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/SRA_norm.SRA_norm_${f}.normalized.pp8score.txt ${masterOUT}/SRA_norm.SRA_norm_${f}.normalized.pp8score.mastertable.txt
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/SRA_norm.DEG_${f}.normalized.pp8score.txt ${masterOUT}/SRA_norm.DEG_${f}.normalized.pp8score.mastertable.txt
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/DEG_${f}.SRA_norm.normalized.pp8score.txt ${masterOUT}/DEG_${f}.SRA_norm.normalized.pp8score.mastertable.txt
 	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/DEG_${f}.DEG_${f}.normalized.pp8score.txt ${masterOUT}/DEG_${f}.DEG_${f}.normalized.pp8score.mastertable.txt
 	done
 fi
