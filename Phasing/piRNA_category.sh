@@ -17,7 +17,7 @@ parafly_file=${OUTDIR}/intersect.para
 
 
 for i in `ls ${INDIR}/*.inserts/*.xkxh.norm.bed.gz |grep -v uniqmap`
-do \
+do 
 	FILE=${i##*/}
 	insertsname=`basename $FILE .xkxh.norm.bed.gz`
 	inserts=${FILE%%.inserts.*}

@@ -70,7 +70,7 @@ do
 	RSQ=${INDIR}/rnaseq/diff_analysis_S_AS_11252013/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.out.DESeqNF.transposon.normalizedcounts.txt
 	DEG=${INDIR}/degradome/diff_analysis_S_AS_11252013/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.S.out.DESeqNF.transposon.normalizedcounts.txt
 	
-	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_correlation $SRA $RSQ $DEG ${g} ${OUTDIR2}" >>${paraFile}	
+	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R_utils/R.source plot_correlation $SRA $RSQ $DEG ${g} ${OUTDIR2}" >>${paraFile}	
 done
 ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands 
 
@@ -94,7 +94,7 @@ do
 	RSQ=${INDIR}/rnaseq/diff_analysis_S_AS_11252013/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.out.DESeqNF.transposon.normalizedcounts.txt
 	DEG=${INDIR}/degradome/diff_analysis_S_AS_11252013/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.S.out.DESeqNF.transposon.normalizedcounts.txt
 	
-	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_correlation $SRA $RSQ $DEG ${g} ${OUTDIR2}" >>${paraFile}	
+	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R_utils/R.source plot_correlation $SRA $RSQ $DEG ${g} ${OUTDIR2}" >>${paraFile}	
 done
 ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands 
 
@@ -118,7 +118,7 @@ do
 	RSQ=${INDIR}/rnaseq/diff_analysis_S_AS_11252013/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.out.DESeqNF.transposon.normalizedcounts.txt
 	DEG=${INDIR}/degradome/diff_analysis_S_AS_11252013/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.S.out.DESeqNF.transposon.normalizedcounts.txt
 	
-	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_correlation $SRA $RSQ $DEG ${g} ${OUTDIR2}" >>${paraFile}	
+	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R_utils/R.source plot_correlation $SRA $RSQ $DEG ${g} ${OUTDIR2}" >>${paraFile}	
 done
 ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands 
 
@@ -143,7 +143,7 @@ do
 	RSQ=${INDIR}/rnaseq/diff_analysis_S_AS_11252013/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.out.DESeqNF.transposon.normalizedcounts.txt
 	DEG=${INDIR}/degradome/diff_analysis_S_AS_11252013/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.AS.out.DESeqNF.transposon.normalizedcounts.txt
 	
-	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_correlation $SRA $RSQ $DEG ${g} ${OUTDIR2}" >>${paraFile}	
+	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R_utils/R.source plot_correlation $SRA $RSQ $DEG ${g} ${OUTDIR2}" >>${paraFile}	
 done
 ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands 
 
@@ -166,6 +166,6 @@ do
 	RSQ=${INDIR}/rnaseq/diff_analysis_S_AS_11252013/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.out.DESeqNF.transposon.normalizedcounts.txt
 	DEG=${INDIR}/degradome/diff_analysis_S_AS_11252013/${g}/${g}.x_rRNA.dm3.Aligned.out.FLY_TRANSPOSON_ALL_GENE.htseqcount.nf.AS.out.DESeqNF.transposon.normalizedcounts.txt
 	
-	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source plot_correlation $SRA $RSQ $DEG ${g} ${OUTDIR2}" >>${paraFile}	
+	echo -e "${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R_utils/R.source plot_correlation $SRA $RSQ $DEG ${g} ${OUTDIR2}" >>${paraFile}	
 done
 ParaFly -c $paraFile -CPU 8 -failed_cmds $paraFile.failed_commands

@@ -89,15 +89,15 @@ then
 		done
 		
 	
-	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/SRA_norm.SRA_norm_${f}.nonnormalized.pp8score.txt ${masterOUT}/SRA_norm.SRA_norm_${f}.nonnormalized.pp8score.mastertable.txt
-	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/SRA_norm.DEG_${f}.nonnormalized.pp8score.txt ${masterOUT}/SRA_norm.DEG_${f}.nonnormalized.pp8score.mastertable.txt
-	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/DEG_${f}.SRA_norm.nonnormalized.pp8score.txt ${masterOUT}/DEG_${f}.SRA_norm.nonnormalized.pp8score.mastertable.txt
-	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/DEG_${f}.DEG_${f}.nonnormalized.pp8score.txt ${masterOUT}/DEG_${f}.DEG_${f}.nonnormalized.pp8score.mastertable.txt
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R_utils/R.source cast_master_table ${masterOUT}/SRA_norm.SRA_norm_${f}.nonnormalized.pp8score.txt ${masterOUT}/SRA_norm.SRA_norm_${f}.nonnormalized.pp8score.mastertable.txt
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R_utils/R.source cast_master_table ${masterOUT}/SRA_norm.DEG_${f}.nonnormalized.pp8score.txt ${masterOUT}/SRA_norm.DEG_${f}.nonnormalized.pp8score.mastertable.txt
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R_utils/R.source cast_master_table ${masterOUT}/DEG_${f}.SRA_norm.nonnormalized.pp8score.txt ${masterOUT}/DEG_${f}.SRA_norm.nonnormalized.pp8score.mastertable.txt
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R_utils/R.source cast_master_table ${masterOUT}/DEG_${f}.DEG_${f}.nonnormalized.pp8score.txt ${masterOUT}/DEG_${f}.DEG_${f}.nonnormalized.pp8score.mastertable.txt
 		
-	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/SRA_norm.SRA_norm_${f}.normalized.pp8score.txt ${masterOUT}/SRA_norm.SRA_norm_${f}.normalized.pp8score.mastertable.txt
-	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/SRA_norm.DEG_${f}.normalized.pp8score.txt ${masterOUT}/SRA_norm.DEG_${f}.normalized.pp8score.mastertable.txt
-	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/DEG_${f}.SRA_norm.normalized.pp8score.txt ${masterOUT}/DEG_${f}.SRA_norm.normalized.pp8score.mastertable.txt
-	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${masterOUT}/DEG_${f}.DEG_${f}.normalized.pp8score.txt ${masterOUT}/DEG_${f}.DEG_${f}.normalized.pp8score.mastertable.txt
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R_utils/R.source cast_master_table ${masterOUT}/SRA_norm.SRA_norm_${f}.normalized.pp8score.txt ${masterOUT}/SRA_norm.SRA_norm_${f}.normalized.pp8score.mastertable.txt
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R_utils/R.source cast_master_table ${masterOUT}/SRA_norm.DEG_${f}.normalized.pp8score.txt ${masterOUT}/SRA_norm.DEG_${f}.normalized.pp8score.mastertable.txt
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R_utils/R.source cast_master_table ${masterOUT}/DEG_${f}.SRA_norm.normalized.pp8score.txt ${masterOUT}/DEG_${f}.SRA_norm.normalized.pp8score.mastertable.txt
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R_utils/R.source cast_master_table ${masterOUT}/DEG_${f}.DEG_${f}.normalized.pp8score.txt ${masterOUT}/DEG_${f}.DEG_${f}.normalized.pp8score.mastertable.txt
 	done
 fi
 
