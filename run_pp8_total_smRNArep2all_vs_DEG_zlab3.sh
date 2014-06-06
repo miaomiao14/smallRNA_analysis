@@ -4,7 +4,7 @@ script=${PIPELINE_DIRECTORY}/pp8_ww_smRNA_vs_DEG.pl
 INDIR=/home/wangw1/data/projects/cd/smRNA/pp8_SRADEG_datasets
 smRNAINDIR=/home/wangw1/data/projects/cd/smRNA/pp8_SRADEG_datasets_rep2
 degraINDIR=${INDIR}/degradome/pipeline_output_12262013
-OUT0=/home/wangw1/data/projects/cd/smRNA/pp8_smRNAall_vs_degradometrnoutcluster_total_05312014
+OUT0=/home/wangw1/data/projects/cd/smRNA/pp8_smRNAallrep2_vs_degradometrnoutcluster_total_06052014
 
 #note: use window size 16 for complementarity 16 (updated into script)
 
