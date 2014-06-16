@@ -14,7 +14,7 @@ dev.off()
 
 #real data
 #real data
-plotFFTaxes <- function(x, y, samplingFreq, shadeNyq=FALSE, showPeriod = TRUE)
+plotFFTaxes <- function(x, y, samplingFreq, shadeNyq=TRUE, showPeriod = TRUE)
 {
 	Nyq.Freq <- samplingFreq/2
 	FFTFreqs <- getFFTFreqs(Nyq.Freq, y)
@@ -29,7 +29,7 @@ plotFFTaxes <- function(x, y, samplingFreq, shadeNyq=FALSE, showPeriod = TRUE)
 	if (showPeriod == TRUE)
 	{
 		# Period axis on top        
-		a <- axis(3, lty=0, labels=FALSE)
+		a <- axis(3, lty=0, labels=FALSE,at=seq(100,2,by=-4))
 		axis(3, cex.axis=0.6, labels=format(1/a, digits=2), at=a)
 	}
 	if (shadeNyq == TRUE)
@@ -41,12 +41,12 @@ plotFFTaxes <- function(x, y, samplingFreq, shadeNyq=FALSE, showPeriod = TRUE)
 	ret <- list("freq"=FFTFreqs, "FFT"=FFT, "modFFT"=modFFT)
 	return (ret)
 }
-distance=x
-distancePairFre=test
+#distance=x
+#distancePairFre=test
 par(mfrow=c(2,1))
 plot(distance,distancePairFre,ty='l')
-test_fft=plotFFT(distance,distancePairFre,1)
-plot(distance,distancePairFre,ty='l')
+#test_fft=plotFFT(distance,distancePairFre,1)
+#plot(distance,distancePairFre,ty='l')
 test_ff=plotFFTaxes(distance,distancePairFre,1)
 
 
