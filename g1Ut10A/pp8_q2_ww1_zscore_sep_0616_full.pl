@@ -6,7 +6,7 @@ require "Jia.pm";
 use File::Basename;
 use Compress::Zlib;
 use List::Util qw(sum);
-#use PDL;
+use PDL;  #it's needed for initialize
 use PDL::Char;
 $PDL::SHARE = $PDL::SHARE; 
 
