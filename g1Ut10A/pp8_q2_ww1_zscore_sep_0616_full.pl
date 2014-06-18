@@ -364,7 +364,8 @@ sub InputFileProcessing
 			$dnaseq=substr($piRNA,0,$basep);
 			
 			#the supplemental region of piRNAs
-			$supplementseq=substr($piRNA,$basep,23);
+			#my $suppLen=23-$basep;
+			$supplementseq=substr($piRNA,$basep,$supLen);
 					
 			#store the seq of guide 20nt prefix only; for faster extract the reads number later
 			$guidepf{$file}{$dnaseq}+=$reads/$ntm;
@@ -389,7 +390,8 @@ sub InputFileProcessing
      		my $seqtemp=substr($genome{$chr},$seqstart,$len); #this is the genomic strand (+ strand)
      		$piRNA=&revfa($seqtemp);
 			$dnaseq=substr($piRNA,0,$basep);
-			$supplementseq=substr($piRNA,$basep,23);			
+			#my $suppLen=23-$basep;
+			$supplementseq=substr($piRNA,$basep,$supLen);			
 			#store the seq of guide 20nt prefix only; for faster extract the reads number later
 			$guidepf{$file}{$dnaseq}+=$reads/$ntm;
 			$guidepfsplit{$file}{$dnaseq}{"$piRNA,$supplementseq"}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
