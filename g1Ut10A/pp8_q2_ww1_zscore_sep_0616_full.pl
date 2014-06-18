@@ -890,7 +890,7 @@ sub PingPongProcessing
 			   }
 			   
 			   #Z-score for individual ambiguouspairs; by species, reads and by species irrespective of coordinates	   
-			   foreach my $p (@pairs)
+			   foreach my $p (@matchedpairs)
 			   {
 			  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$PofSpecies,$PofSpeciesCor,$PofReads,$PP10ofSpecies,$PP10ofSpeciesCor,$PP10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%{$ambiguousPairSpecies{$p}},\%{$ambiguousPairReads{$p}});
 			    #how to normalize $X0{$p}?
