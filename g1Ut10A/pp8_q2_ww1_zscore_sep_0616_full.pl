@@ -418,19 +418,27 @@ sub InputFileProcessing
          			$supStart=$bedstart+$n-23;
          			$fiveend=$start+$basep;#convert to bed, open
          		}
-	            my $str=substr($genome{$chr},$start,$basep); #substr function is 0 based
-	            $str=&revfa($str);
-	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
+	            
+	            
 	            
 	            #supplemental region
 	           
 	            my $supStr=substr($genome{$chr},$supStart,$supLen);
+	            
+	            if(length($supStr) == $supLen) #exclude boundary reads
+	            {
+	            	
+	            my $str=substr($genome{$chr},$start,$basep); #substr function is 0 based
+	            $str=&revfa($str);
+	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
+	            	
 	            $subStr=&revfa($supStr);
 	            
 	            #store chr, 5'end and strand information separately for each guide 16nt prefix
 	            my $tstrand="-";
 	            $targetpfsplit{$file}{$n}{$str}{"$piRNA,$subStr"}{"$chr,$fiveend,$tstrand"}+=$reads/$ntm; #store the strand information for guide strand
 	            #my $indexStart=$start;
+	            }
 	            	            
         	}
          	else
@@ -447,13 +455,17 @@ sub InputFileProcessing
          			
          			$fiveend=$start;	
          		}
-	            my $str=substr($genome{$chr},$start,$basep);
+	            
 	            $supStart=$start+$basep;
 	            my $supStr=substr($genome{$chr},$supStart,$supLen);
-	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
-	            my $tstrand="+";
-	            #store chr, 5'end and strand information separately for each guide 16nt prefix	
-	            $targetpfsplit{$file}{$n}{$str}{"$piRNA,$subStr"}{"$chr,$fiveend,$tstrand"}+=$reads/$ntm;
+	            if(length($supStr) == $supLen) #exclude boundary reads
+	            {
+	            	my $str=substr($genome{$chr},$start,$basep);
+	            	$targetpf{$file}{$n}{$str}+=$reads/$ntm;
+	            	my $tstrand="+";
+	            	#store chr, 5'end and strand information separately for each guide 16nt prefix	
+	            	$targetpfsplit{$file}{$n}{$str}{"$piRNA,$subStr"}{"$chr,$fiveend,$tstrand"}+=$reads/$ntm;
+	            }
 	            	            
         	}#ifelse
       	}#for
