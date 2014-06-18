@@ -5,8 +5,8 @@ require "restrict_digts.pm";
 require "Jia.pm";
 use File::Basename;
 use Compress::Zlib;
-use List::Util qw(sum);
-use PDL;  #it's needed for initialize
+#use List::Util qw(sum);
+use PDL;  #it's needed for initialize, it has sum functio inside, clash with the one in Util
 use PDL::Char;
 $PDL::SHARE = $PDL::SHARE; 
 
@@ -1005,9 +1005,9 @@ sub PingPongProcessing
 			    $X1=$numOfSpeciesCor[9];
 			    $X2=$numOfReads[9];
 
-			    $S0=sum(@numOfSpecies);
-			    $S1=sum(@numOfSpeciesCor);
-			    $S2=sum(@numOfReads);
+			    $S0=&arrSum(@numOfSpecies);
+			    $S1=&arrSum(@numOfSpeciesCor);
+			    $S2=&arrSum(@numOfReads);
 
 			    if($S0!=0)
 			    {
@@ -1122,40 +1122,48 @@ sub SuppComBitSum
 	return \@scaledSuppSpeciesCom,\@scaledSuppReadsCom;
 }
 
-		sub mean 
-		{
-			my $count=0;
-			my(@numbers) =@_;
-			foreach (@_) { $count+=$_;}
-			return $count/(scalar @_);
-		}
+sub mean 
+{
+	my $count=0;
+	my(@numbers) =@_;
+	foreach (@_) { $count+=$_;}
+	return $count/(scalar @_);
+}
 
-		sub standard_deviation 
-		{
-			my(@numbers) = @_;
-			#Prevent division by 0 error in case you get junk data
-			return undef unless(scalar(@numbers));
+sub arrSum
+{
+	my $sum=0;
+	my (@numbers) =@_;
+	foreach (@_) { $sum+=$_;}
+	return $sum;
+}
 
-			# Step 1, find the mean of the numbers
-			my $total1 = 0;
-			foreach my $num (@numbers) {
-			$total1 += $num;
-			}
-			my $mean1 = $total1 / (scalar @numbers);
+sub standard_deviation 
+{
+	my(@numbers) = @_;
+	#Prevent division by 0 error in case you get junk data
+	return undef unless(scalar(@numbers));
 
-			# Step 2, find the mean of the squares of the differences
-			# between each number and the mean
-			my $total2 = 0;
-			foreach my $num (@numbers) {
-			$total2 += ($mean1-$num)**2;
-			}
-			my $mean2 = $total2 / (scalar @numbers);
+	# Step 1, find the mean of the numbers
+	my $total1 = 0;
+	foreach my $num (@numbers) {
+	$total1 += $num;
+	}
+	my $mean1 = $total1 / (scalar @numbers);
 
-			# Step 3, standard deviation is the square root of the
-			# above mean
-			my $std_dev = sqrt($mean2);
-			return $std_dev;
-		}
+	# Step 2, find the mean of the squares of the differences
+	# between each number and the mean
+	my $total2 = 0;
+	foreach my $num (@numbers) {
+	$total2 += ($mean1-$num)**2;
+	}
+	my $mean2 = $total2 / (scalar @numbers);
+
+	# Step 3, standard deviation is the square root of the
+	# above mean
+	my $std_dev = sqrt($mean2);
+	return $std_dev;
+}
 
 
 		sub usage
