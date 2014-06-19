@@ -76,6 +76,11 @@ $PDL::SHARE = $PDL::SHARE;
 #ask for full complementarity at position 2-10
 #check if the rest are matched(1) or not matched(0), species, or reads(scale by normalized reads)
 
+#06192014
+#chrinfo
+
+
+
 if(scalar(@ARGV)<6)
 {
         usage();
@@ -108,7 +113,16 @@ my $fastafile=$parameters->{fa};
 
  my $supLen=23-$basep;
 
-
+my %chrSize=();
+my $chrFile="/home/wangw1/pipeline_dm/common/dm3.chromInfo";
+open CHR, $chrFile or die "could not find $chrFile: !$";
+while(my $line=<CHR>)
+{
+	chomp $line;
+	my @l=split(/\t/,$line);
+	$chrSize{$l[0]}=$l[1];
+}
+close(CHR);
 
 open LOG, ">${OUTDIR}/LOG.txt";
 
@@ -422,23 +436,28 @@ sub InputFileProcessing
 	            
 	            
 	            #supplemental region
-	           
-	            my $supStr=substr($genome{$chr},$supStart,$supLen);
-	            
-	            if(length($supStr) == $supLen) #exclude boundary reads
+	            my $supStr='';
+	            if($supStart >= 0)
 	            {
+	            	$supStr=substr($genome{$chr},$supStart,$supLen);#exclude reads exceed the left boundary
+
+	            	my $endPostion=$supStart+$supLen;
+	            	if ($endPostion <= $chrSize{$chr}) #exclude reads boundary the right boundary
+	            	#if(length($supStr) == $supLen) 
+	            	{
 	            	
-	            my $str=substr($genome{$chr},$start,$basep); #substr function is 0 based
-	            $str=&revfa($str);
-	            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
-	            	
-	            $subStr=&revfa($supStr);
-	            
-	            #store chr, 5'end and strand information separately for each guide 16nt prefix
-	            my $tstrand="-";
-	            $targetpfsplit{$file}{$n}{$str}{"$piRNA,$subStr"}{"$chr,$fiveend,$tstrand"}+=$reads/$ntm; #store the strand information for guide strand
-	            #my $indexStart=$start;
-	            }
+		            my $str=substr($genome{$chr},$start,$basep); #substr function is 0 based
+		            $str=&revfa($str);
+		            $targetpf{$file}{$n}{$str}+=$reads/$ntm;
+		            	
+		            $subStr=&revfa($supStr);
+		            
+		            #store chr, 5'end and strand information separately for each guide 16nt prefix
+		            my $tstrand="-";
+		            $targetpfsplit{$file}{$n}{$str}{"$piRNA,$subStr"}{"$chr,$fiveend,$tstrand"}+=$reads/$ntm; #store the strand information for guide strand
+		            #my $indexStart=$start;
+	            	}
+		         }
 	            	            
         	}
          	else
@@ -457,14 +476,18 @@ sub InputFileProcessing
          		}
 	            
 	            $supStart=$start+$basep;
-	            my $supStr=substr($genome{$chr},$supStart,$supLen);
-	            if(length($supStr) == $supLen) #exclude boundary reads
+	            my $endPostion=$supStart+$supLen;
+	            if ($endPostion <= $chrSize{$chr}) #exclude reads boundary the right boundary
 	            {
-	            	my $str=substr($genome{$chr},$start,$basep);
-	            	$targetpf{$file}{$n}{$str}+=$reads/$ntm;
-	            	my $tstrand="+";
-	            	#store chr, 5'end and strand information separately for each guide 16nt prefix	
-	            	$targetpfsplit{$file}{$n}{$str}{"$piRNA,$subStr"}{"$chr,$fiveend,$tstrand"}+=$reads/$ntm;
+		            my $supStr=substr($genome{$chr},$supStart,$supLen);
+		            if(length($supStr) == $supLen) #exclude boundary reads
+		            {
+		            	my $str=substr($genome{$chr},$start,$basep);
+		            	$targetpf{$file}{$n}{$str}+=$reads/$ntm;
+		            	my $tstrand="+";
+		            	#store chr, 5'end and strand information separately for each guide 16nt prefix	
+		            	$targetpfsplit{$file}{$n}{$str}{"$piRNA,$subStr"}{"$chr,$fiveend,$tstrand"}+=$reads/$ntm;
+		            }
 	            }
 	            	            
         	}#ifelse
@@ -594,10 +617,22 @@ sub PingPongProcessing
 						
 						my ($targetpiRNA,$targetSuppSeq)=split(/,/,$piTargetIndex);
 						my $ref=$targetSuppSeq;
-	      				my $source = PDL::Char->new($ref);
-	      				my $match = PDL::Char->new($piGuideSuppSeq);     							
-						my $diff = $match == $source;
-						my $diffstr=join('',$diff->list);
+						my $diffstr='';
+						if(length($ref) == length($piGuideSuppSeq))
+						{
+		      				my $source = PDL::Char->new($ref);
+		      				my $match = PDL::Char->new($piGuideSuppSeq);
+		      				     							
+							my $diff = $match == $source;
+							$diffstr=join('',$diff->list);
+						}
+						else
+						{
+							for(my $j=0;$j<$supLen;$j++)
+							{
+								$diffstr=$diffstr.'0';
+								
+							}
 						
 						my $targetpiGuideReads=0;
 						map {$targetpiGuideReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}}; # the total reads for this piRNA
