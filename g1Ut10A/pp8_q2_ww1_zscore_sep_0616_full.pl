@@ -115,7 +115,7 @@ my $fastafile=$parameters->{fa};
 
 my %chrSize=();
 my $chrFile="/home/wangw1/pipeline_dm/common/dm3.chromInfo";
-open CHR, $chrFile or die "could not find $chrFile: !$";
+open CHR, $chrFile or die "could not find $chrFile: $!";
 while(my $line=<CHR>)
 {
 	chomp $line;
@@ -633,6 +633,7 @@ sub PingPongProcessing
 								$diffstr=$diffstr.'0';
 								
 							}
+						}
 						
 						my $targetpiGuideReads=0;
 						map {$targetpiGuideReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}}; # the total reads for this piRNA
@@ -742,10 +743,23 @@ sub PingPongProcessing
 					{	
 						my ($targetpiRNA,$targetSuppSeq)=split(/,/,$piTargetIndex);
 						my $ref=$targetSuppSeq;
-	      				my $source = PDL::Char->new($ref);
-	      				my $match = PDL::Char->new($piGuideSuppSeq);     							
-						my $diff = $match == $source;
-						my $diffstr=join('',$diff->list);
+	      				my $diffstr='';
+						if(length($ref) == length($piGuideSuppSeq))
+						{
+		      				my $source = PDL::Char->new($ref);
+		      				my $match = PDL::Char->new($piGuideSuppSeq);
+		      				     							
+							my $diff = $match == $source;
+							$diffstr=join('',$diff->list);
+						}
+						else
+						{
+							for(my $j=0;$j<$supLen;$j++)
+							{
+								$diffstr=$diffstr.'0';
+								
+							}
+						}
 																	
 						#my $targetpiGuideSpecies=0;	
 						#$targetpiGuideSpecies=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}});
