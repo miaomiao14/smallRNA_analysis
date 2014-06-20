@@ -111,10 +111,10 @@ my $wsize=$parameters->{winsize};
 my $basep=$parameters->{complementarity};
 my $fastafile=$parameters->{fa};
 
- my $supLen=23-$basep;
+ my $supLen=23-$basep; #the length of supplemental region
 
 my %chrSize=();
-my $chrFile="/home/wangw1/pipeline_dm/common/dm3.chromInfo";
+my $chrFile=$parameters->{chrSize};#"/home/wangw1/pipeline_dm/common/dm3.chromInfo";
 open CHR, $chrFile or die "could not find $chrFile: $!";
 while(my $line=<CHR>)
 {
@@ -385,7 +385,7 @@ sub InputFileProcessing
 			$guidepf{$file}{$dnaseq}+=$reads/$ntm;
 			
 			#the coordinates of each piRNA species
-			$guidepfsplit{$file}{$dnaseq}{"$piRNA,$supplementseq"}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
+			$guidepfsplit{$file}{$dnaseq}{$piRNA}{"$chr,$fiveend,$strand"}{$supplementseq}+=$reads/$ntm; #become 0-based from norm.bed format
 
 
 	  	}
@@ -408,7 +408,7 @@ sub InputFileProcessing
 			$supplementseq=substr($piRNA,$basep,$supLen);			
 			#store the seq of guide 20nt prefix only; for faster extract the reads number later
 			$guidepf{$file}{$dnaseq}+=$reads/$ntm;
-			$guidepfsplit{$file}{$dnaseq}{"$piRNA,$supplementseq"}{"$chr,$fiveend,$strand"}+=$reads/$ntm; #become 0-based from norm.bed format
+			$guidepfsplit{$file}{$dnaseq}{$piRNA}{"$chr,$fiveend,$strand"}{$supplementseq}+=$reads/$ntm; #become 0-based from norm.bed format
 
 	  	}
 
@@ -454,7 +454,7 @@ sub InputFileProcessing
 		            
 		            #store chr, 5'end and strand information separately for each guide 16nt prefix
 		            my $tstrand="-";
-		            $targetpfsplit{$file}{$n}{$str}{"$piRNA,$subStr"}{"$chr,$fiveend,$tstrand"}+=$reads/$ntm; #store the strand information for guide strand
+		            $targetpfsplit{$file}{$n}{$str}{$piRNA}{"$chr,$fiveend,$tstrand"}{$subStr}+=$reads/$ntm; #store the strand information for guide strand
 		            #my $indexStart=$start;
 	            	}
 		         }
@@ -486,7 +486,7 @@ sub InputFileProcessing
 		            	$targetpf{$file}{$n}{$str}+=$reads/$ntm;
 		            	my $tstrand="+";
 		            	#store chr, 5'end and strand information separately for each guide 16nt prefix	
-		            	$targetpfsplit{$file}{$n}{$str}{"$piRNA,$subStr"}{"$chr,$fiveend,$tstrand"}+=$reads/$ntm;
+		            	$targetpfsplit{$file}{$n}{$str}{$piRNA}{"$chr,$fiveend,$tstrand"}{$subStr}+=$reads/$ntm;
 		            }
 	            }
 	            	            
@@ -572,10 +572,13 @@ sub PingPongProcessing
 			
 			my $nGcorTotalReads=0; #total reads for this prefix from guide strand
 			foreach my $piQuery (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}})
-			{
-				my $nGcorReads=0;
-				map {$nGcorReads+=$_} values %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}};
-				$nGcorTotalReads+=$nGcorReads;
+			{				
+				foreach my $piQueryCor (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}})
+				{
+					my $nGcorReads=0;
+					map {$nGcorReads+=$_} values %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$piQueryCor}};
+					$nGcorTotalReads+=$nGcorReads;
+				}
 			}
 			
 		    my $nTcor=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}}); #total piRNA species for this prefix from target strand		
@@ -583,9 +586,12 @@ sub PingPongProcessing
 			my $nTcorTotalReads=0; #total reads for this prefix from target strand
 			foreach my $piTargetIndex (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}} )
 			{
-				my $nTcorReads=0;
-				map {$nTcorReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}};
-				$nTcorTotalReads+=$nTcorReads;
+				foreach $piTargetIndexCor (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}} )
+				{
+					my $nTcorReads=0;
+					map {$nTcorReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{$piTargetIndexCor}};
+					$nTcorTotalReads+=$nTcorReads;
+				}
 			}
 		    
 		    my $nnGcorTcor=$nGcor*$nTcor; #total species pairs for this prefix
@@ -601,120 +607,179 @@ sub PingPongProcessing
 				foreach my $piQuery (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}} )
 			    {
 			    	
-			    	my ($piRNAGuide, $piGuideSuppSeq)=split(/,/,$piQuery);
+			    	#my ($piRNAGuide, $piGuideSuppSeq)=split(/,/,$piQuery);
+			    	
+			    	
+			    	
 					my $guideQuerySpecies=0;
 					$guideQuerySpecies=scalar (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}}); #for this guide piRNA, the number of mapping locus(genomic coordinates) 
 					my $guideQueryReads=0;
-					map {$guideQueryReads+=$_} values %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}};#for this guide piRNA, the number of reads for all mapping locus 
+					foreach my $piQueryCor (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}})
+					{
+						my $nGcorReads=0;
+						map {$nGcorReads+=$_} values %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}};#for this guide piRNA, the number of reads for all mapping locus
+						$guideQueryReads+=$nGorReads;
+					} 
 					#guide is the query, target is the index
-      				my $guideQueryReadsNorm=$guideQueryReads/$NTM{$l[2]};	
+      				my $guideQueryReadsNorm=$guideQueryCorReads/$NTM{$l[2]};	
       				
 					foreach my $piTargetIndex (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}} ) #indexed piRNA prefix; iterate each piRNA
 					{	
 
-						#my $targetpiGuideSpecies=0;	
-						#$targetpiGuideSpecies=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}});
-						
-						my ($targetpiRNA,$targetSuppSeq)=split(/,/,$piTargetIndex);
-						my $ref=$targetSuppSeq;
-						my $diffstr='';
-						if(length($ref) == length($piGuideSuppSeq))
+						my $targetpiIndexSpecies=0;	
+						$targetpiIndexSpecies=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}});#for this target piRNA, the number of mapping locus(genomic coordinates)
+						my $targetpiIndexReads=0;
+						foreach my $piTargetIndexCor (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndexCor}} )
 						{
-		      				my $source = PDL::Char->new($ref);
-		      				my $match = PDL::Char->new($piGuideSuppSeq);
-		      				     							
-							my $diff = $match == $source;
-							$diffstr=join('',$diff->list);
+							my $nTcorReads=0;
+							map {$targetpiIndexReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}}; # the total reads for this piRNA
+							$targetpiIndexReads+=$nTcorReads;
+							
 						}
-						else
-						{
-							for(my $j=0;$j<$supLen;$j++)
-							{
-								$diffstr=$diffstr.'0';
-								
-							}
-						}
+						#my ($targetpiRNA,$targetSuppSeq)=split(/,/,$piTargetIndex);
+					
 						
-						my $targetpiGuideReads=0;
-						map {$targetpiGuideReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}}; # the total reads for this piRNA
+						
 						
 						my $cisRecordFlag=0; #flag of cispair
 						
-						foreach my $record (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}}) #each mapping locus for guide piRNA
+						foreach my $Grecord (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}}) #prescan each mapping locus for guide piRNA to find cis target
 						{
-				       		my ($chr,$gfiveend,$gstrand)=split(/,/,$record);
-				       		
-				       		my $guideQueryCorReads=$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$record};
-				       		my $guideQueryCorReadsNorm=$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$record}/$NTM{$l[2]};
-				       		
-				       		###note: how to define cistargets more accurately?
-				       		###in addition to excat match, what if just several nucleotides away?
-
-				       		my $tfiveend=$gfiveend;
-				       		my $tstrand=$gstrand;
-							my $targetpiGuideCorReads=$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{"$chr,$tfiveend,$tstrand"} ;
-							# for each mapping locus for this guide piRNA, if there is a cis pair from target piRNA coordinate pool	
-					       	if($targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{"$chr,$tfiveend,$tstrand"}) #here it checks all coordinates associated with $piTargetIndex
-					       	{
-					       		my $nGpiCor=scalar (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}});
-      							if( $nGpiCor>1)
-					       		{
-						       		$cisPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=1/$NTM{$l[2]}/2; #cis pair species(in terms of piRNA species) must only have one by coordinate definition; but for different record, it has different cis pair
-									$cisPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guideQueryCorReads*$targetpiGuideCorReads/$NTM{$l[2]};		       			      							
-	      							##print out paired piRNA species      							
-	      							print PPSEQPAIR "cis\t$piQuery\t$guideQueryCorReadsNorm\t$piTargetIndex\t$targetpiGuideCorReads\t$diffstr\n" if ($n==9);
-	      								      								     							
-	     							$cisPairSuppSpecies{$g_0_nt.$t_9_nt}{$diffstr}+=1/$NTM{$l[2]}/2;
-	      							$cisPairSuppReads{$g_0_nt.$t_9_nt}{$diffstr}+=$guideQueryCorReads*$targetpiGuideCorReads/$NTM{$l[2]};
-	      								      							
-	      							#ambiguous pairs if there are other mapping loci
-      								$ambiguousPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=1/$NTM{$l[2]}/2;
-      								$ambiguousPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=($guideQueryReads-$guideQueryCorReads)*($targetpiGuideReads-$targetpiGuideCorReads)/$NTM{$l[2]};
-      								
-      								my $ambiguousGuideQueryCorReadsNorm=$guideQueryReadsNorm-$guideQueryCorReadsNorm;
-      								my $ambiguousTargetpiGuideCorReads=$targetpiGuideReads-$targetpiGuideCorReads;
-      								print PPSEQPAIR "ambiguous\t$piQuery\t$ambiguousGuideQueryCorReadsNorm\t$piTargetIndex\t$ambiguousTargetpiGuideCorReads\t$diffstr\n" if ($n==9);
-      								
-      								$ambiguousPairSuppSpecies{$g_0_nt.$t_9_nt}{$diffstr}+=1/$NTM{$l[2]}/2;
-      								$ambiguousPairSuppReads{$g_0_nt.$t_9_nt}{$diffstr}+=($guideQueryReads-$guideQueryCorReads)*($targetpiGuideReads-$targetpiGuideCorReads)/$NTM{$l[2]};
-      								
-      							}
-      							else
-      							{
-      								$cisPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=1/$NTM{$l[2]};
-      								$cisPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guideQueryCorReads*$targetpiGuideCorReads/$NTM{$l[2]};		       			      							
-	      							##print out paired piRNA species      							
-	      							print PPSEQPAIR "cis\t$piQuery\t$guideQueryCorReadsNorm\t$piTargetIndex\t$targetpiGuideCorReads\t$diffstr\n" if ($n==9);
-	      								     							
-	     							$cisPairSuppSpecies{$g_0_nt.$t_9_nt}{$diffstr}+=1/$NTM{$l[2]}/2;
-	      							$cisPairSuppReads{$g_0_nt.$t_9_nt}{$diffstr}+=$guideQueryCorReads*$targetpiGuideCorReads/$NTM{$l[2]};	
-      							}
-      							      						
-								#$cisFlag{$piTargetIndex}+=1;
-								$cisRecordFlag=1;
-								last; #no need to check other coordinates (record) for this pair of piRNA species      					       					       			
-					       	}#if cis coordinate exists
-						} #record
-						#for each query(a piRNA species), if there is a cismatch, then the whole species (no matter how many other possible pairs it has) is viewed as cispair
-						if (! $cisRecordFlag) #after check all the records associated with piQuery
+							if($targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{$Grecord})
+							{
+								$cisRecordFlag=1; #if there is any cis pair among multiple genomic loci for a piRNA species pair, then this species pairs is composed of cis pair and ambiguous pair
+								last;
+							}
+						}	
+												
+						if (! $cisRecordFlag) #if there is no cis pair associated with piQuery, then it can be viewed as a trans pair
 			       		{
 			       			#trans PingPong pair in species
 			       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=1/$NTM{$l[2]};
 			       			#trans PingPong pair in reads
-			       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guideQueryReads*$targetpiGuideReads/$NTM{$l[2]};
-			       			print PPSEQPAIR "trans\t$piQuery\t$guideQueryReadsNorm\t$piTargetIndex\t$targetpiGuideReads\t$diffstr\n" if ($n==9);
+			       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guideQueryReads*$targetpiIndexReads/$NTM{$l[2]};
 			       			
-			       			$transPairSuppSpecies{$g_0_nt.$t_9_nt}{$diffstr}+=1/$NTM{$l[2]};
-			       			$transPairSuppReads{$g_0_nt.$t_9_nt}{$diffstr}+=$guideQueryReads*$targetpiGuideReads/$NTM{$l[2]};
 			       			
-			       			$transPairSuppSpeciesTotal{$diffstr}+=1/$NTM{$l[2]} if ($n==9);
-			       			$transPairSuppReadsTotal{$diffstr}+=$guideQueryReads*$targetpiGuideReads/$NTM{$l[2]} if ($n==9);
+			       			foreach my $Grecord (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}}) #each mapping locus for guide piRNA
+							{
+					       		
+					       		my $piGuideSuppSeq=keys (%{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$Grecord}}) ; #supplemental sequence for guide strand
+								
+					       		my $guideQueryCorReads=values (%{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$Grecord}}); #assuming only one supplemental sequence for each coordinates
+					       		my $guideQueryCorReadsNorm=$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$Grecord}/$NTM{$l[2]};
+								
+								# for each mapping locus for this target piRNA, 
+								foreach my $Trecord (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}) 
+								{	
+									
+									my $targetpiIndexCorReads=values (%{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{$Trecord}}) ;#the reads number for this target mapping locus
+									
+									#no matter is cis or trans, has to do the supplemental sequence comparison
+									my $piTargetIndexSuppSeq=keys (%{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{$Trecord}}); #supplemental sequence for target strand
+						       		my $diffstr='';
+									if(length($piTargetIndexSuppSeq) == length($piGuideSuppSeq)) #check if the length of guideSuppSeq is the same as that of the $piTargetIndexSuppSeq
+									{
+					      				my $source = PDL::Char->new($piTargetIndexSuppSeq);
+					      				my $match = PDL::Char->new($piGuideSuppSeq);
+					      				     							
+										my $diff = $match == $source; #bit comparison gives bit results: 0, not eqaul; 1 equal
+										$diffstr=join('',$diff->list);#convert the list to a string
+									}
+									else
+									{
+										for(my $j=0;$j<$supLen;$j++)
+										{
+											$diffstr=$diffstr.'0'; #for default value
+											
+										}
+									}
+						       								       		
+		      						##print out paired piRNA species      							
+		      						print PPSEQPAIR "trans\t$piQuery\t$guideQueryCorReadsNorm\t$piTargetIndex\t$targetpiIndexCorReads\t$diffstr\n" if ($n==9);
+
+					       			$transPairSuppSpecies{$g_0_nt.$t_9_nt}{$diffstr}+=1/($NTM{$l[2]}*$guideQuerySpecies*$targetpiIndexSpecies);
+					       			$transPairSuppReads{$g_0_nt.$t_9_nt}{$diffstr}+=$guideQueryCorReads*$targetpiIndexCorReads/$NTM{$l[2]};
+					       			
+					       			$transPairSuppSpeciesTotal{$diffstr}+=1/($NTM{$l[2]}*$guideQuerySpecies*$targetpiIndexSpecies) if ($n==9);
+					       			$transPairSuppReadsTotal{$diffstr}+=$guideQueryCorReads*$targetpiIndexCorReads/$NTM{$l[2]} if ($n==9);
+								}#Trecord
+							}#Grecord
 			       			
-			       		}
-						
-						#if(! $cisFlag{$piTargetIndex}) #so that no need to check for already cispaired piRNA species
-						#{
-						#}
+			       		}#if flag=1
+			       		else #if there is cis pair for this species pair
+			       		{	
+							foreach my $Grecord (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}}) #each mapping locus for guide piRNA
+							{
+					       		my ($chr,$gfiveend,$gstrand)=split(/,/,$Grecord);
+					       		
+					       		my $piGuideSuppSeq=keys (%{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$Grecord}}) ; #supplemental sequence for guide strand
+								
+					       		my $guideQueryCorReads=values (%{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$Grecord}}); #assuming only one supplemental sequence for each coordinates
+					       		my $guideQueryCorReadsNorm=$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$Grecord}/$NTM{$l[2]};
+					       		
+					       		###note: how to define cistargets more accurately?
+					       		###in addition to excat match, what if just several nucleotides away?
+	
+					       		#my $tfiveend=$gfiveend;
+					       		#my $tstrand=$gstrand;
+								
+								# for each mapping locus for this target piRNA, 
+								foreach my $Trecord (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}) 
+								{	
+									
+									my $targetpiIndexCorReads=values (%{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{$Trecord}}) ;#the reads number for this target mapping locus
+									
+									#no matter is cis or trans, has to do the supplemental sequence comparison
+									my $piTargetIndexSuppSeq=keys (%{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{$Trecord}}); #supplemental sequence for target strand
+						       		my $diffstr='';
+									if(length($piTargetIndexSuppSeq) == length($piGuideSuppSeq)) #check if the length of guideSuppSeq is the same as that of the $piTargetIndexSuppSeq
+									{
+					      				my $source = PDL::Char->new($piTargetIndexSuppSeq);
+					      				my $match = PDL::Char->new($piGuideSuppSeq);
+					      				     							
+										my $diff = $match == $source; #bit comparison gives bit results: 0, not eqaul; 1 equal
+										$diffstr=join('',$diff->list);#convert the list to a string
+									}
+									else
+									{
+										for(my $j=0;$j<$supLen;$j++)
+										{
+											$diffstr=$diffstr.'0'; #for default value
+											
+										}
+									}
+																		
+							       	if($Trecord eq $Grecord}) #here it only checks this coordinate associated with $piTargetIndex,if there is a cis pair from target piRNA coordinate pool
+							       	{				
+							       					       								       		
+							       		$cisPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=1/($NTM{$l[2]}*$guideQuerySpecies*$targetpiIndexSpecies); #cis pair species(in terms of piRNA species) must only have one by coordinate definition; but for different record, it has different cis pair
+										$cisPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guideQueryCorReads*$targetpiIndexCorReads/$NTM{$l[2]};		       			      							
+		      							##print out paired piRNA species      							
+		      							print PPSEQPAIR "cis\t$piQuery\t$guideQueryCorReadsNorm\t$piTargetIndex\t$targetpiIndexCorReads\t$diffstr\n" if ($n==9);
+		      								      								     							
+		     							$cisPairSuppSpecies{$g_0_nt.$t_9_nt}{$diffstr}+=1/($NTM{$l[2]}*$guideQuerySpecies*$targetpiIndexSpecies);
+		      							$cisPairSuppReads{$g_0_nt.$t_9_nt}{$diffstr}+=$guideQueryCorReads*$targetpiIndexCorReads/$NTM{$l[2]};
+   					       					       			
+							       	}#if cis coordinate exists,if Grecord eq Trecord
+							       	else
+						       		{		      							
+		      							#ambiguous pairs if not cis pair
+	      								$ambiguousPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=1/($NTM{$l[2]}*$guideQuerySpecies*$targetpiIndexSpecies);
+	      								$ambiguousPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=($guideQueryCorReads)*($targetpiIndexCorReads)/$NTM{$l[2]};
+	      								
+	      								print PPSEQPAIR "ambiguous\t$piQuery\t$guideQueryCorReadsNorm\t$piTargetIndex\t$targetpiIndexCorReads\t$diffstr\n" if ($n==9);
+	      								
+	      								$ambiguousPairSuppSpecies{$g_0_nt.$t_9_nt}{$diffstr}+=1/($NTM{$l[2]}*$guideQuerySpecies*$targetpiIndexSpecies);
+	      								$ambiguousPairSuppReads{$g_0_nt.$t_9_nt}{$diffstr}+=($guideQueryCorReads)*($targetpiIndexCorReads)/$NTM{$l[2]};
+	      								
+	      							} #if Grecord neq Trecord
+							       	
+							       	
+								} #for each Trecord
+							} #for each Grecord
+
+			       		}#if flag=1	
+
 					}#piGuideSpe
 			    }#piSpecies
 	      	}#perfect pair
@@ -731,52 +796,64 @@ sub PingPongProcessing
 		       $transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]};
 		       #trans PingPong pair in reads
 		       $transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$gttotal/$NTM{$l[2]};
-		       		       		       		       		      		   
+		       	
 		       	foreach my $piQuery (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}} )
-			    {
-					my ($piRNAGuide, $piGuideSuppSeq)=split(/,/,$piQuery);
-					
-					my $guideQueryReads=0;
-					map {$guideQueryReads+=$_} values %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}};
-					my $guideQueryReadsNorm=$guideQueryReads/$NTM{$l[2]};	
-					foreach my $piTargetIndex (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}} )
-					{	
-						my ($targetpiRNA,$targetSuppSeq)=split(/,/,$piTargetIndex);
-						my $ref=$targetSuppSeq;
-	      				my $diffstr='';
-						if(length($ref) == length($piGuideSuppSeq))
+			    {	 
+			    	my $guideQuerySpecies=0;
+					$guideQuerySpecies=scalar (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}}); #for this guide piRNA, the number of mapping locus(genomic coordinates) 
+			    	 
+			    	foreach my $piTargetIndex (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}} ) #indexed piRNA prefix; iterate each piRNA
+					{    
+						my $targetpiIndexSpecies=0;	
+						$targetpiIndexSpecies=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}});#for this target piRNA, the number of mapping locus(genomic coordinates)
+						 		       		       		      		   
+			       		foreach my $Grecord (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}}) #each mapping locus for guide piRNA
 						{
-		      				my $source = PDL::Char->new($ref);
-		      				my $match = PDL::Char->new($piGuideSuppSeq);
-		      				     							
-							my $diff = $match == $source;
-							$diffstr=join('',$diff->list);
-						}
-						else
-						{
-							for(my $j=0;$j<$supLen;$j++)
-							{
-								$diffstr=$diffstr.'0';
+				       		
+				       		my $piGuideSuppSeq=keys (%{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$Grecord}}) ; #supplemental sequence for guide strand
+							
+				       		my $guideQueryCorReads=values (%{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$Grecord}}); #assuming only one supplemental sequence for each coordinates
+				       		my $guideQueryCorReadsNorm=$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$Grecord}/$NTM{$l[2]};
+							
+							# for each mapping locus for this target piRNA, 
+							foreach my $Trecord (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}) 
+							{	
 								
-							}
-						}
-																	
-						#my $targetpiGuideSpecies=0;	
-						#$targetpiGuideSpecies=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}});
-						my $targetpiGuideReads=0;
-						map {$targetpiGuideReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}};
-		       			print PPSEQPAIR "trans\t$piQuery\t$guideQueryReadsNorm\t$piTargetIndex\t$targetpiGuideReads\t$diffstr\n" if ($n==9);
-		       			
-		       			
-		       			$transPairSuppSpecies{$g_0_nt.$t_9_nt}{$diffstr}+=1/$NTM{$l[2]};
-			   			$transPairSuppReads{$g_0_nt.$t_9_nt}{$diffstr}+=$guideQueryReads*$targetpiGuideReads/$NTM{$l[2]};
-			   			
-			   			$transPairSuppSpeciesTotal{$diffstr}+=1/$NTM{$l[2]} if ($n==9);
-			       		$transPairSuppReadsTotal{$diffstr}+=$guideQueryReads*$targetpiGuideReads/$NTM{$l[2]} if ($n==9);
-			   			
-					}
-			    }
-			}
+								my $targetpiIndexCorReads=values (%{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{$Trecord}}) ;#the reads number for this target mapping locus
+								
+								#no matter is cis or trans, has to do the supplemental sequence comparison
+								my $piTargetIndexSuppSeq=keys (%{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{$Trecord}}); #supplemental sequence for target strand
+					       		my $diffstr='';
+								if(length($piTargetIndexSuppSeq) == length($piGuideSuppSeq)) #check if the length of guideSuppSeq is the same as that of the $piTargetIndexSuppSeq
+								{
+				      				my $source = PDL::Char->new($piTargetIndexSuppSeq);
+				      				my $match = PDL::Char->new($piGuideSuppSeq);
+				      				     							
+									my $diff = $match == $source; #bit comparison gives bit results: 0, not eqaul; 1 equal
+									$diffstr=join('',$diff->list);#convert the list to a string
+								}
+								else
+								{
+									for(my $j=0;$j<$supLen;$j++)
+									{
+										$diffstr=$diffstr.'0'; #for default value
+										
+									}
+								}
+					       								       		
+	      						##print out paired piRNA species      							
+	      						print PPSEQPAIR "trans\t$piQuery\t$guideQueryCorReadsNorm\t$piTargetIndex\t$targetpiIndexCorReads\t$diffstr\n" if ($n==9);
+	
+				       			$transPairSuppSpecies{$g_0_nt.$t_9_nt}{$diffstr}+=1/($NTM{$l[2]}*$guideQuerySpecies*$targetpiIndexSpecies);
+				       			$transPairSuppReads{$g_0_nt.$t_9_nt}{$diffstr}+=$guideQueryCorReads*$targetpiIndexCorReads/$NTM{$l[2]};
+				       			
+				       			$transPairSuppSpeciesTotal{$diffstr}+=1/($NTM{$l[2]}*$guideQuerySpecies*$targetpiIndexSpecies) if ($n==9);
+				       			$transPairSuppReadsTotal{$diffstr}+=$guideQueryCorReads*$targetpiIndexCorReads/$NTM{$l[2]} if ($n==9);
+							}#Trecord
+						}#Grecord
+					}#pitarget
+				}#piQuery	
+			}#elsif
 		} #while
 		close(IN);
         
@@ -1232,6 +1309,7 @@ sub standard_deviation
 				print "-a  <fasta file of the genome>\n\t";
 				print "-m  <mapping output dir>\n\t";
 				print "-q  <query seq output dir>\n\t";
+				print "-c  <chromosome size file>\n\t";
 		        print "This perl script is count the frequency of 10A irrespective of 1U\n";
 				print "It's maintained by WEI WANG. If you have any questions, please contact wei.wang2\@umassmed.edu\n";
 		        exit(1);
@@ -1254,6 +1332,7 @@ sub standard_deviation
 						elsif($next_arg eq "-a"){ $parameters->{fa} = shift(@ARGV); }
 						elsif($next_arg eq "-m"){ $parameters->{mappingoutdir}= shift(@ARGV); }
 						elsif($next_arg eq "-q"){ $parameters->{queryseqoutdir} = shift(@ARGV); }
+						elsif($next_arg eq "-c"){ $parameters->{chrSize}= shift(@ARGV); }
 
 		                else{ print "Invalid argument: $next_arg"; usage(); }
 		        }
