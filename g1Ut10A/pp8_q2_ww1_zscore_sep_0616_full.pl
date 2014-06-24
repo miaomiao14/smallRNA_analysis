@@ -700,7 +700,7 @@ sub PingPongProcessing
 											}
 						       								       		
 				      						##print out paired piRNA species      							
-				      						print PPSEQPAIR "trans\t$piQuery\t$guideQueryCorReadsNorm\t$piTargetIndex\t$targetpiIndexCorReads\t$diffstr\n" if ($n==9);
+				      						print PPSEQPAIR "trans\t$piQuery\t$Grecord\t$piGuideSuppSeq\t$guideQueryCorReadsNorm\t$piTargetIndex\t$Trecord\t$piTargetIndexSuppSeq\t$targetpiIndexCorReads\t$diffstr\n" if ($n==9);
 
 							       			$transPairSuppSpecies{$g_0_nt.$t_9_nt}{$diffstr}+=1/($NTM{$l[2]}*$guideQuerySpecies*$targetpiIndexSpecies);
 							       			$transPairSuppReads{$g_0_nt.$t_9_nt}{$diffstr}+=$guideQueryCorReads*$targetpiIndexCorReads/$NTM{$l[2]};
@@ -778,7 +778,7 @@ sub PingPongProcessing
 			      								$ambiguousPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=1/($NTM{$l[2]}*$guideQuerySpecies*$targetpiIndexSpecies);
 			      								$ambiguousPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=($guideQueryCorReads)*($targetpiIndexCorReads)/$NTM{$l[2]};
 	      								
-			      								print PPSEQPAIR "ambiguous\t$piQuery\t$guideQueryCorReadsNorm\t$piTargetIndex\t$targetpiIndexCorReads\t$diffstr\n" if ($n==9);
+			      								print PPSEQPAIR "ambiguous\t$piQuery\t$Grecord\t$piGuideSuppSeq\t$guideQueryCorReadsNorm\t$piTargetIndex\t$Trecord\t$piTargetIndexSuppSeq\t$targetpiIndexCorReads\t$diffstr\n" if ($n==9);
 	      								
 			      								$ambiguousPairSuppSpecies{$g_0_nt.$t_9_nt}{$diffstr}+=1/($NTM{$l[2]}*$guideQuerySpecies*$targetpiIndexSpecies);
 			      								$ambiguousPairSuppReads{$g_0_nt.$t_9_nt}{$diffstr}+=($guideQueryCorReads)*($targetpiIndexCorReads)/$NTM{$l[2]};
@@ -859,7 +859,7 @@ sub PingPongProcessing
 										}
 					       								       		
 			      						##print out paired piRNA species      							
-			      						print PPSEQPAIR "trans\t$piQuery\t$guideQueryCorReadsNorm\t$piTargetIndex\t$targetpiIndexCorReads\t$diffstr\n" if ($n==9);
+			      						print PPSEQPAIR "trans\t$piQuery\t$Grecord\t$piGuideSuppSeq\t$guideQueryCorReadsNorm\t$piTargetIndex\t$Trecord\t$piTargetIndexSuppSeq\t$targetpiIndexCorReads\t$diffstr\n" if ($n==9);
 	
 						       			$transPairSuppSpecies{$g_0_nt.$t_9_nt}{$diffstr}+=1/($NTM{$l[2]}*$guideQuerySpecies*$targetpiIndexSpecies);
 						       			$transPairSuppReads{$g_0_nt.$t_9_nt}{$diffstr}+=$guideQueryCorReads*$targetpiIndexCorReads/$NTM{$l[2]};
