@@ -56,7 +56,7 @@ foreach my $pos (0..$countLastPos)
 	$gSpec=scalar (keys %{$G{$pos}});
 	$tSpec=scalar (keys %{$T{$pos}});
 	
-	$totalSpec=$aSpec+$cSpec+$gSpec+$gSpec;
+	$totalSpec=$aSpec+$cSpec+$gSpec+$tSpec;
 	
 		
 	my $aFrac=0;
