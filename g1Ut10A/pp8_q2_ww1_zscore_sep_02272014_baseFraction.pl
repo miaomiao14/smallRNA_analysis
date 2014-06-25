@@ -463,7 +463,7 @@ sub PingPongProcessing
 	   
 	   foreach my $b (keys %{$pairedFirstBase{$guideStrandFile}})
 	   {
-	   		map {$pairedFirstBaseReads{$b}+=$_} values  %{$pairedFirstBase{$guideStrandFile}{$b}};
+	   		map {$pairedFirstBaseReads{$b}+=$_} values  %{$pairedFirstBase{$guideStrandFile}{$b}};#foreach nucleotide 
 	   		$pairedFirstBaseReadsTotal+=$pairedFirstBaseReads{$b};
 	   		$pairedFirstBaseSpecies{$b}=scalar (keys  %{$pairedFirstBase{$guideStrandFile}{$b}});
 	   		$pairedFirstBaseSpeciesTotal+=$pairedFirstBaseSpecies{$b};
@@ -472,10 +472,10 @@ sub PingPongProcessing
 	   		#total
 	   		map {$totalFirstBaseReads{$b}+=$_} values %{$totalFirstBase{$guideStrandFile}{$b}};
 	   		$totalFirstBaseReadsTotal+= $totalFirstBaseReads{$b};
-	   		$totalFirstBaseSpecies{$b}=scalar (keys %{$totalFirstBase{$guideStrandFile}{$b}});
+	   		$totalFirstBaseSpecies{$b}=scalar (keys %{$totalFirstBase{$guideStrandFile}{$b}}); #the number of species is the number of prefix species
 	   		$totalFirstBaseSpeciesTotal+= $totalFirstBaseSpecies{$b};
 	   }
-	   foreach my $b (keys  %pairedFirstBaseReads)
+	   foreach my $b (keys  %pairedFirstBaseReads) # to calculate fraction for first base
 	   {			
 	   		$pairedFirstBaseReadsF{$b}=$pairedFirstBaseReads{$b}/$pairedFirstBaseReadsTotal;
 	   		$pairedFirstBaseReadsF{$b}=&restrict_num_decimal_digits($pairedFirstBaseReadsF{$b},4);
@@ -488,6 +488,7 @@ sub PingPongProcessing
 	   		$totalFirstBaseSpeciesF{$b}=&restrict_num_decimal_digits($totalFirstBaseSpeciesF{$b},4);
 	   }
 	   
+	   #better to do the decimal digits approximation here
 	   	$pairedFirstBaseSpeciesTotal=&restrict_num_decimal_digits($pairedFirstBaseSpeciesTotal,4);
 		$pairedFirstBaseReadsTotal=&restrict_num_decimal_digits($pairedFirstBaseReadsTotal,4);
 	   	$totalFirstBaseSpeciesTotal=&restrict_num_decimal_digits($totalFirstBaseSpeciesTotal,4);
@@ -513,7 +514,7 @@ sub PingPongProcessing
 	   		map {$pairedTenthBaseReads{$b}+=$_} values  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}};
 	   		$pairedTenthBaseReadsTotal+=$pairedTenthBaseReads{$b};
 	   		#species
-	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}});
+	   		$pairedTenthBaseSpecies{$b}=scalar (keys  %{$pairedTenthBase{$targetStrandFile}{$n}{$b}});#the number of species is the number of real ones
 	   		$pairedTenthBaseSpeciesTotal+=$pairedTenthBaseSpecies{$b};
 	   		
 	   		
@@ -558,7 +559,7 @@ sub PingPongProcessing
 	   
 	   #$pairedExpectedTenthBase
 	   
-	   foreach my $b (keys  %pairedTenthBaseReads)
+	   foreach my $b (keys  %pairedTenthBaseReads) #to calculate fraction for tenth base
 	   {			
 	   		$pairedTenthBaseReadsF{$b}=$pairedTenthBaseReads{$b}/$pairedTenthBaseReadsTotal;
 	   		$pairedTenthBaseReadsF{$b}=&restrict_num_decimal_digits($pairedTenthBaseReadsF{$b},4);
