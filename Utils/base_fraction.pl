@@ -1,6 +1,6 @@
  #!/usr/bin/perl
  
-
+use File::Basename;
  
 my $inFile=$parameters->{input};
 my $filename=fileparse($inFile);
