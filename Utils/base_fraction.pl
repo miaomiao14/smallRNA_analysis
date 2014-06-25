@@ -1,6 +1,16 @@
 #!/usr/bin/perl
  
 use File::Basename;
+
+
+if(scalar(@ARGV)<6)
+{
+        usage();
+}
+
+my $parameters={};#initialize a reference of a hash
+
+&parse_command_line($parameters, @ARGV);
  
 my $inFile=$parameters->{input};
 my $filename=fileparse($inFile);
