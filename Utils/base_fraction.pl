@@ -1,4 +1,4 @@
- #!/usr/bin/perl
+#!/usr/bin/perl
  
 use File::Basename;
  
@@ -6,7 +6,7 @@ my $inFile=$parameters->{input};
 my $filename=fileparse($inFile);
 my $outDir=$parameters->{outdir};
 open IN, $inFile or die "could not find $inFile: $!";
-open OUT, "> $outDir/$filename.baseFraction.txt"; 
+open OUT, ">$outDir/$filename.baseFraction.txt"; 
 
 my %A=();
 my %C=(); 
