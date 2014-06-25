@@ -28,17 +28,19 @@ while(my $line=<IN>)
 {
 	chomp $line;
 	my @l=split(/\t/,$line);
-	my $piSeq=$l[$parameters->{seq}-1];
+	my $piSeq=$l[$parameters->{seq}-1]; 
 	my $readsNum=$l[$parameters->{readsNum}-1];
     
-	
-    foreach my $pos (0..$lastPos)
-    {
-        $A{$pos}{$piSeq}+=$readsNum if ( substr($piSeq,$pos,1) eq 'A');
-        $C{$pos}{$piSeq}+=$readsNum if ( substr($piSeq,$pos,1) eq 'C');
-        $G{$pos}{$piSeq}+=$readsNum if ( substr($piSeq,$pos,1) eq 'G');
-     	$T{$pos}{$piSeq}+=$readsNum if ( substr($piSeq,$pos,1) eq 'T');
-    }
+	if(length($piSeq)>$lastPos)
+	{
+	    foreach my $pos (0..$lastPos)
+	    {
+	        $A{$pos}{$piSeq}+=$readsNum if ( substr($piSeq,$pos,1) eq 'A'); #ask how many species and reads has g1A, g2A, g3A...
+	        $C{$pos}{$piSeq}+=$readsNum if ( substr($piSeq,$pos,1) eq 'C');
+	        $G{$pos}{$piSeq}+=$readsNum if ( substr($piSeq,$pos,1) eq 'G');
+	     	$T{$pos}{$piSeq}+=$readsNum if ( substr($piSeq,$pos,1) eq 'T');
+	    }
+	}
 
 }
 my $countLastPos=$lastPos;
