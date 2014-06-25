@@ -727,7 +727,7 @@ sub PingPongProcessing
 				      						print PPSEQPAIR "trans\t$piQuery\t$Grecord\t$piGuideSuppSeq\t$guideQueryCorReadsNorm\t$piTargetIndex\t$Trecord\t$piTargetIndexSuppSeq\t$targetpiIndexCorReadsNorm\t$diffstr\n" if ($n==9);
 
 											my $corPairReads=$guideQueryCorReads*$targetpiIndexCorReads/($NTMG{$l[2]}*$NTMT{$l[1]});
-							       			my $corPairSpecies=1/($NTM{$l[2]}*$NTMT{$l[1]}*$guideQuerySpecies*$targetpiIndexSpecies);
+							       			my $corPairSpecies=1/($NTMG{$l[2]}*$NTMT{$l[1]}*$guideQuerySpecies*$targetpiIndexSpecies);
 												
 							       			$transPairSuppSpecies{$g_0_nt.$t_9_nt}{$diffstr}+=$corPairSpecies;
 							       			$transPairSuppReads{$g_0_nt.$t_9_nt}{$diffstr}+=$corPairReads;
@@ -789,7 +789,7 @@ sub PingPongProcessing
 											}
 											
 											my $corPairReads=$guideQueryCorReads*$targetpiIndexCorReads/($NTMG{$l[2]}*$NTMT{$l[1]});
-							       			my $corPairSpecies=1/($NTM{$l[2]}*$NTMT{$l[1]}*$guideQuerySpecies*$targetpiIndexSpecies);
+							       			my $corPairSpecies=1/($NTMG{$l[2]}*$NTMT{$l[1]}*$guideQuerySpecies*$targetpiIndexSpecies);
 																		
 									       	if($Trecord eq $Grecord) #here it only checks this coordinate associated with $piTargetIndex,if there is a cis pair from target piRNA coordinate pool
 									       	{				
