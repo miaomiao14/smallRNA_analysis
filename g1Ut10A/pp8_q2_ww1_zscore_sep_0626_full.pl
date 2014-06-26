@@ -740,6 +740,7 @@ sub PingPongProcessing
 												$cisPairReadsNonTNorm{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$corPairReads*$NTMT{$l[1]};	       			      							
 				      							##print out paired piRNA species      							
 				      							print PPSEQPAIR "cis\t$piQuery\t$Grecord\t$guideQueryCorReadsNorm\t$piTargetIndex\t$Trecord\t$targetpiIndexCorReadsNorm\n" if ($n==9);
+				      							print PPSEQPAIR "cisNonTNorm\t$piQuery\t$Grecord\t$guideQueryCorReadsNorm\t$piTargetIndex\t$Trecord\t$targetpiIndexCorReads\n" if ($n==9);
 				      							last;		      								      								     							
 									       	}#if cis coordinate exists,if Grecord eq Trecord
 #									       	else
@@ -810,6 +811,7 @@ sub PingPongProcessing
 			       		
 			      						##print out paired piRNA species      							
 			      						print PPSEQPAIR "trans\t$piQuery\t$Grecord\t$guideQueryCorReadsNorm\t$piTargetIndex\t$Trecord\t$targetpiIndexCorReadsNorm\n" if ($n==9);
+			      						print PPSEQPAIR "transNonTNorm\t$piQuery\t$Grecord\t$guideQueryCorReadsNorm\t$piTargetIndex\t$Trecord\t$targetpiIndexCorReads\n" if ($n==9);
 
 
 								}#Trecord
