@@ -447,7 +447,6 @@ sub InputFileProcessing
 		            my $tstrand="-";
 		            $targetpfsplit{$file}{$n}{$str}{$piRNA}{"$chr,$fiveend,$tstrand"}+=$reads/$ntm; #store the strand information for potential guide strand
 
-		         }
 	            	            
         	}
          	else
