@@ -956,7 +956,7 @@ sub PingPongProcessing
 			   {
 			  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$PofSpecies,$PofSpeciesCor,$PofReads,$PP10ofSpecies,$PP10ofSpeciesCor,$PP10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%{$transPairSpeciesNonTNorm{$p}},\%{$transPairReadsNonTNorm{$p}});
 			    #how to normalize $X0{$p}?
-			    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\ttrans\ttransNonTNorm\t$p\t$wsize\t$basep\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$PofSpecies\t$PofSpeciesCor\t$PofReads\t$PP10ofSpecies\t$PP10ofSpeciesCor\t$PP10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n"; ##file2 is the guide and file1 is the target
+			    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\ttransNonTNorm\t$p\t$wsize\t$basep\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$PofSpecies\t$PofSpeciesCor\t$PofReads\t$PP10ofSpecies\t$PP10ofSpeciesCor\t$PP10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n"; ##file2 is the guide and file1 is the target
 			   }
 			   
 			   
@@ -1013,18 +1013,7 @@ sub PingPongProcessing
 				undef  %pp8allPairSpecies;
 				undef %pp8allPairReads;
 				
-				#score for supplemental region pairing if view seed region as 2-10
-				my ($scaledSpeciesRef,$scaledReadsRef)=&SuppComBitSum(\%transPairSuppSpeciesTotal,\%transPairSuppReadsTotal);#for n=10
-				for(my $position=0; $position< @{$scaledSpeciesRef};$position++)
-				{
-					my $supPos=$position+$basep+1;				
-					print PPSEQSUPPVECTOR "transPair\tall\t$basep\t10\t$supPos\t$scaledSpeciesRef->[$position]\t$scaledReadsRef->[$position]\n";
-				}
-				#for(my $position=0; $position< @{$scaledReadsRef};$position++)
-				#{
-				#	my $supPos=$position+$basep+1;				
-				#	print PPSEQSUPPVECTOR "reads\t$supPos\t$scaledReadsRef->[$position]\n";
-				#}
+
 
 
 			#close(PPUAFRACTION);
