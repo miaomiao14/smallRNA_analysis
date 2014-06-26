@@ -943,12 +943,12 @@ sub PingPongProcessing
 			   }
 			   
 			   #Z-score for individual ambiguouspairs; by species, reads and by species irrespective of coordinates	   
-			   foreach my $p (@matchedpairs)
-			   {
-			  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$PofSpecies,$PofSpeciesCor,$PofReads,$PP10ofSpecies,$PP10ofSpeciesCor,$PP10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%{$ambiguousPairSpecies{$p}},\%{$ambiguousPairReads{$p}});
-			    #how to normalize $X0{$p}?
-			    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\tambiguous\t$p\t$wsize\t$basep\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$PofSpecies\t$PofSpeciesCor\t$PofReads\t$PP10ofSpecies\t$PP10ofSpeciesCor\t$PP10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n"; ##file2 is the guide and file1 is the target
-			   }
+#			   foreach my $p (@matchedpairs)
+#			   {
+#			  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$PofSpecies,$PofSpeciesCor,$PofReads,$PP10ofSpecies,$PP10ofSpeciesCor,$PP10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%{$ambiguousPairSpecies{$p}},\%{$ambiguousPairReads{$p}});
+#			    #how to normalize $X0{$p}?
+#			    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\tambiguous\t$p\t$wsize\t$basep\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$PofSpecies\t$PofSpeciesCor\t$PofReads\t$PP10ofSpecies\t$PP10ofSpeciesCor\t$PP10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n"; ##file2 is the guide and file1 is the target
+#			   }
 
 
 				my %transallPairSpecies=();
