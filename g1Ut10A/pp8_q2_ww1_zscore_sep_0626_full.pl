@@ -577,12 +577,11 @@ sub PingPongProcessing
 				my $nGcorTotalReads=0; #total reads for this prefix from guide strand
 				foreach my $piQuery (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}})
 				{				
-					foreach my $piQueryCor (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}})
-					{
+
 						my $nGcorReads=0;
-						map {$nGcorReads+=$_} values %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$piQueryCor}};
+						map {$nGcorReads+=$_} values %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}};
 						$nGcorTotalReads+=$nGcorReads;
-					}
+
 				}
 			
 			    my $nTcor=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}}); #total piRNA species for this prefix from target strand		
@@ -590,12 +589,11 @@ sub PingPongProcessing
 				my $nTcorTotalReads=0; #total reads for this prefix from target strand
 				foreach my $piTargetIndex (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}} )
 				{
-					foreach $piTargetIndexCor (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}} )
-					{
+
 						my $nTcorReads=0;
-						map {$nTcorReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{$piTargetIndexCor}};
+						map {$nTcorReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}};
 						$nTcorTotalReads+=$nTcorReads;
-					}
+
 				}
 		    
 				$nnGcorTcor=$nGcor*$nTcor; #total species pairs for this prefix
@@ -619,12 +617,11 @@ sub PingPongProcessing
 					my $guideQuerySpecies=0;
 					$guideQuerySpecies=scalar (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}}); #for this guide piRNA, the number of mapping locus(genomic coordinates) 
 					my $guideQueryReads=0;
-					foreach my $piQueryCor (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}})
-					{
+
 						my $nGcorReads=0;
-						map {$nGcorReads+=$_} values %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$piQueryCor}};#for this guide piRNA, the number of reads for all mapping locus
+						map {$nGcorReads+=$_} values %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}};#for this guide piRNA, the number of reads for all mapping locus
 						$guideQueryReads+=$nGorReads;
-					} 
+
 
       				
 					foreach my $piTargetIndex (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}} ) #indexed piRNA prefix; iterate each piRNA
@@ -633,13 +630,11 @@ sub PingPongProcessing
 						my $targetpiIndexSpecies=0;	
 						$targetpiIndexSpecies=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}});#for this target piRNA, the number of mapping locus(genomic coordinates)
 						my $targetpiIndexReads=0;
-						foreach my $piTargetIndexCor (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}} )
-						{
+
 							my $nTcorReads=0;
-							map {$targetpiIndexReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{$piTargetIndexCor}}; # the total reads for this target piRNA
+							map {$targetpiIndexReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}}; # the total reads for this target piRNA
 							$targetpiIndexReads+=$nTcorReads;
-							
-						}
+
 						#my ($targetpiRNA,$targetSuppSeq)=split(/,/,$piTargetIndex);
 					
 						
