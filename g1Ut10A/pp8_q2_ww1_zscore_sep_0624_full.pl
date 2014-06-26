@@ -644,7 +644,7 @@ sub PingPongProcessing
 					{
 						my $nGcorReads=0;
 						map {$nGcorReads+=$_} values %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$piQueryCor}};#for this guide piRNA, the number of reads for all mapping locus
-						$guideQueryReads+=$nGorReads;
+						$guideQueryReads+=$nGcorReads;
 					} 
 
       				

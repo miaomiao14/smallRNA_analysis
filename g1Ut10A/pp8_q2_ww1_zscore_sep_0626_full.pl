@@ -86,6 +86,7 @@ use Compress::Zlib;
 #06/26/2014
 #suppress ambiguous calculation and output because it runs super slowly
 #suppress supplemental pairing check
+#report both normalize to target and nonnormalize to target: l[1]
 
 if(scalar(@ARGV)<6)
 {
