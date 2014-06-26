@@ -657,7 +657,7 @@ sub PingPongProcessing
 						foreach my $piTargetIndexCor (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}} )
 						{
 							my $nTcorReads=0;
-							map {$targetpiIndexReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{$piTargetIndexCor}}; # the total reads for this target piRNA
+							map {$nTcorReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{$piTargetIndexCor}}; # the total reads for this target piRNA
 							$targetpiIndexReads+=$nTcorReads;
 							
 						}
