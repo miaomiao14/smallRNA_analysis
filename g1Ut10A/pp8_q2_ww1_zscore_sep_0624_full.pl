@@ -802,20 +802,21 @@ sub PingPongProcessing
 		      								      								     							
 				     							$cisPairSuppSpecies{$g_0_nt.$t_9_nt}{$diffstr}+=$corPairSpecies;
 				      							$cisPairSuppReads{$g_0_nt.$t_9_nt}{$diffstr}+=$corPairReads;
+				      							last;
    					       					       			
 									       	}#if cis coordinate exists,if Grecord eq Trecord
-									       	else
-								       		{		      							
-				      							#ambiguous pairs if not cis pair
-			      								$ambiguousPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$corPairSpecies;
-			      								$ambiguousPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$corPairReads;
-	      								
-			      								print PPSEQPAIR "ambiguous\t$piQuery\t$Grecord\t$piGuideSuppSeq\t$guideQueryCorReadsNorm\t$piTargetIndex\t$Trecord\t$piTargetIndexSuppSeq\t$targetpiIndexCorReadsNorm\t$diffstr\n" if ($n==9);
-	      								
-			      								$ambiguousPairSuppSpecies{$g_0_nt.$t_9_nt}{$diffstr}+=$corPairSpecies;
-			      								$ambiguousPairSuppReads{$g_0_nt.$t_9_nt}{$diffstr}+=$corPairReads;
-	      								
-			      							} #if Grecord neq Trecord
+#									       	else
+#								       		{		      							
+#				      							#ambiguous pairs if not cis pair
+#			      								$ambiguousPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$corPairSpecies;
+#			      								$ambiguousPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$corPairReads;
+#	      								
+#			      								print PPSEQPAIR "ambiguous\t$piQuery\t$Grecord\t$piGuideSuppSeq\t$guideQueryCorReadsNorm\t$piTargetIndex\t$Trecord\t$piTargetIndexSuppSeq\t$targetpiIndexCorReadsNorm\t$diffstr\n" if ($n==9);
+#	      								
+#			      								$ambiguousPairSuppSpecies{$g_0_nt.$t_9_nt}{$diffstr}+=$corPairSpecies;
+#			      								$ambiguousPairSuppReads{$g_0_nt.$t_9_nt}{$diffstr}+=$corPairReads;
+#	      								
+#			      							} #if Grecord neq Trecord
 										}#for each $TrecordSup   	
 									} #for each Trecord
 								}#for each GrecordSup
@@ -932,19 +933,19 @@ sub PingPongProcessing
 
 					print PPSCOREUA "$m\tcis\t$p\t$n_of_cisPairSpecies\t$n_of_cisPairSpecies_cor\t$n_of_cisPairReads\n";
 					
-					my $n_of_ambiguousPairSpecies=0;
-					$n_of_ambiguousPairSpecies=scalar (keys %{$ambiguousPairSpecies{$p}{$n}});
-					$n_of_ambiguousPairSpecies= &restrict_num_decimal_digits($n_of_ambiguousPairSpecies,3);
-										    
-					my $n_of_ambiguousPairSpecies_cor=0;
-					map {$n_of_ambiguousPairSpecies_cor+=$_} values %{$ambiguousPairSpecies{$p}{$n}} ;
-					$n_of_ambiguousPairSpecies_cor=&restrict_num_decimal_digits($n_of_ambiguousPairSpecies_cor,3);
-											     
-					my $n_of_ambiguousPairReads=0;
-					map {$n_of_ambiguousPairReads+=$_} values %{$ambiguousPairReads{$p}{$n}} ;
-					$n_of_ambiguousPairReads=&restrict_num_decimal_digits($n_of_ambiguousPairReads,3);
-
-					print PPSCOREUA "$m\tambiguous\t$p\t$n_of_ambiguousPairSpecies\t$n_of_ambiguousPairSpecies_cor\t$n_of_ambiguousPairReads\n";
+#					my $n_of_ambiguousPairSpecies=0;
+#					$n_of_ambiguousPairSpecies=scalar (keys %{$ambiguousPairSpecies{$p}{$n}});
+#					$n_of_ambiguousPairSpecies= &restrict_num_decimal_digits($n_of_ambiguousPairSpecies,3);
+#										    
+#					my $n_of_ambiguousPairSpecies_cor=0;
+#					map {$n_of_ambiguousPairSpecies_cor+=$_} values %{$ambiguousPairSpecies{$p}{$n}} ;
+#					$n_of_ambiguousPairSpecies_cor=&restrict_num_decimal_digits($n_of_ambiguousPairSpecies_cor,3);
+#											     
+#					my $n_of_ambiguousPairReads=0;
+#					map {$n_of_ambiguousPairReads+=$_} values %{$ambiguousPairReads{$p}{$n}} ;
+#					$n_of_ambiguousPairReads=&restrict_num_decimal_digits($n_of_ambiguousPairReads,3);
+#
+#					print PPSCOREUA "$m\tambiguous\t$p\t$n_of_ambiguousPairSpecies\t$n_of_ambiguousPairSpecies_cor\t$n_of_ambiguousPairReads\n";
 	
 			   }
 			   #Ping-Pong score according to different G1T10 pairs
@@ -995,15 +996,15 @@ sub PingPongProcessing
 					}
 					
 					
-					my %ambiguousPairIndiSuppSpecies= %{$ambiguousPairSuppSpecies{$p}};
-				 	my %ambiguousPairIndiSuppReads= %{$ambiguousPairSuppReads{$p}};
-				 	
-				 	my ($scaledSpeciesRef,$scaledReadsRef)=&SuppComBitSum(\%ambiguousPairIndiSuppSpecies,\%ambiguousPairIndiSuppReads);#for n=10
-					for(my $position=0; $position< @{$scaledSpeciesRef};$position++)
-					{
-						my $supPos=$position+$basep+1;				
-						print PPSEQSUPPVECTOR "ambiguousPair\t$p\t$basep\t$m\t$supPos\t$scaledSpeciesRef->[$position]\t$scaledReadsRef->[$position]\n";
-					}
+#					my %ambiguousPairIndiSuppSpecies= %{$ambiguousPairSuppSpecies{$p}};
+#				 	my %ambiguousPairIndiSuppReads= %{$ambiguousPairSuppReads{$p}};
+#				 	
+#				 	my ($scaledSpeciesRef,$scaledReadsRef)=&SuppComBitSum(\%ambiguousPairIndiSuppSpecies,\%ambiguousPairIndiSuppReads);#for n=10
+#					for(my $position=0; $position< @{$scaledSpeciesRef};$position++)
+#					{
+#						my $supPos=$position+$basep+1;				
+#						print PPSEQSUPPVECTOR "ambiguousPair\t$p\t$basep\t$m\t$supPos\t$scaledSpeciesRef->[$position]\t$scaledReadsRef->[$position]\n";
+#					}
 
 				}
 				 
@@ -1070,13 +1071,13 @@ sub PingPongProcessing
 			    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\ttrans\t$p\t$wsize\t$basep\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$PofSpecies\t$PofSpeciesCor\t$PofReads\t$PP10ofSpecies\t$PP10ofSpeciesCor\t$PP10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n"; ##file2 is the guide and file1 is the target
 			   }
 			   
-			   #Z-score for individual ambiguouspairs; by species, reads and by species irrespective of coordinates	   
-			   foreach my $p (@matchedpairs)
-			   {
-			  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$PofSpecies,$PofSpeciesCor,$PofReads,$PP10ofSpecies,$PP10ofSpeciesCor,$PP10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%{$ambiguousPairSpecies{$p}},\%{$ambiguousPairReads{$p}});
-			    #how to normalize $X0{$p}?
-			    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\tambiguous\t$p\t$wsize\t$basep\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$PofSpecies\t$PofSpeciesCor\t$PofReads\t$PP10ofSpecies\t$PP10ofSpeciesCor\t$PP10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n"; ##file2 is the guide and file1 is the target
-			   }
+#			   #Z-score for individual ambiguouspairs; by species, reads and by species irrespective of coordinates	   
+#			   foreach my $p (@matchedpairs)
+#			   {
+#			  	my ($ZofSpecies,$ZofSpeciesCor,$ZofReads,$PofSpecies,$PofSpeciesCor,$PofReads,$PP10ofSpecies,$PP10ofSpeciesCor,$PP10ofReads,$MofSpecies,$MofSpeciesCor,$MofReads,$StdofSpecies,$StdofSpeciesCor,$StdofReads)=&ZscoreCal(\%{$ambiguousPairSpecies{$p}},\%{$ambiguousPairReads{$p}});
+#			    #how to normalize $X0{$p}?
+#			    print ZSCOREUA "$guideStrandFile\-$targetStrandFile\tambiguous\t$p\t$wsize\t$basep\t$ZofSpecies\t$ZofSpeciesCor\t$ZofReads\t$PofSpecies\t$PofSpeciesCor\t$PofReads\t$PP10ofSpecies\t$PP10ofSpeciesCor\t$PP10ofReads\t$MofSpecies\t$MofSpeciesCor\t$MofReads\t$StdofSpecies\t$StdofSpeciesCor\t$StdofReads\n"; ##file2 is the guide and file1 is the target
+#			   }
 
 
 				my %transallPairSpecies=();
