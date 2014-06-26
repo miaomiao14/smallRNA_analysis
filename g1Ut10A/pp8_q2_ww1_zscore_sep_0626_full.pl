@@ -6,9 +6,9 @@ require "Jia.pm";
 use File::Basename;
 use Compress::Zlib;
 #use List::Util qw(sum);
-use PDL;  #it's needed for initialize, it has sum functio inside, clash with the one in Util
-use PDL::Char;
-$PDL::SHARE = $PDL::SHARE; 
+#use PDL;  #it's needed for initialize, it has sum functio inside, clash with the one in Util
+#use PDL::Char;
+#$PDL::SHARE = $PDL::SHARE; 
 
 # rule is p1 and p17-21 doesn't need to pair but p2-16 need
 # simplifized version with prefix 16nt
