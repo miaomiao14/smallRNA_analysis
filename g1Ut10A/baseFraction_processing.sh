@@ -8,7 +8,7 @@ export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 
 INDIR=$1
 OUTDIR=$2
-[ ! -f ${OUTDIR} ] && mkdir ${OUTDIR}
+[ ! -f ${OUTDIR} ] && mkdir -p ${OUTDIR}
 
 declare -a GROUPGT=("cis" "trans")
 
