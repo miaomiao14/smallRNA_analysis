@@ -15,12 +15,13 @@ declare -a GROUPGT=("cis" "trans")
 for i in ${INDIR}/*.UA_VA.ppseq.txt
 do
 	filename=${i##*/}
-	for g in "${GROUPGT[@]}"
-	do
+	#for g in "${GROUPGT[@]}"
+	#do
+		g="cis"
 		cat $i |grep ${g} |cut -f2,3,4 |sort -u |cut -f1,3 >${OUTDIR}/${filename%.txt}.${g}.guide
 		${PIPELINE_DIRECTORY}/Utils/base_fraction.pl -i ${OUTDIR}/${filename%.txt}.${g}.guide -o ${OUTDIR} -p 1 -r 2 -l 23
 		
 		cat $i |grep ${g} |cut -f5,6,7 |sort -u |cut -f1,3 >${OUTDIR}/${filename%.txt}.${g}.target
 		${PIPELINE_DIRECTORY}/Utils/base_fraction.pl -i ${OUTDIR}/${filename%.txt}.${g}.target -o ${OUTDIR} -p 1 -r 2 -l 23
-	done
+	#done
 done
