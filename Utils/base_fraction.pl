@@ -1,5 +1,5 @@
 #!/usr/bin/perl
- 
+use Compress::Zlib;
 use File::Basename;
 
 
@@ -15,7 +15,7 @@ my $parameters={};#initialize a reference of a hash
 my $inFile=$parameters->{input};
 my $filename=fileparse($inFile);
 my $outDir=$parameters->{outdir};
-open IN, $inFile or die "could not find $inFile: $!";
+#open IN, $inFile or die "could not find $inFile: $!";
 open OUT, ">$outDir/$filename.baseFraction.txt"; 
 
 my %A=();
@@ -23,8 +23,10 @@ my %C=();
 my %G=(); 
 my %T=();
 my %count=();
-my $lastPos=$parameters->{lenghth}-1; 
-while(my $line=<IN>)
+my $lastPos=$parameters->{lenghth}-1;
+my $gz = gzopen($inFile, "rb") or die "Cannot open $inFile: $gzerrno\n" ;
+while($gz->gzreadline($line) > 0) 
+#while(my $line=<IN>)
 {
 	chomp $line;
 	my @l=split(/\t/,$line);
@@ -43,6 +45,8 @@ while(my $line=<IN>)
 	}
 
 }
+$gz->gzclose();
+
 my $countLastPos=$lastPos;
 
 foreach my $pos (0..$countLastPos)
