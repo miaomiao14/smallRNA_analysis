@@ -10,7 +10,7 @@ INDIR=$1
 OUTDIR=$2
 [ ! -f ${OUTDIR} ] && mkdir -p ${OUTDIR}
 
-declare -a GROUPGT=("cisNonTNorm" "trans")
+declare -a GROUPGT=("cis" "cisNonTNorm" "trans")
 
 for i in ${INDIR}/*.UA_VA.ppseq.txt
 do
