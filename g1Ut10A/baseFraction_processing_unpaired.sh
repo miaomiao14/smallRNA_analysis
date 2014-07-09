@@ -25,29 +25,29 @@ do
 	gunzip ${OUTDIR}/Phil.SRA.AubIPuniq.${gt}.unox.ovary.inserts.xkxh.match2_all.out.23-29nt.uniq.reads.gz
 	
 	#cat cis and trans guide: Aub:Ago3 PP
-	cat ${gt}*prefix16_v26/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.cis.guide ${gt}*prefix16_v26/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.trans.guide |cut -f1 |sort -u >${gt}*prefix16_v26/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.guide
+	cat ${gt}_uniq_unox_AubIPSRA_Ago3IPSRA_prefix16_v26/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.cis.guide ${gt}_uniq_unox_AubIPSRA_Ago3IPSRA_prefix16_v26/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.trans.guide |cut -f1 |sort -u >${gt}_uniq_unox_AubIPSRA_Ago3IPSRA_prefix16_v26/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.guide
 
 	#cat cis and trans target: Aub:Ago3 PP
-	cat ${gt}*prefix16_v26/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.cis.target ${gt}*prefix16_v26/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.trans.target |cut -f1 |sort -u >${gt}*prefix16_v26/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.target
+	cat ${gt}_uniq_unox_AubIPSRA_Ago3IPSRA_prefix16_v26/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.cis.target ${gt}_uniq_unox_AubIPSRA_Ago3IPSRA_prefix16_v26/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.trans.target |cut -f1 |sort -u >${gt}_uniq_unox_AubIPSRA_Ago3IPSRA_prefix16_v26/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.target
 	
 	#unpaired guide: Aub
-	exmatchBycol.pl ${gt}*prefix16_v26/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.guide ${OUTDIR}/Phil.SRA.AubIPuniq.${gt}.unox.ovary.inserts.xkxh.match2_all.out.23-29nt.uniq.reads 1 >${OUTDIR}/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.unpaired.guide
+	exmatchBycol.pl ${gt}_uniq_unox_AubIPSRA_Ago3IPSRA_prefix16_v26/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.guide ${OUTDIR}/Phil.SRA.AubIPuniq.${gt}.unox.ovary.inserts.xkxh.match2_all.out.23-29nt.uniq.reads 1 >${OUTDIR}/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.unpaired.guide
 
 	#unpaired target: Ago3
-	exmatchBycol.pl ${gt}*prefix16_v26/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.target ${OUTDIR}/Phil.SRA.Ago3IPuniq.${gt}.unox.ovary.inserts.xkxh.match2_all.out.23-29nt.uniq.reads 1 >${OUTDIR}/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.unpaired.target
+	exmatchBycol.pl ${gt}_uniq_unox_AubIPSRA_Ago3IPSRA_prefix16_v26/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.target ${OUTDIR}/Phil.SRA.Ago3IPuniq.${gt}.unox.ovary.inserts.xkxh.match2_all.out.23-29nt.uniq.reads 1 >${OUTDIR}/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.unpaired.target
 	
 				
 	#cat cis and trans guide:Ago3:Aub PP
-	cat ${gt}*prefix16_v26/Ago3IPuniq_${gt}_unox_.AubIPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.cis.guide ${gt}*prefix16_v26/Ago3IPuniq_${gt}_unox_.AubIPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.trans.guide |cut -f1 |sort -u >${gt}*prefix16_v26/Ago3IPuniq_${gt}_unox_.AubIPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.guide
+	cat ${gt}_uniq_unox_AubIPSRA_Ago3IPSRA_prefix16_v26/Ago3IPuniq_${gt}_unox_.AubIPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.cis.guide ${gt}_uniq_unox_AubIPSRA_Ago3IPSRA_prefix16_v26/Ago3IPuniq_${gt}_unox_.AubIPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.trans.guide |cut -f1 |sort -u >${gt}_uniq_unox_AubIPSRA_Ago3IPSRA_prefix16_v26/Ago3IPuniq_${gt}_unox_.AubIPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.guide
 
 	#cat cis and trans target:Ago3:Aub PP
-	cat ${gt}*prefix16_v26/Ago3IPuniq_${gt}_unox_.AubIPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.cis.target ${gt}*prefix16_v26/Ago3IPuniq_${gt}_unox_.AubIPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.trans.target |cut -f1 |sort -u >${gt}*prefix16_v26/Ago3IPuniq_${gt}_unox_.AubIPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.target
+	cat ${gt}_uniq_unox_AubIPSRA_Ago3IPSRA_prefix16_v26/Ago3IPuniq_${gt}_unox_.AubIPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.cis.target ${gt}_uniq_unox_AubIPSRA_Ago3IPSRA_prefix16_v26/Ago3IPuniq_${gt}_unox_.AubIPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.trans.target |cut -f1 |sort -u >${gt}_uniq_unox_AubIPSRA_Ago3IPSRA_prefix16_v26/Ago3IPuniq_${gt}_unox_.AubIPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.target
 	
 	#unpaired guide: Ago3
-	exmatchBycol.pl ${gt}*prefix16_v26/Ago3IPuniq_${gt}_unox_.AubIPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.guide ${OUTDIR}/Phil.SRA.Ago3IPuniq.${gt}.unox.ovary.inserts.xkxh.match2_all.out.23-29nt.uniq.reads 1 >${OUTDIR}/Ago3IPuniq_${gt}_unox_.AubIPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.unpaired.guide	
+	exmatchBycol.pl ${gt}_uniq_unox_AubIPSRA_Ago3IPSRA_prefix16_v26/Ago3IPuniq_${gt}_unox_.AubIPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.guide ${OUTDIR}/Phil.SRA.Ago3IPuniq.${gt}.unox.ovary.inserts.xkxh.match2_all.out.23-29nt.uniq.reads 1 >${OUTDIR}/Ago3IPuniq_${gt}_unox_.AubIPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.unpaired.guide	
 
 	#unpaired guide: Aub
-	exmatchBycol.pl ${gt}*prefix16_v26/Ago3IPuniq_${gt}_unox_.AubIPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.target ${OUTDIR}/Phil.SRA.AubIPuniq.${gt}.unox.ovary.inserts.xkxh.match2_all.out.23-29nt.uniq.reads 1 >${OUTDIR}/Ago3IPuniq_${gt}_unox_.AubIPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.unpaired.target	
+	exmatchBycol.pl ${gt}_uniq_unox_AubIPSRA_Ago3IPSRA_prefix16_v26/Ago3IPuniq_${gt}_unox_.AubIPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.target ${OUTDIR}/Phil.SRA.AubIPuniq.${gt}.unox.ovary.inserts.xkxh.match2_all.out.23-29nt.uniq.reads 1 >${OUTDIR}/Ago3IPuniq_${gt}_unox_.AubIPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.unpaired.target	
 																																																																																															
 	echo "${PIPELINE_DIRECTORY}/Utils/base_fraction.pl -i ${OUTDIR}/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.unpaired.guide -o ${OUTDIR} -p 1 -r 2 -l 23" >>${OUTDIR}/pararun
 	echo "${PIPELINE_DIRECTORY}/Utils/base_fraction.pl -i ${OUTDIR}/AubIPuniq_${gt}_unox_.Ago3IPuniq_${gt}_unox.16.prefix.UA_VA.ppseq.unpaired.target -o ${OUTDIR} -p 1 -r 2 -l 23" >>${OUTDIR}/pararun
