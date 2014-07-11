@@ -3,8 +3,8 @@
 
 export PIPELINEDIR=/home/lees2/pipeline:/home/xuj1/pipeline
 
-INPUTDIR=/home/wangw1/isilon_temp/BmN4/xiorIPprocesseddata
-OUTPUTDIR=/home/wangw1/isilon_temp/BmN4/xiorIPprocesseddata/uniqBound
+INPUTDIR=/home/wangw1/data/bmn4/BmN4/Xiol2014
+OUTPUTDIR=/home/wangw1/data/bmn4/BmN4/Xiol2014/uniqBound
 [ ! -d $OUTPUTDIR ] && mkdir $OUTPUTDIR
 
 STEP=1
