@@ -1292,6 +1292,7 @@ sub usage
 		print "-d  <flag of index[0|1]>\n\t";
 		print "-f  <flag of index[bed|normbed]>\n\t";
 		print "-w  <background windowsize>\n\t";
+		print "-l  <left boundary of window>\n\t";
 		print "-p  <the length of prefix>\n\t";
 		print "-a  <fasta file of the genome>\n\t";
 		print "-m  <mapping output dir>\n\t";

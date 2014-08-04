@@ -14,8 +14,8 @@ export PIPELINE_DIRECTORY=/home/wangw1/git/smallRNA_analysis
 export PATH=${PIPELINE_DIRECTORY}/:$PATH
 
 
-INDIR=/home/wangw1/isilon_temp/smRNA/jia_pipeline_results/temp #this is the folder store all pipeline results outmost folders
-OUT=/home/wangw1/isilon_temp/smRNA/transposon_piRNA
+INDIR=/home/wangw1/data/projects/cd/smRNA/jia_pipeline_results/ #this is the folder store all pipeline results outmost folders
+OUT=/home/wangw1/data/projects/cd/smRNA/transposon_piRNA
 LOG=${OUT}/log
 
 STEP=1
@@ -104,6 +104,30 @@ fi
 [ $? == 0 ] && \
 touch ${OUT}/.status.${STEP}.subpiRNA.phasing
 STEP=$((STEP+1))
+
+OUTDIR4=${OUT}/phasingMasterT
+[ ! -d $OUTDIR4 ] && mkdir -p ${OUTDIR4}
+if [ ! -f ${OUT}/.status.${STEP}.transposon_piRNA.T.phasing.mastertable ] 
+then
+	[ -s ${OUTDIR4}/allpiRNAs.allgt.5-5.distance.min.distribution.summary.raw.txt ] && rm ${OUTDIR4}/allpiRNAs.allgt.5-5.distance.min.distribution.summary.raw.txt
+	for i in `ls ${OUTDIR1}/*.ovary.inserts.xkxh.norm.bed.T.gz.5-5.distance.distribution.summary`
+	do
+		inputfile=${i##*/}
+		insertsname=`basename $inputfile .ovary.inserts.xkxh.norm.bed.T.gz.5-5.distance.distribution.summary`
+		samplename=${insertsname#*.SRA.*}
+		
+	awk -v gt=${samplename}.T '{OFS="\t"}{print gt,$1,$2}' ${i} >>${OUTDIR4}/allpiRNAs.allgt.T.5-5.distance.min.distribution.summary.raw.txt
+		
+		
+	done
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/R.source cast_master_table ${OUTDIR4}/allpiRNAs.allgt.T.5-5.distance.min.distribution.summary.raw.txt ${OUTDIR4}/allpiRNAs.allgt.T.5-5.distance.min.distribution.summary.mastertable.txt 
+	#transform to fraction (1..100 nt)
+	${PIPELINE_DIRECTORY}/RRR ${PIPELINE_DIRECTORY}/Phasing/piRNA_distance_plot.r summary_masterTable ${OUTDIR4}/allpiRNAs.allgt.T.5-5.distance.min.distribution.summary.mastertable.txt ${OUTDIR4}
+fi
+[ $? == 0 ] && \
+touch ${OUT}/.status.${STEP}.transposon_piRNA.T.phasing.mastertable
+STEP=$((STEP+1))
+
 
 
 

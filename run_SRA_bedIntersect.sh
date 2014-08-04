@@ -74,11 +74,11 @@ do
 	echo -e " zcat $i|tail -n +2 |awk 'BEGIN{OFS="\t"}{print $1,$2-1,$$3,$6,$7,$4,$5}'| bedtools sort -i -  >${i%.norm.bed.gz}.sorted.bed2 && "" >>$parafly_file
 	echo -e " bedtools intersect -a ${i%.norm.bed.gz}.sorted.bed2 -b ${!t} -f 0.999 -wo |awk 'BEGIN{FS=OFS=\"\\t\"}{ \$2+=1; if (\$6==\$18) {sense=\"sense\"} else {sense=\"antisense\"}; print \$4,\$5,\$1\":\"\$2\"-\"\$3\"(\"\$6\")\",sense,\$16,\$16,1,\$NF}' | gzip > ${INTERSECTOUTDIR}/${ALL_BED_NAME}.ntm.collapse.${t}.nta.mapper2.gz"    >> $parafly_file
 
-	if [$t = "FLY_PIRNA_CLUSTER" ] #for cluster uniq mappers
-	then
+	#if [$t = "FLY_PIRNA_CLUSTER" ] #for cluster uniq mappers
+	#then
 		
 		
-	fi
+	#fi
 
 	done
 	

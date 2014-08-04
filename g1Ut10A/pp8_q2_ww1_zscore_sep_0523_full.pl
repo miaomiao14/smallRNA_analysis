@@ -67,6 +67,9 @@ use List::Util qw(sum);
 #5/15/2014
 #report Ping-Pong pairs
 
+#05/23/2014
+#print out the overlap 1 for Aubprefixuniq:DEG Ping_Pong
+
 if(scalar(@ARGV)<6)
 {
         usage();
@@ -555,7 +558,7 @@ sub PingPongProcessing
       							
       							##print out paired piRNA species
       							
-      							print PPSEQPAIR "cis\t$piQuery\t$guideQueryReadsNorm\t$piGuideSpe\t$targetpiGuideReads\n" if ($n==9);
+      							print PPSEQPAIR "cis\t$piQuery\t$guideQueryReadsNorm\t$piGuideSpe\t$targetpiGuideReads\n" if ($n==1);
       							
 								#$cisFlag{$piGuideSpe}+=1;
 								$cisRecordFlag=1;
@@ -569,7 +572,7 @@ sub PingPongProcessing
 			       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=1/$NTM{$l[2]};
 			       			#trans PingPong pair in reads
 			       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guideQueryReads*$targetpiGuideReads/$NTM{$l[2]};
-			       			print PPSEQPAIR "trans\t$piQuery\t$guideQueryReadsNorm\t$piGuideSpe\t$targetpiGuideReads\n" if ($n==9);
+			       			print PPSEQPAIR "trans\t$piQuery\t$guideQueryReadsNorm\t$piGuideSpe\t$targetpiGuideReads\n" if ($n==1);
 			       		}
 						
 						#if(! $cisFlag{$piGuideSpe}) #so that no need to check for already cispaired piRNA species
@@ -593,7 +596,7 @@ sub PingPongProcessing
 		       $transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$nnGcorTcor/$NTM{$l[2]};
 		       #trans PingPong pair in reads
 		       $transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$gttotal/$NTM{$l[2]};
-		       if ($n==9)
+		       if ($n==1)
 		       {
 		       	foreach my $piQuery (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}} )
 			    {
