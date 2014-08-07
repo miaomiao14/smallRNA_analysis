@@ -1,6 +1,6 @@
 #!/bin/bash -x
-export PIPELINE_DIRECTORY=/home/ww74w/git/smallRNA_analysis
-script=${PIPELINE_DIRECTORY}/pp8_ww_smRNA_vs_DEG.pl
+export PIPELINE_DIRECTORY=/home/ww74w/git/smallRNA_analysis/
+script=${PIPELINE_DIRECTORY}/primary_piRNA_biogenesis/pp8_ww_smRNA_vs_DEG_ghpcc.pl
 
 OUT0=/home/bh80w/scratch/SRA/pp8
 
