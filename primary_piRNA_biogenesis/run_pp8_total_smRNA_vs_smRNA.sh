@@ -17,7 +17,7 @@ then
 for i in *.bed2
 	
 do
-	gt=${gt%.trimmed*}
+	gt=${i%.trimmed*}
 	for f in "${FEATURE[@]}"
 	do
 		filename=${gt##*/}
@@ -30,9 +30,9 @@ do
 		LOG=${OUTDIR}/${g}.log	
 		smmapper2=${OUT0}/${gf}.inserts.xkxh.all.norm.bed.23-29 #share the SRA norm.bed files
 		[ ! -f $smmapper2 ] && \
-		awk 'BEGIN{OFS="\t"}{if($3-$2<30) {start=$2+1;print $1,start,$3,$6,$7,$4,$5}}' $i >${smmapper2} && gzip ${smmapper2}.gz	
+			
 	#total Ping-Pong
-		[ ! -s ${OUT0}/${g}.total.pp8.out ] && /home/ww74w/smallRNApipeline/bin/hm.bsub.wrapperhm.bsub.wrapper 1 10:00 short ${g} ${OUT0} "$script ${smmapper2}.gz ${smmapper2}.gz 1 ${OUTDIR} >${OUT0}/${g}.total.pp8.out" 
+		[ ! -s ${OUT0}/${g}.total.pp8.out ] && /home/ww74w/smallRNApipeline/bin/hm.bsub.wrapperhm.bsub.wrapper 1 10:00 short ${g} ${OUT0} "awk 'BEGIN{OFS="\t"}{if($3-$2<30) {start=$2+1;print $1,start,$3,$6,$7,$4,$5}}' $i >${smmapper2} && gzip ${smmapper2}.gz && $script ${smmapper2}.gz ${smmapper2}.gz 1 ${OUTDIR} >${OUT0}/${g}.total.pp8.out" 
 	done
 
 done
