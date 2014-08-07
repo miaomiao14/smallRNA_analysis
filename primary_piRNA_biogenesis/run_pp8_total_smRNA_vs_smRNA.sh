@@ -11,10 +11,10 @@ STEP=1
 [ ! -d ${OUT0} ] && mkdir -p ${OUT0}
 #step 1
 #OUT=${OUT0}
-
+INPUT=/home/bh80w/scratch/SRA/all_x_rpmk_MASK_bed2
 if [ ! -f ${OUT0}/.status.${STEP}.SRA_SRA.pp8 ] 
 then
-for i in *.bed2
+for i in ${INPUT}/*.bed2
 	
 do
 	gt=${i%.trimmed*}
