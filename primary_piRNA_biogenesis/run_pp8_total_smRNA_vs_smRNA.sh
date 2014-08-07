@@ -21,7 +21,7 @@ do
 	for f in "${FEATURE[@]}"
 	do
 		filename=${gt##*/}
-		gf=${filename%.trimmed*}
+		gf=${filename%.trim*}
 		#g=${gf#*SRA.}
 		g=$gf
 		OUTDIR=${OUT0}/${g}_${f}
