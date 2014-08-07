@@ -32,7 +32,7 @@ do
 		[ ! -f $smmapper2 ] && \
 			
 	#total Ping-Pong
-[ ! -s ${OUT0}/${g}.total.pp8.out ] && /home/ww74w/smallRNApipeline/bin/hm.bsub.wrapper 1 10:00 short ${g} ${OUT0} "awk 'BEGIN{OFS=\"\\\t\"}{if(\$3-\$2<30) {start=\$2+1;print \$1,start,\$3,\$6,\$7,\$4,\$5}}' $i >${smmapper2} && gzip ${smmapper2}.gz && $script ${smmapper2}.gz ${smmapper2}.gz 1 ${OUTDIR} >${OUT0}/${g}.total.pp8.out" 
+[ ! -s ${OUT0}/${g}.total.pp8.out ] && /home/ww74w/smallRNApipeline/bin/hm.bsub.wrapper 1 10:00 short ${g} ${OUT0} "awk 'BEGIN{OFS=\"\\t\"}{if(\$3-\$2<30) {start=\$2+1;print \$1,start,\$3,\$6,\$7,\$4,\$5}}' $i >${smmapper2} && gzip ${smmapper2}.gz && $script ${smmapper2}.gz ${smmapper2}.gz 1 ${OUTDIR} >${OUT0}/${g}.total.pp8.out" 
 	done
 
 done
