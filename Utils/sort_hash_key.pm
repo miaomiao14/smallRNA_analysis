@@ -1,16 +1,16 @@
 #%test=("10"=>1,"11"=>2,"9"=>3);
 
-#&sort_hash_key(%test);
+#&sort_hash_key(\%test);
 sub sort_hash_key
 {
-my %hash=@_;
-my @sortarray=();
-foreach $k (sort {$a <=> $b } keys %hash)
-{
-	push @sortarray, $k;
-}
-#print "@sortarray";
-return @sortarray;
+	my ($hashref)=@_;
+	my @sortarray=();
+	foreach $k (sort {$a <=> $b } keys %{$hashref})
+	{
+		push @sortarray, $k;
+	}
+	#print "@sortarray";
+	return @sortarray;
 }
 
 #%t1=("110"=> 10, "102"=> 11);
