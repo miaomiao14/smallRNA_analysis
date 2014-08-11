@@ -92,8 +92,8 @@ use Compress::Zlib;
     
     foreach $chr (keys %plus)
     {
-        %plus_chr = %{$plus{$chr}};
-        @plus_sort = &sort_hash_key( %plus_chr ); ##sort by the numerical value of the key
+        $plus_chr_ref = \%{$plus{$chr}};
+        @plus_sort = &sort_hash_key( $plus_chr_ref ); ##sort by the numerical value of the key
         
         foreach  ($k=0;$k<$#plus_sort;$k++)
         {
@@ -122,7 +122,7 @@ use Compress::Zlib;
         if($minus{$chr})
         {
             
-            @minus_sort=&sort_hash_key(%{$minus{$chr}});
+            @minus_sort=&sort_hash_key(\%{$minus{$chr}});
             #%minus_lendis=&lendis_dist(%minus_sort);
             foreach  ($k=0;$k<$#minus_sort;$k++)
             {
