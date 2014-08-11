@@ -90,8 +90,10 @@ use Data::Dumper;
 		}
 		$gz->gzclose();
 #	}
-  open OUT, ">$ARGV[2]/temp.hash.txt";
+  open OUT, ">$ARGV[2]/temp.hash.plus.txt";
 print OUT Dumper(%plus);
+close(OUT);
+ open OUT, ">$ARGV[2]/temp.hash.minus.txt";
 print OUT Dumper(%minus);
 close(OUT);
     
