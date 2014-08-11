@@ -21,35 +21,53 @@ use threads;
 use threads::shared;
 use strict;
 use warnings;
-#use Getopt::Long;
+use Getopt::Long;
 use Getopt::Std;
 my %Options;
 
 my $numArgs = $#ARGV + 1;
-my $ok = getopts('i:o:F:D:w:', \%Options);
-if($numArgs < 4 || !$ok || !exists($Options{i}) || !exists($Options{o}) ) 
+#my $ok = getopts('i:o:F:D:w:', \%Options);
+
+my $format='normbed';
+my $CLONE='SRA';
+my $winSize=100;
+
+my $inFileName='';
+my $outDir='';
+
+my $ok = GetOptions( 'i=s' => \$inFileName, 'o=s' => \$outDir, 'F=s' => \$format, 'D=s' => $CLONE, 'w=i' => \$winSize );
+
+print $inFileName,"\n";
+
+if($numArgs < 5 || !$ok || !$inFileName || !$outDir ) 
 { 
   Usage();
   exit;
 }
 
-	my $inFileName = $Options{i} ;
-	my $outDir = $Options{o};
-	my $format='normbed';
-	if ( exists($Options{F}) )
-  	{ 
-		$format=$Options{F};
-	}
-	my $CLONE='SRA';
-	if ( exists($Options{D}) )
-  	{
-	 	$CLONE=$Options{D};
-  	}
-  	my $winSize=100;
-  	if ( exists($Options{w}) )
-  	{
-	 	$winSize=$Options{w};
-  	}
+#if($numArgs < 4 || !$ok || !exists($Options{i}) || !exists($Options{o}) ) 
+#{ 
+#  Usage();
+#  exit;
+#}
+
+#	my $inFileName = $Options{i} ;
+#	my $outDir = $Options{o};
+#	my $format='normbed';
+#	if ( exists($Options{F}) )
+#  	{ 
+#		$format=$Options{F};
+#	}
+#	my $CLONE='SRA';
+#	if ( exists($Options{D}) )
+#  	{
+#	 	$CLONE=$Options{D};
+#  	}
+#  	my $winSize=100;
+#  	if ( exists($Options{w}) )
+#  	{
+#	 	$winSize=$Options{w};
+#  	}
 
 my $file1=fileparse($inFileName);  
 
