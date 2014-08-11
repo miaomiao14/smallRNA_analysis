@@ -26,7 +26,7 @@ use Getopt::Std;
 my %Options;
 
 my $numArgs = $#ARGV + 1;
-my $ok = getopts('i:o:F:D', \%Options);
+my $ok = getopts('i:o:F:D:', \%Options);
 if($numArgs < 4 || !$ok || !exists($Options{i}) || !exists($Options{o}) ) 
 { 
   Usage();
