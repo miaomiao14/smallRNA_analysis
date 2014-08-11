@@ -74,7 +74,7 @@ use Compress::Zlib;
         		{
 				next if (length($l[6])>29 || length($l[6])<23);
         		}
-        		if($l[3] eq "+") #strand information is not included in the data, but in the file name
+        		if($l[5] eq "+") #strand information is not included in the data, but in the file name
         		{
 	            	$plus{$l[0]}{$l[1]}+=$reads/$ntm;
 	            	$plus_end{$l[0]}{$l[1]}=$l[2];
