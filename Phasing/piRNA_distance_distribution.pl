@@ -67,21 +67,22 @@ use Compress::Zlib;
         	}
         	if($format eq "bed2")#bo's definition
 			{
-
-        		$reads=$l[3];
-        		$ntm=$l[4];
+				
+				my ($chr,$bedstart,$bedend,$reads,$ntm,$strand,$seq)= split(/\t/,$line);
+				$len=$bedend-$bedstart;
+				
         		if($CLONE eq "SRA")
         		{
-				next if (length($l[6])>29 || length($l[6])<23);
+					next if ($len>29 || $len<23);
         		}
-        		if($l[5] eq "+") #strand information is not included in the data, but in the file name
+        		if($strand eq "+") #strand information is not included in the data, but in the file name
         		{
-	            	$plus{$l[0]}{$l[1]}+=$reads/$ntm;
+	            	$plus{$chr}{$bedstart}+=$reads/$ntm;
 	            	$plus_end{$l[0]}{$l[1]}=$l[2];
 	        	}
 	        	else
 	        	{
-	            	$minus{$l[0]}{$l[2]}+=$reads/$ntm;
+	            	$minus{$chr}{$bedend}+=$reads/$ntm;
 	        	}
         	}		
         			
