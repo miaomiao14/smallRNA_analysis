@@ -111,84 +111,117 @@ sub parseInputFile
 {
   		my ($readMapRef, $fileHandle) = @_;
 		
-		while($fileHandle->gzreadline(my $line) > 0)
-		{ 
-			next if ($line=~/data/);
-			chomp $line; 
-			$line=~s/\s+/\t/g; #change all spaces to tab
-			
-			my $chr;
-			my $bedstart;
-			my $bedend;
-			my $strand;
-			my $seq;
-			my $reads;
-			my $ntm;
-			my $len;
+
 
         	if($format eq "normbed")
         	{
-        		($chr,$bedstart,$bedend,$strand,$seq,$reads,$ntm)= split(/\t/,$line);
-				$len=$bedend-$bedstart+1;
-				
-				if($CLONE eq "SRA") #length range to filter for piRNAs; for DEG, no filtering should be processed
-        		{
-					next if ($len>29 || $len<23);
-        		}
-				if ($strand eq '+')
-				{
-	            	$readMapRef->{$strand}{$chr}{$bedstart}+=$reads/$ntm; 
-	            	#$plus_end{$chr}{$bedend}=$l[2];
-	        	}
-	        	else
-	        	{
-	            	$readMapRef->{$strand}{$chr}{$bedend}+=$reads/$ntm;
-	        	}
+        		while($fileHandle->gzreadline(my $line) > 0)
+				{ 
+					next if ($line=~/data/);
+					chomp $line; 
+					$line=~s/\s+/\t/g; #change all spaces to tab
+					
+					my $chr;
+					my $bedstart;
+					my $bedend;
+					my $strand;
+					my $seq;
+					my $reads;
+					my $ntm;
+					my $len;
+        		
+	        		($chr,$bedstart,$bedend,$strand,$seq,$reads,$ntm)= split(/\t/,$line);
+					$len=$bedend-$bedstart+1;
+					
+					if($CLONE eq "SRA") #length range to filter for piRNAs; for DEG, no filtering should be processed
+	        		{
+						next if ($len>29 || $len<23);
+	        		}
+					if ($strand eq '+')
+					{
+		            	$readMapRef->{$strand}{$chr}{$bedstart}+=$reads/$ntm; 
+		            	#$plus_end{$chr}{$bedend}=$l[2];
+		        	}
+		        	else
+		        	{
+		            	$readMapRef->{$strand}{$chr}{$bedend}+=$reads/$ntm;
+		        	}
+				}#while
         	}
 			if($format eq "bed")
 			{
-				
-				my ($chr,$bedstart,$bedend,$seq,$ntmreads,$strand)= split(/\t/,$line);
-				$reads=$ntmreads;
-				$ntm=1;
-				$len=$bedend-$bedstart;
-				
-				if($CLONE eq "SRA") #length range to filter for piRNAs; for DEG, no filtering should be processed
-        		{
-					next if ($len>29 || $len<23);
-        		}
-        		#($reads,$ntm,$dep)=split(/,/,$l[3]);
-        		if($file1=~/plus/i) #strand information is not included in the data, but in the file name
-        		{
-	            	$readMapRef->{$strand}{$chr}{$bedstart}+=$reads/$ntm;
-	            	#$plus_end{$l[0]}{$l[1]}=$_[2];
-	        	}
-	        	if($file1=~/minus/i)
-	        	{
-	            	$readMapRef->{$strand}{$chr}{$bedend}+=$reads/$ntm;
-	        	}
+				while($fileHandle->gzreadline(my $line) > 0)
+				{ 
+					next if ($line=~/data/);
+					chomp $line; 
+					$line=~s/\s+/\t/g; #change all spaces to tab
+					
+					my $chr;
+					my $bedstart;
+					my $bedend;
+					my $strand;
+					my $seq;
+					my $reads;
+					my $ntm;
+					my $len;
+					my $ntmreads;
+					
+					($chr,$bedstart,$bedend,$seq,$ntmreads,$strand)= split(/\t/,$line);
+					$reads=$ntmreads;
+					$ntm=1;
+					$len=$bedend-$bedstart;
+					
+					if($CLONE eq "SRA") #length range to filter for piRNAs; for DEG, no filtering should be processed
+	        		{
+						next if ($len>29 || $len<23);
+	        		}
+	        		#($reads,$ntm,$dep)=split(/,/,$l[3]);
+	        		if($file1=~/plus/i) #strand information is not included in the data, but in the file name
+	        		{
+		            	$readMapRef->{$strand}{$chr}{$bedstart}+=$reads/$ntm;
+		            	#$plus_end{$l[0]}{$l[1]}=$_[2];
+		        	}
+		        	if($file1=~/minus/i)
+		        	{
+		            	$readMapRef->{$strand}{$chr}{$bedend}+=$reads/$ntm;
+		        	}
+				}#while
         	}
         	if($format eq "bed2")#bo's definition
 			{
-				($chr,$bedstart,$bedend,$reads,$ntm,$strand,$seq)= split(/\t/,$line);
-				$len=$bedend-$bedstart;
-
-        		if($CLONE eq "SRA")
-        		{
-					next if ($len>29 || $len<23);
-        		}
-        		if($strand eq "+") #strand information is not included in the data, but in the file name
-        		{
-	            	$readMapRef->{$strand}{$chr}{$bedstart}+=$reads/$ntm; 
-	            	#$plus_end{$l[0]}{$l[1]}=$l[2];
-	        	}
-	        	else
-	        	{
-	            	$readMapRef->{$strand}{$chr}{$bedend}+=$reads/$ntm;
-	        	}
-        	}		
+				while($fileHandle->gzreadline(my $line) > 0)
+				{ 
+					next if ($line=~/data/);
+					chomp $line; 
+					$line=~s/\s+/\t/g; #change all spaces to tab
+					
+					my $chr;
+					my $bedstart;
+					my $bedend;
+					my $strand;
+					my $seq;
+					my $reads;
+					my $ntm;
+					my $len;
+					($chr,$bedstart,$bedend,$reads,$ntm,$strand,$seq)= split(/\t/,$line);
+					$len=$bedend-$bedstart;
+	
+	        		if($CLONE eq "SRA")
+	        		{
+						next if ($len>29 || $len<23);
+	        		}
+	        		if($strand eq "+") #strand information is not included in the data, but in the file name
+	        		{
+		            	$readMapRef->{$strand}{$chr}{$bedstart}+=$reads/$ntm; 
+		            	#$plus_end{$l[0]}{$l[1]}=$l[2];
+		        	}
+		        	else
+		        	{
+		            	$readMapRef->{$strand}{$chr}{$bedend}+=$reads/$ntm;
+		        	}
+        	}#while		
         			
-		}#while
+		}#if
 } #sub
 		
 
@@ -196,7 +229,9 @@ sub parseInputFile
         {
         	my ($sorted5endRef,$readMapRef,$strand,$chr,$disScoreRef,$disScoreChrRef) =@_;
         	
-	        foreach  (my $k=0;$k< scalar( @{$sorted5endRef} );$k++)
+        	my $numOfarr=scalar( @{$sorted5endRef} );
+        	$numOfarr=$numOfarr-1;
+	        foreach  (my $k=0;$k< $numOfarr;$k++)
 	        {
 	            my $dis=0;
 	    
