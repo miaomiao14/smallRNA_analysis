@@ -16,7 +16,7 @@ BEGIN { unshift @INC,"/home/wangw1/git/smallRNA_analysis/Utils/";}
 require "sort_hash_key.pm";
 use File::Basename;
 use Compress::Zlib;
-
+use Data::Dump;
 use threads;
 use threads::shared;
 use strict;
@@ -64,6 +64,11 @@ my $gz="";
 $gz = gzopen($inFileName, "rb") or die "Cannot open $inFileName: $gzerrno\n" ;
 parseInputFile(\%readMap,$gz);
 $gz->gzclose();
+
+
+open OUT, ">$outDir/temp.mt.hash.txt";
+print OUT Dumper(%readMap);
+close(OUT);
 
 ###processing the distance 
 

@@ -89,7 +89,10 @@ use Compress::Zlib;
 		}
 		$gz->gzclose();
 #	}
-  
+  open OUT, ">$outDir/temp.hash.txt";
+print OUT Dumper(%plus);
+print OUT Dumper(%minus);
+close(OUT);
     
     foreach $chr (keys %plus)
     {
