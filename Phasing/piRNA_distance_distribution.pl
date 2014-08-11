@@ -15,6 +15,7 @@ BEGIN { unshift @INC,"/home/wangw1/git/smallRNA_analysis/Utils/";}
 require "sort_hash_key.pm";
 use File::Basename;
 use Compress::Zlib;
+use Data::Dumper;
 # the distribution of 5'-5' end distance of piRNAs from the same strand.
 
    $file1=fileparse($ARGV[0]);  
