@@ -35,7 +35,7 @@ my $winSize=100;
 my $inFileName='';
 my $outDir='';
 
-my $ok = GetOptions( 'i=s' => \$inFileName, 'o=s' => \$outDir, 'F=s' => \$format, 'D=s' => $CLONE, 'w=i' => \$winSize );
+my $ok = GetOptions( 'inputFile=s' => \$inFileName, 'o=s' => \$outDir, 'F=s' => \$format, 'D=s' => $CLONE, 'w=i' => \$winSize );
 
 print $inFileName,"\n";
 
