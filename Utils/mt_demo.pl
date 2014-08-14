@@ -1,4 +1,4 @@
-#!/usr/bin/Perl
+#!/usr/bin/perl
 
 use strict;
 use threads;

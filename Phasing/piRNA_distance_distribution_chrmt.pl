@@ -7,108 +7,113 @@
 #the first trial of perl multithreading
 #08/11/2014
 
-
-
 BEGIN { unshift @INC,"/home/wangw1/git/smallRNA_analysis/Utils/";}
 require "Statstics.pm";
-require "Jia.pm";
+
 BEGIN { unshift @INC,"/home/wangw1/git/smallRNA_analysis/Utils/";}
 require "sort_hash_key.pm";
 use File::Basename;
-use Compress::Zlib;
+# use Compress::Zlib;
 use Data::Dumper;
 use threads;
 use threads::shared;
 use strict;
 use warnings;
 use Getopt::Long;
-use Getopt::Std;
-my %Options;
+use Cwd;
+use FileHandle;
+# use Benchmark qw(:hireswallclock);
+use Hash::Merge qw( merge );
+
+# my $timespent;
 
 my $numArgs = $#ARGV + 1;
-#my $ok = getopts('i:o:F:D:w:', \%Options);
-
 my $format='normbed';
 my $CLONE='SRA';
 my $winSize=100;
-
 my $inFileName='';
-my $outDir='';
+my $outDir=getcwd;
+my $help="Help";
+my $ok = GetOptions( 'help|?' => \$help,'inputFile|i=s' => \$inFileName, 'outputDir|o=s' => \$outDir, 'format|F=s' => \$format, 'Clone|C=s' => $CLONE, 'windowSize|w=i' => \$winSize );
 
-my $ok = GetOptions( 'inputFile=s' => \$inFileName, 'o=s' => \$outDir, 'F=s' => \$format, 'D=s' => $CLONE, 'w=i' => \$winSize );
-
-print $inFileName,"\n";
-
-if($numArgs < 5 || !$ok || !$inFileName || !$outDir ) 
-{ 
+if($numArgs < 5 || !$ok || !$inFileName || !$outDir )
+{
   Usage();
   exit;
 }
 
-#if($numArgs < 4 || !$ok || !exists($Options{i}) || !exists($Options{o}) ) 
-#{ 
-#  Usage();
-#  exit;
-#}
-
-#	my $inFileName = $Options{i} ;
-#	my $outDir = $Options{o};
-#	my $format='normbed';
-#	if ( exists($Options{F}) )
-#  	{ 
-#		$format=$Options{F};
-#	}
-#	my $CLONE='SRA';
-#	if ( exists($Options{D}) )
-#  	{
-#	 	$CLONE=$Options{D};
-#  	}
-#  	my $winSize=100;
-#  	if ( exists($Options{w}) )
-#  	{
-#	 	$winSize=$Options{w};
-#  	}
-
-my $file1=fileparse($inFileName);  
-
-###main function; main hashes to store the data
-my %plus=(); 
-my %plus_end=(); 
-my %minus=();
-my $mins_end=();
-
+my $file1=fileparse($inFileName);
 my %readMap; #a hash to store strand, chr, coordinates(one end)
-my $gz="";
-$gz = gzopen($inFileName, "rb") or die "Cannot open $inFileName: $gzerrno\n" ;
-parseInputFile(\%readMap,$gz);
-$gz->gzclose();
 
 
-open OUT, ">$outDir/temp.mt.hash.txt";
-print OUT Dumper(%readMap);
-close(OUT);
+###zlib is conflict with multithreading
+###can not read gzip files
+my $fh = FileHandle->new;
+if ($fh->open("< $inFileName")) {
+	parseInputFile(\%readMap,$fh);
+    $fh->close;
+}
+
+# open ARROUT, ">$outDir/temp.mt.array.sorted.txt";
+# print ARROUT Dumper(%readMap);
+# close(ARROUT);
 
 ###processing the distance 
-
 my %disScoreChr=();
 my %disScore=();
 
+####variables for threads
+my $nb_process = 10;
+my @running = ();
+my @Threads;
+
 foreach my $strand (keys %readMap)
-{  
+{
+
 	foreach my $chr (keys %{$readMap{$strand}})
 	{
-		my $plus_chr_ref = \%{$readMap{$strand}{$chr}};
-		my @sorted5end = &sort_hash_key( $plus_chr_ref ); ##sort by the numerical value of the key, put it into an array
-        &disProcess(\@sorted5end,\%readMap,$strand,$chr,\%disScore,\%disScoreChr);
-        
-
-	}#chr     
+		
+       # my $trd= threads -> new ( sub {disProcess( \%{$readMap{$strand}{$chr}},$strand,$chr,\%disScoreChr) } ); #each thread will write to the same hash, not a good idea
+	   # my $trd= threads -> new ( sub {disProcess( \%{$readMap{$strand}{$chr}},$strand,$chr,\%{$disScoreChr{$chr}}) } ); #not try yet
+		
+		# print "\n\nNow trying without threading:\n\n";
+		#my $starttime2 = Benchmark->new;
+		#&disProcess( \%{$readMap{$strand}{$chr}},$strand,$chr,\%disScoreChr);		
+		# my $finishtime2 = Benchmark->new;
+		# $timespent = timediff($finishtime2,$starttime2);
+		# print "\nDone!\n$chr at $strand Spent ". timestr($timespent),"\n";
+		
+		my $trd= threads -> new ( sub {disProcess( \%{$readMap{$strand}{$chr}},$strand,$chr) } ); #return value
+        push (@Threads, $trd);
+        my $tid = $trd->tid;
+        #print "  - starting thread $tid\n";
+		
+	}#chr
 }#strand
 
+foreach my $thr (@Threads)
+{
+	#print $thr->tid, " threadID\n";
+	my $resultHashRef=$thr->join;
+	
+	%disScoreChr=%{merge(\%disScoreChr,$resultHashRef)};
+	#print "joining...\n";
+}
 
-#write the output to files
 
-my $OUTDIR=$outDir;   
+foreach my $strand (keys %disScoreChr)
+{
+	foreach my $chr (keys %{$disScoreChr{$strand}})
+	{
+		foreach my $dis (keys %{$disScoreChr{$strand}{$chr}})
+		{
+			$disScore{$dis}+=$disScoreChr{$strand}{$chr}{$dis};
+		}
+	}
+}
+
+#write the output to files; separate strand, chr
+my $OUTDIR=$outDir;
 open OUT, ">$OUTDIR/$file1.5-5.distance.distribution" or die "cannot write to $OUTDIR: $!\n";
 foreach my $strand (keys %disScoreChr)
 {
@@ -121,13 +126,78 @@ foreach my $strand (keys %disScoreChr)
 	}
 }
 close (OUT);
-       
+#write the output to files; accumulative distance score 
 open OUT, ">$OUTDIR/$file1.5-5.distance.distribution.summary" or die "cannot write to $OUTDIR: $!\n";
 foreach my $dis (sort { $a <=> $b } keys %disScore)
 {
 	print OUT "$dis\t$disScore{$dis}\n";
 }
 close(OUT);
+
+
+sub disProcess
+{
+	# my ($readMapChrRef,$strand,$chr,$disScoreChrRef) =@_;
+	my ($readMapChrRef,$strand,$chr) =@_;
+	my %disScoreChrRef=();
+	my @sorted5end = &sort_hash_key( $readMapChrRef ); ##sort by the numerical value of the key, put it into an array
+	if($strand eq "+" or $strand eq "plus")
+	{
+	    foreach  (my $k=0;$k< $#sorted5end;$k++)
+	    {
+	        my $dis=0;
+	        foreach (my $j=$k+1;$j<=$#sorted5end ;$j++)
+	        {
+	            $dis=$sorted5end[$j]-$sorted5end[$k]; ##why the $dis smaller than 0?
+	            if($dis>0 && $dis <=$winSize)
+	            {
+					if (! exists $disScoreChrRef{$strand}{$chr}{$dis}) 
+					{
+						$disScoreChrRef{$strand}{$chr}{$dis} = 0;
+					}
+
+					my $minDis = &min($readMapChrRef->{$sorted5end[$j]},$readMapChrRef->{$sorted5end[$k]});
+					$disScoreChrRef{$strand}{$chr}{$dis}+=$minDis;
+	            }
+	            else
+	            {
+	                $j=scalar( @sorted5end );
+	            }
+	        }#j
+	    }#k
+	}
+	
+	if($strand eq "-" or $strand eq "minus")
+	{
+	    foreach  (my $k=$#sorted5end;$k>0;$k--)
+	    {
+	        my $dis=0;
+	        foreach (my $j=$k-1;$j>=0 ;$j--)
+	        {
+	            $dis=$sorted5end[$k]-$sorted5end[$j]; ##why the $dis smaller than 0?
+	            if($dis>0 && $dis <=$winSize)
+	            {
+					if (! exists $disScoreChrRef{$strand}{$chr}{$dis}) 
+					{
+						$disScoreChrRef{$strand}{$chr}{$dis} = 0;
+					}
+
+					my $minDis = &min($readMapChrRef->{$sorted5end[$j]},$readMapChrRef->{$sorted5end[$k]});
+					$disScoreChrRef{$strand}{$chr}{$dis}+=$minDis;
+	            }
+	            else
+	            {
+	                $j=-1;
+	            }
+	        }#j
+	    }#k
+	}
+	
+	
+	
+	return (\%disScoreChrRef);
+}
+
 
 
 sub parseInputFile
@@ -199,12 +269,12 @@ sub parseInputFile
 						next if ($len>29 || $len<23);
 	        		}
 	        		#($reads,$ntm,$dep)=split(/,/,$l[3]);
-	        		if($file1=~/plus/i) #strand information is not included in the data, but in the file name
+	        		if ($strand eq '+') #strand information is not included in the data, but in the file name
 	        		{
 		            	$readMapRef->{$strand}{$chr}{$bedstart}+=$reads/$ntm;
 		            	#$plus_end{$l[0]}{$l[1]}=$_[2];
 		        	}
-		        	if($file1=~/minus/i)
+		        	else
 		        	{
 		            	$readMapRef->{$strand}{$chr}{$bedend}+=$reads/$ntm;
 		        	}
@@ -212,7 +282,8 @@ sub parseInputFile
         	}
         	if($format eq "bed2")#bo's definition
 			{
-				while($fileHandle->gzreadline(my $line) > 0)
+				
+				while(my $line = $fileHandle->getline())
 				{ 
 					next if ($line=~/data/);
 					chomp $line; 
@@ -229,10 +300,10 @@ sub parseInputFile
 					($chr,$bedstart,$bedend,$reads,$ntm,$strand,$seq)= split(/\t/,$line);
 					$len=$bedend-$bedstart;
 	
-	        		if($CLONE eq "SRA")
-	        		{
+					if($CLONE eq "SRA")
+					{
 						next if ($len>29 || $len<23);
-	        		}
+					}
 	        		if($strand eq "+") #strand information is not included in the data, but in the file name
 	        		{
 		            	$readMapRef->{$strand}{$chr}{$bedstart}+=$reads/$ntm; 
@@ -248,45 +319,18 @@ sub parseInputFile
 } #sub
 		
 
-        sub disProcess
-        {
-        	my ($sorted5endRef,$readMapRef,$strand,$chr,$disScoreRef,$disScoreChrRef) =@_;
-        	
-        	my $numOfarr=scalar( @{$sorted5endRef} );
-        	$numOfarr=$numOfarr-1;
-	        foreach  (my $k=0;$k< $numOfarr;$k++)
-	        {
-	            my $dis=0;
-	    
-	            foreach (my $j=$k+1;$j<scalar( @{$sorted5endRef} );$j++)
-	            {
-	                $dis=${$sorted5endRef}[$j]-${$sorted5endRef}[$k]; ##why the $dis smaller than 0?
-	                if($dis>0 && $dis <=$winSize)
-	                {
-	                    
-	                    my $minDis=&min($readMapRef->{$strand}{$chr}{${$sorted5endRef}[$j]},$readMapRef->{$strand}{$chr}{${$sorted5endRef}[$k]});
-	                    $disScoreChrRef->{$strand}{$chr}{$dis}+=$minDis;
-	                    $disScoreRef->{$dis}+=$minDis;
-	                }
-	                else
-	                {
-	                    $j=scalar( @{$sorted5endRef} );
-	                }
-	            }
-	    
-	        }
-        }
+
 
 
 
 sub Usage
 {
 	print "\n=======================================================================\n"; 
-	print "\nUSAGE:$0\n\n -i <inputFile> -o <outputDir> -F <input-file type> [bed|normbed|bed2] -D [SRA | DEG]\n\n"; 
+	print "\nUSAGE:$0\n\n -i <inputFile> -o <outputDir> -F <input-file type> <bed|normbed|bed2> -D <SRA | DEG> -w <window size of distance>\n\n"; 
 	print " [-i <file>]\tinput file containing tags/reads in normbed/BED/bed2 format\n";
-	print " [-o <file>]\toutput file into which directory will be stored\n";
-	print " [-F <int>]\tinput-file type, currently bed,bed2(customized) and normbed are supported\n\t\t(default: normbed)\n";
-	print " [-D <int>]\tcloning method (SRA or DEG, length matters)\n";
+	print " [-o <file>]\toutput file into which directory will be stored (default: current working directory)\n";
+	print " [-F <str>]\tinput-file type, currently bed,bed2(customized) and normbed are supported\n\t\t(default: normbed)\n";
+	print " [-C <str>]\tcloning method (SRA or DEG, length matters, default:SRA)\n";
 	print " [-w <int>]\tscanning window size downstread of each signal (default: 100)\n";
  	print "This perl script is count the frequency of 5'-5'end distances of smallRNAs(23-29) from the same strand\n";
 	print  "\n=======================================================================\n\n";

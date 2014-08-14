@@ -90,18 +90,19 @@ use Data::Dumper;
 		}
 		$gz->gzclose();
 #	}
-  open OUT, ">$ARGV[2]/temp.hash.plus.txt";
-print OUT Dumper(%plus);
-close(OUT);
- open OUT, ">$ARGV[2]/temp.hash.minus.txt";
-print OUT Dumper(%minus);
-close(OUT);
+  #open ARROUT, ">$ARGV[2]/temp.array.sorted.txt";
+# print OUT Dumper(%plus);
+# close(OUT);
+#  open OUT, ">$ARGV[2]/temp.hash.minus.txt";
+# print OUT Dumper(%minus);
+# close(OUT);
     
     foreach $chr (keys %plus)
     {
         $plus_chr_ref = \%{$plus{$chr}};
         @plus_sort = &sort_hash_key( $plus_chr_ref ); ##sort by the numerical value of the key
-        
+		#print ARROUT "$chr\t+\n";
+        #print ARROUT Dumper(@plus_sort);
         foreach  ($k=0;$k<$#plus_sort;$k++)
         {
             $dis=0;
@@ -130,6 +131,8 @@ close(OUT);
         {
             
             @minus_sort=&sort_hash_key(\%{$minus{$chr}});
+			#print ARROUT "$chr\t-\n";
+			#print ARROUT Dumper(@minus_sort);
             #%minus_lendis=&lendis_dist(%minus_sort);
             foreach  ($k=0;$k<$#minus_sort;$k++)
             {
@@ -152,6 +155,8 @@ close(OUT);
             }
         }
     }
+	
+	close(ARROUT);
  	$OUTDIR=$ARGV[2];   
     open OUT, ">$OUTDIR/$file1.5-5.distance.distribution";
     foreach $strand (keys %hash_dis)
