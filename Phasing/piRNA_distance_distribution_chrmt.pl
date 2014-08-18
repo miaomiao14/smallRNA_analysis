@@ -208,7 +208,7 @@ sub parseInputFile
 
         	if($format eq "normbed")
         	{
-        		while($fileHandle->gzreadline(my $line) > 0)
+        		while(my $line = $fileHandle->getline())
 				{ 
 					next if ($line=~/data/);
 					chomp $line; 
@@ -243,7 +243,7 @@ sub parseInputFile
         	}
 			if($format eq "bed")
 			{
-				while($fileHandle->gzreadline(my $line) > 0)
+				while(my $line = $fileHandle->getline())
 				{ 
 					next if ($line=~/data/);
 					chomp $line; 

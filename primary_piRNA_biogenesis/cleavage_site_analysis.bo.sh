@@ -5,6 +5,7 @@ BOTN=20000
 CPU=8
 [ ! -f ${1%bed2}piRNA.bed2 ] && awk '$3-$2>22 && $3-$2<30' $1 > ${1%bed2}piRNA.bed2
 [ ! -f ${2%bed2}piRNA.bed2 ] && awk '$3-$2>22 && $3-$2<30' $2 > ${2%bed2}piRNA.bed2
+##bed2Detail: this program calculate the ping-pong score for each genomic posisitons.
 [ ! -f ${1%.ovary*}__${2%.ovary*}.bed2Detail ] && \
 bed2Detail -a ${1%bed2}piRNA.bed2 -b ${2%bed2}piRNA.bed2 -c $CHROM | \
 	awk 'BEGIN{OFS="\t"}{if ($6=="+"){print $1,$2,$2+1,$4/$5,1,$6,$8} else {print $1,$3-1,$3,$4/$5,1,$6,$8}}' | \
