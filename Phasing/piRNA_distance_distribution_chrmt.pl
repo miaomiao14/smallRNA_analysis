@@ -14,7 +14,7 @@ BEGIN { unshift @INC,"/home/wangw1/git/smallRNA_analysis/Utils/";}
 require "sort_hash_key.pm";
 use File::Basename;
 # use Compress::Zlib;
-use Data::Dumper;
+#use Data::Dumper;
 use threads;
 use threads::shared;
 use strict;
@@ -208,7 +208,7 @@ sub parseInputFile
 
         	if($format eq "normbed")
         	{
-        		while($fileHandle->gzreadline(my $line) > 0)
+        		while(my $line = $fileHandle->getline())
 				{ 
 					next if ($line=~/data/);
 					chomp $line; 
@@ -243,7 +243,7 @@ sub parseInputFile
         	}
 			if($format eq "bed")
 			{
-				while($fileHandle->gzreadline(my $line) > 0)
+				while(my $line = $fileHandle->getline())
 				{ 
 					next if ($line=~/data/);
 					chomp $line; 
