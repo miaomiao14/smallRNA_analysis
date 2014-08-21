@@ -328,7 +328,7 @@ sub InputFileProcessing
 		}
 		if($fileFormat eq "bed2")
 		{
-			($chr,$bedstart,$bedend,$reads,$ntm,$strand)= split(/\t/,$line);
+			($chr,$bedstart,$bedend,$reads,$ntm,$strand,$seq)= split(/\t/,$line);
 			#$reads=$ntmreads;
 			#$ntm=1;
 			$len=$bedend-$bedstart;
