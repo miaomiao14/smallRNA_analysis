@@ -326,6 +326,13 @@ sub InputFileProcessing
 			$ntm=1;
 			$len=$bedend-$bedstart;
 		}
+		if($fileFormat eq "bed2")
+		{
+			($chr,$bedstart,$bedend,$reads,$ntm,$strand)= split(/\t/,$line);
+			#$reads=$ntmreads;
+			#$ntm=1;
+			$len=$bedend-$bedstart;
+		}
 		
 		if($inputfile=~/SRA/){next if (length($seq)>29 || length($seq)<23);}
 		next if (/data/);
@@ -338,7 +345,7 @@ sub InputFileProcessing
 		if($strand eq '+')
 		{	
 			
-			if($fileFormat eq "bed")
+			if(($fileFormat eq "bed") or ($fileFormat eq "bed2"))
 			{ 
 				$fiveend=$bedstart; #0-based,closed
 			}
@@ -362,7 +369,7 @@ sub InputFileProcessing
 	  	}
 	  	else
 	  	{
-	  		if($fileFormat eq "bed")
+	  		if(($fileFormat eq "bed") or ($fileFormat eq "bed2"))
 			{
 	  			$fiveend=$bedend; #open
 			}
@@ -390,7 +397,7 @@ sub InputFileProcessing
         	if ($strand eq '+') #target strand information
          	{
          		
-         		if($fileFormat eq "bed")
+         		if(($fileFormat eq "bed") or ($fileFormat eq "bed2"))
          		{
 	            	$start=$bedstart+$n+1-$basep; # $bedstart is 0 based and $start is 0 based, the intermediate end $bedstart+$n+1 is open
 	            	$fiveend=$start+$basep; #open
@@ -412,7 +419,7 @@ sub InputFileProcessing
         	}
          	else
          	{
-         		if($fileFormat eq "bed")
+         		if(($fileFormat eq "bed") or ($fileFormat eq "bed2"))
          		{
 		            $start=$bedend-$n-1; #closed
 		            $fiveend=$start; #0-based
