@@ -96,7 +96,7 @@ my $fileFormat=$parameters->{format};
 my $wsize=$parameters->{winsize};
 my $basep=$parameters->{complementarity};
 my $fastafile=$parameters->{fa};
-
+my $leftbound=$parameters->{lwinsize};
 
 
 
@@ -212,7 +212,7 @@ if($indexFlag)
 				close(OUT);
 			}
 			#bowtie index file
-			for ($n=0;$n<$wsize;$n++)
+			for ($n=$leftbound;$n<$wsize;$n++)
 			{
 				$fa="$OUTDIR/$file.ref.$n.fa";
 				$indexb="$BOUTDIR/$file.$basep.$n";
@@ -383,7 +383,7 @@ sub InputFileProcessing
 
 	  	}
 
-      	for (my $n=0;$n<$wsize;$n++)
+      	for (my $n=$leftbound;$n<$wsize;$n++)
       	{
       		my $start=0;
       		my $fiveend=0;
@@ -456,10 +456,10 @@ sub PingPongProcessing
 	open PPSEQPAIR, ">$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.prefix.UA_VA.ppseq.txt";
 	
 	#open PPUAFRACTION, ">$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.prefix.UA_VA.base.fraction.txt";
-	print PPSEQPAIR "pairmode\tguidepiRNAs\tguidepiRNAsReads\ttargetpiRNAs\ttargetpiRNAsReads\n";
+	print PPSEQPAIR "pairmode\tguidepiRNAs\tguidepiRNAsReads\tguidepiRNAcor\ttargetpiRNAs\ttargetpiRNAsReads\ttargetpiRNAcor\n";
 
 	
-	foreach ($n=0;$n<$wsize;$n++)
+	foreach ($n=$leftbound;$n<$wsize;$n++)
 	{
 
 		# file1 as ref
@@ -502,10 +502,10 @@ sub PingPongProcessing
 		    my $nTcor=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}});		
 		    
 			my $nTcorTotalReads=0;
-			foreach my $piGuideSpe (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}} )
+			foreach my $piTargetIndex (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}} )
 			{
 				my $nTcorReads=0;
-				map {$nTcorReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piGuideSpe}};
+				map {$nTcorReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}};
 				$nTcorTotalReads+=$nTcorReads;
 			}
 		    
@@ -528,13 +528,13 @@ sub PingPongProcessing
 					#guide is the query, target is the index
       				my $guideQueryReadsNorm=$guideQueryReads/$NTM{$l[2]};	
       				
-					foreach my $piGuideSpe (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}} )
+					foreach my $piTargetIndex (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}} )
 					{	
 
 						#my $targetpiGuideSpecies=0;	
-						#$targetpiGuideSpecies=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piGuideSpe}});
+						#$targetpiGuideSpecies=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}});
 						my $targetpiGuideReads=0;
-						map {$targetpiGuideReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piGuideSpe}};
+						map {$targetpiGuideReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}};
 						
 						my $cisRecordFlag=0; #flag of cispair
 						
@@ -544,20 +544,25 @@ sub PingPongProcessing
 
 				       		###note: how to define cistargets more accurately?
 				       		###in addition to excat match, what if just several nucleotides away?
+				       		my $guideQueryCorReads=$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$record};
+						    #assuming only one supplemental sequence for each coordinates
+						    my $guideQueryCorReadsNorm=$guideQueryCorReads/$NTM{$l[2]};
+				       		
 
 				       		my $tfiveend=$gfiveend;
 				       		my $tstrand=$gstrand;
 					
-					       	if($targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piGuideSpe}{"$chr,$tfiveend,$tstrand"}) #here it checks all coordinates associated with $piGuideSpe
+					       	if($targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{"$chr,$tfiveend,$tstrand"}) #here it checks all coordinates associated with $piTargetIndex
 					       	{
 					       		$cisPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=1/$NTM{$l[2]}; #cis pair species must only have one by coordinate definition; but for different record, it has different cis pair
 								$cisPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guideQueryReads*$targetpiGuideReads/$NTM{$l[2]};		       			
       							
+      							my $targetpiGuideCorReads=$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{"$chr,$tfiveend,$tstrand"};
       							##print out paired piRNA species
       							
-      							print PPSEQPAIR "cis\t$piQuery\t$guideQueryReadsNorm\t$piGuideSpe\t$targetpiGuideReads\n" if ($n==9);
+      							print PPSEQPAIR "cis\t$piQuery\t$guideQueryCorReadsNorm\t$record\t$piTargetIndex\t$targetpiGuideCorReads\t$record\n" if ($n==9);
       							
-								#$cisFlag{$piGuideSpe}+=1;
+								#$cisFlag{$piTargetIndex}+=1;
 								$cisRecordFlag=1;
 								last; #no need to check other coordinates (record) for this pair of piRNA species      					       					       			
 					       	}
@@ -569,10 +574,21 @@ sub PingPongProcessing
 			       			$transPairSpecies{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=1/$NTM{$l[2]};
 			       			#trans PingPong pair in reads
 			       			$transPairReads{$g_0_nt.$t_9_nt}{$n}{$l[2]}+=$guideQueryReads*$targetpiGuideReads/$NTM{$l[2]};
-			       			print PPSEQPAIR "trans\t$piQuery\t$guideQueryReadsNorm\t$piGuideSpe\t$targetpiGuideReads\n" if ($n==9);
+			       			foreach my $Grecord (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}})
+							{
+								my $guideQueryCorReads=$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$Grecord};
+						    	#assuming only one supplemental sequence for each coordinates
+						    	my $guideQueryCorReadsNorm=$guideQueryCorReads/$NTM{$l[2]};
+						    	
+				       			foreach my $Trecord (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}}) 
+								{
+				       				my $targetpiGuideCorReads=$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{$Trecord};
+				       				print PPSEQPAIR "trans\t$piQuery\t$guideQueryCorReadsNorm\t$Grecord\t$piTargetIndex\t$targetpiGuideCorReads\t$Trecord\n" if ($n==9);
+								}
+							}
 			       		}
 						
-						#if(! $cisFlag{$piGuideSpe}) #so that no need to check for already cispaired piRNA species
+						#if(! $cisFlag{$piTargetIndex}) #so that no need to check for already cispaired piRNA species
 						#{
 						#}
 					}#piGuideSpe
@@ -601,20 +617,31 @@ sub PingPongProcessing
 					my $guideQueryReads=0;
 					map {$guideQueryReads+=$_} values %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}};
 					my $guideQueryReadsNorm=$guideQueryReads/$NTM{$l[2]};	
-					foreach my $piGuideSpe (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}} )
+					foreach my $piTargetIndex (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}} )
 					{	
 
 						#my $targetpiGuideSpecies=0;	
-						#$targetpiGuideSpecies=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piGuideSpe}});
+						#$targetpiGuideSpecies=scalar (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}});
 						my $targetpiGuideReads=0;
-						map {$targetpiGuideReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piGuideSpe}};
-		       			print PPSEQPAIR "trans\t$piQuery\t$guideQueryReadsNorm\t$piGuideSpe\t$targetpiGuideReads\n" ;
-					}
-			    }
-		       }
-
-
-			}
+						map {$targetpiGuideReads+=$_} values %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}};
+		       			#print PPSEQPAIR "trans\t$piQuery\t$guideQueryReadsNorm\t$piTargetIndex\t$targetpiGuideReads\n" ;
+		       			foreach my $Grecord (keys %{$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}})
+						{
+							my $guideQueryCorReads=$guidepfsplit{$guideStrandFile}{$l[2]}{$piQuery}{$Grecord};
+					    	#assuming only one supplemental sequence for each coordinates
+					    	my $guideQueryCorReadsNorm=$guideQueryCorReads/$NTM{$l[2]};
+					    	
+			       			foreach my $Trecord (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}}) 
+							{
+			       				my $targetpiGuideCorReads=$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{$Trecord};
+			       				print PPSEQPAIR "trans\t$piQuery\t$guideQueryCorReadsNorm\t$Grecord\t$piTargetIndex\t$targetpiGuideCorReads\t$Trecord\n" if ($n==9);
+							}
+						}
+		       			
+					}#$piTargetIndex
+			    }#$piQuery
+		       }#if
+			}#else
 		} #while
 		close(IN);
         
@@ -785,7 +812,7 @@ sub PingPongProcessing
 			    my @numOfSpeciesCor=();
 			    my @numOfReads=();
 
-			    for(my $n=0;$n<$wsize;$n++)
+			    for(my $n=$leftbound;$n<$wsize;$n++)
 			    {
 			    	my $n1=scalar (keys %{$transPairSpeciesRef->{$n}});
 			    	my $n2=scalar (keys %{$transPairReadsRef->{$n}});
@@ -949,6 +976,7 @@ sub PingPongProcessing
 				print "-s  <species name[fly|bombyx|mouse]>\n\t";
 				print "-d  <flag of index[0|1]>\n\t";
 				print "-f  <flag of index[bed|normbed]>\n\t";
+				print "-l  <left boundary of window>\n\t";
 				print "-w  <background windowsize>\n\t";
 				print "-p  <the length of prefix>\n\t";
 				print "-a  <fasta file of the genome>\n\t";
@@ -971,6 +999,7 @@ sub PingPongProcessing
 		                elsif($next_arg eq "-b"){ $parameters->{indexoutdir} = shift(@ARGV); }
 		                elsif($next_arg eq "-d"){ $parameters->{indexflag} = shift(@ARGV); }
 		                elsif($next_arg eq "-f"){ $parameters->{format} = shift(@ARGV); }
+		                elsif($next_arg eq "-l"){ $parameters->{lwinsize}= shift(@ARGV); }
 		                elsif($next_arg eq "-w"){ $parameters->{winsize}= shift(@ARGV); }
 						elsif($next_arg eq "-p"){ $parameters->{complementarity}= shift(@ARGV); }
 						elsif($next_arg eq "-a"){ $parameters->{fa} = shift(@ARGV); }
