@@ -1,4 +1,12 @@
-CHROM=dm3.ChromInfo.txt
+#para1: input bed file(anchor point): chr start end strand reads ppscore
+#para2: _ 
+#para3: bigWig files for piRNAs (watson )
+#para4: bigWig files for piRNAs (crick)
+#para5: can be ignored
+
+
+
+CHROM=/home/ww74w/pipeline/common/dm3.ChromInfo.txt
 TOPN=${5:-10000}
 BOTN=20000
 CPU=8
@@ -6,13 +14,17 @@ echo "taking the top $TOPN lines of input file and convert to bed"
 awk 'BEGIN{OFS="\t"}{if ($4=="+") {printf "%s\t%d\t%d\t%.2f\t%d\t%s\n", $1,$2,$3,$5,$6,$4} }' $1 | head -${TOPN} > ${1%.ovary*}__${2%.ovary*}.bed2Detail.Watson.top${TOPN}
 awk 'BEGIN{OFS="\t"}{if ($4=="-") {printf "%s\t%d\t%d\t%.2f\t%d\t%s\n", $1,$2,$3,$5,$6,$4} }' $1 | head -${TOPN} >  ${1%.ovary*}__${2%.ovary*}.bed2Detail.Crick.top${TOPN}
 echo "use bwtool to aggregate the sigal"
+#waston strand
 bwtool agg 100:100 -starts ${1%.ovary*}__${2%.ovary*}.bed2Detail.Watson.top${TOPN} \
 	 $3 \
 	 ${1%.ovary*}__${2%.ovary*}.bed2Detail.Watson.top${TOPN}_agg_${3%.ovary*}.txt
+#crick strand
 bwtool agg 100:100 -starts ${1%.ovary*}__${2%.ovary*}.bed2Detail.Crick.top${TOPN} \
 	 $4 \
 	 ${1%.ovary*}__${2%.ovary*}.bed2Detail.Crick.top${TOPN}_agg_${3%.ovary*}.txt
+#merge waston and crick
 paste ${1%.ovary*}__${2%.ovary*}.bed2Detail.Watson.top${TOPN}_agg_${3%.ovary*}.txt  ${1%.ovary*}__${2%.ovary*}.bed2Detail.Crick.top${TOPN}_agg_${3%.ovary*}.txt | awk 'BEGIN{OFS="\t"}{if ($1>0) --$1; print $1,$2-$4}' > ${1%.ovary*}__${2%.ovary*}.bed2Detail.top${TOPN}_agg_${3%.ovary*}.txt && rm -rf ${1%.ovary*}__${2%.ovary*}.bed2Detail.Watson.top${TOPN}_agg_${3%.ovary*}.txt  ${1%.ovary*}__${2%.ovary*}.bed2Detail.Crick.top${TOPN}_agg_${3%.ovary*}.txt
+#
 Rscript --slave piPipes_draw_aggregate.R ${1%.ovary*}__${2%.ovary*}.bed2Detail.top${TOPN}_agg_${3%.ovary*}.txt ${1%.ovary*}__${2%.ovary*}.bed2Detail.top${TOPN}_agg_${3%.ovary*} ${1%.ovary*}__${2%.ovary*}.bed2Detail.top${TOPN}_agg_${3%.ovary*}
 
 bwtool matrix 100:100 -starts ${1%.ovary*}__${2%.ovary*}.bed2Detail.Watson.top${TOPN} \
