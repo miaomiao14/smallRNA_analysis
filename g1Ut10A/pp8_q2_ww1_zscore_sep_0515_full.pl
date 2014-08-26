@@ -567,7 +567,7 @@ sub PingPongProcessing
       							my $targetpiGuideCorReads=$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{"$chr,$tfiveend,$tstrand"};
       							##print out paired piRNA species
       							
-      							print PPSEQPAIR "cis\t$piQuery\t$guideQueryCorReadsNorm\t$record\t$piTargetIndex\t$targetpiGuideCorReads\t$record\n" if ($n==9);
+      							print PPSEQPAIR "cis\t$piQuery\t$guideQueryCorReadsNorm\t$record\t$piTargetIndex\t$targetpiGuideCorReads\t$record\n" if ($n==9); ##not accurate cis, only one cis pair for v15, v10
       							
 								#$cisFlag{$piTargetIndex}+=1;
 								$cisRecordFlag=1;

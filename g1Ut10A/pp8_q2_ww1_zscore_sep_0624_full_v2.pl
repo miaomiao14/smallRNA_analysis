@@ -476,7 +476,7 @@ sub InputFileProcessing
         	}
          	else
          	{
-         		if($fileFormat eq "bed")
+         		if(($fileFormat eq "bed") or ($fileFormat eq "bed2"))
          		{
 		            $start=$bedend-$n-1; #closed
 					$supStart=$start+$basep;
