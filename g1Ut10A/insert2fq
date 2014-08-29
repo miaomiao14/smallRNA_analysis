@@ -1,0 +1,2 @@
+#! /usr/bin/env bash
+awk '{len=length($1); for (j=0;j<$2;++j) { printf "@%d\n%s\n+\n", C++,$1; for(i=0;i<len;++i){printf "%s","I"}; print "";}}' $1
