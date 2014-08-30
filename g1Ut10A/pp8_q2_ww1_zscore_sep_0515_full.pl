@@ -463,7 +463,7 @@ sub PingPongProcessing
 	open PPSEQPAIR, ">$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.prefix.UA_VA.ppseq.txt";
 	
 	#open PPUAFRACTION, ">$OUTDIR/$guideStrandFile.$targetStrandFile.$basep.prefix.UA_VA.base.fraction.txt";
-	print PPSEQPAIR "pairmode\tguidepiRNAs\tguidepiRNAsReads\tguidepiRNAcor\ttargetpiRNAs\ttargetpiRNAsReads\ttargetpiRNAcor\n";
+	#print PPSEQPAIR "pairmode\tguidepiRNAs\tguidepiRNAsReads\tguidepiRNAcor\ttargetpiRNAs\ttargetpiRNAsReads\ttargetpiRNAcor\n";
 
 	
 	foreach ($n=$leftbound;$n<$wsize;$n++)
@@ -567,7 +567,7 @@ sub PingPongProcessing
       							my $targetpiGuideCorReads=$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{"$chr,$tfiveend,$tstrand"};
       							##print out paired piRNA species
       							
-      							print PPSEQPAIR "cis\t$piQuery\t$guideQueryCorReadsNorm\t$record\t$piTargetIndex\t$targetpiGuideCorReads\t$record\n" if ($n==9); ##not accurate cis, only one cis pair for v15, v10
+      							#print PPSEQPAIR "cis\t$piQuery\t$guideQueryCorReadsNorm\t$record\t$piTargetIndex\t$targetpiGuideCorReads\t$record\n" if ($n==9); ##not accurate cis, only one cis pair for v15, v10
       							
 								#$cisFlag{$piTargetIndex}+=1;
 								$cisRecordFlag=1;
@@ -590,7 +590,7 @@ sub PingPongProcessing
 				       			foreach my $Trecord (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}}) 
 								{
 				       				my $targetpiGuideCorReads=$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{$Trecord};
-				       				print PPSEQPAIR "trans\t$piQuery\t$guideQueryCorReadsNorm\t$Grecord\t$piTargetIndex\t$targetpiGuideCorReads\t$Trecord\n" if ($n==9);
+				       				#print PPSEQPAIR "trans\t$piQuery\t$guideQueryCorReadsNorm\t$Grecord\t$piTargetIndex\t$targetpiGuideCorReads\t$Trecord\n" if ($n==9);
 								}
 							}
 			       		}
@@ -641,7 +641,7 @@ sub PingPongProcessing
 			       			foreach my $Trecord (keys %{$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}}) 
 							{
 			       				my $targetpiGuideCorReads=$targetpfsplit{$targetStrandFile}{$n}{$l[1]}{$piTargetIndex}{$Trecord};
-			       				print PPSEQPAIR "trans\t$piQuery\t$guideQueryCorReadsNorm\t$Grecord\t$piTargetIndex\t$targetpiGuideCorReads\t$Trecord\n" if ($n==9);
+			       				#print PPSEQPAIR "trans\t$piQuery\t$guideQueryCorReadsNorm\t$Grecord\t$piTargetIndex\t$targetpiGuideCorReads\t$Trecord\n" if ($n==9);
 							}
 						}
 		       			
@@ -804,7 +804,7 @@ sub PingPongProcessing
 
 
 			#close(PPUAFRACTION);
-			close(PPSEQPAIR);
+			#close(PPSEQPAIR);
 			close(PPSCOREUA);
 			close(ZSCOREUA);
  	
