@@ -7,10 +7,10 @@
 #the first trial of perl multithreading
 #08/11/2014
 
-BEGIN { unshift @INC,"/home/wangw1/git/smallRNA_analysis/Utils/";}
+BEGIN { unshift @INC,"$ENV{\"HOME\"}/git/smallRNA_analysis/Utils/";}
 require "Statstics.pm";
 
-BEGIN { unshift @INC,"/home/wangw1/git/smallRNA_analysis/Utils/";}
+BEGIN { unshift @INC,"$ENV{\"HOME\"}/git/smallRNA_analysis/Utils/";}
 require "sort_hash_key.pm";
 use File::Basename;
 # use Compress::Zlib;
@@ -158,7 +158,11 @@ foreach my $strand (keys %disScoreChr)
 
 #write the output to files; separate strand, chr
 my $OUTDIR=$outDir;
-open OUT, ">$OUTDIR/$file1.$end1.to.$file2.$end2.distance.distribution" or die "cannot write to $OUTDIR: $!\n";
+my $filename1=$file1;
+$filename1=~ s/ovary.*// ;
+my $filename2=$file2;
+$filename2=~ s/ovary.*// ;
+open OUT, ">$OUTDIR/$filename1.$end1.to.$filename2.$end2.distance.distribution" or die "cannot write to $OUTDIR: $!\n";
 foreach my $strand (keys %disScoreChr)
 {
 	foreach my $chr (sort keys %{$disScoreChr{$strand}})
@@ -174,7 +178,7 @@ foreach my $strand (keys %disScoreChr)
 }
 close (OUT);
 #write the output to files; accumulative distance score 
-open OUT, ">$OUTDIR/$file1.$end1.to.$file2.$end2.distance.distribution.summary" or die "cannot write to $OUTDIR: $!\n";
+open OUT, ">$OUTDIR/$filename1.$end1.to.$filename2.$end2.distance.distribution.summary" or die "cannot write to $OUTDIR: $!\n";
 foreach my $dis (sort { $a <=> $b } keys %disScore)
 {
 	foreach my $nuc (sort keys %{$disScore{$dis}})
