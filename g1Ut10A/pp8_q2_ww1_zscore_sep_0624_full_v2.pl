@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-BEGIN { unshift @INC,"/home/wangw1/git/smallRNA_analysis/Utils/";}
+BEGIN { unshift @INC,"$ENV{\"HOME\"}/git/smallRNA_analysis/Utils/";}
 require "restrict_digts.pm";
 require "Jia.pm";
 use File::Basename;

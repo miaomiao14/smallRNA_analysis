@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/home/ww74w/localperl/bin/perl
 
 #Author: Wei Wang;
 #email: weiwangumms@gmail.com
@@ -7,10 +7,11 @@
 #the first trial of perl multithreading
 #08/11/2014
 
-BEGIN { unshift @INC,"/home/wangw1/git/smallRNA_analysis/Utils/";}
+BEGIN { unshift @INC,"/home/ww74w/git/smallRNA_analysis/Utils/";}
 require "Statstics.pm";
-
-BEGIN { unshift @INC,"/home/wangw1/git/smallRNA_analysis/Utils/";}
+# BEGIN { unshift @INC,"/home/ww74w/localperl/lib/site_perl/5.14.2/x86_64-linux";}
+# require "threads.pm";
+BEGIN { unshift @INC,"/home/ww74w/git/smallRNA_analysis/Utils/";}
 require "sort_hash_key.pm";
 use File::Basename;
 # use Compress::Zlib;
