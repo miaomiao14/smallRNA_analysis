@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
-my $HOMEDIR=$ENV{"HOME"};
-BEGIN { unshift @INC,"$HOMEDIR/git/smallRNA_analysis/Utils/";}
+
+BEGIN { unshift @INC,"$ENV{\"HOME\"}/git/smallRNA_analysis/Utils/";}
 require "Statstics.pm";
 require "Jia.pm";
 use File::Basename;
@@ -24,7 +24,8 @@ use Compress::Zlib;
 #08/07/2014
 #modify to fit ghpcc
 #$fa="$HOMEDIR/smallRNApipeline/pipeline_dm/common/fasta/dmel-all-chromosome-r5.5_TAS.fasta";
-$fa="/home/wangw1/data/common/fasta/dmel-all-chromosome-r5.5_TAS.fasta";
+#$fa="/home/wangw1/data/common/fasta/dmel-all-chromosome-r5.5_TAS.fasta";
+$fa="/home/wangw1/data/common/dmel-all-chromosome-r5.5_TAS.fasta";
 open IN, $fa;
 while(my $line=<IN>) { if ($line=~/>(.+) type/) { $chr="chr$1";} else { chomp $line; $genome{$chr}=$line;}}
 
