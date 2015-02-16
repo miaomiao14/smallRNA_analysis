@@ -4,6 +4,7 @@ my $HOMEDIR=$ENV{"HOME"};
 BEGIN { unshift @INC,"/home/wangw1/git/smallRNA_analysis/Utils/";}
 require "Statstics.pm";
 require "Jia.pm";
+require "match.pm";
 use File::Basename;
 use Compress::Zlib;
 # rule is p1 and p17-21 doesn't need to pair but p2-10 need, the rest 1mm
@@ -199,7 +200,7 @@ for ($i=0; $i<$ARGV[2]; $i++)
 		print PPZ "$file2-$file1\t$Z\t";
 		print "$file2-$file1\t$Z\t";
 	 	
-	 	$N1=`/home/wangw1/bin/match.pl $OUTDIR/$file2.$file1.ppseq $OUTDIR/$file2.seq | sumcol+ 2`; chomp($N1);
+	 	$N1=`/home/wangw1/git/smallRNA_analysis/Utils/match.pl $OUTDIR/$file2.$file1.ppseq $OUTDIR/$file2.seq | sumcol+ 2`; chomp($N1);
 	 	
 		if ($Z!=-10) 
 		{
