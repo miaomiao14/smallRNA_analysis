@@ -26,3 +26,17 @@ samtools view -bS ${outdir}/${outname%.bed*}.map2deg${inname}.sam | \
 bedtools bamtobed -i stdin | \
 awk -v len=$((2*RC_EXT+1)) '{if($6=="+") { a[$2%len]++; b[($3-1)%len]++} else {c[$2%len]++;d[($3-1)%len]++}}END{for (i=0;i<len;++i) printf "%d\t%d\t%d\t%d\t%d\n", i+1, a[i], b[i], -c[i], -d[i]}' \
 	> ${outdir}/${outname%.bed*}.map2deg${inname}.species
+
+
+awk -v piRNA_bot=23 -v piRNA_top=29 '{if (!printed[$7] && $3-$2 >= piRNA_bot && $3-$2 <= piRNA_top) { for (k=1; k<=$4; ++k) print ">"$7"_"$4"\n"$7; printed[$7]=1}}' $2 | \
+bowtie2 \
+	-N 0 -L 16 --gbar 16 --no-1mm-upfront -D 1 \
+	-x ${1}r1.RC.ext${RC_EXT}.unique \
+	-f -p $CPU \
+	-U -  \
+	1> ${outdir}/${outname%.bed*}.map2deg${inname}.sam \
+	2> ${outdir}/${outname%.bed*}.map2deg${inname}.log && \
+samtools view -bS ${outdir}/${outname%.bed*}.map2deg${inname}.sam | \
+bedtools bamtobed -i stdin | \
+awk -v len=$((2*RC_EXT+1)) '{if($6=="+") { a[$2%len]++; b[($3-1)%len]++} else {c[$2%len]++;d[($3-1)%len]++}}END{for (i=0;i<len;++i) printf "%d\t%d\t%d\t%d\t%d\n", i+1, a[i], b[i], -c[i], -d[i]}' \
+	> ${outdir}/${outname%.bed*}.map2deg${inname}.reads
