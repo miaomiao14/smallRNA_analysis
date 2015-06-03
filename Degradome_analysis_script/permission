@@ -1,0 +1,4 @@
+chmod 755 *.sh
+git add *
+git commit -m "permission"
+git push

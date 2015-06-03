@@ -1,0 +1,20 @@
+#!/usr/bin/perl
+
+$file="-";
+if($ARGV[0]) {$file = $ARGV[0];}
+open IN,$file or die;
+while(<IN>){
+ chomp;
+ @line=split/\t/;
+ $count{$line[2]}++;
+}
+close IN;
+
+$"="\t";
+open IN, $file or die;
+while(<IN>){
+ chomp;
+ @line=split/\t/;
+ print "@line[0..6]\t$count{$line[2]}\n";
+}
+close IN;
