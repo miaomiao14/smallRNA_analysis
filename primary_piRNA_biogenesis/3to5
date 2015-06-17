@@ -1,0 +1,42 @@
+#!/bin/bash -x
+CLUSTER42AB=/home/bh80w/piper/common/dm3/Brennecke.piRNAcluster.42AB.bed6.gz
+RM=/home/bh80w/piper/common/dm3/UCSC.RepeatMask.bed
+THREE_PRIME_UTR=/home/bh80w/piper/common/dm3/UCSC.refSeq.3UTR.bed.gz
+FLAM=/home/bh80w/piper/common/dm3/Brennecke.piRNAcluster.flam.bed6.gz
+
+i=$1
+function run {
+	piPipes_phasing -a ${1} -b ${1} -p 8 > ${1}.5to5
+	awk 'BEGIN{OFS="\t"}{if ($3-$2>22) {if ($6=="+"){print $1,$3-1,$3,$4,$5,$6} else {print $1,$2,$2+1,$4,$5,$6}}}' $1 > ${1}.3end
+	piPipes_phasing -p 8 -a ${1}.3end -b ${1} > ${1}.3to5
+	Rscript /home/bh80w/bin/phasing.R ${1}.3to5 > ${1}.3to5.z1
+	pp2 -a $1 -b $1 -p 8 > ${1}.pp2
+	rm -rf ${1}.3end
+}
+
+awk '$3-$2>22 && $3-$2<30' $i > ${i%bed2}piRNA.bed2
+run ${i%bed2}piRNA.bed2
+awk '$5==1' ${i%bed2}piRNA.bed2 > ${i%bed2}piRNA.uniq.bed2 
+run ${i%bed2}piRNA.uniq.bed2
+
+bedtools intersect -wa -u -a ${i%bed2}piRNA.bed2 -b $CLUSTER42AB > ${i%bed2}piRNA.CLUSTER42AB.bed2
+run ${i%bed2}piRNA.CLUSTER42AB.bed2
+awk '$5==1' ${i%bed2}piRNA.CLUSTER42AB.bed2 > ${i%bed2}piRNA.CLUSTER42AB.uniq.bed2
+run ${i%bed2}piRNA.CLUSTER42AB.uniq.bed2
+
+bedtools intersect -wa -u -a ${i%bed2}piRNA.bed2 -b $FLAM > ${i%bed2}piRNA.FLAM.bed2
+run ${i%bed2}piRNA.FLAM.bed2
+awk '$5==1' ${i%bed2}piRNA.FLAM.bed2 > ${i%bed2}piRNA.FLAM.uniq.bed2
+run ${i%bed2}piRNA.FLAM.uniq.bed2
+
+bedtools intersect -wa -u -a ${i%bed2}piRNA.bed2 -b $RM > ${i%bed2}piRNA.RM.bed2
+run ${i%bed2}piRNA.RM.bed2
+awk '$5==1' ${i%bed2}piRNA.RM.bed2 > ${i%bed2}piRNA.RM.uniq.bed2
+run ${i%bed2}piRNA.RM.uniq.bed2
+
+bedtools intersect -wa -u -a ${i%bed2}piRNA.bed2 -b $THREE_PRIME_UTR > ${i%bed2}piRNA.THREE_PRIME_UTR.bed2
+run ${i%bed2}piRNA.THREE_PRIME_UTR.bed2
+awk '$5==1' ${i%bed2}piRNA.THREE_PRIME_UTR.bed2 > ${i%bed2}piRNA.THREE_PRIME_UTR.uniq.bed2
+run ${i%bed2}piRNA.THREE_PRIME_UTR.uniq.bed2
+
+rm -rf ${i%bed2}piRNA.uniq.bed2 ${i%bed2}piRNA.CLUSTER42AB.bed2 ${i%bed2}piRNA.CLUSTER42AB.uniq.bed2 ${i%bed2}piRNA.FLAM.bed2 ${i%bed2}piRNA.FLAM.uniq.bed2 ${i%bed2}piRNA.RM.bed2 ${i%bed2}piRNA.THREE_PRIME_UTR.bed2 ${i%bed2}piRNA.THREE_PRIME_UTR.uniq.bed2
