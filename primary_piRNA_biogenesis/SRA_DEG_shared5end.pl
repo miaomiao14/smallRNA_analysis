@@ -19,8 +19,8 @@ require "parseInputFile.pm";
 my $numArgs = $#ARGV + 1;
 my $format1='bed2';
 my $format2='bed2';
-my $CLONE1='SRA';
-my $CLONE2='DEG';
+my $CLONE1='';
+my $CLONE2='';
 my $winSize=100;
 my $inFileName1='';
 my $inFileName2=''; ##reference strand
