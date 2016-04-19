@@ -11,5 +11,5 @@ open IN, $ARGV[1];
 while(my $line=<IN>) {
 chomp $line;
 @l=split(/\t/,$line);
-print "$line" if (exists $hash{$l[0]});
+print "$line\n" if (exists $hash{$l[0]});
 }
