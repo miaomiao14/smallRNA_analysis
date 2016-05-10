@@ -1,4 +1,4 @@
 chmod 755 *
-git add *
+git add --all *
 git commit -m "permission"
 git push
