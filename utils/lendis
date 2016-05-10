@@ -1,0 +1,31 @@
+#!/usr/bin/perl
+#author:Jia Xu
+#Mar 12th,2008
+#calculate # of seqs per length [option r:times # of reads]
+#the input file should have 2nd col as # of reads
+
+if (@ARGV<1) { print "USAGE: lendis seqsfile [r](#ofreads)\n";
+               print "In order to use #of reads,the input file should have 2nd col as # of reads\n";
+               exit 1;}
+open IN,$ARGV[0];
+while(my $line=<IN>) {
+  chomp $line;
+  @l=split(/\t/,$line);
+  $reads{$l[0]}=$l[1];
+}
+
+foreach my $r (keys %reads)
+{
+ if($ARGV[1] eq 'r') {$count{length($r)}+=$reads{$r};}
+ else{$count{length($r)}++;}
+}
+
+@k=sort {$a <=> $b} keys %count;
+$min=shift @k;
+$max=pop @k;
+foreach my $m (1..$max)
+{
+ if (!exists $count{$m}) {$count{$m}=0;}
+ print "$m\t$count{$m}\n";
+}
+close IN;
