@@ -1,0 +1,1 @@
+for i in $PWD/adapter_trim/*.gz; do file=`basename $i`;name=${file/.trim*/}; mkdir -p $PWD/mapping/$name; cd $PWD/mapping/$name; ln -s $i;cd ../../;  done
