@@ -1,7 +1,0 @@
-Phil.SRA.QinAgo3Muts.ox.ovary.inserts	1.182
-Phil.SRA.QinAgo3Hets.ox.ovary.inserts	1.015
-Phil.SRA.AubWTrescue.ox.ovary.inserts	1.277
-Phil.SRA.AubCDrescue.ox.ovary.inserts	1.603
-Phil.SRA.aubvasAgo3WTrescue.ox.ovary.inserts	1.372
-Phil.SRA.aubvasAgo3CDrescue.ox.ovary.inserts	1.964
-Phil.SRA.aubCDinHets.ox.ovary.inserts	1.148
