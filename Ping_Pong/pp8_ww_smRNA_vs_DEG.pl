@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 
-BEGIN { unshift @INC,"$ENV{\"HOME\"}/git/smallRNA_analysis/Utils/";}
+BEGIN { unshift @INC,"$ENV{\"HOME\"}/git/smallRNA_analysis/utils/";}
 require "Statstics.pm";
 require "Jia.pm";
 use File::Basename;
